@@ -2,1905 +2,3262 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Cash Flow Bank</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Cash Flow Bank - Your Goals. Our Priority.</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
+
 <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-storage-compat.js"></script>
 
 <style>
-*{box-sizing:border-box}
-body{margin:0;font-family:Inter,Arial,sans-serif;background:#f4f7f5;color:#14231e}
-button,input,select,textarea{font:inherit}
-.hidden{display:none!important}
-.card{background:#fff;border:1px solid #e4e9e6;border-radius:20px;box-shadow:0 8px 30px rgba(0,0,0,.04)}
-.btn{border:0;border-radius:12px;padding:12px 17px;font-weight:700;cursor:pointer}
-.btn:disabled{opacity:.55;cursor:not-allowed}
-.primary{background:#063b2b;color:#fff}
-.primary:hover{background:#07513b}
-.light{background:#edf4f0;color:#063b2b}
-.danger{background:#fee2e2;color:#991b1b}
-.input{width:100%;border:1px solid #d8e0dc;border-radius:12px;padding:12px 14px;background:#fff;outline:0}
-.input:focus{border-color:#087f5b;box-shadow:0 0 0 3px rgba(8,127,91,.1)}
-.sidebar{background:#042d22;color:#dcefe9}
-.nav{display:flex;align-items:center;gap:12px;width:100%;padding:12px 14px;border:0;background:none;color:inherit;border-radius:12px;text-align:left;cursor:pointer}
-.nav:hover,.nav.active{background:#0a4b38;color:#fff}
-.badge{display:inline-flex;padding:5px 10px;border-radius:999px;font-size:12px;font-weight:800}
-.badge.pending{background:#fff4cf;color:#805b00}
-.badge.approved,.badge.completed{background:#dcfce7;color:#166534}
-.badge.declined,.badge.cancelled{background:#fee2e2;color:#991b1b}
-.badge.refunded{background:#dbeafe;color:#1d4ed8}
-.avatar{width:44px;height:44px;border-radius:50%;object-fit:cover}
-.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;padding:18px;z-index:100}
-.modal{background:#fff;width:100%;max-width:560px;border-radius:22px;padding:25px;max-height:92vh;overflow:auto}
+:root{
+    --green:#063b2b;
+    --green2:#087f5b;
+    --light:#f4f7f5;
+}
+
+*{
+    box-sizing:border-box;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    margin:0;
+    font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    background:var(--light);
+    color:#15251f;
+}
+
+button,
+input,
+select,
+textarea{
+    font:inherit;
+}
+
+button{
+    cursor:pointer;
+}
+
+.hidden{
+    display:none!important;
+}
+
+.card{
+    background:#fff;
+    border:1px solid #e3e9e6;
+    border-radius:20px;
+    box-shadow:0 8px 30px rgba(0,0,0,.04);
+}
+
+.input{
+    width:100%;
+    border:1px solid #d8e1dc;
+    border-radius:12px;
+    padding:12px 14px;
+    outline:none;
+    background:#fff;
+    color:#18261f;
+}
+
+.input:focus{
+    border-color:#087f5b;
+    box-shadow:0 0 0 3px rgba(8,127,91,.10);
+}
+
+.btn{
+    border:0;
+    border-radius:12px;
+    padding:12px 16px;
+    font-weight:700;
+    transition:.2s;
+}
+
+.btn:disabled{
+    opacity:.55;
+    cursor:not-allowed;
+}
+
+.btn-primary{
+    background:var(--green);
+    color:white;
+}
+
+.btn-primary:hover{
+    background:#07513b;
+}
+
+.btn-light{
+    background:#edf4f0;
+    color:var(--green);
+}
+
+.btn-light:hover{
+    background:#e1ece7;
+}
+
+.btn-danger{
+    background:#fee2e2;
+    color:#991b1b;
+}
+
+.sidebar{
+    background:#042d22;
+    color:#dcefe8;
+}
+
+.nav-btn{
+    width:100%;
+    border:0;
+    background:transparent;
+    color:inherit;
+    display:flex;
+    align-items:center;
+    gap:12px;
+    padding:12px 14px;
+    border-radius:12px;
+    text-align:left;
+}
+
+.nav-btn:hover,
+.nav-btn.active{
+    background:#0a4b38;
+    color:#fff;
+}
+
+.badge{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:5px 10px;
+    border-radius:999px;
+    font-size:12px;
+    font-weight:800;
+}
+
+.badge-pending{
+    background:#fff4cf;
+    color:#805b00;
+}
+
+.badge-approved,
+.badge-completed{
+    background:#dcfce7;
+    color:#166534;
+}
+
+.badge-declined,
+.badge-cancelled{
+    background:#fee2e2;
+    color:#991b1b;
+}
+
+.badge-refunded{
+    background:#dbeafe;
+    color:#1d4ed8;
+}
+
+.avatar{
+    width:44px;
+    height:44px;
+    border-radius:50%;
+    object-fit:cover;
+}
+
+.modal-overlay{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.55);
+    z-index:100;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding:20px;
+}
+
+.modal{
+    width:100%;
+    max-width:560px;
+    max-height:92vh;
+    overflow:auto;
+    background:#fff;
+    border-radius:22px;
+    padding:25px;
+}
+
 @media(max-width:900px){
-.sidebar{position:fixed;left:-280px;top:0;bottom:0;width:270px;z-index:90;transition:.25s}
-.sidebar.open{left:0}
-.main{margin-left:0!important}
+
+    .sidebar{
+        position:fixed;
+        left:-280px;
+        top:0;
+        bottom:0;
+        width:270px;
+        z-index:90;
+        transition:.25s;
+    }
+
+    .sidebar.open{
+        left:0;
+    }
+
+    .main-content{
+        margin-left:0!important;
+    }
 }
 </style>
 </head>
 
 <body>
 
-<!-- AUTH -->
-<div id="authPage" class="min-h-screen bg-gradient-to-br from-[#042d22] to-[#087f5b] flex items-center justify-center p-5">
+<!-- =========================================================
+     AUTHENTICATION
+========================================================= -->
 
-<div class="w-full max-w-md bg-white rounded-3xl p-7 shadow-2xl">
+<div id="authPage"
+     class="min-h-screen bg-gradient-to-br from-[#042d22] to-[#087f5b] flex items-center justify-center p-5">
 
-<div class="text-center mb-7">
-<div class="mx-auto w-14 h-14 rounded-2xl bg-[#063b2b] text-white flex items-center justify-center mb-3">
-<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-<path d="M3 10h18M5 10v8m4-8v8m6-8v8m4-8v8M2 20h20M12 3l10 7H2l10-7Z"/>
-</svg>
+    <div class="w-full max-w-md bg-white rounded-3xl p-7 shadow-2xl">
+
+        <div class="text-center mb-7">
+
+            <div class="mx-auto w-14 h-14 rounded-2xl bg-[#063b2b] text-white flex items-center justify-center mb-3">
+
+                <svg width="30" height="30" viewBox="0 0 24 24"
+                     fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 10h18"/>
+                    <path d="M5 10v8"/>
+                    <path d="M9 10v8"/>
+                    <path d="M15 10v8"/>
+                    <path d="M19 10v8"/>
+                    <path d="M2 20h20"/>
+                    <path d="M12 3l10 7H2l10-7Z"/>
+                </svg>
+
+            </div>
+
+            <h1 class="text-2xl font-black">
+                Cash Flow Bank
+            </h1>
+
+            <p class="text-gray-500 text-sm mt-1">
+                Your Goals. Our Priority.
+            </p>
+
+        </div>
+
+
+        <!-- LOGIN -->
+
+        <div id="loginBox">
+
+            <h2 class="text-xl font-bold mb-4">
+                Sign in
+            </h2>
+
+            <form id="loginForm" class="space-y-3">
+
+                <input
+                    id="loginId"
+                    class="input"
+                    placeholder="Email or 10-digit account number"
+                    required
+                >
+
+                <input
+                    id="loginPassword"
+                    type="password"
+                    class="input"
+                    placeholder="Password"
+                    required
+                >
+
+                <button
+                    id="loginButton"
+                    class="btn btn-primary w-full"
+                    type="submit"
+                >
+                    Sign in
+                </button>
+
+            </form>
+
+            <button
+                onclick="forgotPassword()"
+                class="text-sm text-[#087f5b] font-bold mt-4"
+            >
+                Forgot password?
+            </button>
+
+            <p class="text-sm text-gray-500 mt-5">
+
+                Don't have an account?
+
+                <button
+                    onclick="showRegister()"
+                    class="text-[#087f5b] font-bold"
+                >
+                    Create one
+                </button>
+
+            </p>
+
+            <div
+                id="loginMessage"
+                class="text-sm mt-3"
+            ></div>
+
+        </div>
+
+
+        <!-- REGISTER -->
+
+        <div id="registerBox" class="hidden">
+
+            <h2 class="text-xl font-bold mb-4">
+                Create account
+            </h2>
+
+            <form id="registerForm" class="space-y-3">
+
+                <input
+                    id="regName"
+                    class="input"
+                    placeholder="Full name"
+                    required
+                >
+
+                <input
+                    id="regEmail"
+                    type="email"
+                    class="input"
+                    placeholder="Email address"
+                    required
+                >
+
+                <input
+                    id="regPhone"
+                    class="input"
+                    placeholder="Phone number"
+                >
+
+                <select id="regCountry" class="input">
+
+                    <option>United States</option>
+                    <option>Canada</option>
+                    <option>United Kingdom</option>
+                    <option>Nigeria</option>
+                    <option>Ghana</option>
+                    <option>Kenya</option>
+                    <option>South Africa</option>
+                    <option>India</option>
+                    <option>Other</option>
+
+                </select>
+
+                <select id="regType" class="input">
+
+                    <option>Savings</option>
+                    <option>Current</option>
+                    <option>Business</option>
+                    <option>Student</option>
+
+                </select>
+
+                <input
+                    id="regPassword"
+                    type="password"
+                    class="input"
+                    placeholder="Password"
+                    minlength="6"
+                    required
+                >
+
+                <input
+                    id="regConfirm"
+                    type="password"
+                    class="input"
+                    placeholder="Confirm password"
+                    minlength="6"
+                    required
+                >
+
+                <button
+                    id="registerButton"
+                    class="btn btn-primary w-full"
+                    type="submit"
+                >
+                    Create account
+                </button>
+
+            </form>
+
+            <p class="text-sm text-gray-500 mt-5">
+
+                Already have an account?
+
+                <button
+                    onclick="showLogin()"
+                    class="text-[#087f5b] font-bold"
+                >
+                    Sign in
+                </button>
+
+            </p>
+
+            <div
+                id="registerMessage"
+                class="text-sm mt-3"
+            ></div>
+
+        </div>
+
+    </div>
 </div>
-<h1 class="text-2xl font-black">Cash Flow Bank</h1>
-<p class="text-gray-500 text-sm">Modern financial services made simple</p>
-</div>
-
-<div id="loginBox">
-
-<h2 class="text-xl font-bold mb-4">Sign in</h2>
-
-<form id="loginForm" class="space-y-3">
-
-<input id="loginId"
-class="input"
-placeholder="Email or 10-digit account number"
-required>
-
-<input id="loginPass"
-type="password"
-class="input"
-placeholder="Password"
-required>
-
-<button class="btn primary w-full">Sign in</button>
-
-</form>
-
-<button onclick="forgotPassword()" class="text-sm text-[#087f5b] font-bold mt-4">
-Forgot password?
-</button>
-
-<p class="text-sm text-gray-500 mt-5">
-Don't have an account?
-<button onclick="showRegister()" class="text-[#087f5b] font-bold">
-Create one
-</button>
-</p>
-
-<div id="loginMessage" class="mt-3 text-sm"></div>
-
-</div>
-
-<div id="registerBox" class="hidden">
-
-<h2 class="text-xl font-bold mb-4">Create account</h2>
-
-<form id="registerForm" class="space-y-3">
-
-<input id="regName" class="input" placeholder="Full name" required>
-
-<input id="regEmail" type="email" class="input" placeholder="Email address" required>
-
-<input id="regPhone" class="input" placeholder="Phone number">
-
-<select id="regCountry" class="input">
-<option>United States</option>
-<option>Canada</option>
-<option>United Kingdom</option>
-<option>Nigeria</option>
-<option>Ghana</option>
-<option>Kenya</option>
-<option>Other</option>
-</select>
-
-<select id="regType" class="input">
-<option>Savings</option>
-<option>Current</option>
-<option>Business</option>
-<option>Student</option>
-</select>
-
-<input id="regPass"
-type="password"
-class="input"
-placeholder="Password"
-required
-minlength="6">
-
-<button id="registerButton" class="btn primary w-full">
-Create account
-</button>
-
-</form>
-
-<p class="text-sm text-gray-500 mt-5">
-Already have an account?
-<button onclick="showLogin()" class="text-[#087f5b] font-bold">
-Sign in
-</button>
-</p>
-
-<div id="registerMessage" class="mt-3 text-sm"></div>
-
-</div>
-
-</div>
-</div>
 
 
-<!-- APPLICATION -->
+<!-- =========================================================
+     APPLICATION
+========================================================= -->
+
 <div id="application" class="hidden min-h-screen">
 
-<!-- SIDEBAR -->
-<aside id="sidebar" class="sidebar fixed left-0 top-0 bottom-0 w-[270px] p-5 flex flex-col">
+    <!-- SIDEBAR -->
+
+    <aside
+        id="sidebar"
+        class="sidebar fixed left-0 top-0 bottom-0 w-[270px] p-5 flex flex-col"
+    >
+
+        <div class="flex items-center gap-3 mb-8 px-2">
+
+            <div class="w-11 h-11 rounded-xl bg-white text-[#063b2b] flex items-center justify-center">
+
+                <svg width="24" height="24" viewBox="0 0 24 24"
+                     fill="none" stroke="currentColor" stroke-width="2">
+
+                    <path d="M3 10h18"/>
+                    <path d="M5 10v8"/>
+                    <path d="M9 10v8"/>
+                    <path d="M15 10v8"/>
+                    <path d="M19 10v8"/>
+                    <path d="M2 20h20"/>
+                    <path d="M12 3l10 7H2l10-7Z"/>
+
+                </svg>
+
+            </div>
+
+            <div>
+
+                <b class="text-white">
+                    Cash Flow
+                </b>
+
+                <div class="text-xs opacity-60">
+                    Financial Services
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <nav class="space-y-1">
+
+            <button
+                class="nav-btn active"
+                data-page="dashboard"
+                onclick="showPage('dashboard')"
+            >
+                <span>⌂</span>
+                Dashboard
+            </button>
+
+            <button
+                class="nav-btn"
+                data-page="accounts"
+                onclick="showPage('accounts')"
+            >
+                <span>▣</span>
+                Account Summary
+            </button>
+
+            <button
+                class="nav-btn"
+                data-page="transfer"
+                onclick="showPage('transfer')"
+            >
+                <span>⇄</span>
+                Transfer
+            </button>
+
+            <button
+                class="nav-btn"
+                data-page="history"
+                onclick="showPage('history')"
+            >
+                <span>◷</span>
+                History
+            </button>
+
+            <button
+                class="nav-btn"
+                onclick="showFeature('Deposit')"
+            >
+                <span>＋</span>
+                Deposit
+            </button>
+
+            <button
+                class="nav-btn"
+                onclick="showFeature('Withdraw')"
+            >
+                <span>−</span>
+                Withdraw
+            </button>
+
+            <button
+                class="nav-btn"
+                data-page="profile"
+                onclick="showPage('profile')"
+            >
+                <span>◉</span>
+                Profile
+            </button>
 
-<div class="flex items-center gap-3 mb-8 px-2">
+            <button
+                class="nav-btn"
+                onclick="showFeature('KYC Verification')"
+            >
+                <span>✓</span>
+                KYC Verification
+            </button>
 
-<div class="w-11 h-11 rounded-xl bg-white text-[#063b2b] flex items-center justify-center">
+            <button
+                class="nav-btn"
+                onclick="showFeature('Settings')"
+            >
+                <span>⚙</span>
+                Settings
+            </button>
+
+            <button
+                class="nav-btn"
+                onclick="openSupport()"
+            >
+                <span>?</span>
+                Support
+            </button>
 
-<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-<path d="M3 10h18M5 10v8m4-8v8m6-8v8m4-8v8M2 20h20M12 3l10 7H2l10-7Z"/>
-</svg>
+        </nav>
 
-</div>
 
-<div>
-<b class="text-white">Cash Flow</b>
-<div class="text-xs opacity-60">Demo Bank</div>
-</div>
+        <div class="mt-auto border-t border-white/10 pt-4">
 
-</div>
+            <button
+                class="nav-btn"
+                onclick="logout()"
+            >
+                <span>↪</span>
+                Sign out
+            </button>
 
-<nav class="space-y-1">
+        </div>
 
-<button class="nav active" data-page="dashboard" onclick="showPage('dashboard')">
-⌂ Dashboard
-</button>
+    </aside>
 
-<button class="nav" data-page="transfer" onclick="showPage('transfer')">
-⇄ Transfer
-</button>
 
-<button class="nav" data-page="history" onclick="showPage('history')">
-◷ History
-</button>
+    <!-- MAIN -->
 
-<button class="nav" onclick="showFeature('Deposit')">
-＋ Deposit
-</button>
+    <main class="main-content ml-[270px] min-h-screen">
 
-<button class="nav" onclick="showFeature('Withdraw')">
-− Withdraw
-</button>
+        <!-- HEADER -->
 
-<button class="nav" data-page="profile" onclick="showPage('profile')">
-◉ Profile
-</button>
+        <header
+            class="h-20 bg-white border-b flex items-center justify-between px-5 md:px-8 sticky top-0 z-30"
+        >
 
-<button class="nav" onclick="showFeature('Settings')">
-⚙ Settings
-</button>
+            <div class="flex items-center gap-3">
 
-<button class="nav" onclick="openSupport()">
-? Support
-</button>
+                <button
+                    onclick="toggleMenu()"
+                    class="btn btn-light md:hidden"
+                >
+                    ☰
+                </button>
 
-</nav>
+                <div>
 
-<div class="mt-auto border-t border-white/10 pt-4">
+                    <div class="text-xs text-gray-500">
+                        Welcome back
+                    </div>
 
-<button class="nav" onclick="logout()">
-↪ Sign out
-</button>
+                    <div
+                        id="headerName"
+                        class="font-black"
+                    >
+                        Customer
+                    </div>
 
-</div>
+                </div>
 
-</aside>
+            </div>
 
 
-<!-- MAIN -->
-<main class="main ml-[270px] min-h-screen">
+            <div class="flex items-center gap-3">
 
-<header class="h-20 bg-white border-b flex items-center justify-between px-5 md:px-8 sticky top-0 z-30">
+                <button
+                    onclick="toggleBalance()"
+                    class="btn btn-light"
+                    title="Show or hide balance"
+                >
+                    ◉
+                </button>
 
-<div class="flex items-center gap-3">
+                <button
+                    onclick="openSupport()"
+                    class="btn btn-light hidden sm:block"
+                >
+                    Support
+                </button>
 
-<button onclick="toggleMenu()" class="btn light md:hidden">
-☰
-</button>
+                <button
+                    onclick="showPage('profile')"
+                    class="rounded-full"
+                >
 
-<div>
-<div class="text-xs text-gray-500">Welcome back</div>
-<div id="headerName" class="font-black">Customer</div>
-</div>
+                    <img
+                        id="headerPhoto"
+                        class="avatar hidden"
+                        alt="Profile"
+                    >
 
-</div>
+                    <span
+                        id="headerInitial"
+                        class="avatar bg-emerald-100 text-[#063b2b] flex items-center justify-center font-black"
+                    >
+                        C
+                    </span>
 
-<div class="flex items-center gap-3">
+                </button>
 
-<button onclick="toggleBalance()" class="btn light">
-◉
-</button>
+            </div>
 
-<button onclick="openSupport()" class="btn light hidden sm:block">
-Support
-</button>
+        </header>
 
-<button onclick="showPage('profile')">
 
-<img id="headerPhoto"
-class="avatar hidden"
-alt="Profile">
+        <div class="p-5 md:p-8">
 
-<span id="headerInitial"
-class="avatar bg-emerald-100 text-[#063b2b] flex items-center justify-center font-black">
-C
-</span>
 
-</button>
+            <!-- =================================================
+                 DASHBOARD
+            ================================================= -->
 
-</div>
+            <section id="page-dashboard">
 
-</header>
+                <div class="mb-6">
 
+                    <h1 class="text-3xl font-black">
+                        Dashboard
+                    </h1>
 
-<div class="p-5 md:p-8">
+                    <p class="text-gray-500">
+                        Your account overview.
+                    </p>
 
-<!-- DASHBOARD -->
-<section id="page-dashboard">
+                </div>
 
-<div class="mb-6">
 
-<h1 class="text-3xl font-black">Dashboard</h1>
+                <div class="grid lg:grid-cols-3 gap-5">
 
-<p class="text-gray-500">
-Your account overview.
-</p>
+                    <!-- BALANCE -->
 
-</div>
+                    <div class="lg:col-span-2 rounded-3xl bg-gradient-to-br from-[#063b2b] to-[#087f5b] text-white p-6">
 
+                        <div class="flex justify-between items-start">
 
-<div class="grid lg:grid-cols-3 gap-5">
+                            <div>
 
-<!-- BALANCE -->
-<div class="lg:col-span-2 rounded-3xl bg-gradient-to-br from-[#063b2b] to-[#087f5b] text-white p-6">
+                                <div class="text-sm opacity-70">
+                                    Available balance
+                                </div>
 
-<div class="flex justify-between">
+                                <div
+                                    id="balanceDisplay"
+                                    class="text-4xl font-black mt-2"
+                                >
+                                    $0.00
+                                </div>
 
-<div>
+                            </div>
 
-<div class="text-sm opacity-70">
-Available balance
-</div>
+                            <div
+                                id="accountStatusBadge"
+                                class="badge badge-pending"
+                            >
+                                Pending
+                            </div>
 
-<div id="balanceDisplay" class="text-4xl font-black mt-2">
-$0.00
-</div>
+                        </div>
 
-</div>
 
-<div id="accountStatus" class="badge pending">
-Pending
-</div>
+                        <div class="grid sm:grid-cols-3 gap-5 mt-8">
 
-</div>
+                            <div>
 
-<div class="grid sm:grid-cols-3 gap-5 mt-8">
+                                <div class="text-xs opacity-60">
+                                    Account number
+                                </div>
 
-<div>
-<div class="text-xs opacity-60">Account number</div>
-<b id="dashboardAccount">—</b>
-</div>
+                                <b id="dashboardAccount">
+                                    —
+                                </b>
 
-<div>
-<div class="text-xs opacity-60">Account type</div>
-<b id="dashboardType">—</b>
-</div>
+                            </div>
 
-<div>
-<div class="text-xs opacity-60">Account limit</div>
-<b id="dashboardLimit">$0.00</b>
-</div>
 
-</div>
+                            <div>
 
-</div>
+                                <div class="text-xs opacity-60">
+                                    Account type
+                                </div>
 
+                                <b id="dashboardType">
+                                    —
+                                </b>
 
-<!-- CREDIT SCORE -->
-<div class="card p-6">
+                            </div>
 
-<div class="flex justify-between">
 
-<div>
+                            <div>
 
-<div class="text-sm text-gray-500">
-Credit Score
-</div>
+                                <div class="text-xs opacity-60">
+                                    Account limit
+                                </div>
 
-<div id="creditScore" class="text-4xl font-black text-[#063b2b] mt-2">
-650
-</div>
+                                <b id="dashboardLimit">
+                                    $0.00
+                                </b>
 
-</div>
+                            </div>
 
-<div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center">
-★
-</div>
+                        </div>
 
-</div>
+                    </div>
 
-<p class="text-sm text-gray-500 mt-4">
-Demo credit score for this platform.
-</p>
 
-<button onclick="creditDetails()" class="text-[#087f5b] font-bold text-sm mt-4">
-View details →
-</button>
+                    <!-- CREDIT SCORE -->
 
-</div>
+                    <div class="card p-6">
 
-</div>
+                        <div class="flex justify-between">
 
+                            <div>
 
-<!-- INFO CARDS -->
-<div class="grid md:grid-cols-2 xl:grid-cols-4 gap-4 mt-5">
+                                <div class="text-sm text-gray-500">
+                                    Credit Score
+                                </div>
 
-<div class="card p-5">
+                                <div
+                                    id="creditScore"
+                                    class="text-4xl font-black text-[#063b2b] mt-2"
+                                >
+                                    650
+                                </div>
 
-<div class="text-xs text-gray-500">
-Account created
-</div>
+                            </div>
 
-<div id="createdDate" class="font-black mt-2">
-—
-</div>
+                            <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center text-[#087f5b]">
 
-</div>
+                                <svg width="25" height="25"
+                                     viewBox="0 0 24 24"
+                                     fill="none"
+                                     stroke="currentColor"
+                                     stroke-width="2">
 
-<div class="card p-5">
+                                    <path d="M12 3v18"/>
+                                    <path d="M5 8h10a4 4 0 1 1 0 8H5"/>
+                                    <path d="M5 12h8"/>
 
-<div class="text-xs text-gray-500">
-Country
-</div>
+                                </svg>
 
-<div id="dashboardCountry" class="font-black mt-2">
-—
-</div>
+                            </div>
 
-</div>
+                        </div>
 
-<div class="card p-5">
+                        <p class="text-sm text-gray-500 mt-4">
+                            Demo credit score.
+                        </p>
 
-<div class="text-xs text-gray-500">
-Account status
-</div>
+                        <button
+                            onclick="showCreditScore()"
+                            class="text-[#087f5b] font-bold text-sm mt-4"
+                        >
+                            View details →
+                        </button>
 
-<div id="dashboardStatus" class="font-black mt-2 capitalize">
-—
-</div>
+                    </div>
 
-</div>
+                </div>
 
-<div class="card p-5">
 
-<div class="text-xs text-gray-500">
-Transactions
-</div>
+                <!-- ACCOUNT DETAILS -->
 
-<div id="transactionCount" class="font-black mt-2">
-0
-</div>
+                <div class="grid md:grid-cols-2 xl:grid-cols-4 gap-4 mt-5">
 
-</div>
+                    <div class="card p-5">
 
-</div>
+                        <div class="text-xs text-gray-500">
+                            Account created
+                        </div>
 
+                        <div
+                            id="createdDate"
+                            class="font-black mt-2"
+                        >
+                            —
+                        </div>
 
-<!-- QUICK ACTIONS -->
-<div class="card p-6 mt-5">
+                    </div>
 
-<h3 class="font-black text-lg mb-4">
-Quick actions
-</h3>
 
-<div class="grid sm:grid-cols-3 gap-3">
+                    <div class="card p-5">
 
-<button onclick="showPage('transfer')" class="btn light text-left">
-⇄<br>
-Send money
-</button>
+                        <div class="text-xs text-gray-500">
+                            Country
+                        </div>
 
-<button onclick="showPage('history')" class="btn light text-left">
-◷<br>
-Transaction history
-</button>
+                        <div
+                            id="dashboardCountry"
+                            class="font-black mt-2"
+                        >
+                            —
+                        </div>
 
-<button onclick="showPage('profile')" class="btn light text-left">
-◉<br>
-Edit profile
-</button>
+                    </div>
 
-</div>
 
-</div>
+                    <div class="card p-5">
 
+                        <div class="text-xs text-gray-500">
+                            Account status
+                        </div>
 
-<!-- RECENT -->
-<div class="card p-6 mt-5">
+                        <div
+                            id="dashboardStatus"
+                            class="font-black mt-2 capitalize"
+                        >
+                            —
+                        </div>
 
-<div class="flex justify-between mb-4">
+                    </div>
 
-<h3 class="font-black text-lg">
-Recent transactions
-</h3>
 
-<button onclick="showPage('history')" class="text-[#087f5b] font-bold text-sm">
-View all
-</button>
+                    <div class="card p-5">
 
-</div>
+                        <div class="text-xs text-gray-500">
+                            Transactions
+                        </div>
 
-<div id="recentTransactions">
-No transactions yet.
-</div>
+                        <div
+                            id="transactionCount"
+                            class="font-black mt-2"
+                        >
+                            0
+                        </div>
 
-</div>
+                    </div>
 
-</section>
+                </div>
 
 
-<!-- TRANSFER -->
-<section id="page-transfer" class="hidden">
+                <!-- QUICK ACTIONS -->
 
-<h1 class="text-3xl font-black">
-Transfer money
-</h1>
+                <div class="card p-6 mt-5">
 
-<p class="text-gray-500 mb-6">
-Create a demo transfer request.
-</p>
+                    <h3 class="font-black text-lg mb-4">
+                        Quick actions
+                    </h3>
 
-<div class="card p-6 max-w-2xl">
+                    <div class="grid sm:grid-cols-3 gap-3">
 
-<form id="transferForm" class="space-y-4">
+                        <button
+                            onclick="showPage('transfer')"
+                            class="btn btn-light text-left"
+                        >
+                            ⇄
+                            <br>
+                            Send money
+                        </button>
 
-<input id="recipientName"
-class="input"
-placeholder="Recipient name"
-required>
+                        <button
+                            onclick="showPage('history')"
+                            class="btn btn-light text-left"
+                        >
+                            ◷
+                            <br>
+                            Transaction history
+                        </button>
 
-<input id="recipientAccount"
-class="input"
-placeholder="Recipient account number"
-required>
+                        <button
+                            onclick="showPage('profile')"
+                            class="btn btn-light text-left"
+                        >
+                            ◉
+                            <br>
+                            Edit profile
+                        </button>
 
-<input id="transferAmount"
-class="input"
-type="number"
-min="0.01"
-step="0.01"
-placeholder="Amount"
-required>
+                    </div>
 
-<textarea id="transferNote"
-class="input"
-rows="3"
-placeholder="Transfer note"></textarea>
+                </div>
 
-<button id="transferButton" class="btn primary w-full">
-Submit transfer
-</button>
 
-</form>
+                <!-- RECENT TRANSACTIONS -->
 
-<div id="transferMessage" class="mt-4 text-sm"></div>
+                <div class="card p-6 mt-5">
 
-</div>
+                    <div class="flex justify-between items-center mb-4">
 
-</section>
+                        <h3 class="font-black text-lg">
+                            Recent transactions
+                        </h3>
 
+                        <button
+                            onclick="showPage('history')"
+                            class="text-[#087f5b] font-bold text-sm"
+                        >
+                            View all
+                        </button>
 
-<!-- HISTORY -->
-<section id="page-history" class="hidden">
+                    </div>
 
-<h1 class="text-3xl font-black">
-Transaction history
-</h1>
+                    <div id="recentTransactions">
+                        Loading...
+                    </div>
 
-<p class="text-gray-500 mb-6">
-Your transfer activity and refunds.
-</p>
+                </div>
 
-<div class="card overflow-hidden">
+            </section>
 
-<div id="historyList">
-Loading...
-</div>
 
-</div>
+            <!-- =================================================
+                 ACCOUNT SUMMARY
+            ================================================= -->
 
-</section>
+            <section id="page-accounts" class="hidden">
 
+                <h1 class="text-3xl font-black mb-2">
+                    Account Summary
+                </h1>
 
-<!-- PROFILE -->
-<section id="page-profile" class="hidden">
+                <p class="text-gray-500 mb-6">
+                    Complete information about your account.
+                </p>
 
-<h1 class="text-3xl font-black">
-My Profile
-</h1>
 
-<p class="text-gray-500 mb-6">
-Update your personal information and profile picture.
-</p>
+                <div class="grid md:grid-cols-2 gap-5">
 
+                    <div class="card p-6">
 
-<div class="grid lg:grid-cols-[300px_1fr] gap-5">
+                        <h3 class="font-black text-lg mb-5">
+                            Account information
+                        </h3>
 
-<div class="card p-6 text-center">
+                        <div class="space-y-4 text-sm">
 
-<img id="profilePhoto"
-class="w-32 h-32 rounded-full object-cover mx-auto hidden"
-alt="Profile">
+                            <div class="flex justify-between">
+                                <span class="text-gray-500">
+                                    Account number
+                                </span>
 
-<div id="profileInitial"
-class="w-32 h-32 rounded-full bg-emerald-100 text-[#063b2b] mx-auto flex items-center justify-center text-4xl font-black">
-C
-</div>
+                                <b id="summaryAccount">
+                                    —
+                                </b>
+                            </div>
 
-<label class="btn light inline-block mt-5 cursor-pointer">
+                            <div class="flex justify-between">
+                                <span class="text-gray-500">
+                                    Account type
+                                </span>
 
-Change picture
+                                <b id="summaryType">
+                                    —
+                                </b>
+                            </div>
 
-<input
-id="photoInput"
-type="file"
-accept="image/*"
-class="hidden">
+                            <div class="flex justify-between">
+                                <span class="text-gray-500">
+                                    Country
+                                </span>
 
-</label>
+                                <b id="summaryCountry">
+                                    —
+                                </b>
+                            </div>
 
-<div id="photoMessage" class="text-xs text-gray-500 mt-2"></div>
+                            <div class="flex justify-between">
+                                <span class="text-gray-500">
+                                    Created
+                                </span>
 
-</div>
+                                <b id="summaryCreated">
+                                    —
+                                </b>
+                            </div>
 
+                            <div class="flex justify-between">
+                                <span class="text-gray-500">
+                                    Status
+                                </span>
 
-<div class="card p-6">
+                                <b id="summaryStatus">
+                                    —
+                                </b>
+                            </div>
 
-<form id="profileForm" class="grid md:grid-cols-2 gap-4">
+                        </div>
 
-<div>
+                    </div>
 
-<label class="text-sm font-bold">
-Full name
-</label>
 
-<input id="editName" class="input mt-1" required>
+                    <div class="card p-6">
 
-</div>
+                        <h3 class="font-black text-lg mb-5">
+                            Financial overview
+                        </h3>
 
+                        <div class="space-y-4">
 
-<div>
+                            <div>
 
-<label class="text-sm font-bold">
-Email
-</label>
+                                <div class="flex justify-between text-sm mb-2">
 
-<input id="editEmail"
-class="input mt-1 bg-gray-50"
-disabled>
+                                    <span class="text-gray-500">
+                                        Available balance
+                                    </span>
 
-</div>
+                                    <b id="summaryBalance">
+                                        $0.00
+                                    </b>
 
+                                </div>
 
-<div>
+                                <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
 
-<label class="text-sm font-bold">
-Phone
-</label>
+                                    <div
+                                        id="balanceBar"
+                                        class="h-full bg-[#087f5b]"
+                                        style="width:0%"
+                                    ></div>
 
-<input id="editPhone" class="input mt-1">
+                                </div>
 
-</div>
+                            </div>
 
 
-<div>
+                            <div class="flex justify-between">
 
-<label class="text-sm font-bold">
-Country
-</label>
+                                <span class="text-gray-500">
+                                    Account limit
+                                </span>
 
-<select id="editCountry" class="input mt-1">
+                                <b id="summaryLimit">
+                                    $0.00
+                                </b>
 
-<option>United States</option>
-<option>Canada</option>
-<option>United Kingdom</option>
-<option>Nigeria</option>
-<option>Ghana</option>
-<option>Kenya</option>
-<option>Other</option>
+                            </div>
 
-</select>
 
-</div>
+                            <div class="flex justify-between">
 
+                                <span class="text-gray-500">
+                                    Credit score
+                                </span>
 
-<div class="md:col-span-2">
+                                <b id="summaryCredit">
+                                    650
+                                </b>
 
-<button class="btn primary">
-Save profile
-</button>
+                            </div>
 
-<span id="profileMessage" class="text-sm ml-3"></span>
+                        </div>
 
-</div>
+                    </div>
 
-</form>
+                </div>
 
-</div>
+            </section>
 
-</div>
 
+            <!-- =================================================
+                 TRANSFER
+            ================================================= -->
 
-<div class="card p-6 mt-5">
+            <section id="page-transfer" class="hidden">
 
-<h3 class="font-black mb-5">
-Account information
-</h3>
+                <h1 class="text-3xl font-black mb-2">
+                    Transfer money
+                </h1>
 
-<div class="grid md:grid-cols-3 gap-5 text-sm">
+                <p class="text-gray-500 mb-6">
+                    Create a demo transfer request.
+                </p>
 
-<div>
-<span class="text-gray-500">Account number</span>
-<b id="profileAccount" class="block mt-1">—</b>
-</div>
 
-<div>
-<span class="text-gray-500">Account created</span>
-<b id="profileCreated" class="block mt-1">—</b>
-</div>
+                <div class="card p-6 max-w-2xl">
 
-<div>
-<span class="text-gray-500">Account status</span>
-<b id="profileStatus" class="block mt-1 capitalize">—</b>
-</div>
+                    <form id="transferForm" class="space-y-4">
 
-</div>
+                        <div>
 
-</div>
+                            <label class="text-sm font-bold">
+                                Recipient name
+                            </label>
 
-</section>
+                            <input
+                                id="recipientName"
+                                class="input mt-1"
+                                required
+                            >
 
-</div>
+                        </div>
 
 
-<footer class="px-8 pb-8 text-xs text-gray-400">
-© 2026 Cash Flow Bank — Demo financial platform. Not a real bank or real-money ledger.
-</footer>
+                        <div>
 
-</main>
-</div>
+                            <label class="text-sm font-bold">
+                                Recipient account
+                            </label>
 
+                            <input
+                                id="recipientAccount"
+                                class="input mt-1"
+                                required
+                            >
 
-<!-- MODAL -->
-<div id="modal" class="modal-bg hidden">
+                        </div>
 
-<div class="modal">
 
-<div class="flex justify-between items-center mb-5">
+                        <div>
 
-<h3 id="modalTitle" class="text-xl font-black">
-Notice
-</h3>
+                            <label class="text-sm font-bold">
+                                Amount
+                            </label>
 
-<button onclick="closeModal()" class="text-2xl">
-×
-</button>
+                            <input
+                                id="transferAmount"
+                                class="input mt-1"
+                                type="number"
+                                min="0.01"
+                                step="0.01"
+                                required
+                            >
 
-</div>
+                        </div>
+
+
+                        <div>
+
+                            <label class="text-sm font-bold">
+                                Note
+                            </label>
+
+                            <textarea
+                                id="transferNote"
+                                class="input mt-1"
+                                rows="3"
+                            ></textarea>
+
+                        </div>
+
+
+                        <button
+                            id="transferButton"
+                            class="btn btn-primary w-full"
+                            type="submit"
+                        >
+                            Submit transfer
+                        </button>
+
+                    </form>
+
+
+                    <div
+                        id="transferMessage"
+                        class="text-sm mt-4"
+                    ></div>
+
+                    <p class="text-xs text-gray-400 mt-4">
+                        Demo notice: this platform does not move real money.
+                    </p>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 HISTORY
+            ================================================= -->
+
+            <section id="page-history" class="hidden">
+
+                <h1 class="text-3xl font-black mb-2">
+                    Transaction History
+                </h1>
+
+                <p class="text-gray-500 mb-6">
+                    Review transfers, cancellations and refunds.
+                </p>
+
+
+                <div class="card overflow-hidden">
+
+                    <div id="historyList">
+                        Loading...
+                    </div>
+
+                </div>
+
+            </section>
+
 
-<div id="modalBody"></div>
+            <!-- =================================================
+                 PROFILE
+            ================================================= -->
 
+            <section id="page-profile" class="hidden">
+
+                <h1 class="text-3xl font-black mb-2">
+                    My Profile
+                </h1>
+
+                <p class="text-gray-500 mb-6">
+                    Edit your profile and profile picture.
+                </p>
+
+
+                <div class="grid lg:grid-cols-[300px_1fr] gap-5">
+
+                    <!-- PHOTO -->
+
+                    <div class="card p-6 text-center">
+
+                        <img
+                            id="profilePhoto"
+                            class="w-32 h-32 rounded-full object-cover mx-auto hidden"
+                            alt="Profile picture"
+                        >
+
+                        <div
+                            id="profileInitial"
+                            class="w-32 h-32 rounded-full bg-emerald-100 text-[#063b2b] mx-auto flex items-center justify-center text-4xl font-black"
+                        >
+                            C
+                        </div>
+
+
+                        <label class="btn btn-light inline-block mt-5 cursor-pointer">
+
+                            Change picture
+
+                            <input
+                                id="profilePhotoInput"
+                                type="file"
+                                accept="image/*"
+                                class="hidden"
+                            >
+
+                        </label>
+
+                        <div
+                            id="photoMessage"
+                            class="text-xs text-gray-500 mt-3"
+                        ></div>
+
+                    </div>
+
+
+                    <!-- FORM -->
+
+                    <div class="card p-6">
+
+                        <form id="profileForm" class="grid md:grid-cols-2 gap-4">
+
+                            <div>
+
+                                <label class="text-sm font-bold">
+                                    Full name
+                                </label>
+
+                                <input
+                                    id="editName"
+                                    class="input mt-1"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <div>
+
+                                <label class="text-sm font-bold">
+                                    Email
+                                </label>
+
+                                <input
+                                    id="editEmail"
+                                    class="input mt-1 bg-gray-50"
+                                    disabled
+                                >
+
+                            </div>
+
+
+                            <div>
+
+                                <label class="text-sm font-bold">
+                                    Phone
+                                </label>
+
+                                <input
+                                    id="editPhone"
+                                    class="input mt-1"
+                                >
+
+                            </div>
+
+
+                            <div>
+
+                                <label class="text-sm font-bold">
+                                    Country
+                                </label>
+
+                                <select
+                                    id="editCountry"
+                                    class="input mt-1"
+                                >
+
+                                    <option>United States</option>
+                                    <option>Canada</option>
+                                    <option>United Kingdom</option>
+                                    <option>Nigeria</option>
+                                    <option>Ghana</option>
+                                    <option>Kenya</option>
+                                    <option>South Africa</option>
+                                    <option>India</option>
+                                    <option>Other</option>
+
+                                </select>
+
+                            </div>
+
+
+                            <div class="md:col-span-2">
+
+                                <button
+                                    class="btn btn-primary"
+                                    type="submit"
+                                >
+                                    Save profile
+                                </button>
+
+                                <span
+                                    id="profileMessage"
+                                    class="text-sm ml-3"
+                                ></span>
+
+                            </div>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+
+                <!-- ACCOUNT INFO -->
+
+                <div class="card p-6 mt-5">
+
+                    <h3 class="font-black text-lg mb-5">
+                        Account information
+                    </h3>
+
+                    <div class="grid md:grid-cols-3 gap-5 text-sm">
+
+                        <div>
+
+                            <span class="text-gray-500">
+                                Account number
+                            </span>
+
+                            <b
+                                id="profileAccount"
+                                class="block mt-1"
+                            >
+                                —
+                            </b>
+
+                        </div>
+
+
+                        <div>
+
+                            <span class="text-gray-500">
+                                Account created
+                            </span>
+
+                            <b
+                                id="profileCreated"
+                                class="block mt-1"
+                            >
+                                —
+                            </b>
+
+                        </div>
+
+
+                        <div>
+
+                            <span class="text-gray-500">
+                                Account status
+                            </span>
+
+                            <b
+                                id="profileStatus"
+                                class="block mt-1 capitalize"
+                            >
+                                —
+                            </b>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+        </div>
+
+
+        <footer class="px-8 pb-8 text-xs text-gray-400">
+
+            © 2026 Cash Flow Bank — Demo financial platform.
+            Not a real bank or real-money ledger.
+
+        </footer>
+
+    </main>
+
 </div>
+
+
+<!-- =========================================================
+     MODAL
+========================================================= -->
+
+<div
+    id="modalOverlay"
+    class="modal-overlay hidden"
+>
+
+    <div class="modal">
+
+        <div class="flex justify-between items-center mb-5">
+
+            <h3
+                id="modalTitle"
+                class="text-xl font-black"
+            >
+                Notice
+            </h3>
+
+            <button
+                onclick="closeModal()"
+                class="text-2xl"
+            >
+                ×
+            </button>
+
+        </div>
+
+        <div id="modalContent"></div>
+
+    </div>
 
 </div>
 
 
 <script>
 
-const firebaseConfig={
-apiKey:"AIzaSyB6M6TtGnHPWOnDr9xO4JYJbx4qtZr9W2w",
-authDomain:"cashflowbank-9068.firebaseapp.com",
-projectId:"cashflowbank-9068",
-storageBucket:"cashflowbank-9068.firebasestorage.app",
-messagingSenderId:"38012287371",
-appId:"1:38012287371:web:e3e8df73166ae0fc84d78e"
+/* =========================================================
+   FIREBASE
+========================================================= */
+
+const firebaseConfig = {
+
+    apiKey:"AIzaSyB6M6TtGnHPWOnDr9xO4JYJbx4qtZr9W2w",
+
+    authDomain:"cashflowbank-9068.firebaseapp.com",
+
+    projectId:"cashflowbank-9068",
+
+    storageBucket:"cashflowbank-9068.firebasestorage.app",
+
+    messagingSenderId:"38012287371",
+
+    appId:"1:38012287371:web:e3e8df73166ae0fc84d78e"
+
 };
 
 firebase.initializeApp(firebaseConfig);
 
-const auth=firebase.auth();
-const db=firebase.firestore();
-const storage=firebase.storage();
-
-let currentUser=null;
-let currentData=null;
-let transactions=[];
-let balanceHidden=false;
+const auth = firebase.auth();
+const db = firebase.firestore();
+const storage = firebase.storage();
 
 
-/* HELPERS */
+/* =========================================================
+   STATE
+========================================================= */
+
+let currentUser = null;
+let currentData = null;
+let transactions = [];
+let balanceHidden = false;
+
+
+/* =========================================================
+   HELPERS
+========================================================= */
 
 function $(id){
-return document.getElementById(id);
+    return document.getElementById(id);
 }
+
 
 function money(value){
-return new Intl.NumberFormat("en-US",{
-style:"currency",
-currency:"USD"
-}).format(Number(value||0));
-}
 
-function dateValue(value){
-
-if(!value)return null;
-
-if(value.toDate)return value.toDate();
-
-const d=new Date(value);
-
-return isNaN(d)?null:d;
+    return new Intl.NumberFormat("en-US",{
+        style:"currency",
+        currency:"USD"
+    }).format(Number(value || 0));
 
 }
+
+
+function getDate(value){
+
+    if(!value){
+        return null;
+    }
+
+    if(value.toDate){
+        return value.toDate();
+    }
+
+    const date = new Date(value);
+
+    return isNaN(date.getTime()) ? null : date;
+
+}
+
 
 function formatDate(value){
 
-const d=dateValue(value);
+    const date = getDate(value);
 
-if(!d)return "—";
+    if(!date){
+        return "—";
+    }
 
-return d.toLocaleDateString("en-US",{
-year:"numeric",
-month:"long",
-day:"numeric"
-});
+    return date.toLocaleDateString("en-US",{
+        year:"numeric",
+        month:"long",
+        day:"numeric"
+    });
 
 }
+
 
 function formatDateTime(value){
 
-const d=dateValue(value);
+    const date = getDate(value);
 
-if(!d)return "—";
+    if(!date){
+        return "—";
+    }
 
-return d.toLocaleString("en-US",{
-dateStyle:"medium",
-timeStyle:"short"
-});
+    return date.toLocaleString("en-US",{
+        dateStyle:"medium",
+        timeStyle:"short"
+    });
 
 }
+
 
 function escapeHTML(value){
 
-return String(value??"")
-.replace(/&/g,"&amp;")
-.replace(/</g,"&lt;")
-.replace(/>/g,"&gt;")
-.replace(/"/g,"&quot;")
-.replace(/'/g,"&#039;");
-
-}
-
-function message(id,text,success=false){
-
-$(id).textContent=text;
-
-$(id).className=
-"text-sm mt-3 "+
-(success?"text-green-700":"text-red-600");
+    return String(value ?? "")
+        .replace(/&/g,"&amp;")
+        .replace(/</g,"&lt;")
+        .replace(/>/g,"&gt;")
+        .replace(/"/g,"&quot;")
+        .replace(/'/g,"&#039;");
 
 }
 
 
-/* AUTH */
+function showMessage(id,text,success=false){
+
+    const element=$(id);
+
+    if(!element){
+        return;
+    }
+
+    element.textContent=text;
+
+    element.className=
+        "text-sm mt-3 "+
+        (success ? "text-green-700" : "text-red-600");
+
+}
+
+
+/* =========================================================
+   AUTH UI
+========================================================= */
 
 function showLogin(){
 
-$("loginBox").classList.remove("hidden");
-$("registerBox").classList.add("hidden");
+    $("loginBox").classList.remove("hidden");
+    $("registerBox").classList.add("hidden");
 
 }
+
 
 function showRegister(){
 
-$("loginBox").classList.add("hidden");
-$("registerBox").classList.remove("hidden");
+    $("loginBox").classList.add("hidden");
+    $("registerBox").classList.remove("hidden");
 
 }
 
 
-$("loginForm").addEventListener("submit",async e=>{
+/* =========================================================
+   GENERATE ACCOUNT NUMBER
+========================================================= */
 
-e.preventDefault();
+async function generateUniqueAccountNumber(){
 
-message("loginMessage","Signing in...",true);
+    for(let i=0;i<20;i++){
 
-try{
+        const number=String(
+            Math.floor(
+                1000000000 +
+                Math.random()*9000000000
+            )
+        );
 
-let login=$("loginId").value.trim();
-let email=login;
+        const snapshot=
+            await db
+                .collection("users")
+                .where("accountNumber","==",number)
+                .limit(1)
+                .get();
 
-if(/^\d{10}$/.test(login)){
+        if(snapshot.empty){
+            return number;
+        }
 
-const snap=await db
-.collection("users")
-.where("accountNumber","==",login)
-.limit(1)
-.get();
+    }
 
-if(snap.empty)
-throw new Error("Account number not found.");
-
-email=snap.docs[0].data().email;
+    throw new Error(
+        "Could not generate an account number."
+    );
 
 }
 
-await auth.signInWithEmailAndPassword(
-email,
-$("loginPass").value
+
+/* =========================================================
+   REGISTER
+========================================================= */
+
+$("registerForm").addEventListener(
+    "submit",
+    async function(event){
+
+        event.preventDefault();
+
+        const button=$("registerButton");
+
+        const password=$("regPassword").value;
+        const confirm=$("regConfirm").value;
+
+        if(password!==confirm){
+
+            showMessage(
+                "registerMessage",
+                "Passwords do not match."
+            );
+
+            return;
+        }
+
+        button.disabled=true;
+        button.textContent="Creating account...";
+
+        let credential=null;
+
+        try{
+
+            const email=$("regEmail").value.trim();
+
+            credential=
+                await auth.createUserWithEmailAndPassword(
+                    email,
+                    password
+                );
+
+            const accountNumber=
+                await generateUniqueAccountNumber();
+
+            await db
+                .collection("users")
+                .doc(credential.user.uid)
+                .set({
+
+                    uid:credential.user.uid,
+
+                    accountNumber,
+
+                    name:$("regName").value.trim(),
+
+                    email,
+
+                    phone:$("regPhone").value.trim(),
+
+                    country:$("regCountry").value,
+
+                    accountType:$("regType").value,
+
+                    status:"pending",
+
+                    balance:0,
+
+                    accountLimit:0,
+
+                    creditScore:650,
+
+                    photoURL:"",
+
+                    createdAt:
+                        firebase.firestore
+                            .FieldValue
+                            .serverTimestamp(),
+
+                    updatedAt:
+                        firebase.firestore
+                            .FieldValue
+                            .serverTimestamp()
+
+                });
+
+            showMessage(
+                "registerMessage",
+                "Account created successfully. Your account is waiting for approval.",
+                true
+            );
+
+            setTimeout(
+                showLogin,
+                1200
+            );
+
+        }catch(error){
+
+            console.error(error);
+
+            if(credential){
+
+                try{
+                    await credential.user.delete();
+                }catch(_){}
+
+            }
+
+            showMessage(
+                "registerMessage",
+                error.message
+            );
+
+        }finally{
+
+            button.disabled=false;
+            button.textContent="Create account";
+
+        }
+
+    }
 );
 
-}catch(error){
 
-message("loginMessage",error.message);
+/* =========================================================
+   LOGIN
+========================================================= */
 
-}
+$("loginForm").addEventListener(
+    "submit",
+    async function(event){
 
-});
+        event.preventDefault();
 
+        const button=$("loginButton");
 
-$("registerForm").addEventListener("submit",async e=>{
+        button.disabled=true;
+        button.textContent="Signing in...";
 
-e.preventDefault();
+        try{
 
-const button=$("registerButton");
+            let login=$("loginId").value.trim();
 
-button.disabled=true;
-button.textContent="Creating account...";
+            let email=login;
 
-let credential=null;
+            if(/^\d{10}$/.test(login)){
 
-try{
+                const snapshot=
+                    await db
+                        .collection("users")
+                        .where(
+                            "accountNumber",
+                            "==",
+                            login
+                        )
+                        .limit(1)
+                        .get();
 
-const email=$("regEmail").value.trim();
-const password=$("regPass").value;
+                if(snapshot.empty){
 
-credential=
-await auth.createUserWithEmailAndPassword(
-email,
-password
+                    throw new Error(
+                        "Account number not found."
+                    );
+
+                }
+
+                email=snapshot.docs[0].data().email;
+
+            }
+
+            await auth.signInWithEmailAndPassword(
+                email,
+                $("loginPassword").value
+            );
+
+        }catch(error){
+
+            showMessage(
+                "loginMessage",
+                error.message
+            );
+
+        }finally{
+
+            button.disabled=false;
+            button.textContent="Sign in";
+
+        }
+
+    }
 );
 
-const accountNumber=await generateAccountNumber();
 
-await db
-.collection("users")
-.doc(credential.user.uid)
-.set({
-
-uid:credential.user.uid,
-
-accountNumber,
-
-name:$("regName").value.trim(),
-
-email,
-
-phone:$("regPhone").value.trim(),
-
-country:$("regCountry").value,
-
-accountType:$("regType").value,
-
-status:"pending",
-
-balance:0,
-
-accountLimit:0,
-
-creditScore:650,
-
-photoURL:"",
-
-createdAt:
-firebase.firestore.FieldValue.serverTimestamp(),
-
-updatedAt:
-firebase.firestore.FieldValue.serverTimestamp()
-
-});
-
-message(
-"registerMessage",
-"Account created successfully. Your account is waiting for approval.",
-true
-);
-
-setTimeout(showLogin,1200);
-
-}catch(error){
-
-if(credential){
-
-try{
-await credential.user.delete();
-}catch(_){}
-
-}
-
-message("registerMessage",error.message);
-
-}finally{
-
-button.disabled=false;
-button.textContent="Create account";
-
-}
-
-});
-
-
-async function generateAccountNumber(){
-
-for(let i=0;i<20;i++){
-
-const number=
-String(
-Math.floor(
-1000000000+
-Math.random()*9000000000
-)
-);
-
-const snap=
-await db.collection("users")
-.where("accountNumber","==",number)
-.limit(1)
-.get();
-
-if(snap.empty)return number;
-
-}
-
-throw new Error("Unable to generate account number.");
-
-}
-
+/* =========================================================
+   PASSWORD RESET
+========================================================= */
 
 async function forgotPassword(){
 
-const email=$("loginId").value.trim();
+    const login=$("loginId").value.trim();
 
-if(!email || /^\d{10}$/.test(email)){
+    if(!login || /^\d{10}$/.test(login)){
 
-alert("Enter your email address first.");
+        alert(
+            "Enter your email address first."
+        );
 
-return;
+        return;
+    }
 
-}
+    try{
 
-try{
+        await auth.sendPasswordResetEmail(login);
 
-await auth.sendPasswordResetEmail(email);
+        alert(
+            "Password reset email sent."
+        );
 
-alert("Password reset email sent.");
+    }catch(error){
 
-}catch(error){
+        alert(error.message);
 
-alert(error.message);
-
-}
-
-}
-
-
-/* AUTH STATE */
-
-auth.onAuthStateChanged(async user=>{
-
-if(!user){
-
-currentUser=null;
-currentData=null;
-
-$("authPage").classList.remove("hidden");
-$("application").classList.add("hidden");
-
-return;
+    }
 
 }
 
-currentUser=user;
 
-try{
+/* =========================================================
+   AUTH STATE
+========================================================= */
 
-await loadUser();
+auth.onAuthStateChanged(
+    async function(user){
 
-$("authPage").classList.add("hidden");
-$("application").classList.remove("hidden");
+        if(!user){
 
-}catch(error){
+            currentUser=null;
+            currentData=null;
 
-console.error(error);
-await auth.signOut();
+            $("authPage").classList.remove("hidden");
+            $("application").classList.add("hidden");
 
-}
+            return;
+        }
 
-});
+        currentUser=user;
 
+        try{
+
+            await loadUser();
+
+            $("authPage").classList.add("hidden");
+            $("application").classList.remove("hidden");
+
+        }catch(error){
+
+            console.error(error);
+
+            alert(
+                "Unable to load your account."
+            );
+
+            await auth.signOut();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   LOAD USER
+========================================================= */
 
 async function loadUser(){
 
-const snap=
-await db.collection("users")
-.doc(currentUser.uid)
-.get();
+    const snapshot=
+        await db
+            .collection("users")
+            .doc(currentUser.uid)
+            .get();
 
-if(!snap.exists)
-throw new Error("Account record not found.");
+    if(!snapshot.exists){
 
-currentData=snap.data();
+        throw new Error(
+            "Your account record was not found."
+        );
 
-populateUser();
+    }
 
-await loadTransactions();
+    currentData=snapshot.data();
+
+    populateUser();
+
+    await loadTransactions();
 
 }
 
 
-/* USER DISPLAY */
+/* =========================================================
+   POPULATE USER
+========================================================= */
 
 function populateUser(){
 
-const d=currentData;
+    const data=currentData;
 
-$("headerName").textContent=d.name||"Customer";
+    $("headerName").textContent=
+        data.name || "Customer";
 
-$("dashboardAccount").textContent=
-d.accountNumber||"—";
+    $("dashboardAccount").textContent=
+        data.accountNumber || "—";
 
-$("dashboardType").textContent=
-d.accountType||"—";
+    $("dashboardType").textContent=
+        data.accountType || "—";
 
-$("dashboardLimit").textContent=
-money(d.accountLimit);
+    $("dashboardLimit").textContent=
+        money(data.accountLimit);
 
-$("dashboardCountry").textContent=
-d.country||"—";
+    $("dashboardCountry").textContent=
+        data.country || "—";
 
-$("dashboardStatus").textContent=
-d.status||"pending";
+    $("dashboardStatus").textContent=
+        data.status || "pending";
 
-$("createdDate").textContent=
-formatDate(d.createdAt);
+    $("createdDate").textContent=
+        formatDate(data.createdAt);
 
-$("profileAccount").textContent=
-d.accountNumber||"—";
+    $("profileAccount").textContent=
+        data.accountNumber || "—";
 
-$("profileCreated").textContent=
-formatDate(d.createdAt);
+    $("profileCreated").textContent=
+        formatDate(data.createdAt);
 
-$("profileStatus").textContent=
-d.status||"pending";
+    $("profileStatus").textContent=
+        data.status || "pending";
 
-$("creditScore").textContent=
-d.creditScore??650;
+    $("creditScore").textContent=
+        Number(data.creditScore || 650);
 
-$("editName").value=d.name||"";
-$("editEmail").value=d.email||currentUser.email||"";
-$("editPhone").value=d.phone||"";
-$("editCountry").value=d.country||"Other";
+    $("summaryAccount").textContent=
+        data.accountNumber || "—";
 
-const status=
-String(d.status||"pending").toLowerCase();
+    $("summaryType").textContent=
+        data.accountType || "—";
 
-$("accountStatus").textContent=status;
+    $("summaryCountry").textContent=
+        data.country || "—";
 
-$("accountStatus").className=
-"badge "+
-(
-status==="approved"
-?"approved":
-status==="declined"
-?"declined":
-"pending"
-);
+    $("summaryCreated").textContent=
+        formatDate(data.createdAt);
 
-setProfilePhoto(d.photoURL,d.name||"Customer");
+    $("summaryStatus").textContent=
+        data.status || "pending";
 
-updateBalance();
+    $("summaryBalance").textContent=
+        money(data.balance);
 
-}
+    $("summaryLimit").textContent=
+        money(data.accountLimit);
 
+    $("summaryCredit").textContent=
+        Number(data.creditScore || 650);
 
-function updateBalance(){
+    $("editName").value=
+        data.name || "";
 
-$("balanceDisplay").textContent=
-balanceHidden
-?"••••••"
-:money(currentData.balance);
+    $("editEmail").value=
+        data.email || currentUser.email || "";
 
-}
+    $("editPhone").value=
+        data.phone || "";
 
-
-function setProfilePhoto(url,name){
-
-const initial=
-(name||"C").trim().charAt(0).toUpperCase();
-
-$("headerInitial").textContent=initial;
-$("profileInitial").textContent=initial;
-
-if(url){
-
-$("headerPhoto").src=url;
-$("headerPhoto").classList.remove("hidden");
-$("headerInitial").classList.add("hidden");
-
-$("profilePhoto").src=url;
-$("profilePhoto").classList.remove("hidden");
-$("profileInitial").classList.add("hidden");
-
-}else{
-
-$("headerPhoto").classList.add("hidden");
-$("headerInitial").classList.remove("hidden");
-
-$("profilePhoto").classList.add("hidden");
-$("profileInitial").classList.remove("hidden");
-
-}
-
-}
+    $("editCountry").value=
+        data.country || "Other";
 
 
-/* TRANSACTIONS */
+    const status=
+        String(data.status || "pending")
+            .toLowerCase();
 
-async function loadTransactions(){
+    $("accountStatusBadge").textContent=
+        status.charAt(0).toUpperCase()+status.slice(1);
 
-const snap=
-await db.collection("transactions")
-.where("userId","==",currentUser.uid)
-.get();
+    $("accountStatusBadge").className=
+        "badge "+
+        (
+            status==="approved"
+                ? "badge-approved"
+                : status==="declined"
+                    ? "badge-declined"
+                    : "badge-pending"
+        );
 
-transactions=
-snap.docs
-.map(doc=>({
-id:doc.id,
-...doc.data()
-}))
-.sort((a,b)=>{
 
-const aa=a.createdAt?.seconds||0;
-const bb=b.createdAt?.seconds||0;
+    const limit=
+        Number(data.accountLimit || 0);
 
-return bb-aa;
+    const balance=
+        Number(data.balance || 0);
 
-});
+    let percentage=0;
 
-$("transactionCount").textContent=
-transactions.length;
+    if(limit>0){
+        percentage=
+            Math.min(
+                100,
+                Math.max(
+                    0,
+                    (balance/limit)*100
+                )
+            );
+    }
 
-renderRecent();
-renderHistory();
+    $("balanceBar").style.width=
+        percentage+"%";
+
+
+    setProfileImage(
+        data.photoURL,
+        data.name || "Customer"
+    );
+
+    updateBalanceDisplay();
 
 }
 
 
-function statusBadge(status){
+/* =========================================================
+   BALANCE
+========================================================= */
 
-const s=
-String(status||"pending").toLowerCase();
+function updateBalanceDisplay(){
 
-return `<span class="badge ${s}">
-${s.charAt(0).toUpperCase()+s.slice(1)}
-</span>`;
+    if(balanceHidden){
 
-}
+        $("balanceDisplay").textContent=
+            "••••••";
 
+    }else{
 
-function renderRecent(){
+        $("balanceDisplay").textContent=
+            money(currentData.balance);
 
-const list=transactions.slice(0,5);
-
-if(!list.length){
-
-$("recentTransactions").innerHTML=
-`<p class="text-gray-500 text-sm">
-No transactions yet.
-</p>`;
-
-return;
-
-}
-
-$("recentTransactions").innerHTML=
-list.map(t=>`
-
-<div class="flex justify-between items-center py-4 border-b last:border-0">
-
-<div>
-
-<b>${escapeHTML(t.recipientName||"Transfer")}</b>
-
-<p class="text-xs text-gray-500">
-${formatDateTime(t.createdAt)}
-</p>
-
-</div>
-
-<div class="text-right">
-
-<b>${money(t.amount)}</b>
-
-<div class="mt-1">
-${statusBadge(t.status)}
-</div>
-
-</div>
-
-</div>
-
-`).join("");
-
-}
-
-
-function renderHistory(){
-
-if(!transactions.length){
-
-$("historyList").innerHTML=
-`<p class="p-6 text-gray-500">
-No transactions yet.
-</p>`;
-
-return;
-
-}
-
-$("historyList").innerHTML=
-transactions.map(t=>{
-
-const status=
-String(t.status||"pending").toLowerCase();
-
-const canCancel=
-status==="pending";
-
-return `
-
-<div class="p-5 border-b last:border-0">
-
-<div class="flex flex-col md:flex-row md:justify-between gap-4">
-
-<div>
-
-<b>${escapeHTML(t.recipientName||"Transfer")}</b>
-
-<p class="text-sm text-gray-500 mt-1">
-Account: ${escapeHTML(t.recipientAccount||"—")}
-</p>
-
-<p class="text-sm text-gray-500">
-${formatDateTime(t.createdAt)}
-</p>
-
-${t.note?
-`<p class="text-sm text-gray-500 mt-2">
-${escapeHTML(t.note)}
-</p>`:""}
-
-${status==="refunded"?
-`<p class="text-sm text-blue-700 font-bold mt-2">
-Refund issued: ${money(t.refundAmount||t.amount)}
-</p>`:""}
-
-</div>
-
-<div class="text-right">
-
-<div class="font-black">
-${money(t.amount)}
-</div>
-
-<div class="mt-1">
-${statusBadge(status)}
-</div>
-
-${canCancel?
-`<button
-onclick="cancelTransaction('${t.id}')"
-class="btn danger text-sm mt-3">
-Cancel transaction
-</button>`:""}
-
-</div>
-
-</div>
-
-</div>
-
-`;
-
-}).join("");
-
-}
-
-
-/* TRANSFER */
-
-$("transferForm").addEventListener("submit",async e=>{
-
-e.preventDefault();
-
-if(!currentUser)return;
-
-if(String(currentData.status).toLowerCase()!=="approved"){
-
-message(
-"transferMessage",
-"Transfers are available after account approval."
-);
-
-return;
-
-}
-
-const recipientName=
-$("recipientName").value.trim();
-
-const recipientAccount=
-$("recipientAccount").value.trim();
-
-const amount=
-Number($("transferAmount").value);
-
-const note=
-$("transferNote").value.trim();
-
-if(!recipientName||
-!recipientAccount||
-!amount||
-amount<=0){
-
-message(
-"transferMessage",
-"Please complete all required fields."
-);
-
-return;
-
-}
-
-if(amount>Number(currentData.balance||0)){
-
-message(
-"transferMessage",
-"Insufficient balance."
-);
-
-return;
-
-}
-
-const button=$("transferButton");
-
-button.disabled=true;
-button.textContent="Processing...";
-
-try{
-
-/*
-ledger:
-The amount is deducted when the transfer is created.
-If the user cancels while pending, the amount is restored
-and the transaction becomes REFUNDED.
-*/
-
-const newBalance=
-Number(currentData.balance||0)-amount;
-
-const transactionRef=
-db.collection("transactions").doc();
-
-await db.runTransaction(async transaction=>{
-
-const userRef=
-db.collection("users").doc(currentUser.uid);
-
-const userSnap=
-await transaction.get(userRef);
-
-if(!userSnap.exists)
-throw new Error("User account not found.");
-
-const user=userSnap.data();
-
-const latestBalance=
-Number(user.balance||0);
-
-if(amount>latestBalance)
-throw new Error("Insufficient balance.");
-
-transaction.update(userRef,{
-
-balance:latestBalance-amount,
-
-updatedAt:
-firebase.firestore.FieldValue.serverTimestamp()
-
-});
-
-transaction.set(transactionRef,{
-
-userId:currentUser.uid,
-
-userName:user.name||"",
-
-userEmail:user.email||currentUser.email||"",
-
-recipientName,
-
-recipientAccount,
-
-amount,
-
-note,
-
-status:"pending",
-
-type:"transfer",
-
-refundAmount:0,
-
-createdAt:
-firebase.firestore.FieldValue.serverTimestamp(),
-
-updatedAt:
-firebase.firestore.FieldValue.serverTimestamp()
-
-});
-
-});
-
-currentData.balance=newBalance;
-
-updateBalance();
-
-await loadTransactions();
-
-$("transferForm").reset();
-
-message(
-"transferMessage",
-`Transfer submitted. ${money(amount)} was deducted from your balance.`,
-true
-);
-
-}catch(error){
-
-console.error(error);
-
-message(
-"transferMessage",
-error.message||"Transfer failed."
-);
-
-}finally{
-
-button.disabled=false;
-button.textContent="Submit transfer";
-
-}
-
-});
-
-
-/* CANCEL + REFUND */
-
-async function cancelTransaction(transactionId){
-
-const transactionRef=
-db.collection("transactions").doc(transactionId);
-
-try{
-
-await db.runTransaction(async transaction=>{
-
-const txSnap=
-await transaction.get(transactionRef);
-
-if(!txSnap.exists)
-throw new Error("Transaction not found.");
-
-const tx=txSnap.data();
-
-if(tx.userId!==currentUser.uid)
-throw new Error("You cannot cancel this transaction.");
-
-if(String(tx.status).toLowerCase()!=="pending")
-throw new Error("Only pending transactions can be cancelled.");
-
-const userRef=
-db.collection("users").doc(currentUser.uid);
-
-const userSnap=
-await transaction.get(userRef);
-
-if(!userSnap.exists)
-throw new Error("Account not found.");
-
-const user=userSnap.data();
-
-const refundedBalance=
-Number(user.balance||0)+Number(tx.amount||0);
-
-transaction.update(userRef,{
-
-balance:refundedBalance,
-
-updatedAt:
-firebase.firestore.FieldValue.serverTimestamp()
-
-});
-
-transaction.update(transactionRef,{
-
-status:"refunded",
-
-refundAmount:Number(tx.amount||0),
-
-refundedAt:
-firebase.firestore.FieldValue.serverTimestamp(),
-
-updatedAt:
-firebase.firestore.FieldValue.serverTimestamp(),
-
-cancelledBy:"customer"
-
-});
-
-});
-
-await loadUser();
-
-alert("Transaction cancelled. The amount has been refunded to your balance.");
-
-}catch(error){
-
-alert(error.message);
-
-}
-
-}
-
-
-/* PROFILE */
-
-$("profileForm").addEventListener("submit",async e=>{
-
-e.preventDefault();
-
-try{
-
-await db.collection("users")
-.doc(currentUser.uid)
-.update({
-
-name:$("editName").value.trim(),
-
-phone:$("editPhone").value.trim(),
-
-country:$("editCountry").value,
-
-updatedAt:
-firebase.firestore.FieldValue.serverTimestamp()
-
-});
-
-await loadUser();
-
-$("profileMessage").textContent=
-"Profile updated successfully.";
-
-$("profileMessage").className=
-"text-sm ml-3 text-green-700";
-
-}catch(error){
-
-$("profileMessage").textContent=
-error.message;
-
-$("profileMessage").className=
-"text-sm ml-3 text-red-600";
-
-}
-
-});
-
-
-/* PROFILE PHOTO */
-
-$("photoInput").addEventListener("change",async e=>{
-
-const file=e.target.files[0];
-
-if(!file)return;
-
-if(!file.type.startsWith("image/")){
-
-$("photoMessage").textContent=
-"Please select an image.";
-
-return;
-
-}
-
-if(file.size>5*1024*1024){
-
-$("photoMessage").textContent=
-"Image must be smaller than 5 MB.";
-
-return;
-
-}
-
-$("photoMessage").textContent=
-"Uploading...";
-
-try{
-
-const path=
-"profilePhotos/"+
-currentUser.uid+
-"/profile.jpg";
-
-const ref=storage.ref(path);
-
-await ref.put(file);
-
-const url=await ref.getDownloadURL();
-
-await db.collection("users")
-.doc(currentUser.uid)
-.update({
-
-photoURL:url,
-
-updatedAt:
-firebase.firestore.FieldValue.serverTimestamp()
-
-});
-
-currentData.photoURL=url;
-
-setProfilePhoto(url,currentData.name||"Customer");
-
-$("photoMessage").textContent=
-"Profile picture updated.";
-
-}catch(error){
-
-console.error(error);
-
-$("photoMessage").textContent=
-error.message;
-
-}
-
-});
-
-
-/* NAVIGATION */
-
-function showPage(page){
-
-document.querySelectorAll("[id^='page-']")
-.forEach(section=>section.classList.add("hidden"));
-
-$("page-"+page).classList.remove("hidden");
-
-document.querySelectorAll(".nav[data-page]")
-.forEach(button=>{
-
-button.classList.toggle(
-"active",
-button.dataset.page===page
-);
-
-});
-
-$("sidebar").classList.remove("open");
-
-window.scrollTo({
-top:0,
-behavior:"smooth"
-});
-
-}
-
-
-function toggleMenu(){
-
-$("sidebar").classList.toggle("open");
+    }
 
 }
 
 
 function toggleBalance(){
 
-balanceHidden=!balanceHidden;
+    balanceHidden=!balanceHidden;
 
-updateBalance();
-
-}
-
-
-function logout(){
-
-auth.signOut();
+    updateBalanceDisplay();
 
 }
 
 
-/* MODALS */
+/* =========================================================
+   PROFILE IMAGE
+========================================================= */
 
-function openModal(title,body){
+function setProfileImage(url,name){
 
-$("modalTitle").textContent=title;
-$("modalBody").innerHTML=body;
-$("modal").classList.remove("hidden");
+    const initial=
+        String(name || "C")
+            .trim()
+            .charAt(0)
+            .toUpperCase();
+
+    $("headerInitial").textContent=
+        initial;
+
+    $("profileInitial").textContent=
+        initial;
+
+
+    if(url){
+
+        $("headerPhoto").src=url;
+        $("headerPhoto").classList.remove("hidden");
+        $("headerInitial").classList.add("hidden");
+
+        $("profilePhoto").src=url;
+        $("profilePhoto").classList.remove("hidden");
+        $("profileInitial").classList.add("hidden");
+
+    }else{
+
+        $("headerPhoto").classList.add("hidden");
+        $("headerInitial").classList.remove("hidden");
+
+        $("profilePhoto").classList.add("hidden");
+        $("profileInitial").classList.remove("hidden");
+
+    }
 
 }
+
+
+/* =========================================================
+   PROFILE PHOTO UPLOAD
+========================================================= */
+
+$("profilePhotoInput").addEventListener(
+    "change",
+    async function(event){
+
+        const file=event.target.files[0];
+
+        if(!file){
+            return;
+        }
+
+        if(!file.type.startsWith("image/")){
+
+            $("photoMessage").textContent=
+                "Please select an image file.";
+
+            return;
+        }
+
+        if(file.size>5*1024*1024){
+
+            $("photoMessage").textContent=
+                "The image must be smaller than 5 MB.";
+
+            return;
+        }
+
+        $("photoMessage").textContent=
+            "Uploading picture...";
+
+        try{
+
+            const reference=
+                storage
+                    .ref()
+                    .child(
+                        "profilePhotos/"
+                        +currentUser.uid+
+                        "/profile.jpg"
+                    );
+
+            await reference.put(file);
+
+            const url=
+                await reference.getDownloadURL();
+
+            await db
+                .collection("users")
+                .doc(currentUser.uid)
+                .update({
+
+                    photoURL:url,
+
+                    updatedAt:
+                        firebase.firestore
+                            .FieldValue
+                            .serverTimestamp()
+
+                });
+
+            currentData.photoURL=url;
+
+            setProfileImage(
+                url,
+                currentData.name || "Customer"
+            );
+
+            $("photoMessage").textContent=
+                "Profile picture updated successfully.";
+
+        }catch(error){
+
+            console.error(error);
+
+            $("photoMessage").textContent=
+                error.message;
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   PROFILE EDIT
+========================================================= */
+
+$("profileForm").addEventListener(
+    "submit",
+    async function(event){
+
+        event.preventDefault();
+
+        try{
+
+            await db
+                .collection("users")
+                .doc(currentUser.uid)
+                .update({
+
+                    name:
+                        $("editName")
+                            .value
+                            .trim(),
+
+                    phone:
+                        $("editPhone")
+                            .value
+                            .trim(),
+
+                    country:
+                        $("editCountry")
+                            .value,
+
+                    updatedAt:
+                        firebase.firestore
+                            .FieldValue
+                            .serverTimestamp()
+
+                });
+
+            await loadUser();
+
+            $("profileMessage").textContent=
+                "Profile updated successfully.";
+
+            $("profileMessage").className=
+                "text-sm ml-3 text-green-700";
+
+        }catch(error){
+
+            $("profileMessage").textContent=
+                error.message;
+
+            $("profileMessage").className=
+                "text-sm ml-3 text-red-600";
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   TRANSACTIONS
+========================================================= */
+
+async function loadTransactions(){
+
+    const snapshot=
+        await db
+            .collection("transactions")
+            .where(
+                "userId",
+                "==",
+                currentUser.uid
+            )
+            .get();
+
+    transactions=
+        snapshot.docs
+            .map(doc=>({
+                id:doc.id,
+                ...doc.data()
+            }))
+            .sort(
+                (a,b)=>
+                    (b.createdAt?.seconds || 0) -
+                    (a.createdAt?.seconds || 0)
+            );
+
+    $("transactionCount").textContent=
+        transactions.length;
+
+    renderRecentTransactions();
+    renderHistory();
+
+}
+
+
+/* =========================================================
+   STATUS BADGE
+========================================================= */
+
+function transactionBadge(status){
+
+    const value=
+        String(status || "pending")
+            .toLowerCase();
+
+    let className="badge-pending";
+
+    if(value==="approved"){
+        className="badge-approved";
+    }
+
+    if(value==="completed"){
+        className="badge-completed";
+    }
+
+    if(value==="declined"){
+        className="badge-declined";
+    }
+
+    if(value==="cancelled"){
+        className="badge-cancelled";
+    }
+
+    if(value==="refunded"){
+        className="badge-refunded";
+    }
+
+    return `
+        <span class="badge ${className}">
+            ${value.charAt(0).toUpperCase()+value.slice(1)}
+        </span>
+    `;
+
+}
+
+
+/* =========================================================
+   RECENT TRANSACTIONS
+========================================================= */
+
+function renderRecentTransactions(){
+
+    const list=
+        transactions.slice(0,5);
+
+    if(!list.length){
+
+        $("recentTransactions").innerHTML=
+            `<p class="text-sm text-gray-500">
+                No transactions yet.
+            </p>`;
+
+        return;
+    }
+
+    $("recentTransactions").innerHTML=
+        list.map(transaction=>`
+
+            <div class="flex justify-between items-center py-4 border-b last:border-0">
+
+                <div>
+
+                    <b>
+                        ${escapeHTML(
+                            transaction.recipientName ||
+                            "Transfer"
+                        )}
+                    </b>
+
+                    <p class="text-xs text-gray-500 mt-1">
+                        ${formatDateTime(
+                            transaction.createdAt
+                        )}
+                    </p>
+
+                </div>
+
+                <div class="text-right">
+
+                    <b>
+                        ${money(transaction.amount)}
+                    </b>
+
+                    <div class="mt-1">
+                        ${transactionBadge(
+                            transaction.status
+                        )}
+                    </div>
+
+                </div>
+
+            </div>
+
+        `).join("");
+
+}
+
+
+/* =========================================================
+   HISTORY
+========================================================= */
+
+function renderHistory(){
+
+    if(!transactions.length){
+
+        $("historyList").innerHTML=
+            `<p class="p-6 text-gray-500">
+                No transactions yet.
+            </p>`;
+
+        return;
+    }
+
+
+    $("historyList").innerHTML=
+        transactions.map(transaction=>{
+
+            const status=
+                String(
+                    transaction.status || "pending"
+                ).toLowerCase();
+
+            const canCancel=
+                status==="pending";
+
+            return `
+
+                <div class="p-5 border-b last:border-0">
+
+                    <div class="flex flex-col md:flex-row md:justify-between gap-4">
+
+                        <div>
+
+                            <b>
+                                ${escapeHTML(
+                                    transaction.recipientName ||
+                                    "Transfer"
+                                )}
+                            </b>
+
+                            <p class="text-sm text-gray-500 mt-1">
+                                Recipient account:
+                                ${escapeHTML(
+                                    transaction.recipientAccount ||
+                                    "—"
+                                )}
+                            </p>
+
+                            <p class="text-sm text-gray-500">
+                                ${formatDateTime(
+                                    transaction.createdAt
+                                )}
+                            </p>
+
+                            ${
+                                transaction.note
+                                ?
+                                `<p class="text-sm text-gray-500 mt-2">
+                                    ${escapeHTML(transaction.note)}
+                                </p>`
+                                :
+                                ""
+                            }
+
+                            ${
+                                status==="refunded"
+                                ?
+                                `<div class="mt-3 p-3 rounded-xl bg-blue-50 text-blue-700 text-sm">
+                                    <b>Refund issued</b>
+                                    <br>
+                                    ${money(
+                                        transaction.refundAmount ||
+                                        transaction.amount
+                                    )}
+                                    was returned to your demo balance.
+                                </div>`
+                                :
+                                ""
+                            }
+
+                        </div>
+
+
+                        <div class="md:text-right">
+
+                            <div class="font-black text-lg">
+                                ${money(transaction.amount)}
+                            </div>
+
+                            <div class="mt-1">
+                                ${transactionBadge(
+                                    transaction.status
+                                )}
+                            </div>
+
+                            ${
+                                canCancel
+                                ?
+                                `<button
+                                    onclick="cancelTransaction('${transaction.id}')"
+                                    class="btn btn-danger text-sm mt-3"
+                                >
+                                    Cancel transaction
+                                </button>`
+                                :
+                                ""
+                            }
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            `;
+
+        }).join("");
+
+}
+
+
+/* =========================================================
+   TRANSFER
+========================================================= */
+
+$("transferForm").addEventListener(
+    "submit",
+    async function(event){
+
+        event.preventDefault();
+
+        if(!currentUser || !currentData){
+            return;
+        }
+
+
+        const accountStatus=
+            String(
+                currentData.status || ""
+            ).toLowerCase();
+
+        if(accountStatus!=="approved"){
+
+            showMessage(
+                "transferMessage",
+                "Transfers are available after your account is approved."
+            );
+
+            return;
+        }
+
+
+        const recipientName=
+            $("recipientName")
+                .value
+                .trim();
+
+        const recipientAccount=
+            $("recipientAccount")
+                .value
+                .trim();
+
+        const amount=
+            Number(
+                $("transferAmount").value
+            );
+
+        const note=
+            $("transferNote")
+                .value
+                .trim();
+
+
+        if(
+            !recipientName ||
+            !recipientAccount ||
+            !amount ||
+            amount<=0
+        ){
+
+            showMessage(
+                "transferMessage",
+                "Please complete all required fields."
+            );
+
+            return;
+        }
+
+
+        const currentBalance=
+            Number(currentData.balance || 0);
+
+        if(amount>currentBalance){
+
+            showMessage(
+                "transferMessage",
+                "Insufficient demo balance."
+            );
+
+            return;
+        }
+
+
+        const button=
+            $("transferButton");
+
+        button.disabled=true;
+        button.textContent=
+            "Processing...";
+
+
+        try{
+
+            /*
+             * DEMO LEDGER
+             *
+             * The balance is deducted when the transfer is
+             * created. If the pending transaction is cancelled,
+             * the amount is added back and the transaction
+             * becomes "refunded".
+             */
+
+            const transactionReference=
+                db.collection("transactions").doc();
+
+
+            await db.runTransaction(
+                async transaction=>{
+
+                    const userReference=
+                        db.collection("users")
+                            .doc(currentUser.uid);
+
+                    const userSnapshot=
+                        await transaction.get(
+                            userReference
+                        );
+
+                    if(!userSnapshot.exists){
+
+                        throw new Error(
+                            "Your account could not be found."
+                        );
+
+                    }
+
+
+                    const user=
+                        userSnapshot.data();
+
+                    const latestBalance=
+                        Number(user.balance || 0);
+
+
+                    if(amount>latestBalance){
+
+                        throw new Error(
+                            "Insufficient demo balance."
+                        );
+
+                    }
+
+
+                    transaction.update(
+                        userReference,
+                        {
+
+                            balance:
+                                latestBalance - amount,
+
+                            updatedAt:
+                                firebase.firestore
+                                    .FieldValue
+                                    .serverTimestamp()
+
+                        }
+                    );
+
+
+                    transaction.set(
+                        transactionReference,
+                        {
+
+                            userId:
+                                currentUser.uid,
+
+                            userName:
+                                user.name || "",
+
+                            userEmail:
+                                user.email ||
+                                currentUser.email ||
+                                "",
+
+                            recipientName,
+
+                            recipientAccount,
+
+                            amount,
+
+                            note,
+
+                            status:"pending",
+
+                            type:"transfer",
+
+                            refundAmount:0,
+
+                            createdAt:
+                                firebase.firestore
+                                    .FieldValue
+                                    .serverTimestamp(),
+
+                            updatedAt:
+                                firebase.firestore
+                                    .FieldValue
+                                    .serverTimestamp()
+
+                        }
+                    );
+
+                }
+            );
+
+
+            currentData.balance=
+                currentBalance-amount;
+
+
+            updateBalanceDisplay();
+
+            await loadTransactions();
+
+
+            $("transferForm").reset();
+
+
+            showMessage(
+                "transferMessage",
+                `${money(amount)} was deducted from your demo balance and the transfer was submitted.`,
+                true
+            );
+
+
+        }catch(error){
+
+            console.error(error);
+
+            showMessage(
+                "transferMessage",
+                error.message ||
+                "Unable to process transfer."
+            );
+
+        }finally{
+
+            button.disabled=false;
+
+            button.textContent=
+                "Submit transfer";
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   CANCEL TRANSACTION + REFUND
+========================================================= */
+
+async function cancelTransaction(transactionId){
+
+    if(!currentUser){
+        return;
+    }
+
+
+    const transactionReference=
+        db.collection("transactions")
+            .doc(transactionId);
+
+
+    if(!confirm(
+        "Cancel this pending transaction? The amount will be refunded to your demo balance."
+    )){
+        return;
+    }
+
+
+    try{
+
+        await db.runTransaction(
+            async transaction=>{
+
+                const transactionSnapshot=
+                    await transaction.get(
+                        transactionReference
+                    );
+
+
+                if(!transactionSnapshot.exists){
+
+                    throw new Error(
+                        "Transaction not found."
+                    );
+
+                }
+
+
+                const transactionData=
+                    transactionSnapshot.data();
+
+
+                if(
+                    transactionData.userId !==
+                    currentUser.uid
+                ){
+
+                    throw new Error(
+                        "You cannot cancel this transaction."
+                    );
+
+                }
+
+
+                if(
+                    String(
+                        transactionData.status
+                    ).toLowerCase() !== "pending"
+                ){
+
+                    throw new Error(
+                        "Only pending transactions can be cancelled."
+                    );
+
+                }
+
+
+                const userReference=
+                    db.collection("users")
+                        .doc(currentUser.uid);
+
+
+                const userSnapshot=
+                    await transaction.get(
+                        userReference
+                    );
+
+
+                if(!userSnapshot.exists){
+
+                    throw new Error(
+                        "Account not found."
+                    );
+
+                }
+
+
+                const user=
+                    userSnapshot.data();
+
+
+                const refund=
+                    Number(
+                        transactionData.amount || 0
+                    );
+
+
+                const newBalance=
+                    Number(user.balance || 0)+refund;
+
+
+                transaction.update(
+                    userReference,
+                    {
+
+                        balance:newBalance,
+
+                        updatedAt:
+                            firebase.firestore
+                                .FieldValue
+                                .serverTimestamp()
+
+                    }
+                );
+
+
+                transaction.update(
+                    transactionReference,
+                    {
+
+                        status:"refunded",
+
+                        refundAmount:refund,
+
+                        cancelledBy:"customer",
+
+                        refundedAt:
+                            firebase.firestore
+                                .FieldValue
+                                .serverTimestamp(),
+
+                        updatedAt:
+                            firebase.firestore
+                                .FieldValue
+                                .serverTimestamp()
+
+                    }
+                );
+
+            }
+        );
+
+
+        await loadUser();
+
+
+        alert(
+            "Transaction cancelled successfully. The amount has been refunded to your demo balance."
+        );
+
+
+    }catch(error){
+
+        console.error(error);
+
+        alert(error.message);
+
+    }
+
+}
+
+
+/* =========================================================
+   PROFILE PAGE
+========================================================= */
+
+function showPage(page){
+
+    document
+        .querySelectorAll(
+            '[id^="page-"]'
+        )
+        .forEach(
+            section=>
+                section.classList.add("hidden")
+        );
+
+
+    const target=
+        $("page-"+page);
+
+    if(target){
+        target.classList.remove("hidden");
+    }
+
+
+    document
+        .querySelectorAll(
+            ".nav-btn[data-page]"
+        )
+        .forEach(button=>{
+
+            button.classList.toggle(
+                "active",
+                button.dataset.page===page
+            );
+
+        });
+
+
+    $("sidebar").classList.remove("open");
+
+    window.scrollTo({
+        top:0,
+        behavior:"smooth"
+    });
+
+}
+
+
+/* =========================================================
+   MOBILE MENU
+========================================================= */
+
+function toggleMenu(){
+
+    $("sidebar").classList.toggle(
+        "open"
+    );
+
+}
+
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+async function logout(){
+
+    await auth.signOut();
+
+}
+
+
+/* =========================================================
+   MODAL
+========================================================= */
+
+function openModal(title,content){
+
+    $("modalTitle").textContent=title;
+
+    $("modalContent").innerHTML=content;
+
+    $("modalOverlay")
+        .classList
+        .remove("hidden");
+
+}
+
 
 function closeModal(){
 
-$("modal").classList.add("hidden");
+    $("modalOverlay")
+        .classList
+        .add("hidden");
 
 }
 
-function creditDetails(){
 
-const score=
-Number(currentData.creditScore||650);
+/* =========================================================
+   CREDIT SCORE
+========================================================= */
 
-let description=
-score>=750
-?"Excellent score"
-:score>=700
-?"Good score"
-:score>=650
-?"Fair score"
-:"Building score";
+function showCreditScore(){
 
-openModal(
-"Credit Score",
-`
+    const score=
+        Number(
+            currentData.creditScore || 650
+        );
 
-<div class="text-center">
 
-<div class="text-6xl font-black text-[#063b2b]">
-${score}
-</div>
+    let description=
+        "Demo score";
 
-<div class="font-bold mt-2">
-${description}
-</div>
+    if(score>=750){
+        description="Excellent demo score";
+    }else if(score>=700){
+        description="Good demo score";
+    }else if(score>=650){
+        description="Fair demo score";
+    }else{
+        description="Building demo score";
+    }
 
-<p class="text-sm text-gray-500 mt-5">
-credit score stored on your Cash Flow Bank profile.FICO score, credit-bureau score, a real lending decision.
-</p>
 
-</div>
+    openModal(
+        "Credit Score",
+        `
 
-`
-);
+        <div class="text-center">
+
+            <div class="text-6xl font-black text-[#063b2b]">
+                ${score}
+            </div>
+
+            <div class="font-bold mt-3">
+                ${description}
+            </div>
+
+            <p class="text-sm text-gray-500 mt-5">
+                This is a demonstration score stored on
+                your Cash Flow Bank demo account. It is not
+                a real credit-bureau score, FICO score,
+                lending decision, or credit report.
+            </p>
+
+        </div>
+
+        `
+    );
 
 }
 
+
+/* =========================================================
+   FEATURES
+========================================================= */
 
 function showFeature(name){
 
-openModal(
-name,
-`
+    openModal(
+        name,
+        `
 
-<div class="text-center py-5">
+        <div class="text-center py-5">
 
-<div class="text-4xl mb-4">ℹ️</div>
+            <div class="w-14 h-14 rounded-full bg-emerald-50 text-[#087f5b] flex items-center justify-center mx-auto text-2xl">
+                ✓
+            </div>
 
-<h3 class="font-black text-lg">
-${name} 
-</h3>
+            <h3 class="font-black text-lg mt-4">
+                ${escapeHTML(name)}
+            </h3>
 
-<p class="text-gray-500 text-sm mt-2">
-This section is available in the interface but does not move real money.
-</p>
+            <p class="text-gray-500 text-sm mt-2">
+              Trust us  
+            </p>
 
-</div>
+        </div>
 
-`
-);
+        `
+    );
 
 }
 
+
+/* =========================================================
+   SUPPORT
+========================================================= */
 
 function openSupport(){
 
-if(window.Tawk_API&&typeof window.Tawk_API.maximize==="function"){
+    if(
+        window.Tawk_API &&
+        typeof window.Tawk_API.maximize==="function"
+    ){
 
-window.Tawk_API.maximize();
+        window.Tawk_API.maximize();
 
-}else{
+    }else{
 
-openModal(
-"Customer Support",
-`
-<p class="text-gray-600">
-Live support is loading. Please try again in a moment.
-</p>
-`
-);
+        openModal(
+            "Customer Support",
+            `
+            <p class="text-gray-600">
+                Live support is loading. Please try again
+                in a moment.
+            </p>
+            `
+        );
+
+    }
 
 }
 
-}
 
-
-/* TAWK */
+/* =========================================================
+   TAWK.TO
+========================================================= */
 
 var Tawk_API=Tawk_API||{};
 var Tawk_LoadStart=new Date();
 
 (function(){
 
-var s1=document.createElement("script");
-var s0=document.getElementsByTagName("script")[0];
+    var s1=document.createElement("script");
+    var s0=document.getElementsByTagName("script")[0];
 
-s1.async=true;
-s1.src="https://embed.tawk.to/6aad7099ecbade3448f2e8f6/default";
-s1.charset="UTF-8";
-s1.setAttribute("crossorigin","*");
+    s1.async=true;
 
-s0.parentNode.insertBefore(s1,s0);
+    s1.src=
+        "https://embed.tawk.to/6aad7099ecbade3448f2e8f6/default";
+
+    s1.charset="UTF-8";
+
+    s1.setAttribute(
+        "crossorigin",
+        "*"
+    );
+
+    s0.parentNode.insertBefore(
+        s1,
+        s0
+    );
 
 })();
 
