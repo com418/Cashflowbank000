@@ -14,19 +14,17 @@
         body { 
             margin: 0; 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background: var(--primary-dark); 
-            color: #fff; 
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
+            background: #ffffff; 
+            color: #333; 
         }
 
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            padding: 20px 50px;
+            padding: 20px 60px;
+            background: #fff;
+            border-bottom: 1px solid #eee;
         }
 
         .logo-area {
@@ -42,55 +40,85 @@
 
         .logo-title {
             font-weight: 800;
-            font-size: 1.25rem;
+            font-size: 1.3rem;
             letter-spacing: 0.5px;
-            color: #ffffff;
+            color: #002b1d;
         }
-        .logo-title span { color: var(--accent-green); }
-        .logo-sub { font-size: 0.72rem; color: #a0a0a0; font-weight: normal; }
+        .logo-title span { color: var(--button-green); }
+        .logo-sub { font-size: 0.72rem; color: #666; font-weight: normal; }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 25px;
+        }
 
         nav a {
-            color: #fff;
+            color: #333;
             text-decoration: none;
-            margin: 0 15px;
             font-size: 0.95rem;
+            font-weight: 500;
         }
 
         nav a.active {
-            border-bottom: 2px solid var(--accent-green);
+            color: var(--button-green);
+            border-bottom: 2px solid var(--button-green);
             padding-bottom: 4px;
         }
 
         .login-btn-top {
             background: #fff;
-            color: #000;
+            color: #002b1d;
+            border: 1px solid #ccc;
             padding: 8px 22px;
             border-radius: 20px;
             text-decoration: none;
             font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, #002b1d 0%, #004d33 100%), url('city-bg.jpg') center/cover;
+            position: relative;
+            padding: 60px 60px 80px 60px;
+            color: #fff;
+            overflow: hidden;
+        }
+
+        /* Subtle wavy bottom accent matching design */
+        .hero-section::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 60px;
+            background: linear-gradient(to top, #ffffff, transparent);
         }
 
         .main-container { 
             display: flex; 
-            width: 90%; 
             max-width: 1200px; 
             margin: auto; 
             justify-content: space-between; 
-            align-items: center; 
-            padding: 40px 0;
+            align-items: flex-start; 
+            position: relative;
+            z-index: 2;
         }
 
-        .left-hero { width: 48%; }
-        .left-hero h3 { color: #a0f0d0; text-transform: uppercase; letter-spacing: 1px; font-size: 0.9rem; }
-        .left-hero h1 { font-size: 3.8rem; line-height: 1.15; margin: 10px 0 20px 0; }
+        .left-hero { width: 45%; }
+        .left-hero h3 { color: #a0f0d0; text-transform: uppercase; letter-spacing: 1px; font-size: 0.85rem; margin-bottom: 10px; }
+        .left-hero h1 { font-size: 3.6rem; line-height: 1.15; margin: 0 0 20px 0; font-weight: 800; }
         .left-hero h1 span { color: var(--accent-green); }
-        .left-hero p { color: #d0d0d0; line-height: 1.6; font-size: 1.05rem; margin-bottom: 30px; }
+        .left-hero p { color: #d0d0d0; line-height: 1.6; font-size: 1.05rem; margin-bottom: 40px; }
 
         .feature-item {
             display: flex;
             align-items: flex-start;
             gap: 15px;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
         .feature-icon-box {
@@ -102,7 +130,7 @@
             justify-content: center;
         }
 
-        .feature-item h4 { margin: 0 0 5px 0; font-size: 1rem; }
+        .feature-item h4 { margin: 0 0 4px 0; font-size: 1rem; color: #fff; }
         .feature-item p { margin: 0; font-size: 0.85rem; color: #aaa; }
 
         .card { 
@@ -111,7 +139,7 @@
             padding: 35px; 
             border-radius: 16px; 
             width: 440px; 
-            box-shadow: 0 15px 35px rgba(0,0,0,0.4); 
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3); 
             box-sizing: border-box;
         }
         
@@ -119,17 +147,17 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            margin-bottom: 10px;
+            margin-bottom: 8px;
         }
 
-        .card h2 { margin: 0 0 5px 0; color: #0b251d; font-size: 1.6rem; }
-        .card-subtitle { font-size: 0.85rem; color: #666; margin-bottom: 20px; }
+        .card h2 { margin: 0 0 4px 0; color: #002b1d; font-size: 1.8rem; }
+        .card-subtitle { font-size: 0.85rem; color: #666; margin-bottom: 25px; }
 
-        .input-group { margin-bottom: 14px; }
-        .input-group label { display: block; font-size: 0.8rem; color: #555; margin-bottom: 4px; font-weight: 600; }
+        .input-group { margin-bottom: 15px; }
+        .input-group label { display: block; font-size: 0.8rem; color: #555; margin-bottom: 5px; font-weight: 600; }
         .input-group input, .input-group select { 
             width: 100%; 
-            padding: 11px 14px; 
+            padding: 12px 14px; 
             border: 1px solid #ddd; 
             border-radius: 8px; 
             font-size: 0.95rem; 
@@ -143,7 +171,7 @@
             gap: 8px;
             font-size: 0.8rem;
             color: #666;
-            margin: 15px 0;
+            margin: 20px 0;
         }
 
         .terms-row a { color: var(--button-green); text-decoration: none; }
@@ -153,7 +181,7 @@
             color: white; 
             border: none; 
             width: 100%; 
-            padding: 13px; 
+            padding: 14px; 
             border-radius: 8px; 
             font-size: 1rem; 
             font-weight: bold; 
@@ -170,7 +198,7 @@
             text-align: center;
             border-bottom: 1px solid #eee;
             line-height: 0.1em;
-            margin: 20px 0;
+            margin: 25px 0;
             color: #999;
             font-size: 0.8rem;
         }
@@ -179,14 +207,56 @@
         .footer-link { text-align: center; font-size: 0.85rem; color: #666; }
         .footer-link a { color: var(--button-green); text-decoration: none; font-weight: bold; }
 
+        /* Bottom Feature Grid (Image 4 / 5 style) */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            max-width: 1200px;
+            margin: 60px auto;
+            padding: 0 20px;
+        }
+
+        .feature-card {
+            background: #fff;
+            padding: 30px 20px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.04);
+            border: 1px solid #f0f0f0;
+        }
+
+        .feature-card-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(0, 135, 68, 0.08);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 15px auto;
+        }
+
+        .feature-card h3 { font-size: 1.05rem; color: #002b1d; margin: 0 0 8px 0; }
+        .feature-card p { font-size: 0.85rem; color: #666; margin: 0 0 15px 0; line-height: 1.5; }
+        .feature-card a { color: var(--button-green); text-decoration: none; font-size: 0.85rem; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; }
+
         footer {
-            border-top: 1px solid rgba(255,255,255,0.1);
-            padding: 20px 50px;
+            background: #001f14;
+            color: #888;
+            padding: 40px 60px;
             display: flex;
             justify-content: space-between;
             align-items: center;
-            font-size: 0.8rem;
-            color: #888;
+            font-size: 0.85rem;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .footer-logo-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
         }
     </style>
 </head>
@@ -194,10 +264,10 @@
 
     <header>
         <div class="logo-area">
-            <!-- Inline SVG Logo (CF Symbol) -->
+            <!-- Inline SVG Logo Symbol matching Image 4/5 -->
             <svg width="42" height="42" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="50" cy="50" r="50" fill="#00c853"/>
-                <path d="M68 32H40C33.3726 32 28 37.3726 28 44V56C28 62.6274 33.3726 68 40 68H55V56H42V44H68V68H72V44C72 37.3726 66.6274 32 60 32H68Z" fill="#002b1d"/>
+                <circle cx="50" cy="50" r="50" fill="#008744"/>
+                <path d="M68 32H40C33.3726 32 28 37.3726 28 44V56C28 62.6274 33.3726 68 40 68H55V56H42V44H68V68H72V44C72 37.3726 66.6274 32 60 32H68Z" fill="#ffffff"/>
             </svg>
             <div class="logo-text-group">
                 <div class="logo-title">CASH FLOW <span>BANK</span></div>
@@ -205,144 +275,209 @@
             </div>
         </div>
         <nav>
-            <a href="#" class="active">Home</a>
+            <a href="index.html" class="active">Home</a>
             <a href="#">About</a>
             <a href="#">Services</a>
             <a href="#">Blog</a>
             <a href="#">Contact</a>
         </nav>
-        <a href="login.html" class="login-btn-top">Login</a>
+        <a href="login.html" class="login-btn-top">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Login
+        </a>
     </header>
 
-    <div class="main-container">
-        <div class="left-hero">
-            <h3>Join Cash Flow Bank</h3>
-            <h1>Your Future<br><span>Starts Here</span></h1>
-            <p>Open your account in minutes and experience secure, simple and modern banking — anytime, anywhere.</p>
-            
-            <div class="feature-item">
-                <div class="feature-icon-box">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00c853" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    <section class="hero-section">
+        <div class="main-container">
+            <div class="left-hero">
+                <h3>Join Cash Flow Bank</h3>
+                <h1>Your Future<br><span>Starts Here</span></h1>
+                <p>Open your account in minutes and experience secure, simple and modern banking — anytime, anywhere.</p>
+                
+                <div class="feature-item">
+                    <div class="feature-icon-box">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00c853" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    </div>
+                    <div>
+                        <h4>Safe & Secure</h4>
+                        <p>Your money is protected with advanced security layers.</p>
+                    </div>
                 </div>
-                <div>
-                    <h4>Safe & Secure</h4>
-                    <p>Your money is protected with advanced security layers.</p>
+                <div class="feature-item">
+                    <div class="feature-icon-box">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00c853" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                    </div>
+                    <div>
+                        <h4>Fast & Easy</h4>
+                        <p>Get started seamlessly in under two minutes.</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon-box">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00c853" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                    </div>
+                    <div>
+                        <h4>Global Access</h4>
+                        <p>Bank from anywhere in the world.</p>
+                    </div>
                 </div>
             </div>
-            <div class="feature-item">
-                <div class="feature-icon-box">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00c853" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+
+            <div class="card">
+                <div class="card-header-area">
+                    <svg width="30" height="30" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="50" cy="50" r="50" fill="#008744"/>
+                        <path d="M68 32H40C33.3726 32 28 37.3726 28 44V56C28 62.6274 33.3726 68 40 68H55V56H42V44H68V68H72V44C72 37.3726 66.6274 32 60 32H68Z" fill="#ffffff"/>
+                    </svg>
+                    <div style="font-weight:700; font-size:1rem; color:#002b1d;">CASH FLOW <span style="color:#008744;">BANK</span></div>
                 </div>
-                <div>
-                    <h4>Fast & Easy</h4>
-                    <p>Get started seamlessly in under two minutes.</p>
-                </div>
-            </div>
-            <div class="feature-item">
-                <div class="feature-icon-box">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#00c853" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-                </div>
-                <div>
-                    <h4>Global Access</h4>
-                    <p>Bank and execute transactions globally without hassle.</p>
+                <h2>Create Your Account</h2>
+                <div class="card-subtitle">Fill in the details below to get started.</div>
+                
+                <form id="regForm">
+                    <div class="input-group">
+                        <label>Account Type</label>
+                        <select id="account_type" required>
+                            <option value="Savings Account">Savings Account</option>
+                            <option value="Current Account">Current Account</option>
+                            <option value="Business Account">Business Account</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Country</label>
+                        <select id="country" required>
+                            <option value="United States">United States</option>
+                            <option value="Nigeria">Nigeria</option>
+                            <option value="United Kingdom">United Kingdom</option>
+                            <option value="Canada">Canada</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Full Name</label>
+                        <input type="text" id="full_name" placeholder="Enter your full name" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Email Address</label>
+                        <input type="email" id="email" placeholder="you@example.com" required>
+                    </div>
+                    <div class="input-group">
+                        <label>Password</label>
+                        <input type="password" id="password" placeholder="Create a password" required>
+                    </div>
+                    <div class="input-group">
+                        <label>PIN</label>
+                        <input type="password" id="pin" maxlength="4" placeholder="Enter 4-digit PIN" required>
+                    </div>
+
+                    <div class="terms-row">
+                        <input type="checkbox" id="terms" required>
+                        <label for="terms" style="display:inline; font-weight:normal; color:#666;">I agree to the <a href="#">Terms & Conditions</a> and <a href="#">Privacy Policy</a></label>
+                    </div>
+
+                    <button type="submit" class="btn" id="submitBtn">
+                        Create Account 
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                    </button>
+                </form>
+
+                <div class="divider"><span>OR</span></div>
+                
+                <div class="footer-link">
+                    Already have an account? <a href="login.html">Log in</a>
                 </div>
             </div>
         </div>
+    </section>
 
-        <div class="card">
-            <div class="card-header-area">
-                <svg width="30" height="30" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="50" cy="50" r="50" fill="#008744"/>
-                    <path d="M68 32H40C33.3726 32 28 37.3726 28 44V56C28 62.6274 33.3726 68 40 68H55V56H42V44H68V68H72V44C72 37.3726 66.6274 32 60 32H68Z" fill="#ffffff"/>
-                </svg>
-                <div style="font-weight:700; font-size:1rem; color:#002b1d;">CASH FLOW <span style="color:#008744;">BANK</span></div>
+    <!-- Bottom Feature Grid -->
+    <div class="features-grid">
+        <div class="feature-card">
+            <div class="feature-card-icon">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#008744" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
             </div>
-            <h2>Create Your Account</h2>
-            <div class="card-subtitle">Fill in the details below to get started.</div>
-            
-            <form id="regForm">
-                <div class="input-group">
-                    <label>Account Type</label>
-                    <select id="account_type" required>
-                        <option value="Savings Account">Savings Account</option>
-                        <option value="Current Account">Current Account</option>
-                        <option value="Business Account">Business Account</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label>Country</label>
-                    <select id="country" required>
-                        <option value="United States">United States</option>
-                        <option value="Nigeria">Nigeria</option>
-                        <option value="United Kingdom">United Kingdom</option>
-                        <option value="Canada">Canada</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <label>Full Name</label>
-                    <input type="text" id="full_name" placeholder="Enter your full name" required>
-                </div>
-                <div class="input-group">
-                    <label>Email Address</label>
-                    <input type="email" id="email" placeholder="you@example.com" required>
-                </div>
-                <div class="input-group">
-                    <label>Password</label>
-                    <input type="password" id="password" placeholder="Create a password" required>
-                </div>
-                <div class="input-group">
-                    <label>PIN</label>
-                    <input type="password" id="pin" maxlength="4" placeholder="Enter 4-digit PIN" required>
-                </div>
-
-                <div class="terms-row">
-                    <input type="checkbox" id="terms" required>
-                    <label for="terms" style="display:inline; font-weight:normal; color:#666;">I agree to the <a href="#">Terms & Conditions</a> & <a href="#">Privacy Policy</a></label>
-                </div>
-
-                <button type="submit" class="btn">
-                    Create Account 
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                </button>
-            </form>
-
-            <div class="divider"><span>OR</span></div>
-            
-            <div class="footer-link">
-                Already have an account? <a href="login.html">Log in</a>
+            <h3>Secure Banking</h3>
+            <p>Your security is our top priority with advanced data encryption.</p>
+            <a href="#">Learn More &rarr;</a>
+        </div>
+        <div class="feature-card">
+            <div class="feature-card-icon">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#008744" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
             </div>
+            <h3>Instant Transfers</h3>
+            <p>Send and receive money in seconds globally or locally.</p>
+            <a href="#">Learn More &rarr;</a>
+        </div>
+        <div class="feature-card">
+            <div class="feature-card-icon">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#008744" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+            </div>
+            <h3>Multi-Currency</h3>
+            <p>Bank in your local currency or manage international accounts.</p>
+            <a href="#">Learn More &rarr;</a>
+        </div>
+        <div class="feature-card">
+            <div class="feature-card-icon">
+                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#008744" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
+            </div>
+            <h3>24/7 Support</h3>
+            <p>We are always here to help you via chat or phone anytime.</p>
+            <a href="#">Learn More &rarr;</a>
         </div>
     </div>
 
     <footer>
-        <div>© 2026 Cash Flow Bank. All rights reserved.</div>
-        <div style="display: flex; align-items: center; gap: 6px;">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00c853" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
-            Privacy Policy | Terms & Conditions
+        <div>
+            <div class="footer-logo-group">
+                <svg width="30" height="30" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="50" r="50" fill="#00c853"/>
+                    <path d="M68 32H40C33.3726 32 28 37.3726 28 44V56C28 62.6274 33.3726 68 40 68H55V56H42V44H68V68H72V44C72 37.3726 66.6274 32 60 32H68Z" fill="#002b1d"/>
+                </svg>
+                <div style="font-weight:700; color:#fff;">CASH FLOW <span style="color:#00c853;">BANK</span></div>
+            </div>
+            © 2026 Cash Flow Bank. All rights reserved.
+        </div>
+        <div style="display: flex; align-items: center; gap: 15px;">
+            <a href="#" style="color:#aaa; text-decoration:none;">Privacy Policy</a>
+            <a href="#" style="color:#aaa; text-decoration:none;">Terms & Conditions</a>
+            <span style="color: #00c853; display:inline-flex; align-items:center; gap:5px;">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg> Secure Banking
+            </span>
         </div>
     </footer>
 
     <script>
         document.getElementById('regForm').addEventListener('submit', async (e) => {
             e.preventDefault();
-            const res = await fetch('/api/register', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    account_type: document.getElementById('account_type').value,
-                    country: document.getElementById('country').value,
-                    full_name: document.getElementById('full_name').value,
-                    email: document.getElementById('email').value,
-                    password: document.getElementById('password').value,
-                    pin: document.getElementById('pin').value
-                })
-            });
-            const data = await res.json();
-            if (res.ok) {
-                alert(data.message);
-                window.location.href = `verify.html?email=${encodeURIComponent(document.getElementById('email').value)}`;
-            } else {
-                alert(data.error);
+            const btn = document.getElementById('submitBtn');
+            btn.disabled = true;
+            btn.innerText = 'Creating Account...';
+
+            try {
+                const res = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        account_type: document.getElementById('account_type').value,
+                        country: document.getElementById('country').value,
+                        full_name: document.getElementById('full_name').value,
+                        email: document.getElementById('email').value,
+                        password: document.getElementById('password').value,
+                        pin: document.getElementById('pin').value
+                    })
+                });
+                const data = await res.json();
+                if (res.ok) {
+                    alert(data.message);
+                    window.location.href = `verify.html?email=${encodeURIComponent(document.getElementById('email').value)}`;
+                } else {
+                    alert(data.error || 'Registration failed');
+                    btn.disabled = false;
+                    btn.innerHTML = `Create Account <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>`;
+                }
+            } catch (err) {
+                alert('Network connection error.');
+                btn.disabled = false;
+                btn.innerHTML = `Create Account <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>`;
             }
         });
     </script>
