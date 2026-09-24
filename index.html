@@ -3,15 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#002b1d">
 
     <title>Cash Flow Bank — Your Goals. Our Priority.</title>
+
+    <meta name="theme-color" content="#002b1d">
 
     <!-- Tailwind -->
     <script src="https://cdn.tailwindcss.com"></script>
 
     <!-- Lucide Icons -->
     <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-database-compat.js"></script>
 
     <style>
         :root {
@@ -20,19 +26,16 @@
             --accent: #00c853;
             --button: #008744;
             --button-hover: #006c35;
-
             --bg: #f4f7f6;
             --card: #ffffff;
             --text: #10231c;
             --muted: #66736e;
             --border: #e2e8e5;
-
             --danger: #ef4444;
             --warning: #f59e0b;
             --success: #16a34a;
             --info: #2563eb;
-
-            --shadow: 0 10px 30px rgba(0, 43, 29, .08);
+            --shadow: 0 10px 30px rgba(0,43,29,.08);
         }
 
         * {
@@ -45,22 +48,14 @@
 
         body {
             margin: 0;
-            font-family:
-                Inter,
-                ui-sans-serif,
-                system-ui,
-                -apple-system,
-                BlinkMacSystemFont,
-                "Segoe UI",
-                sans-serif;
+            font-family: Inter, Arial, Helvetica, sans-serif;
             background: var(--bg);
             color: var(--text);
         }
 
         button,
         input,
-        select,
-        textarea {
+        select {
             font: inherit;
         }
 
@@ -73,98 +68,101 @@
         }
 
         .glass {
-            background: rgba(255,255,255,.94);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
+            background: rgba(255,255,255,.88);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
         }
 
         .hero {
-            min-height: 680px;
-            position: relative;
+            min-height: 700px;
             background:
                 linear-gradient(
                     90deg,
                     rgba(0,43,29,.94) 0%,
-                    rgba(0,43,29,.82) 48%,
-                    rgba(0,43,29,.45) 100%
+                    rgba(0,43,29,.82) 50%,
+                    rgba(0,43,29,.62) 100%
                 ),
-                url("https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=2000&q=85")
+                url("https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1800&q=85")
                 center/cover no-repeat;
         }
 
-        .hero-grid {
-            min-height: 680px;
-            display: grid;
-            grid-template-columns: 1.1fr .9fr;
+        .logo-mark {
+            width: 45px;
+            height: 45px;
+            border-radius: 13px;
+            background: var(--primary-dark);
+            color: white;
+            display: flex;
             align-items: center;
-            gap: 60px;
-            max-width: 1250px;
-            margin: auto;
-            padding: 100px 24px 70px;
+            justify-content: center;
+            font-weight: 900;
         }
 
-        .auth-card {
-            border-radius: 24px;
-            box-shadow: 0 25px 70px rgba(0,0,0,.2);
-        }
-
-        .auth-input {
-            width: 100%;
-            border: 1px solid var(--border);
-            background: #fff;
-            color: #10231c;
-            border-radius: 12px;
-            padding: 13px 14px;
-            outline: none;
+        .btn {
+            border: 0;
+            border-radius: 10px;
+            padding: 11px 16px;
+            font-weight: 700;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
             transition: .2s;
         }
 
-        .auth-input:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(0,200,83,.12);
+        .btn:hover {
+            transform: translateY(-1px);
         }
 
         .btn-primary {
-            border: none;
             background: var(--button);
-            color: #fff;
-            border-radius: 12px;
-            padding: 13px 18px;
-            font-weight: 700;
-            transition: .2s;
+            color: white;
         }
 
         .btn-primary:hover {
             background: var(--button-hover);
-            transform: translateY(-1px);
+        }
+
+        .btn-white {
+            background: white;
+            color: var(--primary-dark);
+        }
+
+        .btn-danger {
+            background: #fee2e2;
+            color: #991b1b;
         }
 
         .btn-secondary {
-            border: 1px solid var(--border);
-            background: #fff;
-            color: var(--text);
-            border-radius: 12px;
-            padding: 12px 18px;
-            font-weight: 700;
-            transition: .2s;
+            background: #eef2f0;
+            color: #34443e;
         }
 
-        .btn-secondary:hover {
-            border-color: #b8c6c0;
-            background: #f8faf9;
+        .input {
+            width: 100%;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 12px 14px;
+            outline: none;
+            background: white;
+        }
+
+        .input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(0,108,53,.10);
+        }
+
+        .auth-card {
+            border-radius: 22px;
+            box-shadow: 0 25px 70px rgba(0,0,0,.18);
         }
 
         .feature-card {
-            background: #fff;
+            background: white;
             border: 1px solid var(--border);
             border-radius: 18px;
-            padding: 26px;
+            padding: 25px;
             box-shadow: var(--shadow);
-            transition: .2s;
-        }
-
-        .feature-card:hover {
-            transform: translateY(-3px);
         }
 
         /* Dashboard */
@@ -175,119 +173,86 @@
         }
 
         .sidebar {
+            width: 260px;
             position: fixed;
             left: 0;
             top: 0;
             bottom: 0;
-            width: 260px;
+            z-index: 60;
             background: var(--primary-dark);
             color: white;
-            z-index: 1000;
             overflow-y: auto;
-            transition: transform .25s ease;
+            transition: .25s;
         }
 
-        .sidebar-logo {
-            height: 78px;
-            display: flex;
-            align-items: center;
-            padding: 0 22px;
-            border-bottom: 1px solid rgba(255,255,255,.08);
-        }
-
-        .sidebar-section-title {
-            color: rgba(255,255,255,.45);
-            font-size: 11px;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: .08em;
-            padding: 18px 22px 8px;
-        }
-
-        .sidebar-link {
-            width: calc(100% - 20px);
-            margin: 3px 10px;
-            padding: 11px 12px;
-            border: none;
-            background: transparent;
-            color: rgba(255,255,255,.75);
-            border-radius: 10px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            text-align: left;
-            transition: .2s;
-        }
-
-        .sidebar-link:hover,
-        .sidebar-link.active {
-            background: rgba(255,255,255,.1);
-            color: white;
-        }
-
-        .sidebar-link.active {
-            box-shadow: inset 3px 0 0 var(--accent);
-        }
-
-        .dashboard-main {
+        .main {
             margin-left: 260px;
             min-height: 100vh;
         }
 
-        .topbar {
-            height: 78px;
-            position: sticky;
-            top: 0;
-            z-index: 900;
-            background: rgba(255,255,255,.94);
-            backdrop-filter: blur(12px);
+        .dashboard-topbar {
+            height: 74px;
+            background: white;
             border-bottom: 1px solid var(--border);
             display: flex;
             align-items: center;
             justify-content: space-between;
-            padding: 0 28px;
+            padding: 0 26px;
+            position: sticky;
+            top: 0;
+            z-index: 40;
         }
 
         .dashboard-content {
             padding: 28px;
-            max-width: 1500px;
-            margin: auto;
         }
 
         .dashboard-card {
-            background: var(--card);
+            background: white;
             border: 1px solid var(--border);
             border-radius: 18px;
             box-shadow: var(--shadow);
         }
 
-        .balance-card {
-            background:
-                linear-gradient(135deg, #003b28 0%, #006c35 55%, #008744 100%);
-            color: white;
-            border: none;
-            overflow: hidden;
-            position: relative;
+        .nav-item {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 14px;
+            border: 0;
+            border-radius: 10px;
+            background: transparent;
+            color: #cbd8d3;
+            text-align: left;
+            transition: .2s;
         }
 
-        .balance-card::after {
-            content: "";
-            position: absolute;
-            width: 250px;
-            height: 250px;
-            border-radius: 50%;
-            right: -100px;
-            top: -100px;
-            background: rgba(255,255,255,.08);
+        .nav-item:hover,
+        .nav-item.active {
+            background: rgba(255,255,255,.10);
+            color: white;
+        }
+
+        .balance-card {
+            background:
+                linear-gradient(
+                    135deg,
+                    #002b1d,
+                    #006c35
+                );
+            color: white;
+            border-radius: 20px;
+            padding: 28px;
+            box-shadow: 0 20px 45px rgba(0,43,29,.20);
         }
 
         .quick-action {
+            background: white;
             border: 1px solid var(--border);
-            background: var(--card);
             border-radius: 16px;
             padding: 18px;
             transition: .2s;
-            text-align: left;
         }
 
         .quick-action:hover {
@@ -295,47 +260,13 @@
             box-shadow: var(--shadow);
         }
 
-        .table-wrap {
-            overflow-x: auto;
-        }
-
-        .data-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .data-table th {
-            text-align: left;
-            color: var(--muted);
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: .05em;
-            padding: 14px 16px;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .data-table td {
-            padding: 16px;
-            border-bottom: 1px solid var(--border);
-            white-space: nowrap;
-        }
-
-        .data-table tr:last-child td {
-            border-bottom: none;
-        }
-
         .status-badge {
             display: inline-flex;
             align-items: center;
-            padding: 5px 9px;
+            padding: 5px 10px;
             border-radius: 999px;
-            font-size: 11px;
+            font-size: 12px;
             font-weight: 800;
-        }
-
-        .status-success {
-            background: #dcfce7;
-            color: #166534;
         }
 
         .status-pending {
@@ -343,108 +274,87 @@
             color: #92400e;
         }
 
-        .status-failed {
+        .status-approved {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .status-declined {
             background: #fee2e2;
             color: #991b1b;
         }
 
-        .form-label {
-            display: block;
-            margin-bottom: 7px;
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--text);
+        .table-wrap {
+            overflow-x: auto;
         }
 
-        .form-input,
-        .form-select,
-        .form-textarea {
+        table {
             width: 100%;
-            border: 1px solid var(--border);
-            border-radius: 11px;
-            background: var(--card);
-            color: var(--text);
-            padding: 12px 13px;
-            outline: none;
+            border-collapse: collapse;
         }
 
-        .form-input:focus,
-        .form-select:focus,
-        .form-textarea:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(0,200,83,.1);
-        }
-
-        .profile-menu {
-            position: absolute;
-            right: 0;
-            top: 52px;
-            width: 220px;
-            background: var(--card);
-            border: 1px solid var(--border);
-            border-radius: 14px;
-            box-shadow: 0 20px 50px rgba(0,0,0,.14);
-            overflow: hidden;
-            z-index: 1200;
-        }
-
-        .profile-menu button {
-            width: 100%;
-            padding: 12px 15px;
-            background: none;
-            border: none;
+        th,
+        td {
+            padding: 14px;
+            border-bottom: 1px solid var(--border);
             text-align: left;
-            color: var(--text);
         }
 
-        .profile-menu button:hover {
-            background: var(--bg);
+        th {
+            font-size: 13px;
+            color: var(--muted);
         }
 
-        .overlay {
+        /* Modal */
+
+        .modal-overlay {
             position: fixed;
             inset: 0;
-            background: rgba(0,0,0,.5);
-            z-index: 950;
-        }
-
-        .modal {
-            position: fixed;
-            inset: 0;
-            z-index: 1300;
+            background: rgba(0,0,0,.55);
+            z-index: 100;
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 20px;
         }
 
-        .modal-card {
-            width: 100%;
-            max-width: 520px;
-            background: var(--card);
+        .modal {
+            width: min(600px, 100%);
+            max-height: 90vh;
+            overflow-y: auto;
+            background: white;
             border-radius: 20px;
-            box-shadow: 0 30px 80px rgba(0,0,0,.25);
-            overflow: hidden;
         }
+
+        /* Toast */
 
         .toast-container {
             position: fixed;
             right: 20px;
             bottom: 20px;
-            z-index: 2000;
+            z-index: 200;
             display: flex;
             flex-direction: column;
             gap: 10px;
-            max-width: calc(100vw - 40px);
         }
 
         .toast {
+            min-width: 280px;
+            max-width: 380px;
+            padding: 14px 16px;
+            border-radius: 12px;
             background: #10231c;
             color: white;
-            padding: 13px 16px;
-            border-radius: 12px;
-            box-shadow: 0 12px 35px rgba(0,0,0,.2);
-            animation: toastIn .25s ease;
+            box-shadow: 0 15px 40px rgba(0,0,0,.18);
+            animation: toastIn .2s ease;
+        }
+
+        .toast.success {
+            background: #166534;
+        }
+
+        .toast.error {
+            background: #991b1b;
         }
 
         @keyframes toastIn {
@@ -452,103 +362,15 @@
                 opacity: 0;
                 transform: translateY(10px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
             }
         }
 
-        .mobile-menu-button {
-            display: none;
-        }
+        @media (max-width: 900px) {
 
-        /* Dark mode */
-
-        body.dark {
-            --bg: #0c1511;
-            --card: #12201a;
-            --text: #f1f7f4;
-            --muted: #9aa9a2;
-            --border: #26372f;
-            --shadow: 0 10px 30px rgba(0,0,0,.25);
-        }
-
-        body.dark .topbar {
-            background: rgba(18,32,26,.94);
-        }
-
-        body.dark .btn-secondary {
-            background: #17271f;
-            color: white;
-            border-color: #2c4036;
-        }
-
-        body.dark .auth-card {
-            background: #12201a;
-            color: white;
-        }
-
-        body.dark .auth-input {
-            background: #17271f;
-            color: white;
-            border-color: #2c4036;
-        }
-
-        body.dark .feature-card {
-            background: #12201a;
-        }
-
-        body.dark .form-input,
-        body.dark .form-select,
-        body.dark .form-textarea {
-            background: #17271f;
-            color: white;
-            border-color: #2c4036;
-        }
-
-        body.dark .profile-menu {
-            background: #12201a;
-        }
-
-        body.dark .profile-menu button:hover {
-            background: #17271f;
-        }
-
-        body.dark .status-success {
-            background: #14532d;
-            color: #bbf7d0;
-        }
-
-        body.dark .status-pending {
-            background: #713f12;
-            color: #fde68a;
-        }
-
-        body.dark .status-failed {
-            background: #7f1d1d;
-            color: #fecaca;
-        }
-
-        /* Responsive */
-
-        @media (max-width: 1000px) {
-            .hero-grid {
-                grid-template-columns: 1fr;
-                gap: 35px;
-                padding-top: 70px;
-                padding-bottom: 70px;
-            }
-
-            .hero {
-                min-height: auto;
-            }
-
-            .hero-grid {
-                min-height: auto;
-            }
-        }
-
-        @media (max-width: 850px) {
             .sidebar {
                 transform: translateX(-100%);
             }
@@ -557,60 +379,28 @@
                 transform: translateX(0);
             }
 
-            .dashboard-main {
+            .main {
                 margin-left: 0;
-            }
-
-            .mobile-menu-button {
-                display: inline-flex;
             }
 
             .dashboard-content {
                 padding: 18px;
             }
-
-            .topbar {
-                padding: 0 16px;
-            }
         }
 
         @media (max-width: 640px) {
-            .hero-grid {
-                padding: 55px 16px;
+
+            .hero {
+                min-height: auto;
+                padding-bottom: 60px;
             }
 
-            .hero h1 {
-                font-size: 40px;
-                line-height: 1.05;
-            }
-
-            .auth-card {
-                border-radius: 18px;
+            .dashboard-topbar {
+                padding: 0 16px;
             }
 
             .dashboard-content {
                 padding: 14px;
-            }
-
-            .topbar {
-                height: 68px;
-            }
-
-            .topbar-search {
-                display: none;
-            }
-
-            .balance-card {
-                padding: 22px !important;
-            }
-
-            .quick-action {
-                padding: 14px;
-            }
-
-            .data-table th,
-            .data-table td {
-                padding: 12px;
             }
         }
     </style>
@@ -618,227 +408,304 @@
 
 <body>
 
+
 <!-- =========================================================
      LANDING PAGE
 ========================================================= -->
 
 <div id="landingView">
 
-    <!-- Header -->
-    <header class="absolute top-0 left-0 right-0 z-50">
-        <div class="max-w-7xl mx-auto px-5">
-            <div class="h-20 flex items-center justify-between">
+    <!-- HEADER -->
 
-                <button onclick="window.scrollTo({top:0,behavior:'smooth'})"
-                        class="flex items-center gap-3 text-white">
-                    <div class="w-11 h-11 rounded-xl bg-white/10 border border-white/20 flex items-center justify-center">
-                        <i data-lucide="landmark" class="w-6 h-6"></i>
+    <header class="absolute top-0 left-0 right-0 z-40">
+
+        <div class="max-w-7xl mx-auto px-5 py-5 flex items-center justify-between">
+
+            <a href="#" class="flex items-center gap-3 text-white">
+
+                <div class="w-11 h-11 rounded-xl bg-white text-[#002b1d] flex items-center justify-center font-black">
+                    CF
+                </div>
+
+                <div>
+                    <div class="font-black tracking-wide">
+                        CASH FLOW BANK
                     </div>
 
-                    <div class="text-left">
-                        <div class="font-extrabold tracking-wide text-lg">
-                            CASH FLOW
-                        </div>
-                        <div class="text-[10px] text-white/60 tracking-[.2em]">
-                            BANK
-                        </div>
+                    <div class="text-xs text-white/70">
+                        Your Goals. Our Priority.
                     </div>
-                </button>
+                </div>
 
-                <nav class="hidden md:flex items-center gap-7 text-sm text-white/85">
-                    <a href="#home" class="hover:text-white">Home</a>
-                    <a href="#about" class="hover:text-white">About</a>
-                    <a href="#services" class="hover:text-white">Services</a>
-                    <a href="#contact" class="hover:text-white">Contact</a>
-                </nav>
+            </a>
 
-                <button onclick="openLogin()"
-                        class="bg-white text-[#002b1d] px-5 py-2.5 rounded-xl font-bold text-sm hover:bg-gray-100">
+
+            <nav class="hidden md:flex items-center gap-7 text-white/90 text-sm">
+
+                <a href="#home" class="hover:text-white">
+                    Home
+                </a>
+
+                <a href="#about" class="hover:text-white">
+                    About
+                </a>
+
+                <a href="#services" class="hover:text-white">
+                    Services
+                </a>
+
+                <a href="#contact" class="hover:text-white">
+                    Contact
+                </a>
+
+                <button
+                    onclick="scrollToAuth('register')"
+                    class="btn btn-white"
+                >
                     Open Account
                 </button>
 
-            </div>
+            </nav>
+
         </div>
+
     </header>
 
-    <!-- Hero -->
+
+    <!-- HERO -->
+
     <section id="home" class="hero">
 
-        <div class="hero-grid">
+        <div class="max-w-7xl mx-auto px-5 pt-32 pb-16">
 
-            <div class="text-white">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
 
-                <div class="inline-flex items-center gap-2 px-3 py-2 rounded-full bg-white/10 border border-white/15 text-sm mb-6">
-                    <span class="w-2 h-2 rounded-full bg-[#00c853]"></span>
-                    Simple financial management
-                </div>
+                <div class="text-white">
 
-                <h1 class="text-5xl md:text-6xl font-black tracking-tight">
-                    Your Goals.
-                    <span class="text-[#00c853]">Our Priority.</span>
-                </h1>
-
-                <p class="mt-6 text-lg text-white/75 max-w-xl leading-8">
-                    Manage your money, track your accounts and stay connected
-                    with your financial goals from one simple dashboard.
-                </p>
-
-                <div class="mt-8 flex flex-wrap gap-3">
-                    <button onclick="openLogin()"
-                            class="bg-[#00c853] hover:bg-[#00b74a] text-white px-6 py-3.5 rounded-xl font-bold">
-                        Get Started
-                    </button>
-
-                    <a href="#services"
-                       class="border border-white/25 bg-white/10 hover:bg-white/15 text-white px-6 py-3.5 rounded-xl font-bold">
-                        Explore Services
-                    </a>
-                </div>
-
-                <div class="mt-10 grid grid-cols-3 gap-5 max-w-lg">
-                    <div>
-                        <div class="text-2xl font-black">24/7</div>
-                        <div class="text-xs text-white/60 mt-1">Online Access</div>
+                    <div class="inline-flex items-center gap-2 px-3 py-2 rounded-full bg-white/10 border border-white/20 text-sm mb-6">
+                        <span class="w-2 h-2 rounded-full bg-green-400"></span>
+                        Modern Digital Banking
                     </div>
 
-                    <div>
-                        <div class="text-2xl font-black">1</div>
-                        <div class="text-xs text-white/60 mt-1">Simple Dashboard</div>
-                    </div>
+                    <h1 class="text-4xl md:text-6xl font-black leading-tight">
+                        Your Goals.
+                        <span class="text-green-300">
+                            Our Priority.
+                        </span>
+                    </h1>
 
-                    <div>
-                        <div class="text-2xl font-black">∞</div>
-                        <div class="text-xs text-white/60 mt-1">Possibilities</div>
-                    </div>
-                </div>
+                    <p class="text-lg text-white/75 mt-6 max-w-xl leading-8">
+                        Simple, modern financial services designed to help
+                        you manage your money and stay focused on what matters.
+                    </p>
 
-            </div>
+                    <div class="flex flex-wrap gap-3 mt-8">
 
-            <!-- Authentication -->
-            <div id="authCard"
-                 class="auth-card glass p-6 md:p-7">
+                        <button
+                            onclick="scrollToAuth('register')"
+                            class="btn btn-white"
+                        >
+                            Open an Account
+                            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </button>
 
-                <!-- Auth Tabs -->
-                <div class="flex bg-gray-100 rounded-xl p-1 mb-6">
-                    <button id="loginTab"
-                            onclick="setAuthMode('login')"
-                            class="flex-1 py-2.5 rounded-lg bg-white shadow-sm font-bold text-sm">
-                        Sign In
-                    </button>
-
-                    <button id="registerTab"
-                            onclick="setAuthMode('register')"
-                            class="flex-1 py-2.5 rounded-lg font-bold text-sm text-gray-500">
-                        Create Account
-                    </button>
-                </div>
-
-                <!-- Login -->
-                <form id="loginForm" onsubmit="handleLogin(event)">
-
-                    <div class="mb-5">
-                        <h2 class="text-2xl font-black">Welcome back</h2>
-                        <p class="text-sm text-gray-500 mt-1">
-                            Sign in to your Cash Flow account.
-                        </p>
-                    </div>
-
-                    <div class="space-y-4">
-
-                        <div>
-                            <label class="form-label">Account Number or Email</label>
-                            <input
-                                id="loginIdentifier"
-                                class="auth-input"
-                                type="text"
-                                autocomplete="username"
-                                placeholder="Account number or email"
-                                required
-                            >
-                        </div>
-
-                        <div>
-                            <label class="form-label">Password</label>
-
-                            <div class="relative">
-                                <input
-                                    id="loginPassword"
-                                    class="auth-input pr-12"
-                                    type="password"
-                                    autocomplete="current-password"
-                                    placeholder="Enter your password"
-                                    required
-                                >
-
-                                <button type="button"
-                                        onclick="togglePassword('loginPassword', this)"
-                                        class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
-                                    <i data-lucide="eye" class="w-5 h-5"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div class="flex items-center justify-between text-sm">
-                            <label class="flex items-center gap-2">
-                                <input id="rememberMe"
-                                       type="checkbox"
-                                       class="accent-green-600">
-                                <span class="text-gray-500">Remember me</span>
-                            </label>
-
-                            <button type="button"
-                                    onclick="forgotPassword()"
-                                    class="font-bold text-[#008744]">
-                                Forgot password?
-                            </button>
-                        </div>
-
-                        <button type="submit"
-                                class="btn-primary w-full">
+                        <button
+                            onclick="scrollToAuth('login')"
+                            class="btn bg-white/10 text-white border border-white/20"
+                        >
                             Sign In
                         </button>
 
                     </div>
 
-                </form>
+                </div>
 
-                <!-- Register -->
-                <form id="registerForm"
-                      class="hidden"
-                      onsubmit="handleRegister(event)">
 
-                    <div class="mb-5">
-                        <h2 class="text-2xl font-black">Create your account</h2>
-                        <p class="text-sm text-gray-500 mt-1">
-                            Start your Cash Flow journey today.
-                        </p>
+                <!-- AUTH CARD -->
+
+                <div id="authCard" class="auth-card bg-white p-6 md:p-8">
+
+                    <div class="flex border-b mb-6">
+
+                        <button
+                            id="loginTab"
+                            onclick="setAuthMode('login')"
+                            class="flex-1 py-3 font-bold text-green-700 border-b-2 border-green-700"
+                        >
+                            Sign In
+                        </button>
+
+                        <button
+                            id="registerTab"
+                            onclick="setAuthMode('register')"
+                            class="flex-1 py-3 font-bold text-gray-400 border-b-2 border-transparent"
+                        >
+                            Open Account
+                        </button>
+
                     </div>
 
-                    <div class="space-y-4">
 
-                        <div class="grid grid-cols-2 gap-3">
+                    <!-- LOGIN -->
 
-                            <div>
-                                <label class="form-label">Account Type</label>
+                    <form id="loginForm">
 
-                                <select id="regType"
-                                        class="auth-input"
-                                        required>
-                                    <option value="">Select</option>
-                                    <option>Savings</option>
-                                    <option>Current</option>
-                                    <option>Business</option>
-                                    <option>Student</option>
-                                </select>
+                        <h2 class="text-2xl font-black">
+                            Welcome back
+                        </h2>
+
+                        <p class="text-sm text-gray-500 mt-1 mb-6">
+                            Sign in to your Cash Flow Bank account.
+                        </p>
+
+
+                        <div class="mb-4">
+
+                            <label class="block text-sm font-bold mb-2">
+                                Email
+                            </label>
+
+                            <input
+                                id="loginEmail"
+                                type="email"
+                                class="input"
+                                placeholder="you@example.com"
+                                required
+                            >
+
+                        </div>
+
+
+                        <div class="mb-4">
+
+                            <label class="block text-sm font-bold mb-2">
+                                Password
+                            </label>
+
+                            <div class="relative">
+
+                                <input
+                                    id="loginPassword"
+                                    type="password"
+                                    class="input pr-12"
+                                    placeholder="Your password"
+                                    required
+                                >
+
+                                <button
+                                    type="button"
+                                    onclick="toggleFieldPassword('loginPassword')"
+                                    class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400"
+                                >
+                                    <i data-lucide="eye" class="w-5 h-5"></i>
+                                </button>
+
                             </div>
 
-                            <div>
-                                <label class="form-label">Country</label>
+                        </div>
 
-                                <select id="regCountry"
-                                        class="auth-input"
-                                        required>
-                                    <option value="">Select</option>
+
+                        <div class="flex items-center justify-between mb-6">
+
+                            <label class="flex items-center gap-2 text-sm text-gray-600">
+
+                                <input
+                                    id="rememberMe"
+                                    type="checkbox"
+                                >
+
+                                Remember me
+
+                            </label>
+
+                            <button
+                                type="button"
+                                onclick="forgotPassword()"
+                                class="text-sm font-bold text-green-700"
+                            >
+                                Forgot password?
+                            </button>
+
+                        </div>
+
+
+                        <button
+                            id="loginBtn"
+                            type="submit"
+                            class="btn btn-primary w-full py-3"
+                        >
+                            Sign In
+                        </button>
+
+                    </form>
+
+
+                    <!-- REGISTER -->
+
+                    <form id="registerForm" class="hidden">
+
+                        <h2 class="text-2xl font-black">
+                            Create your account
+                        </h2>
+
+                        <p class="text-sm text-gray-500 mt-1 mb-6">
+                            Complete the form to request an account.
+                        </p>
+
+
+                        <div class="grid md:grid-cols-2 gap-4">
+
+                            <div>
+
+                                <label class="block text-sm font-bold mb-2">
+                                    Account Type
+                                </label>
+
+                                <select
+                                    id="regType"
+                                    class="input"
+                                    required
+                                >
+                                    <option value="">
+                                        Select type
+                                    </option>
+
+                                    <option value="Savings">
+                                        Savings
+                                    </option>
+
+                                    <option value="Current">
+                                        Current
+                                    </option>
+
+                                    <option value="Business">
+                                        Business
+                                    </option>
+
+                                    <option value="Student">
+                                        Student
+                                    </option>
+
+                                </select>
+
+                            </div>
+
+
+                            <div>
+
+                                <label class="block text-sm font-bold mb-2">
+                                    Country
+                                </label>
+
+                                <select
+                                    id="regCountry"
+                                    class="input"
+                                    required
+                                >
+                                    <option value="">
+                                        Select country
+                                    </option>
+
                                     <option>Nigeria</option>
                                     <option>Ghana</option>
                                     <option>Kenya</option>
@@ -848,376 +715,396 @@
                                     <option>Canada</option>
                                     <option>India</option>
                                     <option>Other</option>
+
                                 </select>
+
+                            </div>
+
+
+                            <div class="md:col-span-2">
+
+                                <label class="block text-sm font-bold mb-2">
+                                    Full Name
+                                </label>
+
+                                <input
+                                    id="regName"
+                                    class="input"
+                                    placeholder="Your full name"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <div class="md:col-span-2">
+
+                                <label class="block text-sm font-bold mb-2">
+                                    Email
+                                </label>
+
+                                <input
+                                    id="regEmail"
+                                    type="email"
+                                    class="input"
+                                    placeholder="you@example.com"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <div class="md:col-span-2">
+
+                                <label class="block text-sm font-bold mb-2">
+                                    Phone Number
+                                </label>
+
+                                <input
+                                    id="regPhone"
+                                    class="input"
+                                    placeholder="+234..."
+                                    required
+                                >
+
+                            </div>
+
+
+                            <div>
+
+                                <label class="block text-sm font-bold mb-2">
+                                    Password
+                                </label>
+
+                                <input
+                                    id="regPassword"
+                                    type="password"
+                                    class="input"
+                                    placeholder="Minimum 6 characters"
+                                    minlength="6"
+                                    required
+                                >
+
+                            </div>
+
+
+                            <div>
+
+                                <label class="block text-sm font-bold mb-2">
+                                    Confirm Password
+                                </label>
+
+                                <input
+                                    id="regConfirm"
+                                    type="password"
+                                    class="input"
+                                    placeholder="Repeat password"
+                                    minlength="6"
+                                    required
+                                >
+
                             </div>
 
                         </div>
 
-                        <div>
-                            <label class="form-label">Full Name</label>
-                            <input id="regName"
-                                   class="auth-input"
-                                   type="text"
-                                   placeholder="Your full name"
-                                   autocomplete="name"
-                                   required>
-                        </div>
 
-                        <div>
-                            <label class="form-label">Email Address</label>
-                            <input id="regEmail"
-                                   class="auth-input"
-                                   type="email"
-                                   placeholder="you@example.com"
-                                   autocomplete="email"
-                                   required>
-                        </div>
+                        <label class="flex gap-2 items-start text-sm text-gray-600 mt-5">
 
-                        <div>
-                            <label class="form-label">Password</label>
-
-                            <div class="relative">
-                                <input id="regPassword"
-                                       class="auth-input pr-12"
-                                       type="password"
-                                       placeholder="Create a password"
-                                       autocomplete="new-password"
-                                       minlength="6"
-                                       required>
-
-                                <button type="button"
-                                        onclick="togglePassword('regPassword', this)"
-                                        class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400">
-                                    <i data-lucide="eye" class="w-5 h-5"></i>
-                                </button>
-                            </div>
-                        </div>
-
-                        <div>
-                            <label class="form-label">4-Digit PIN</label>
-                            <input id="regPin"
-                                   class="auth-input"
-                                   type="password"
-                                   inputmode="numeric"
-                                   maxlength="4"
-                                   pattern="[0-9]{4}"
-                                   placeholder="••••"
-                                   required>
-                        </div>
-
-                        <label class="flex items-start gap-2 text-xs text-gray-500">
-                            <input id="regTerms"
-                                   type="checkbox"
-                                   class="mt-0.5 accent-green-600"
-                                   required>
+                            <input
+                                id="terms"
+                                type="checkbox"
+                                class="mt-1"
+                                required
+                            >
 
                             <span>
-                                I agree to the terms and acknowledge that this
-                                website is a demonstration interface.
+                                I agree to the terms and understand this
+                                website is a demonstration financial platform.
                             </span>
+
                         </label>
 
-                        <button type="submit"
-                                class="btn-primary w-full">
+
+                        <button
+                            id="registerBtn"
+                            type="submit"
+                            class="btn btn-primary w-full py-3 mt-5"
+                        >
                             Create Account
+                        </button>
+
+                    </form>
+
+
+                    <!-- REGISTRATION SUCCESS -->
+
+                    <div
+                        id="registrationSuccess"
+                        class="hidden text-center py-8"
+                    >
+
+                        <div class="w-16 h-16 rounded-full bg-green-100 text-green-700 mx-auto flex items-center justify-center">
+                            <i data-lucide="check" class="w-8 h-8"></i>
+                        </div>
+
+                        <h2 class="text-2xl font-black mt-5">
+                            Account Created
+                        </h2>
+
+                        <p class="text-gray-500 mt-2">
+                            Your application has been submitted for approval.
+                        </p>
+
+                        <div class="bg-gray-50 border rounded-xl p-5 mt-6">
+
+                            <div class="text-xs text-gray-500">
+                                Your Account Number
+                            </div>
+
+                            <div
+                                id="generatedAccountNumber"
+                                class="text-2xl font-black tracking-widest mt-2"
+                            >
+                                —
+                            </div>
+
+                        </div>
+
+                        <button
+                            onclick="setAuthMode('login')"
+                            class="btn btn-primary mt-6"
+                        >
+                            Return to Sign In
                         </button>
 
                     </div>
 
-                </form>
+                </div>
 
             </div>
 
         </div>
+
     </section>
 
-    <!-- Feature Strip -->
-    <section id="services" class="py-16 bg-[var(--bg)]">
+
+    <!-- FEATURES -->
+
+    <section id="services" class="py-20 bg-white">
 
         <div class="max-w-7xl mx-auto px-5">
 
-            <div class="text-center max-w-2xl mx-auto mb-10">
-                <span class="text-[#008744] font-bold text-sm">
+            <div class="text-center max-w-2xl mx-auto mb-12">
+
+                <div class="text-green-700 font-bold text-sm">
                     OUR SERVICES
-                </span>
+                </div>
 
                 <h2 class="text-3xl md:text-4xl font-black mt-2">
                     Financial tools built around you
                 </h2>
 
-                <p class="text-gray-500 mt-3">
-                    Everything you need to organize and monitor your
-                    financial activity in one place.
+                <p class="text-gray-500 mt-4">
+                    Manage your account, view your activity and keep
+                    your financial goals organized.
                 </p>
+
             </div>
+
 
             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
 
                 <div class="feature-card">
-                    <div class="w-11 h-11 rounded-xl bg-green-50 text-[#008744] flex items-center justify-center">
+
+                    <div class="w-12 h-12 rounded-xl bg-green-100 text-green-700 flex items-center justify-center">
                         <i data-lucide="piggy-bank"></i>
                     </div>
 
-                    <h3 class="font-black mt-5">Savings Accounts</h3>
+                    <h3 class="font-black text-lg mt-5">
+                        Savings Accounts
+                    </h3>
 
-                    <p class="text-sm text-gray-500 mt-2 leading-6">
-                        Organize your savings and keep track of your financial goals.
+                    <p class="text-sm text-gray-500 mt-2">
+                        Keep track of your savings and financial goals.
                     </p>
+
                 </div>
 
+
                 <div class="feature-card">
-                    <div class="w-11 h-11 rounded-xl bg-green-50 text-[#008744] flex items-center justify-center">
+
+                    <div class="w-12 h-12 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center">
                         <i data-lucide="wallet"></i>
                     </div>
 
-                    <h3 class="font-black mt-5">Current Accounts</h3>
+                    <h3 class="font-black text-lg mt-5">
+                        Current Accounts
+                    </h3>
 
-                    <p class="text-sm text-gray-500 mt-2 leading-6">
-                        A simple interface for monitoring everyday account activity.
+                    <p class="text-sm text-gray-500 mt-2">
+                        A simple dashboard for everyday account activity.
                     </p>
+
                 </div>
 
+
                 <div class="feature-card">
-                    <div class="w-11 h-11 rounded-xl bg-green-50 text-[#008744] flex items-center justify-center">
+
+                    <div class="w-12 h-12 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center">
                         <i data-lucide="send"></i>
                     </div>
 
-                    <h3 class="font-black mt-5">Money Transfers</h3>
+                    <h3 class="font-black text-lg mt-5">
+                        Transfers
+                    </h3>
 
-                    <p class="text-sm text-gray-500 mt-2 leading-6">
-                        Record and manage transfers directly from your dashboard.
+                    <p class="text-sm text-gray-500 mt-2">
+                        Record simulated transfers from your dashboard.
                     </p>
+
                 </div>
 
+
                 <div class="feature-card">
-                    <div class="w-11 h-11 rounded-xl bg-green-50 text-[#008744] flex items-center justify-center">
+
+                    <div class="w-12 h-12 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center">
                         <i data-lucide="briefcase-business"></i>
                     </div>
 
-                    <h3 class="font-black mt-5">Business Banking</h3>
+                    <h3 class="font-black text-lg mt-5">
+                        Business Banking
+                    </h3>
 
-                    <p class="text-sm text-gray-500 mt-2 leading-6">
-                        Keep business-related financial information organized.
+                    <p class="text-sm text-gray-500 mt-2">
+                        Organize demo business account information.
                     </p>
-                </div>
-
-            </div>
-        </div>
-    </section>
-
-    <!-- About -->
-    <section id="about" class="py-20 bg-white">
-
-        <div class="max-w-6xl mx-auto px-5 grid md:grid-cols-2 gap-12 items-center">
-
-            <div>
-                <span class="text-[#008744] font-bold text-sm">
-                    ABOUT CASH FLOW
-                </span>
-
-                <h2 class="text-3xl md:text-4xl font-black mt-3">
-                    A simpler way to manage your financial life.
-                </h2>
-
-                <p class="text-gray-500 leading-7 mt-5">
-                    Cash Flow Bank is designed around a straightforward
-                    digital experience, helping users view account
-                    information, organize transactions and stay connected
-                    with their financial goals.
-                </p>
-
-                <div class="mt-7 space-y-4">
-
-                    <div class="flex gap-3">
-                        <div class="w-8 h-8 rounded-full bg-green-100 text-green-700 flex items-center justify-center shrink-0">
-                            <i data-lucide="check" class="w-4 h-4"></i>
-                        </div>
-
-                        <div>
-                            <h3 class="font-bold">Simple dashboard</h3>
-                            <p class="text-sm text-gray-500 mt-1">
-                                Find important account information quickly.
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="flex gap-3">
-                        <div class="w-8 h-8 rounded-full bg-green-100 text-green-700 flex items-center justify-center shrink-0">
-                            <i data-lucide="check" class="w-4 h-4"></i>
-                        </div>
-
-                        <div>
-                            <h3 class="font-bold">Transaction tracking</h3>
-                            <p class="text-sm text-gray-500 mt-1">
-                                Keep a clear record of activity in the dashboard.
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="flex gap-3">
-                        <div class="w-8 h-8 rounded-full bg-green-100 text-green-700 flex items-center justify-center shrink-0">
-                            <i data-lucide="check" class="w-4 h-4"></i>
-                        </div>
-
-                        <div>
-                            <h3 class="font-bold">Live support</h3>
-                            <p class="text-sm text-gray-500 mt-1">
-                                Get help through the integrated live chat.
-                            </p>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-            <div class="rounded-3xl bg-[#002b1d] p-8 md:p-10 text-white">
-
-                <div class="w-14 h-14 rounded-2xl bg-white/10 flex items-center justify-center">
-                    <i data-lucide="shield-check" class="w-7 h-7"></i>
-                </div>
-
-                <h3 class="text-2xl font-black mt-7">
-                    Built for a clean digital experience
-                </h3>
-
-                <p class="text-white/65 mt-4 leading-7">
-                    Your dashboard gives you one place to review your
-                    account information, transactions, profile and
-                    available services.
-                </p>
-
-                <button onclick="openLogin()"
-                        class="mt-7 bg-[#00c853] px-5 py-3 rounded-xl font-bold">
-                    Access Dashboard
-                </button>
-
-            </div>
-
-        </div>
-    </section>
-
-    <!-- Contact -->
-    <section id="contact" class="py-16 bg-[var(--bg)]">
-
-        <div class="max-w-6xl mx-auto px-5">
-
-            <div class="dashboard-card p-8 md:p-10 grid md:grid-cols-2 gap-10">
-
-                <div>
-                    <span class="text-[#008744] font-bold text-sm">
-                        CONTACT
-                    </span>
-
-                    <h2 class="text-3xl font-black mt-2">
-                        Need help?
-                    </h2>
-
-                    <p class="text-gray-500 mt-3 leading-7">
-                        Use the live chat button to contact support directly.
-                        You can also access Support from your dashboard.
-                    </p>
-                </div>
-
-                <div class="space-y-4">
-
-                    <div class="flex gap-4">
-                        <div class="w-10 h-10 rounded-xl bg-green-50 text-[#008744] flex items-center justify-center">
-                            <i data-lucide="message-circle"></i>
-                        </div>
-
-                        <div>
-                            <div class="font-bold">Live Chat</div>
-                            <div class="text-sm text-gray-500">
-                                Available through the chat widget.
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="flex gap-4">
-                        <div class="w-10 h-10 rounded-xl bg-green-50 text-[#008744] flex items-center justify-center">
-                            <i data-lucide="clock"></i>
-                        </div>
-
-                        <div>
-                            <div class="font-bold">Online Access</div>
-                            <div class="text-sm text-gray-500">
-                                Access your dashboard anytime.
-                            </div>
-                        </div>
-                    </div>
 
                 </div>
 
             </div>
 
         </div>
+
     </section>
 
-    <!-- Footer -->
-    <footer class="bg-[#002b1d] text-white py-12">
+
+    <!-- ABOUT -->
+
+    <section id="about" class="py-20 bg-[#f4f7f6]">
 
         <div class="max-w-7xl mx-auto px-5">
 
-            <div class="grid md:grid-cols-4 gap-10">
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
 
                 <div>
-                    <div class="flex items-center gap-3">
-                        <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center">
-                            <i data-lucide="landmark"></i>
-                        </div>
 
-                        <div>
-                            <div class="font-black">CASH FLOW</div>
-                            <div class="text-[9px] tracking-[.2em] text-white/50">
-                                BANK
+                    <div class="text-green-700 font-bold text-sm">
+                        ABOUT CASH FLOW
+                    </div>
+
+                    <h2 class="text-3xl md:text-4xl font-black mt-2">
+                        A simpler way to manage your financial dashboard.
+                    </h2>
+
+                    <p class="text-gray-500 mt-5 leading-7">
+                        Cash Flow Bank is a modern financial-services
+                        demonstration platform designed around a clean,
+                        easy-to-use customer experience.
+                    </p>
+
+                    <div class="grid sm:grid-cols-2 gap-4 mt-7">
+
+                        <div class="bg-white p-5 rounded-xl border">
+                            <div class="font-black">
+                                Simple
+                            </div>
+                            <div class="text-sm text-gray-500 mt-1">
+                                Easy account management.
                             </div>
                         </div>
+
+                        <div class="bg-white p-5 rounded-xl border">
+                            <div class="font-black">
+                                Organized
+                            </div>
+                            <div class="text-sm text-gray-500 mt-1">
+                                Clear financial activity.
+                            </div>
+                        </div>
+
                     </div>
 
-                    <p class="text-white/50 text-sm leading-6 mt-5">
-                        Your Goals. Our Priority.
+                </div>
+
+
+                <div class="bg-[#002b1d] rounded-3xl p-8 text-white">
+
+                    <div class="text-green-300 font-bold">
+                        YOUR GOALS
+                    </div>
+
+                    <h3 class="text-3xl font-black mt-3">
+                        Your money dashboard,
+                        all in one place.
+                    </h3>
+
+                    <p class="text-white/65 mt-4 leading-7">
+                        View your account, track activity and communicate
+                        with support through the integrated live chat.
                     </p>
-                </div>
 
-                <div>
-                    <h3 class="font-bold mb-4">Company</h3>
-
-                    <div class="space-y-3 text-sm text-white/55">
-                        <a href="#about" class="block hover:text-white">About</a>
-                        <a href="#services" class="block hover:text-white">Services</a>
-                        <a href="#contact" class="block hover:text-white">Contact</a>
-                    </div>
-                </div>
-
-                <div>
-                    <h3 class="font-bold mb-4">Account</h3>
-
-                    <div class="space-y-3 text-sm text-white/55">
-                        <button onclick="openLogin()" class="block hover:text-white">
-                            Sign In
-                        </button>
-
-                        <button onclick="setAuthMode('register'); openLogin()"
-                                class="block hover:text-white">
-                            Create Account
-                        </button>
-                    </div>
-                </div>
-
-                <div>
-                    <h3 class="font-bold mb-4">Support</h3>
-
-                    <p class="text-sm text-white/55 leading-6">
-                        Need assistance? Open the live chat widget to contact
-                        support.
-                    </p>
                 </div>
 
             </div>
 
-            <div class="border-t border-white/10 mt-10 pt-6 text-xs text-white/40">
-                © <span id="footerYear"></span> Cash Flow Bank. All rights reserved.
-                This website is a demonstration interface.
+        </div>
+
+    </section>
+
+
+    <!-- CONTACT -->
+
+    <section id="contact" class="py-20 bg-white">
+
+        <div class="max-w-4xl mx-auto px-5 text-center">
+
+            <div class="text-green-700 font-bold text-sm">
+                CONTACT
+            </div>
+
+            <h2 class="text-3xl md:text-4xl font-black mt-2">
+                Need help?
+            </h2>
+
+            <p class="text-gray-500 mt-4">
+                Use our live chat to contact the support team.
+            </p>
+
+            <button
+                onclick="openTawkChat()"
+                class="btn btn-primary mt-7"
+            >
+                <i data-lucide="message-circle"></i>
+                Open Live Chat
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- FOOTER -->
+
+    <footer class="bg-[#002b1d] text-white py-8">
+
+        <div class="max-w-7xl mx-auto px-5 flex flex-col md:flex-row items-center justify-between gap-4">
+
+            <div class="font-black">
+                CASH FLOW BANK
+            </div>
+
+            <div class="text-sm text-white/60">
+                © 2026 Cash Flow Bank. Demo financial platform.
             </div>
 
         </div>
@@ -1228,207 +1115,222 @@
 
 
 <!-- =========================================================
-     DASHBOARD
+     CUSTOMER DASHBOARD
 ========================================================= -->
 
 <div id="dashboardView" class="hidden">
 
-    <!-- Mobile overlay -->
-    <div id="sidebarOverlay"
-         class="overlay hidden"
-         onclick="toggleSidebar()"></div>
-
-    <!-- Sidebar -->
     <aside id="sidebar" class="sidebar">
 
-        <div class="sidebar-logo">
+        <div class="p-5 border-b border-white/10">
 
-            <div class="w-10 h-10 rounded-xl bg-white/10 flex items-center justify-center mr-3">
-                <i data-lucide="landmark"></i>
-            </div>
+            <div class="flex items-center gap-3">
 
-            <div>
-                <div class="font-black tracking-wide">CASH FLOW</div>
-                <div class="text-[9px] tracking-[.25em] text-white/40">
-                    BANK
+                <div class="w-11 h-11 rounded-xl bg-white text-[#002b1d] flex items-center justify-center font-black">
+                    CF
                 </div>
+
+                <div>
+                    <div class="font-black">
+                        CASH FLOW
+                    </div>
+
+                    <div class="text-xs text-white/60">
+                        BANK
+                    </div>
+                </div>
+
             </div>
 
         </div>
 
-        <div class="sidebar-section-title">Main</div>
 
-        <button class="sidebar-link active"
-                onclick="dashSection('dashboard', this)">
-            <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
-            Dashboard
-        </button>
+        <div class="p-4">
 
-        <button class="sidebar-link"
-                onclick="dashSection('accounts', this)">
-            <i data-lucide="wallet" class="w-5 h-5"></i>
-            Account Summary
-        </button>
+            <div class="text-xs uppercase tracking-wider text-white/40 px-3 mb-2">
+                Dashboard
+            </div>
 
-        <button class="sidebar-link"
-                onclick="dashSection('transfer', this)">
-            <i data-lucide="send" class="w-5 h-5"></i>
-            Transfer
-        </button>
+            <button
+                class="nav-item active"
+                onclick="showDashboardSection('home', this)"
+            >
+                <i data-lucide="layout-dashboard"></i>
+                Dashboard
+            </button>
 
-        <button class="sidebar-link"
-                onclick="dashSection('history', this)">
-            <i data-lucide="receipt-text" class="w-5 h-5"></i>
-            History
-        </button>
+            <button
+                class="nav-item"
+                onclick="showDashboardSection('accounts', this)"
+            >
+                <i data-lucide="wallet"></i>
+                Account Summary
+            </button>
 
-        <div class="sidebar-section-title">Services</div>
+            <button
+                class="nav-item"
+                onclick="showDashboardSection('transfer', this)"
+            >
+                <i data-lucide="send"></i>
+                Transfer
+            </button>
 
-        <button class="sidebar-link"
-                onclick="showDemo('Deposit Check')">
-            <i data-lucide="scan-line" class="w-5 h-5"></i>
-            Deposit Check
-        </button>
+            <button
+                class="nav-item"
+                onclick="showDashboardSection('history', this)"
+            >
+                <i data-lucide="history"></i>
+                History
+            </button>
 
-        <button class="sidebar-link"
-                onclick="showDemo('Deposit Crypto')">
-            <i data-lucide="bitcoin" class="w-5 h-5"></i>
-            Deposit Crypto
-        </button>
 
-        <button class="sidebar-link"
-                onclick="showDemo('Loans')">
-            <i data-lucide="hand-coins" class="w-5 h-5"></i>
-            Loans
-        </button>
+            <div class="text-xs uppercase tracking-wider text-white/40 px-3 mt-7 mb-2">
+                Services
+            </div>
 
-        <button class="sidebar-link"
-                onclick="showDemo('Cards')">
-            <i data-lucide="credit-card" class="w-5 h-5"></i>
-            Cards
-        </button>
+            <button
+                class="nav-item"
+                onclick="demoFeature('Deposit Check')"
+            >
+                <i data-lucide="file-check"></i>
+                Deposit Check
+            </button>
 
-        <button class="sidebar-link"
-                onclick="showDemo('KYC Verification')">
-            <i data-lucide="badge-check" class="w-5 h-5"></i>
-            KYC Verification
-        </button>
+            <button
+                class="nav-item"
+                onclick="demoFeature('Deposit Crypto')"
+            >
+                <i data-lucide="bitcoin"></i>
+                Deposit Crypto
+            </button>
 
-        <div class="sidebar-section-title">Account</div>
+            <button
+                class="nav-item"
+                onclick="demoFeature('Loans')"
+            >
+                <i data-lucide="hand-coins"></i>
+                Loans
+            </button>
 
-        <button class="sidebar-link"
-                onclick="dashSection('profile', this)">
-            <i data-lucide="user" class="w-5 h-5"></i>
-            Profile
-        </button>
+            <button
+                class="nav-item"
+                onclick="demoFeature('Cards')"
+            >
+                <i data-lucide="credit-card"></i>
+                Cards
+            </button>
 
-        <button class="sidebar-link"
-                onclick="dashSection('settings', this)">
-            <i data-lucide="settings" class="w-5 h-5"></i>
-            Settings
-        </button>
+            <button
+                class="nav-item"
+                onclick="demoFeature('KYC Verification')"
+            >
+                <i data-lucide="badge-check"></i>
+                KYC Verification
+            </button>
 
-        <button class="sidebar-link"
-                onclick="showDemo('Support')">
-            <i data-lucide="life-buoy" class="w-5 h-5"></i>
-            Support
-        </button>
 
-        <button class="sidebar-link"
-                onclick="logout()">
-            <i data-lucide="log-out" class="w-5 h-5"></i>
-            Sign Out
-        </button>
+            <div class="text-xs uppercase tracking-wider text-white/40 px-3 mt-7 mb-2">
+                Account
+            </div>
+
+            <button
+                class="nav-item"
+                onclick="showDashboardSection('profile', this)"
+            >
+                <i data-lucide="user"></i>
+                Profile
+            </button>
+
+            <button
+                class="nav-item"
+                onclick="showDashboardSection('settings', this)"
+            >
+                <i data-lucide="settings"></i>
+                Settings
+            </button>
+
+            <button
+                class="nav-item"
+                onclick="openTawkChat()"
+            >
+                <i data-lucide="message-circle"></i>
+                Support
+            </button>
+
+            <button
+                class="nav-item"
+                onclick="logout()"
+            >
+                <i data-lucide="log-out"></i>
+                Sign Out
+            </button>
+
+        </div>
 
     </aside>
 
 
-    <!-- Main Dashboard -->
-    <main class="dashboard-main">
+    <main class="main">
 
-        <!-- Topbar -->
-        <header class="topbar">
+        <header class="dashboard-topbar">
 
             <div class="flex items-center gap-3">
 
-                <button onclick="toggleSidebar()"
-                        class="mobile-menu-button w-10 h-10 rounded-xl border border-[var(--border)] items-center justify-center">
+                <button
+                    onclick="toggleSidebar()"
+                    class="btn btn-secondary lg:hidden"
+                >
                     <i data-lucide="menu"></i>
                 </button>
 
-                <div class="topbar-search hidden md:flex items-center gap-2 border border-[var(--border)] rounded-xl px-3 w-64">
-                    <i data-lucide="search" class="w-4 h-4 text-gray-400"></i>
+                <div>
 
-                    <input id="dashboardSearch"
-                           type="text"
-                           placeholder="Search..."
-                           class="bg-transparent outline-none py-2 w-full text-sm"
-                           oninput="searchDashboard(this.value)">
+                    <div
+                        id="dashboardPageTitle"
+                        class="font-black text-lg"
+                    >
+                        Dashboard
+                    </div>
+
+                    <div
+                        id="dashboardPageSubtitle"
+                        class="text-xs text-gray-500"
+                    >
+                        Welcome back
+                    </div>
+
                 </div>
 
             </div>
 
-            <div class="flex items-center gap-2">
 
-                <button onclick="toggleTheme()"
-                        title="Toggle theme"
-                        class="w-10 h-10 rounded-xl border border-[var(--border)] flex items-center justify-center">
-                    <i id="themeIcon" data-lucide="moon" class="w-5 h-5"></i>
+            <div class="flex items-center gap-3">
+
+                <button
+                    onclick="toggleBalance()"
+                    class="btn btn-secondary"
+                    title="Show or hide balance"
+                >
+                    <i
+                        id="balanceToggleIcon"
+                        data-lucide="eye"
+                        class="w-5 h-5"
+                    ></i>
                 </button>
 
-                <button onclick="showDemo('Notifications')"
-                        class="w-10 h-10 rounded-xl border border-[var(--border)] flex items-center justify-center relative">
-                    <i data-lucide="bell" class="w-5 h-5"></i>
-                    <span class="absolute top-2 right-2 w-2 h-2 bg-red-500 rounded-full"></span>
+                <button
+                    onclick="openTawkChat()"
+                    class="btn btn-secondary"
+                    title="Support"
+                >
+                    <i data-lucide="message-circle"></i>
                 </button>
 
-                <div class="relative">
-
-                    <button onclick="toggleProfileMenu()"
-                            class="flex items-center gap-2 rounded-xl border border-[var(--border)] px-2.5 py-1.5">
-
-                        <div id="topAvatar"
-                             class="w-8 h-8 rounded-lg bg-[#008744] text-white flex items-center justify-center font-bold text-sm">
-                            CF
-                        </div>
-
-                        <div class="hidden sm:block text-left">
-                            <div id="topUserName"
-                                 class="font-bold text-sm">
-                                User
-                            </div>
-
-                            <div class="text-[11px] text-gray-500">
-                                Account
-                            </div>
-                        </div>
-
-                        <i data-lucide="chevron-down"
-                           class="w-4 h-4 text-gray-400"></i>
-
-                    </button>
-
-                    <div id="profileMenu"
-                         class="profile-menu hidden">
-
-                        <button onclick="dashSection('profile'); toggleProfileMenu()">
-                            <i data-lucide="user" class="inline w-4 h-4 mr-2"></i>
-                            My Profile
-                        </button>
-
-                        <button onclick="dashSection('settings'); toggleProfileMenu()">
-                            <i data-lucide="settings" class="inline w-4 h-4 mr-2"></i>
-                            Settings
-                        </button>
-
-                        <button onclick="logout()"
-                                class="!text-red-600">
-                            <i data-lucide="log-out" class="inline w-4 h-4 mr-2"></i>
-                            Sign Out
-                        </button>
-
-                    </div>
-
+                <div
+                    id="userAvatar"
+                    class="w-10 h-10 rounded-full bg-green-100 text-green-700 flex items-center justify-center font-black"
+                >
+                    CF
                 </div>
 
             </div>
@@ -1438,226 +1340,83 @@
 
         <div class="dashboard-content">
 
-            <!-- DASHBOARD HOME -->
-            <section id="section-dashboard" class="dashboard-section">
+            <!-- HOME -->
+
+            <section id="dash-home">
 
                 <div class="mb-7">
 
-                    <div class="text-sm text-gray-500">
-                        Welcome back,
-                    </div>
-
-                    <h1 id="dashboardGreeting"
-                        class="text-3xl md:text-4xl font-black mt-1">
-                        User
+                    <h1 class="text-2xl md:text-3xl font-black">
+                        Welcome,
+                        <span id="userNameGreeting">
+                            Customer
+                        </span>
                     </h1>
 
-                    <p class="text-gray-500 mt-2">
+                    <p class="text-gray-500 mt-1">
                         Here's what's happening with your account.
                     </p>
 
                 </div>
 
 
-                <!-- Balance + Quick Actions -->
-                <div class="grid lg:grid-cols-3 gap-5">
+                <div class="grid lg:grid-cols-3 gap-5 mb-6">
 
-                    <div class="balance-card lg:col-span-2 p-7 rounded-2xl">
+                    <div class="balance-card lg:col-span-2">
 
-                        <div class="flex items-center justify-between relative z-10">
+                        <div class="flex items-center justify-between">
 
-                            <div>
-                                <div class="text-white/60 text-sm">
-                                    Total Balance
-                                </div>
-
-                                <div id="balanceDisplay"
-                                     class="text-4xl md:text-5xl font-black mt-2">
-                                    $0.00
-                                </div>
+                            <div class="text-white/65 text-sm">
+                                Available Balance
                             </div>
 
-                            <button onclick="toggleBalance()"
-                                    class="w-11 h-11 rounded-xl bg-white/10 flex items-center justify-center"
-                                    title="Show/hide balance">
-                                <i id="balanceEye"
-                                   data-lucide="eye"
-                                   class="w-5 h-5"></i>
-                            </button>
+                            <span
+                                id="accountStatusBadge"
+                                class="status-badge status-pending"
+                            >
+                                Pending
+                            </span>
 
                         </div>
 
-                        <div class="relative z-10 mt-8 flex flex-wrap gap-6 text-sm">
+                        <div
+                            id="dashboardBalance"
+                            class="text-4xl md:text-5xl font-black mt-4"
+                        >
+                            $0.00
+                        </div>
+
+                        <div class="flex flex-wrap gap-8 mt-8 text-sm">
 
                             <div>
+
                                 <div class="text-white/50">
                                     Account Number
                                 </div>
 
-                                <div id="balanceAccountNumber"
-                                     class="font-bold mt-1">
+                                <div
+                                    id="dashboardAccountNumber"
+                                    class="font-bold mt-1"
+                                >
                                     —
                                 </div>
+
                             </div>
 
+
                             <div>
+
                                 <div class="text-white/50">
                                     Account Type
                                 </div>
 
-                                <div id="balanceAccountType"
-                                     class="font-bold mt-1">
+                                <div
+                                    id="dashboardAccountType"
+                                    class="font-bold mt-1"
+                                >
                                     —
                                 </div>
-                            </div>
 
-                            <div>
-                                <div class="text-white/50">
-                                    Status
-                                </div>
-
-                                <div class="font-bold mt-1 text-[#9ff2bd]">
-                                    Active
-                                </div>
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="dashboard-card p-5">
-
-                        <h3 class="font-black">
-                            Quick Actions
-                        </h3>
-
-                        <div class="grid grid-cols-2 gap-3 mt-4">
-
-                            <button class="quick-action"
-                                    onclick="dashSection('transfer')">
-
-                                <div class="w-9 h-9 rounded-lg bg-green-50 text-green-700 flex items-center justify-center">
-                                    <i data-lucide="send" class="w-4 h-4"></i>
-                                </div>
-
-                                <div class="font-bold text-sm mt-3">
-                                    Send Money
-                                </div>
-
-                            </button>
-
-                            <button class="quick-action"
-                                    onclick="dashSection('history')">
-
-                                <div class="w-9 h-9 rounded-lg bg-blue-50 text-blue-700 flex items-center justify-center">
-                                    <i data-lucide="history" class="w-4 h-4"></i>
-                                </div>
-
-                                <div class="font-bold text-sm mt-3">
-                                    History
-                                </div>
-
-                            </button>
-
-                            <button class="quick-action"
-                                    onclick="showDemo('Cards')">
-
-                                <div class="w-9 h-9 rounded-lg bg-purple-50 text-purple-700 flex items-center justify-center">
-                                    <i data-lucide="credit-card" class="w-4 h-4"></i>
-                                </div>
-
-                                <div class="font-bold text-sm mt-3">
-                                    Cards
-                                </div>
-
-                            </button>
-
-                            <button class="quick-action"
-                                    onclick="showDemo('Support')">
-
-                                <div class="w-9 h-9 rounded-lg bg-orange-50 text-orange-700 flex items-center justify-center">
-                                    <i data-lucide="headphones" class="w-4 h-4"></i>
-                                </div>
-
-                                <div class="font-bold text-sm mt-3">
-                                    Support
-                                </div>
-
-                            </button>
-
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <!-- Spending + Account -->
-                <div class="grid lg:grid-cols-2 gap-5 mt-5">
-
-                    <div class="dashboard-card p-6">
-
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <h3 class="font-black">
-                                    Spending Overview
-                                </h3>
-
-                                <p class="text-sm text-gray-500 mt-1">
-                                    Your recorded activity
-                                </p>
-                            </div>
-
-                            <div class="text-sm font-bold text-[#008744]">
-                                This Month
-                            </div>
-                        </div>
-
-                        <div class="mt-7">
-
-                            <div class="flex justify-between text-sm mb-2">
-                                <span class="text-gray-500">
-                                    Outgoing
-                                </span>
-
-                                <span id="spendingOutgoing"
-                                      class="font-bold">
-                                    $0.00
-                                </span>
-                            </div>
-
-                            <div class="h-3 rounded-full bg-gray-100 overflow-hidden">
-                                <div id="spendingBar"
-                                     class="h-full bg-[#008744] rounded-full"
-                                     style="width:0%">
-                                </div>
-                            </div>
-
-                        </div>
-
-                        <div class="grid grid-cols-2 gap-4 mt-7">
-
-                            <div class="rounded-xl bg-[var(--bg)] p-4">
-                                <div class="text-xs text-gray-500">
-                                    Transactions
-                                </div>
-
-                                <div id="transactionCount"
-                                     class="text-2xl font-black mt-1">
-                                    0
-                                </div>
-                            </div>
-
-                            <div class="rounded-xl bg-[var(--bg)] p-4">
-                                <div class="text-xs text-gray-500">
-                                    Incoming
-                                </div>
-
-                                <div id="spendingIncoming"
-                                     class="text-2xl font-black mt-1">
-                                    $0.00
-                                </div>
                             </div>
 
                         </div>
@@ -1667,63 +1426,31 @@
 
                     <div class="dashboard-card p-6">
 
-                        <div class="flex items-center justify-between">
-                            <div>
-                                <h3 class="font-black">
-                                    My Account
-                                </h3>
-
-                                <p class="text-sm text-gray-500 mt-1">
-                                    Primary account
-                                </p>
-                            </div>
-
-                            <span class="status-badge status-success">
-                                Active
-                            </span>
+                        <div class="text-sm text-gray-500">
+                            Account Limit
                         </div>
 
-                        <div class="mt-6 flex items-center gap-4">
-
-                            <div class="w-14 h-14 rounded-2xl bg-green-50 text-green-700 flex items-center justify-center">
-                                <i data-lucide="wallet" class="w-7 h-7"></i>
-                            </div>
-
-                            <div>
-                                <div id="accountTypeHome"
-                                     class="font-black">
-                                    Savings Account
-                                </div>
-
-                                <div id="accountNumberHome"
-                                     class="text-sm text-gray-500 mt-1">
-                                    —
-                                </div>
-                            </div>
-
+                        <div
+                            id="dashboardLimit"
+                            class="text-3xl font-black mt-3"
+                        >
+                            $0.00
                         </div>
 
-                        <div class="mt-7 pt-5 border-t border-[var(--border)] grid grid-cols-2 gap-5">
+                        <div class="text-sm text-gray-500 mt-2">
+                            Demo account limit
+                        </div>
 
-                            <div>
-                                <div class="text-xs text-gray-500">
-                                    Available Balance
-                                </div>
+                        <div class="mt-6">
 
-                                <div id="availableBalanceSmall"
-                                     class="font-black text-xl mt-1">
-                                    $0.00
-                                </div>
-                            </div>
+                            <div class="h-2 bg-gray-100 rounded-full overflow-hidden">
 
-                            <div>
-                                <div class="text-xs text-gray-500">
-                                    Currency
-                                </div>
+                                <div
+                                    id="limitProgress"
+                                    class="h-full bg-green-600 rounded-full"
+                                    style="width:0%"
+                                ></div>
 
-                                <div class="font-black text-xl mt-1">
-                                    USD
-                                </div>
                             </div>
 
                         </div>
@@ -1733,156 +1460,222 @@
                 </div>
 
 
-                <!-- Recent Transactions -->
-                <div class="dashboard-card mt-5">
+                <!-- QUICK ACTIONS -->
 
-                    <div class="p-6 flex items-center justify-between">
+                <div class="mb-7">
 
-                        <div>
-                            <h3 class="font-black">
-                                Recent Transactions
-                            </h3>
+                    <h2 class="font-black text-lg mb-4">
+                        Quick Actions
+                    </h2>
 
-                            <p class="text-sm text-gray-500 mt-1">
-                                Your latest account activity
-                            </p>
-                        </div>
+                    <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
 
-                        <button onclick="dashSection('history')"
-                                class="text-sm font-bold text-[#008744]">
-                            View All
+                        <button
+                            class="quick-action text-left"
+                            onclick="showDashboardSection('transfer')"
+                        >
+                            <div class="w-10 h-10 rounded-xl bg-green-100 text-green-700 flex items-center justify-center">
+                                <i data-lucide="send"></i>
+                            </div>
+
+                            <div class="font-bold mt-4">
+                                Send Money
+                            </div>
+
+                            <div class="text-xs text-gray-500 mt-1">
+                                Demo transfer
+                            </div>
+                        </button>
+
+
+                        <button
+                            class="quick-action text-left"
+                            onclick="showDashboardSection('history')"
+                        >
+                            <div class="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center">
+                                <i data-lucide="history"></i>
+                            </div>
+
+                            <div class="font-bold mt-4">
+                                History
+                            </div>
+
+                            <div class="text-xs text-gray-500 mt-1">
+                                View activity
+                            </div>
+                        </button>
+
+
+                        <button
+                            class="quick-action text-left"
+                            onclick="demoFeature('Cards')"
+                        >
+                            <div class="w-10 h-10 rounded-xl bg-purple-100 text-purple-700 flex items-center justify-center">
+                                <i data-lucide="credit-card"></i>
+                            </div>
+
+                            <div class="font-bold mt-4">
+                                Cards
+                            </div>
+
+                            <div class="text-xs text-gray-500 mt-1">
+                                Manage cards
+                            </div>
+                        </button>
+
+
+                        <button
+                            class="quick-action text-left"
+                            onclick="openTawkChat()"
+                        >
+                            <div class="w-10 h-10 rounded-xl bg-amber-100 text-amber-700 flex items-center justify-center">
+                                <i data-lucide="headphones"></i>
+                            </div>
+
+                            <div class="font-bold mt-4">
+                                Support
+                            </div>
+
+                            <div class="text-xs text-gray-500 mt-1">
+                                Talk to us
+                            </div>
                         </button>
 
                     </div>
 
-                    <div id="recentTransactions"></div>
+                </div>
+
+
+                <!-- RECENT TRANSACTIONS -->
+
+                <div class="dashboard-card">
+
+                    <div class="p-5 border-b flex items-center justify-between">
+
+                        <div>
+
+                            <h2 class="font-black">
+                                Recent Transactions
+                            </h2>
+
+                            <p class="text-xs text-gray-500 mt-1">
+                                Your latest account activity.
+                            </p>
+
+                        </div>
+
+                        <button
+                            onclick="showDashboardSection('history')"
+                            class="text-sm font-bold text-green-700"
+                        >
+                            View all
+                        </button>
+
+                    </div>
+
+                    <div
+                        id="recentTransactions"
+                        class="p-5"
+                    >
+                        No transactions yet.
+                    </div>
 
                 </div>
 
             </section>
 
 
-            <!-- ACCOUNTS -->
-            <section id="section-accounts"
-                     class="dashboard-section hidden">
+            <!-- ACCOUNT SUMMARY -->
 
-                <div class="mb-7">
-                    <h1 class="text-3xl font-black">
+            <section id="dash-accounts" class="hidden">
+
+                <div class="mb-6">
+
+                    <h1 class="text-2xl md:text-3xl font-black">
                         Account Summary
                     </h1>
 
-                    <p class="text-gray-500 mt-2">
-                        View your account details and balance.
+                    <p class="text-gray-500 mt-1">
+                        Your account information.
                     </p>
+
                 </div>
 
-                <div class="grid md:grid-cols-2 gap-5">
 
-                    <div class="dashboard-card p-6">
+                <div class="dashboard-card p-6">
 
-                        <div class="flex items-center justify-between">
-                            <div class="w-12 h-12 rounded-xl bg-green-50 text-green-700 flex items-center justify-center">
-                                <i data-lucide="wallet"></i>
+                    <div class="grid md:grid-cols-2 gap-4">
+
+                        <div class="bg-gray-50 rounded-xl p-5">
+                            <div class="text-xs text-gray-500">
+                                Full Name
                             </div>
-
-                            <span class="status-badge status-success">
-                                Active
-                            </span>
-                        </div>
-
-                        <div class="mt-6">
-
-                            <div class="text-sm text-gray-500">
-                                Account Type
-                            </div>
-
-                            <div id="summaryType"
-                                 class="text-2xl font-black mt-1">
+                            <div id="summaryName" class="font-bold mt-1">
                                 —
                             </div>
-
                         </div>
 
-                        <div class="mt-6">
+                        <div class="bg-gray-50 rounded-xl p-5">
+                            <div class="text-xs text-gray-500">
+                                Email
+                            </div>
+                            <div id="summaryEmail" class="font-bold mt-1 break-all">
+                                —
+                            </div>
+                        </div>
 
-                            <div class="text-sm text-gray-500">
+                        <div class="bg-gray-50 rounded-xl p-5">
+                            <div class="text-xs text-gray-500">
+                                Phone
+                            </div>
+                            <div id="summaryPhone" class="font-bold mt-1">
+                                —
+                            </div>
+                        </div>
+
+                        <div class="bg-gray-50 rounded-xl p-5">
+                            <div class="text-xs text-gray-500">
+                                Country
+                            </div>
+                            <div id="summaryCountry" class="font-bold mt-1">
+                                —
+                            </div>
+                        </div>
+
+                        <div class="bg-gray-50 rounded-xl p-5">
+                            <div class="text-xs text-gray-500">
                                 Account Number
                             </div>
-
-                            <div id="summaryNumber"
-                                 class="font-bold mt-1">
+                            <div id="summaryAccountNumber" class="font-bold mt-1">
                                 —
                             </div>
-
                         </div>
 
-                        <div class="mt-6 pt-5 border-t border-[var(--border)]">
-
-                            <div class="text-sm text-gray-500">
-                                Available Balance
+                        <div class="bg-gray-50 rounded-xl p-5">
+                            <div class="text-xs text-gray-500">
+                                Account Type
                             </div>
-
-                            <div id="summaryBalance"
-                                 class="text-3xl font-black mt-1">
-                                $0.00
+                            <div id="summaryType" class="font-bold mt-1">
+                                —
                             </div>
-
                         </div>
 
-                    </div>
-
-
-                    <div class="dashboard-card p-6">
-
-                        <h3 class="font-black">
-                            Account Information
-                        </h3>
-
-                        <div class="space-y-5 mt-6">
-
-                            <div>
-                                <div class="text-xs text-gray-500">
-                                    Account Holder
-                                </div>
-
-                                <div id="summaryName"
-                                     class="font-bold mt-1">
-                                    —
-                                </div>
+                        <div class="bg-gray-50 rounded-xl p-5">
+                            <div class="text-xs text-gray-500">
+                                Status
                             </div>
-
-                            <div>
-                                <div class="text-xs text-gray-500">
-                                    Email
-                                </div>
-
-                                <div id="summaryEmail"
-                                     class="font-bold mt-1">
-                                    —
-                                </div>
+                            <div id="summaryStatus" class="font-bold mt-1">
+                                —
                             </div>
+                        </div>
 
-                            <div>
-                                <div class="text-xs text-gray-500">
-                                    Country
-                                </div>
-
-                                <div id="summaryCountry"
-                                     class="font-bold mt-1">
-                                    —
-                                </div>
+                        <div class="bg-gray-50 rounded-xl p-5">
+                            <div class="text-xs text-gray-500">
+                                Created
                             </div>
-
-                            <div>
-                                <div class="text-xs text-gray-500">
-                                    Currency
-                                </div>
-
-                                <div class="font-bold mt-1">
-                                    USD
-                                </div>
+                            <div id="summaryCreated" class="font-bold mt-1">
+                                —
                             </div>
-
                         </div>
 
                     </div>
@@ -1893,90 +1686,88 @@
 
 
             <!-- TRANSFER -->
-            <section id="section-transfer"
-                     class="dashboard-section hidden">
 
-                <div class="mb-7">
+            <section id="dash-transfer" class="hidden">
 
-                    <h1 class="text-3xl font-black">
+                <div class="mb-6">
+
+                    <h1 class="text-2xl md:text-3xl font-black">
                         Transfer Money
                     </h1>
 
-                    <p class="text-gray-500 mt-2">
-                        Record a transfer from your account.
+                    <p class="text-gray-500 mt-1">
+                        Record a simulated transfer.
                     </p>
 
                 </div>
 
-                <div class="max-w-3xl dashboard-card p-6 md:p-8">
 
-                    <form onsubmit="makeTransfer(event)">
+                <div class="dashboard-card p-6 max-w-2xl">
 
-                        <div class="grid md:grid-cols-2 gap-5">
+                    <form id="transferForm">
 
-                            <div>
-                                <label class="form-label">
-                                    Recipient Name
-                                </label>
+                        <div class="mb-4">
 
-                                <input id="transferName"
-                                       class="form-input"
-                                       type="text"
-                                       placeholder="Recipient full name"
-                                       required>
-                            </div>
+                            <label class="block text-sm font-bold mb-2">
+                                Recipient
+                            </label>
 
-                            <div>
-                                <label class="form-label">
-                                    Recipient Account
-                                </label>
-
-                                <input id="transferAccount"
-                                       class="form-input"
-                                       type="text"
-                                       inputmode="numeric"
-                                       placeholder="10-digit account number"
-                                       minlength="10"
-                                       maxlength="10"
-                                       required>
-                            </div>
-
-                            <div>
-                                <label class="form-label">
-                                    Amount
-                                </label>
-
-                                <input id="transferAmount"
-                                       class="form-input"
-                                       type="number"
-                                       min="0.01"
-                                       step="0.01"
-                                       placeholder="0.00"
-                                       required>
-                            </div>
-
-                            <div>
-                                <label class="form-label">
-                                    Reference
-                                </label>
-
-                                <input id="transferReference"
-                                       class="form-input"
-                                       type="text"
-                                       maxlength="60"
-                                       placeholder="Optional reference">
-                            </div>
+                            <input
+                                id="transferRecipient"
+                                class="input"
+                                placeholder="Recipient name or account"
+                                required
+                            >
 
                         </div>
 
-                        <div class="mt-5 p-4 rounded-xl bg-yellow-50 border border-yellow-100 text-yellow-800 text-sm">
-                            This demo only records transfers when sufficient
-                            demo balance is available. It does not send real money.
+
+                        <div class="mb-4">
+
+                            <label class="block text-sm font-bold mb-2">
+                                Amount
+                            </label>
+
+                            <input
+                                id="transferAmount"
+                                type="number"
+                                min="0.01"
+                                step="0.01"
+                                class="input"
+                                placeholder="0.00"
+                                required
+                            >
+
                         </div>
 
-                        <button type="submit"
-                                class="btn-primary mt-6">
-                            Continue Transfer
+
+                        <div class="mb-5">
+
+                            <label class="block text-sm font-bold mb-2">
+                                Description
+                            </label>
+
+                            <input
+                                id="transferDescription"
+                                class="input"
+                                placeholder="Payment description"
+                            >
+
+                        </div>
+
+
+                        <div class="p-4 bg-amber-50 border border-amber-200 rounded-xl text-sm text-amber-800 mb-5">
+                            Transfers on this website are simulated
+                            demo transactions and do not move real funds.
+                        </div>
+
+
+                        <button
+                            class="btn btn-primary w-full"
+                            type="submit"
+                        >
+                            <i data-lucide="send"></i>
+                            Send Demo Transfer
                         </button>
 
                     </form>
@@ -1987,46 +1778,45 @@
 
 
             <!-- HISTORY -->
-            <section id="section-history"
-                     class="dashboard-section hidden">
 
-                <div class="mb-7 flex flex-wrap items-end justify-between gap-4">
+            <section id="dash-history" class="hidden">
 
-                    <div>
-                        <h1 class="text-3xl font-black">
-                            Transaction History
-                        </h1>
+                <div class="mb-6">
 
-                        <p class="text-gray-500 mt-2">
-                            Review your recorded transactions.
-                        </p>
-                    </div>
+                    <h1 class="text-2xl md:text-3xl font-black">
+                        Transaction History
+                    </h1>
 
-                    <button onclick="clearTransactions()"
-                            class="btn-secondary text-red-600">
-                        Clear Demo History
-                    </button>
+                    <p class="text-gray-500 mt-1">
+                        Your account activity.
+                    </p>
 
                 </div>
+
 
                 <div class="dashboard-card">
 
                     <div class="table-wrap">
-                        <table class="data-table">
+
+                        <table>
 
                             <thead>
+
                                 <tr>
                                     <th>Date</th>
                                     <th>Description</th>
-                                    <th>Account</th>
+                                    <th>Recipient</th>
                                     <th>Amount</th>
                                     <th>Status</th>
                                 </tr>
+
                             </thead>
 
-                            <tbody id="historyTable"></tbody>
+                            <tbody id="historyTable">
+                            </tbody>
 
                         </table>
+
                     </div>
 
                 </div>
@@ -2035,96 +1825,74 @@
 
 
             <!-- PROFILE -->
-            <section id="section-profile"
-                     class="dashboard-section hidden">
 
-                <div class="mb-7">
+            <section id="dash-profile" class="hidden">
 
-                    <h1 class="text-3xl font-black">
-                        My Profile
+                <div class="mb-6">
+
+                    <h1 class="text-2xl md:text-3xl font-black">
+                        Profile
                     </h1>
 
-                    <p class="text-gray-500 mt-2">
-                        Update your personal information.
+                    <p class="text-gray-500 mt-1">
+                        Update your profile information.
                     </p>
 
                 </div>
 
-                <div class="max-w-3xl dashboard-card p-6 md:p-8">
 
-                    <div class="flex items-center gap-4 mb-8">
+                <div class="dashboard-card p-6 max-w-2xl">
 
-                        <div id="profileAvatar"
-                             class="w-16 h-16 rounded-2xl bg-[#008744] text-white flex items-center justify-center text-xl font-black">
-                            CF
-                        </div>
+                    <form id="profileForm">
 
-                        <div>
-                            <div id="profileDisplayName"
-                                 class="font-black text-xl">
-                                User
-                            </div>
+                        <div class="mb-4">
 
-                            <div id="profileAccountDisplay"
-                                 class="text-sm text-gray-500 mt-1">
-                                —
-                            </div>
-                        </div>
+                            <label class="block text-sm font-bold mb-2">
+                                Full Name
+                            </label>
 
-                    </div>
-
-                    <form onsubmit="saveProfile(event)">
-
-                        <div class="grid md:grid-cols-2 gap-5">
-
-                            <div>
-                                <label class="form-label">
-                                    Full Name
-                                </label>
-
-                                <input id="profileName"
-                                       class="form-input"
-                                       type="text"
-                                       required>
-                            </div>
-
-                            <div>
-                                <label class="form-label">
-                                    Email
-                                </label>
-
-                                <input id="profileEmail"
-                                       class="form-input"
-                                       type="email"
-                                       required>
-                            </div>
-
-                            <div>
-                                <label class="form-label">
-                                    Country
-                                </label>
-
-                                <input id="profileCountry"
-                                       class="form-input"
-                                       type="text">
-                            </div>
-
-                            <div>
-                                <label class="form-label">
-                                    Account Type
-                                </label>
-
-                                <input id="profileType"
-                                       class="form-input"
-                                       type="text"
-                                       disabled>
-                            </div>
+                            <input
+                                id="profileName"
+                                class="input"
+                                required
+                            >
 
                         </div>
 
-                        <button type="submit"
-                                class="btn-primary mt-6">
-                            Save Changes
+
+                        <div class="mb-4">
+
+                            <label class="block text-sm font-bold mb-2">
+                                Phone
+                            </label>
+
+                            <input
+                                id="profilePhone"
+                                class="input"
+                            >
+
+                        </div>
+
+
+                        <div class="mb-5">
+
+                            <label class="block text-sm font-bold mb-2">
+                                Country
+                            </label>
+
+                            <input
+                                id="profileCountry"
+                                class="input"
+                            >
+
+                        </div>
+
+
+                        <button
+                            class="btn btn-primary"
+                            type="submit"
+                        >
+                            Save Profile
                         </button>
 
                     </form>
@@ -2135,78 +1903,38 @@
 
 
             <!-- SETTINGS -->
-            <section id="section-settings"
-                     class="dashboard-section hidden">
 
-                <div class="mb-7">
+            <section id="dash-settings" class="hidden">
 
-                    <h1 class="text-3xl font-black">
+                <div class="mb-6">
+
+                    <h1 class="text-2xl md:text-3xl font-black">
                         Settings
                     </h1>
 
-                    <p class="text-gray-500 mt-2">
-                        Customize your dashboard experience.
+                    <p class="text-gray-500 mt-1">
+                        Account preferences.
                     </p>
 
                 </div>
 
-                <div class="max-w-3xl space-y-4">
 
-                    <div class="dashboard-card p-6 flex items-center justify-between gap-5">
+                <div class="dashboard-card p-6 max-w-2xl">
 
-                        <div>
-                            <h3 class="font-black">
-                                Dark Mode
-                            </h3>
+                    <h2 class="font-black">
+                        Account Security
+                    </h2>
 
-                            <p class="text-sm text-gray-500 mt-1">
-                                Change the appearance of your dashboard.
-                            </p>
-                        </div>
+                    <p class="text-sm text-gray-500 mt-2">
+                        Your login is handled through Firebase Authentication.
+                    </p>
 
-                        <button onclick="toggleTheme()"
-                                class="btn-secondary whitespace-nowrap">
-                            Toggle Theme
-                        </button>
-
-                    </div>
-
-                    <div class="dashboard-card p-6 flex items-center justify-between gap-5">
-
-                        <div>
-                            <h3 class="font-black">
-                                Live Support
-                            </h3>
-
-                            <p class="text-sm text-gray-500 mt-1">
-                                Chat with support using the live chat widget.
-                            </p>
-                        </div>
-
-                        <button onclick="openTawkChat()"
-                                class="btn-primary whitespace-nowrap">
-                            Open Chat
-                        </button>
-
-                    </div>
-
-                    <div class="dashboard-card p-6">
-
-                        <h3 class="font-black">
-                            Account Data
-                        </h3>
-
-                        <p class="text-sm text-gray-500 mt-2">
-                            Your demo account information is stored locally
-                            in this browser.
-                        </p>
-
-                        <button onclick="resetDemoData()"
-                                class="mt-5 btn-secondary text-red-600">
-                            Reset Demo Account
-                        </button>
-
-                    </div>
+                    <button
+                        onclick="forgotPassword()"
+                        class="btn btn-secondary mt-5"
+                    >
+                        Reset Password
+                    </button>
 
                 </div>
 
@@ -2220,272 +1948,220 @@
 
 
 <!-- =========================================================
-     DEMO MODAL
-========================================================= -->
-
-<div id="demoModal"
-     class="modal hidden">
-
-    <div class="modal-card">
-
-        <div class="p-6 border-b border-[var(--border)] flex items-center justify-between">
-
-            <div>
-                <h2 id="demoTitle"
-                    class="text-xl font-black">
-                    Coming Soon
-                </h2>
-
-                <p class="text-sm text-gray-500 mt-1">
-                    Cash Flow Bank
-                </p>
-            </div>
-
-            <button onclick="closeDemo()"
-                    class="w-9 h-9 rounded-lg border border-[var(--border)] flex items-center justify-center">
-                <i data-lucide="x"></i>
-            </button>
-
-        </div>
-
-        <div class="p-6">
-
-            <div class="w-14 h-14 rounded-2xl bg-green-50 text-green-700 flex items-center justify-center">
-                <i data-lucide="construction" class="w-7 h-7"></i>
-            </div>
-
-            <p id="demoMessage"
-               class="text-gray-500 leading-7 mt-5">
-                This service is currently available as a demonstration
-                interface.
-            </p>
-
-            <button onclick="closeDemo()"
-                    class="btn-primary mt-6">
-                Close
-            </button>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-<!-- =========================================================
      TOAST
 ========================================================= -->
 
-<div id="toastContainer"
-     class="toast-container">
-</div>
+<div
+    id="toastContainer"
+    class="toast-container"
+></div>
 
 
 <!-- =========================================================
-     JAVASCRIPT
+     FIREBASE + APPLICATION JAVASCRIPT
 ========================================================= -->
 
 <script>
+
 /* =========================================================
-   CASH FLOW BANK — APPLICATION
+   YOUR FIREBASE CONFIGURATION
 ========================================================= */
 
-const STORAGE_KEY = "cashflowbank_demo_v2";
-
-let state = {
-    user: null,
-    transactions: [],
-    theme: "light",
-    balanceHidden: false
+const firebaseConfig = {
+    apiKey: "AIzaSyB6M6TtGnHPWOnDr9xO4JYJbx4qtZr9W2w",
+    authDomain: "cashflowbank-9068.firebaseapp.com",
+    projectId: "cashflowbank-9068",
+    storageBucket: "cashflowbank-9068.firebasestorage.app",
+    messagingSenderId: "38012287371",
+    appId: "1:38012287371:web:e3e8df73166ae0fc84d78e"
 };
 
 
 /* =========================================================
-   BASIC HELPERS
+   FIREBASE INITIALIZATION
 ========================================================= */
 
-function $(id) {
-    return document.getElementById(id);
-}
+firebase.initializeApp(firebaseConfig);
 
-function saveState() {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
-}
+const auth = firebase.auth();
 
-function loadState() {
-    try {
-        const saved = localStorage.getItem(STORAGE_KEY);
-
-        if (saved) {
-            const parsed = JSON.parse(saved);
-
-            state = {
-                ...state,
-                ...parsed
-            };
-        }
-    } catch (error) {
-        console.error("Could not load saved data:", error);
-    }
-}
-
-function money(amount) {
-    const number = Number(amount) || 0;
-
-    return new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD"
-    }).format(number);
-}
-
-function formatDate(dateValue) {
-    const date = new Date(dateValue);
-
-    if (Number.isNaN(date.getTime())) {
-        return "—";
-    }
-
-    return date.toLocaleString([], {
-        year: "numeric",
-        month: "short",
-        day: "numeric",
-        hour: "2-digit",
-        minute: "2-digit"
-    });
-}
-
-function escapeHtml(value) {
-    return String(value ?? "")
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
-}
-
-function toast(message, type = "default") {
-
-    const container = $("toastContainer");
-
-    const item = document.createElement("div");
-
-    item.className = "toast";
-
-    if (type === "success") {
-        item.style.background = "#166534";
-    }
-
-    if (type === "error") {
-        item.style.background = "#991b1b";
-    }
-
-    item.textContent = message;
-
-    container.appendChild(item);
-
-    setTimeout(() => {
-        item.remove();
-    }, 3500);
-}
-
-function scrollToTop() {
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-    });
-}
+const db = firebase.database();
 
 
 /* =========================================================
-   LANDING / AUTH
+   APPLICATION STATE
 ========================================================= */
 
-function openLogin() {
+let currentUser = null;
+let currentAccount = null;
+let balanceHidden = false;
 
-    $("landingView").scrollIntoView({
-        behavior: "smooth"
-    });
 
-    setAuthMode("login");
+/* =========================================================
+   DOM READY
+========================================================= */
 
-    setTimeout(() => {
-        $("loginIdentifier").focus();
-    }, 500);
-}
+document.addEventListener("DOMContentLoaded", () => {
+
+    lucide.createIcons();
+
+
+    document
+        .getElementById("loginForm")
+        .addEventListener(
+            "submit",
+            loginUser
+        );
+
+
+    document
+        .getElementById("registerForm")
+        .addEventListener(
+            "submit",
+            registerUser
+        );
+
+
+    document
+        .getElementById("transferForm")
+        .addEventListener(
+            "submit",
+            makeTransfer
+        );
+
+
+    document
+        .getElementById("profileForm")
+        .addEventListener(
+            "submit",
+            saveProfile
+        );
+
+
+    auth.onAuthStateChanged(
+        async user => {
+
+            if (user) {
+
+                currentUser = user;
+
+                await loadCustomerAccount();
+
+            } else {
+
+                currentUser = null;
+
+                showLanding();
+
+            }
+
+        }
+    );
+
+});
+
+
+/* =========================================================
+   AUTH MODE
+========================================================= */
 
 function setAuthMode(mode) {
 
-    const loginForm = $("loginForm");
-    const registerForm = $("registerForm");
+    const loginForm =
+        document.getElementById("loginForm");
 
-    const loginTab = $("loginTab");
-    const registerTab = $("registerTab");
+    const registerForm =
+        document.getElementById("registerForm");
+
+    const success =
+        document.getElementById(
+            "registrationSuccess"
+        );
+
+    const loginTab =
+        document.getElementById("loginTab");
+
+    const registerTab =
+        document.getElementById("registerTab");
+
+
+    success.classList.add("hidden");
+
 
     if (mode === "register") {
 
         loginForm.classList.add("hidden");
         registerForm.classList.remove("hidden");
 
-        registerTab.classList.add("bg-white", "shadow-sm");
-        registerTab.classList.remove("text-gray-500");
+        registerTab.classList.add(
+            "text-green-700",
+            "border-green-700"
+        );
 
-        loginTab.classList.remove("bg-white", "shadow-sm");
-        loginTab.classList.add("text-gray-500");
+        registerTab.classList.remove(
+            "text-gray-400",
+            "border-transparent"
+        );
+
+        loginTab.classList.remove(
+            "text-green-700",
+            "border-green-700"
+        );
+
+        loginTab.classList.add(
+            "text-gray-400",
+            "border-transparent"
+        );
 
     } else {
 
-        loginForm.classList.remove("hidden");
         registerForm.classList.add("hidden");
+        loginForm.classList.remove("hidden");
 
-        loginTab.classList.add("bg-white", "shadow-sm");
-        loginTab.classList.remove("text-gray-500");
+        loginTab.classList.add(
+            "text-green-700",
+            "border-green-700"
+        );
 
-        registerTab.classList.remove("bg-white", "shadow-sm");
-        registerTab.classList.add("text-gray-500");
+        loginTab.classList.remove(
+            "text-gray-400",
+            "border-transparent"
+        );
+
+        registerTab.classList.remove(
+            "text-green-700",
+            "border-green-700"
+        );
+
+        registerTab.classList.add(
+            "text-gray-400",
+            "border-transparent"
+        );
+
     }
 
-    if (window.lucide) {
-        lucide.createIcons();
-    }
 }
 
 
 /* =========================================================
-   DEMO PASSWORD HASH
-   NOTE: This is NOT secure authentication.
+   SCROLL TO AUTH
 ========================================================= */
 
-function hashDemo(password) {
+function scrollToAuth(mode) {
 
-    let hash = 2166136261;
-
-    for (let i = 0; i < password.length; i++) {
-        hash ^= password.charCodeAt(i);
-        hash +=
-            (hash << 1) +
-            (hash << 4) +
-            (hash << 7) +
-            (hash << 8) +
-            (hash << 24);
-    }
-
-    return (hash >>> 0).toString(16);
-}
+    document
+        .getElementById("authCard")
+        .scrollIntoView({
+            behavior: "smooth",
+            block: "center"
+        });
 
 
-/* =========================================================
-   ACCOUNT NUMBER
-========================================================= */
+    setTimeout(
+        () => setAuthMode(mode),
+        250
+    );
 
-function makeAccountNumber() {
-
-    let number = "";
-
-    for (let i = 0; i < 10; i++) {
-        number += Math.floor(Math.random() * 10);
-    }
-
-    return number;
 }
 
 
@@ -2493,71 +2169,219 @@ function makeAccountNumber() {
    REGISTER
 ========================================================= */
 
-function handleRegister(event) {
+async function registerUser(event) {
 
     event.preventDefault();
 
-    const name = $("regName").value.trim();
-    const email = $("regEmail").value.trim().toLowerCase();
-    const password = $("regPassword").value;
-    const pin = $("regPin").value.trim();
-    const country = $("regCountry").value;
-    const type = $("regType").value;
-    const terms = $("regTerms").checked;
 
-    if (!name || !email || !password || !pin || !country || !type) {
-        toast("Please complete all required fields.", "error");
+    const name =
+        document.getElementById("regName")
+            .value.trim();
+
+
+    const email =
+        document.getElementById("regEmail")
+            .value.trim();
+
+
+    const phone =
+        document.getElementById("regPhone")
+            .value.trim();
+
+
+    const country =
+        document.getElementById("regCountry")
+            .value;
+
+
+    const accountType =
+        document.getElementById("regType")
+            .value;
+
+
+    const password =
+        document.getElementById("regPassword")
+            .value;
+
+
+    const confirm =
+        document.getElementById("regConfirm")
+            .value;
+
+
+    if (password !== confirm) {
+
+        toast(
+            "Passwords do not match.",
+            "error"
+        );
+
         return;
+
     }
 
-    if (password.length < 6) {
-        toast("Password must contain at least 6 characters.", "error");
-        return;
+
+    const button =
+        document.getElementById(
+            "registerBtn"
+        );
+
+
+    button.disabled = true;
+    button.textContent = "Creating account...";
+
+
+    try {
+
+        /*
+          Firebase Authentication creates
+          the customer's login account.
+        */
+
+        const credential =
+            await auth.createUserWithEmailAndPassword(
+                email,
+                password
+            );
+
+
+        const uid =
+            credential.user.uid;
+
+
+        /*
+          Generate a unique 10-digit demo
+          account number.
+        */
+
+        const accountNumber =
+            await generateAccountNumber();
+
+
+        /*
+          Save customer account in Firebase.
+        */
+
+        const account = {
+
+            uid,
+
+            name,
+
+            email,
+
+            phone,
+
+            country,
+
+            accountType,
+
+            accountNumber,
+
+            status: "pending",
+
+            balance: 0,
+
+            accountLimit: 0,
+
+            createdAt: Date.now(),
+
+            updatedAt: Date.now()
+
+        };
+
+
+        await db
+            .ref("accounts/" + uid)
+            .set(account);
+
+
+        document
+            .getElementById(
+                "generatedAccountNumber"
+            )
+            .textContent =
+            accountNumber;
+
+
+        document
+            .getElementById("registerForm")
+            .classList.add("hidden");
+
+
+        document
+            .getElementById(
+                "registrationSuccess"
+            )
+            .classList.remove("hidden");
+
+
+        toast(
+            "Account application submitted.",
+            "success"
+        );
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        toast(
+            firebaseError(error),
+            "error"
+        );
+
+    } finally {
+
+        button.disabled = false;
+        button.textContent = "Create Account";
+
     }
 
-    if (!/^\d{4}$/.test(pin)) {
-        toast("PIN must contain exactly 4 digits.", "error");
-        return;
+}
+
+
+/* =========================================================
+   GENERATE ACCOUNT NUMBER
+========================================================= */
+
+async function generateAccountNumber() {
+
+    for (let i = 0; i < 20; i++) {
+
+        const number =
+            String(
+                Math.floor(
+                    1000000000 +
+                    Math.random() * 9000000000
+                )
+            );
+
+
+        const snapshot =
+            await db
+                .ref("accountNumbers/" + number)
+                .once("value");
+
+
+        if (!snapshot.exists()) {
+
+            await db
+                .ref("accountNumbers/" + number)
+                .set(true);
+
+
+            return number;
+
+        }
+
     }
 
-    if (!terms) {
-        toast("Please accept the terms.", "error");
-        return;
-    }
 
-    const accountNumber = makeAccountNumber();
-
-    state.user = {
-        name,
-        email,
-        country,
-        type,
-        accountNumber,
-        passwordHash: hashDemo(password),
-        pinHash: hashDemo(pin),
-        balance: 0,
-        createdAt: new Date().toISOString()
-    };
-
-    state.transactions = [];
-    state.balanceHidden = false;
-
-    saveState();
-
-    toast(
-        "Account created. Your account number is " + accountNumber,
-        "success"
+    throw new Error(
+        "Could not generate account number."
     );
 
-    $("loginIdentifier").value = accountNumber;
-
-    $("registerForm").reset();
-
-    setAuthMode("login");
-
-    setTimeout(() => {
-        toast("You can now sign in with your account number.", "success");
-    }, 800);
 }
 
 
@@ -2565,75 +2389,183 @@ function handleRegister(event) {
    LOGIN
 ========================================================= */
 
-function handleLogin(event) {
+async function loginUser(event) {
 
     event.preventDefault();
 
-    const identifier = $("loginIdentifier").value.trim().toLowerCase();
-    const password = $("loginPassword").value;
 
-    if (!state.user) {
-        toast("No demo account exists yet. Please create an account first.", "error");
-        setAuthMode("register");
-        return;
+    const email =
+        document.getElementById(
+            "loginEmail"
+        ).value.trim();
+
+
+    const password =
+        document.getElementById(
+            "loginPassword"
+        ).value;
+
+
+    const button =
+        document.getElementById(
+            "loginBtn"
+        );
+
+
+    button.disabled = true;
+    button.textContent = "Signing in...";
+
+
+    try {
+
+        await auth.signInWithEmailAndPassword(
+            email,
+            password
+        );
+
+
+        toast(
+            "Signed in successfully.",
+            "success"
+        );
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        toast(
+            firebaseError(error),
+            "error"
+        );
+
+    } finally {
+
+        button.disabled = false;
+        button.textContent = "Sign In";
+
     }
 
-    const matchesAccount =
-        identifier === String(state.user.accountNumber).toLowerCase();
-
-    const matchesEmail =
-        identifier === String(state.user.email).toLowerCase();
-
-    const matchesPassword =
-        hashDemo(password) === state.user.passwordHash;
-
-    if ((!matchesAccount && !matchesEmail) || !matchesPassword) {
-        toast("Incorrect account information or password.", "error");
-        return;
-    }
-
-    showDashboard();
 }
 
 
 /* =========================================================
-   DASHBOARD
+   LOAD CUSTOMER ACCOUNT
+========================================================= */
+
+async function loadCustomerAccount() {
+
+    if (!currentUser) return;
+
+
+    try {
+
+        const snapshot =
+            await db
+                .ref(
+                    "accounts/" +
+                    currentUser.uid
+                )
+                .once("value");
+
+
+        if (!snapshot.exists()) {
+
+            toast(
+                "Your account record could not be found.",
+                "error"
+            );
+
+            await auth.signOut();
+
+            return;
+
+        }
+
+
+        currentAccount =
+            snapshot.val();
+
+
+        /*
+          Keep the dashboard synchronized with
+          admin changes in Firebase.
+        */
+
+        db.ref(
+            "accounts/" +
+            currentUser.uid
+        ).on(
+            "value",
+            snapshot => {
+
+                if (!snapshot.exists()) {
+                    return;
+                }
+
+                currentAccount =
+                    snapshot.val();
+
+                updateDashboard();
+
+            }
+        );
+
+
+        showDashboard();
+
+        updateDashboard();
+
+    } catch (error) {
+
+        console.error(error);
+
+        toast(
+            "Unable to load your account.",
+            "error"
+        );
+
+    }
+
+}
+
+
+/* =========================================================
+   SHOW DASHBOARD
 ========================================================= */
 
 function showDashboard() {
 
-    if (!state.user) {
-        toast("Please sign in first.", "error");
-        return;
-    }
+    document
+        .getElementById("landingView")
+        .classList.add("hidden");
 
-    $("landingView").classList.add("hidden");
-    $("dashboardView").classList.remove("hidden");
 
-    updateDashboard();
+    document
+        .getElementById("dashboardView")
+        .classList.remove("hidden");
 
-    scrollToTop();
 
-    if (window.lucide) {
-        lucide.createIcons();
-    }
+    lucide.createIcons();
+
 }
 
-function logout() {
 
-    $("dashboardView").classList.add("hidden");
-    $("landingView").classList.remove("hidden");
+/* =========================================================
+   SHOW LANDING
+========================================================= */
 
-    $("loginForm").reset();
+function showLanding() {
 
-    $("sidebar").classList.remove("open");
-    $("sidebarOverlay").classList.add("hidden");
+    document
+        .getElementById("dashboardView")
+        .classList.add("hidden");
 
-    setAuthMode("login");
 
-    scrollToTop();
+    document
+        .getElementById("landingView")
+        .classList.remove("hidden");
 
-    toast("You have been signed out.", "success");
 }
 
 
@@ -2643,314 +2575,199 @@ function logout() {
 
 function updateDashboard() {
 
-    if (!state.user) return;
-
-    const user = state.user;
-
-    const firstName = user.name.split(" ")[0] || user.name;
-
-    $("dashboardGreeting").textContent = firstName;
-    $("topUserName").textContent = user.name;
-
-    const initials = user.name
-        .split(/\s+/)
-        .filter(Boolean)
-        .slice(0, 2)
-        .map(word => word.charAt(0).toUpperCase())
-        .join("");
-
-    $("topAvatar").textContent = initials || "CF";
-    $("profileAvatar").textContent = initials || "CF";
-
-    $("profileDisplayName").textContent = user.name;
-
-    $("profileAccountDisplay").textContent =
-        "Account " + user.accountNumber;
-
-    $("balanceAccountNumber").textContent =
-        user.accountNumber;
-
-    $("balanceAccountType").textContent =
-        user.type + " Account";
-
-    $("accountTypeHome").textContent =
-        user.type + " Account";
-
-    $("accountNumberHome").textContent =
-        user.accountNumber;
-
-    $("summaryType").textContent =
-        user.type + " Account";
-
-    $("summaryNumber").textContent =
-        user.accountNumber;
-
-    $("summaryName").textContent =
-        user.name;
-
-    $("summaryEmail").textContent =
-        user.email;
-
-    $("summaryCountry").textContent =
-        user.country;
-
-    $("profileName").value =
-        user.name;
-
-    $("profileEmail").value =
-        user.email;
-
-    $("profileCountry").value =
-        user.country;
-
-    $("profileType").value =
-        user.type + " Account";
-
-    updateBalance();
-    renderTransactions();
-}
+    if (!currentAccount) return;
 
 
-/* =========================================================
-   BALANCE
-========================================================= */
+    const account =
+        currentAccount;
 
-function updateBalance() {
 
-    if (!state.user) return;
+    const name =
+        account.name || "Customer";
 
-    const balance = Number(state.user.balance) || 0;
 
-    const displayValue =
-        state.balanceHidden
+    document.getElementById(
+        "userNameGreeting"
+    ).textContent =
+        name.split(" ")[0];
+
+
+    document.getElementById(
+        "dashboardAccountNumber"
+    ).textContent =
+        account.accountNumber || "—";
+
+
+    document.getElementById(
+        "dashboardAccountType"
+    ).textContent =
+        account.accountType || "—";
+
+
+    document.getElementById(
+        "dashboardLimit"
+    ).textContent =
+        money(account.accountLimit);
+
+
+    const balance =
+        Number(account.balance || 0);
+
+
+    document.getElementById(
+        "dashboardBalance"
+    ).textContent =
+        balanceHidden
             ? "••••••"
             : money(balance);
 
-    $("balanceDisplay").textContent = displayValue;
-    $("availableBalanceSmall").textContent = displayValue;
-    $("summaryBalance").textContent = displayValue;
 
-    if (state.balanceHidden) {
-        $("balanceEye").setAttribute("data-lucide", "eye-off");
-    } else {
-        $("balanceEye").setAttribute("data-lucide", "eye");
+    const status =
+        document.getElementById(
+            "accountStatusBadge"
+        );
+
+
+    status.className =
+        "status-badge " +
+        (
+            account.status === "approved"
+                ? "status-approved"
+                : account.status === "declined"
+                    ? "status-declined"
+                    : "status-pending"
+        );
+
+
+    status.textContent =
+        capitalize(
+            account.status || "pending"
+        );
+
+
+    document.getElementById(
+        "summaryName"
+    ).textContent =
+        account.name || "—";
+
+
+    document.getElementById(
+        "summaryEmail"
+    ).textContent =
+        account.email || "—";
+
+
+    document.getElementById(
+        "summaryPhone"
+    ).textContent =
+        account.phone || "—";
+
+
+    document.getElementById(
+        "summaryCountry"
+    ).textContent =
+        account.country || "—";
+
+
+    document.getElementById(
+        "summaryAccountNumber"
+    ).textContent =
+        account.accountNumber || "—";
+
+
+    document.getElementById(
+        "summaryType"
+    ).textContent =
+        account.accountType || "—";
+
+
+    document.getElementById(
+        "summaryStatus"
+    ).textContent =
+        capitalize(
+            account.status || "pending"
+        );
+
+
+    document.getElementById(
+        "summaryCreated"
+    ).textContent =
+        formatDate(account.createdAt);
+
+
+    document.getElementById(
+        "profileName"
+    ).value =
+        account.name || "";
+
+
+    document.getElementById(
+        "profilePhone"
+    ).value =
+        account.phone || "";
+
+
+    document.getElementById(
+        "profileCountry"
+    ).value =
+        account.country || "";
+
+
+    const limit =
+        Number(account.accountLimit || 0);
+
+
+    let progress = 0;
+
+    if (limit > 0) {
+
+        progress =
+            Math.min(
+                100,
+                (balance / limit) * 100
+            );
+
     }
 
-    const outgoing = state.transactions
-        .filter(t => t.direction === "out")
-        .reduce((sum, t) => sum + Number(t.amount), 0);
 
-    const incoming = state.transactions
-        .filter(t => t.direction === "in")
-        .reduce((sum, t) => sum + Number(t.amount), 0);
+    document.getElementById(
+        "limitProgress"
+    ).style.width =
+        progress + "%";
 
-    $("spendingOutgoing").textContent = money(outgoing);
-    $("spendingIncoming").textContent = money(incoming);
-    $("transactionCount").textContent = state.transactions.length;
 
-    const maxReference =
-        Math.max(outgoing, incoming, 1);
+    renderTransactions();
 
-    const barWidth =
-        Math.min((outgoing / maxReference) * 100, 100);
+    lucide.createIcons();
 
-    $("spendingBar").style.width = barWidth + "%";
-
-    if (window.lucide) {
-        lucide.createIcons();
-    }
-
-    saveState();
-}
-
-function toggleBalance() {
-
-    state.balanceHidden = !state.balanceHidden;
-
-    updateBalance();
 }
 
 
 /* =========================================================
-   TRANSACTIONS
+   BALANCE TOGGLE
 ========================================================= */
 
-function renderTransactions() {
+function toggleBalance() {
 
-    const transactions = [...state.transactions]
-        .sort((a, b) => new Date(b.date) - new Date(a.date));
+    balanceHidden =
+        !balanceHidden;
 
-    const recent = transactions.slice(0, 5);
 
-    const recentContainer = $("recentTransactions");
+    updateDashboard();
 
-    if (recent.length === 0) {
 
-        recentContainer.innerHTML = `
-            <div class="p-8 text-center text-gray-500">
-                <div class="w-12 h-12 mx-auto rounded-xl bg-[var(--bg)] flex items-center justify-center">
-                    <i data-lucide="receipt" class="w-5 h-5"></i>
-                </div>
+    document.getElementById(
+        "balanceToggleIcon"
+    ).setAttribute(
+        "data-lucide",
+        balanceHidden
+            ? "eye-off"
+            : "eye"
+    );
 
-                <p class="mt-3 font-medium">
-                    No transactions yet.
-                </p>
 
-                <p class="text-sm mt-1">
-                    Your account activity will appear here.
-                </p>
-            </div>
-        `;
+    lucide.createIcons();
 
-    } else {
-
-        recentContainer.innerHTML = `
-            <div class="table-wrap">
-                <table class="data-table">
-                    <thead>
-                        <tr>
-                            <th>Description</th>
-                            <th>Date</th>
-                            <th>Amount</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-
-                    <tbody>
-                        ${recent.map(transactionRow).join("")}
-                    </tbody>
-                </table>
-            </div>
-        `;
-    }
-
-    const history = $("historyTable");
-
-    if (transactions.length === 0) {
-
-        history.innerHTML = `
-            <tr>
-                <td colspan="5"
-                    class="text-center text-gray-500 py-10">
-                    No transactions recorded.
-                </td>
-            </tr>
-        `;
-
-    } else {
-
-        history.innerHTML = transactions
-            .map(transaction => {
-
-                const sign =
-                    transaction.direction === "out"
-                        ? "-"
-                        : "+";
-
-                const amountClass =
-                    transaction.direction === "out"
-                        ? "text-red-600"
-                        : "text-green-600";
-
-                return `
-                    <tr data-search="${escapeHtml(
-                        (
-                            transaction.description +
-                            " " +
-                            transaction.account +
-                            " " +
-                            transaction.amount
-                        ).toLowerCase()
-                    )}">
-
-                        <td>${escapeHtml(formatDate(transaction.date))}</td>
-
-                        <td>
-                            <div class="font-bold">
-                                ${escapeHtml(transaction.description)}
-                            </div>
-
-                            ${
-                                transaction.reference
-                                ? `
-                                    <div class="text-xs text-gray-500 mt-1">
-                                        ${escapeHtml(transaction.reference)}
-                                    </div>
-                                `
-                                : ""
-                            }
-                        </td>
-
-                        <td>${escapeHtml(transaction.account || "—")}</td>
-
-                        <td class="font-black ${amountClass}">
-                            ${sign}${money(transaction.amount)}
-                        </td>
-
-                        <td>
-                            <span class="status-badge status-${transaction.status}">
-                                ${escapeHtml(
-                                    transaction.status.charAt(0).toUpperCase() +
-                                    transaction.status.slice(1)
-                                )}
-                            </span>
-                        </td>
-
-                    </tr>
-                `;
-            })
-            .join("");
-    }
-
-    if (window.lucide) {
-        lucide.createIcons();
-    }
-}
-
-function transactionRow(transaction) {
-
-    const sign =
-        transaction.direction === "out"
-            ? "-"
-            : "+";
-
-    const amountClass =
-        transaction.direction === "out"
-            ? "text-red-600"
-            : "text-green-600";
-
-    return `
-        <tr>
-
-            <td>
-                <div class="font-bold">
-                    ${escapeHtml(transaction.description)}
-                </div>
-
-                <div class="text-xs text-gray-500 mt-1">
-                    ${escapeHtml(transaction.account || "—")}
-                </div>
-            </td>
-
-            <td>
-                ${escapeHtml(formatDate(transaction.date))}
-            </td>
-
-            <td class="font-black ${amountClass}">
-                ${sign}${money(transaction.amount)}
-            </td>
-
-            <td>
-                <span class="status-badge status-${transaction.status}">
-                    ${escapeHtml(
-                        transaction.status.charAt(0).toUpperCase() +
-                        transaction.status.slice(1)
-                    )}
-                </span>
-            </td>
-
-        </tr>
-    `;
 }
 
 
@@ -2958,113 +2775,352 @@ function transactionRow(transaction) {
    TRANSFER
 ========================================================= */
 
-function makeTransfer(event) {
+async function makeTransfer(event) {
 
     event.preventDefault();
 
-    if (!state.user) {
-        toast("Please sign in first.", "error");
+
+    if (!currentAccount) {
         return;
     }
 
-    const name = $("transferName").value.trim();
-    const account = $("transferAccount").value.trim();
-    const amount = Number($("transferAmount").value);
-    const reference = $("transferReference").value.trim();
 
-    if (!name || !account || !amount) {
-        toast("Please complete the transfer form.", "error");
-        return;
-    }
+    if (
+        currentAccount.status !==
+        "approved"
+    ) {
 
-    if (!/^\d{10}$/.test(account)) {
-        toast("Recipient account must contain 10 digits.", "error");
-        return;
-    }
-
-    if (amount <= 0) {
-        toast("Enter a valid transfer amount.", "error");
-        return;
-    }
-
-    const currentBalance =
-        Number(state.user.balance) || 0;
-
-    if (amount > currentBalance) {
         toast(
-            "Insufficient demo balance. Your current balance is " +
-            money(currentBalance) +
-            ".",
+            "Your account must be approved before making a transfer.",
             "error"
         );
+
         return;
+
     }
 
-    state.user.balance =
-        currentBalance - amount;
 
-    state.transactions.push({
-        id: crypto.randomUUID
-            ? crypto.randomUUID()
-            : String(Date.now()),
+    const recipient =
+        document.getElementById(
+            "transferRecipient"
+        ).value.trim();
 
-        date: new Date().toISOString(),
+
+    const amount =
+        Number(
+            document.getElementById(
+                "transferAmount"
+            ).value
+        );
+
+
+    const description =
+        document.getElementById(
+            "transferDescription"
+        ).value.trim();
+
+
+    if (
+        !recipient ||
+        !amount ||
+        amount <= 0
+    ) {
+
+        toast(
+            "Enter a valid recipient and amount.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    const balance =
+        Number(
+            currentAccount.balance || 0
+        );
+
+
+    if (amount > balance) {
+
+        toast(
+            "Insufficient demo balance.",
+            "error"
+        );
+
+        return;
+
+    }
+
+
+    const transactionKey =
+        db.ref(
+            "transactions/" +
+            currentUser.uid
+        ).push().key;
+
+
+    const transaction = {
+
+        id:
+            transactionKey,
+
+        uid:
+            currentUser.uid,
+
+        recipient,
 
         description:
-            "Transfer to " + name,
-
-        account,
+            description ||
+            "Demo transfer",
 
         amount,
 
-        direction: "out",
+        type:
+            "debit",
 
-        status: "success",
+        status:
+            "completed",
 
-        reference
-    });
+        createdAt:
+            Date.now()
 
-    saveState();
+    };
 
-    event.target.reset();
 
-    updateDashboard();
+    try {
 
-    toast(
-        "Transfer recorded successfully.",
-        "success"
-    );
+        /*
+          NOTE:
+          For a real financial system this balance
+          update must be performed server-side using
+          a secure transaction/ledger system.
+
+          This is a demo implementation.
+        */
+
+        const newBalance =
+            balance - amount;
+
+
+        await db
+            .ref(
+                "accounts/" +
+                currentUser.uid
+            )
+            .update({
+
+                balance:
+                    newBalance,
+
+                updatedAt:
+                    Date.now()
+
+            });
+
+
+        await db
+            .ref(
+                "transactions/" +
+                currentUser.uid +
+                "/" +
+                transactionKey
+            )
+            .set(transaction);
+
+
+        document
+            .getElementById(
+                "transferForm"
+            )
+            .reset();
+
+
+        toast(
+            "Demo transfer completed.",
+            "success"
+        );
+
+
+    } catch (error) {
+
+        console.error(error);
+
+        toast(
+            "Unable to complete transfer.",
+            "error"
+        );
+
+    }
+
 }
 
 
 /* =========================================================
-   CLEAR TRANSACTIONS
+   TRANSACTIONS
 ========================================================= */
 
-function clearTransactions() {
+async function renderTransactions() {
 
-    if (!state.user) return;
+    if (!currentUser) return;
 
-    if (state.transactions.length === 0) {
-        toast("There are no transactions to clear.");
-        return;
+
+    try {
+
+        const snapshot =
+            await db
+                .ref(
+                    "transactions/" +
+                    currentUser.uid
+                )
+                .once("value");
+
+
+        const data =
+            snapshot.val() || {};
+
+
+        const transactions =
+            Object.values(data)
+                .sort(
+                    (a, b) =>
+                        Number(b.createdAt || 0) -
+                        Number(a.createdAt || 0)
+                );
+
+
+        const recent =
+            document.getElementById(
+                "recentTransactions"
+            );
+
+
+        const history =
+            document.getElementById(
+                "historyTable"
+            );
+
+
+        if (!transactions.length) {
+
+            recent.innerHTML =
+                `
+                <div class="text-sm text-gray-500">
+                    No transactions yet.
+                </div>
+                `;
+
+
+            history.innerHTML =
+                `
+                <tr>
+                    <td
+                        colspan="5"
+                        class="text-center py-10 text-gray-500"
+                    >
+                        No transactions yet.
+                    </td>
+                </tr>
+                `;
+
+            return;
+
+        }
+
+
+        recent.innerHTML =
+            transactions
+                .slice(0, 5)
+                .map(
+                    tx => `
+
+                    <div class="flex items-center justify-between py-3 border-b last:border-0">
+
+                        <div class="flex items-center gap-3">
+
+                            <div class="w-10 h-10 rounded-full bg-red-100 text-red-600 flex items-center justify-center">
+                                <i data-lucide="arrow-up-right"></i>
+                            </div>
+
+                            <div>
+
+                                <div class="font-bold text-sm">
+                                    ${escapeHtml(tx.description || "Transfer")}
+                                </div>
+
+                                <div class="text-xs text-gray-500">
+                                    ${escapeHtml(tx.recipient || "—")}
+                                </div>
+
+                            </div>
+
+                        </div>
+
+
+                        <div class="text-right">
+
+                            <div class="font-black text-red-600">
+                                -${money(tx.amount)}
+                            </div>
+
+                            <div class="text-xs text-gray-500">
+                                ${formatDate(tx.createdAt)}
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    `
+                )
+                .join("");
+
+
+        history.innerHTML =
+            transactions
+                .map(
+                    tx => `
+
+                    <tr>
+
+                        <td>
+                            ${formatDate(tx.createdAt)}
+                        </td>
+
+                        <td class="font-bold">
+                            ${escapeHtml(tx.description || "Transfer")}
+                        </td>
+
+                        <td>
+                            ${escapeHtml(tx.recipient || "—")}
+                        </td>
+
+                        <td class="font-bold text-red-600">
+                            -${money(tx.amount)}
+                        </td>
+
+                        <td>
+                            <span class="status-badge status-approved">
+                                ${capitalize(tx.status || "completed")}
+                            </span>
+                        </td>
+
+                    </tr>
+
+                    `
+                )
+                .join("");
+
+
+        lucide.createIcons();
+
+    } catch (error) {
+
+        console.error(error);
+
     }
 
-    const confirmed =
-        confirm(
-            "Clear all demo transaction history? This cannot be undone."
-        );
-
-    if (!confirmed) return;
-
-    state.transactions = [];
-
-    saveState();
-
-    renderTransactions();
-    updateBalance();
-
-    toast("Demo transaction history cleared.", "success");
 }
 
 
@@ -3072,34 +3128,69 @@ function clearTransactions() {
    PROFILE
 ========================================================= */
 
-function saveProfile(event) {
+async function saveProfile(event) {
 
     event.preventDefault();
 
-    if (!state.user) return;
+
+    if (!currentUser) return;
+
 
     const name =
-        $("profileName").value.trim();
+        document.getElementById(
+            "profileName"
+        ).value.trim();
 
-    const email =
-        $("profileEmail").value.trim().toLowerCase();
+
+    const phone =
+        document.getElementById(
+            "profilePhone"
+        ).value.trim();
+
 
     const country =
-        $("profileCountry").value.trim();
+        document.getElementById(
+            "profileCountry"
+        ).value.trim();
 
-    if (!name || !email) {
-        toast("Name and email are required.", "error");
-        return;
+
+    try {
+
+        await db
+            .ref(
+                "accounts/" +
+                currentUser.uid
+            )
+            .update({
+
+                name,
+
+                phone,
+
+                country,
+
+                updatedAt:
+                    Date.now()
+
+            });
+
+
+        toast(
+            "Profile updated.",
+            "success"
+        );
+
+    } catch (error) {
+
+        console.error(error);
+
+        toast(
+            "Unable to update profile.",
+            "error"
+        );
+
     }
 
-    state.user.name = name;
-    state.user.email = email;
-    state.user.country = country;
-
-    saveState();
-    updateDashboard();
-
-    toast("Profile updated successfully.", "success");
 }
 
 
@@ -3107,133 +3198,206 @@ function saveProfile(event) {
    DASHBOARD NAVIGATION
 ========================================================= */
 
-function dashSection(name, element = null) {
+function showDashboardSection(
+    section,
+    button = null
+) {
 
-    const sections = document.querySelectorAll(".dashboard-section");
+    const sections = [
+        "home",
+        "accounts",
+        "transfer",
+        "history",
+        "profile",
+        "settings"
+    ];
 
-    sections.forEach(section => {
-        section.classList.add("hidden");
+
+    sections.forEach(name => {
+
+        const element =
+            document.getElementById(
+                "dash-" + name
+            );
+
+        if (element) {
+
+            element.classList.toggle(
+                "hidden",
+                name !== section
+            );
+
+        }
+
     });
 
-    const target =
-        $("section-" + name);
 
-    if (target) {
-        target.classList.remove("hidden");
+    document
+        .querySelectorAll(
+            "#sidebar .nav-item"
+        )
+        .forEach(item =>
+            item.classList.remove("active")
+        );
+
+
+    if (button) {
+        button.classList.add("active");
     }
 
-    document.querySelectorAll(".sidebar-link")
-        .forEach(link => {
-            link.classList.remove("active");
-        });
 
-    if (element) {
-        element.classList.add("active");
-    } else {
+    const titles = {
 
-        const links =
-            document.querySelectorAll(".sidebar-link");
+        home: [
+            "Dashboard",
+            "Welcome back"
+        ],
 
-        links.forEach(link => {
+        accounts: [
+            "Account Summary",
+            "Your account information"
+        ],
 
-            if (
-                link.textContent
-                    .trim()
-                    .toLowerCase()
-                    .includes(
-                        name === "dashboard"
-                            ? "dashboard"
-                            : name === "accounts"
-                                ? "account summary"
-                                : name
-                    )
-            ) {
-                link.classList.add("active");
-            }
-        });
+        transfer: [
+            "Transfer Money",
+            "Send a demo transfer"
+        ],
+
+        history: [
+            "Transaction History",
+            "Your account activity"
+        ],
+
+        profile: [
+            "Profile",
+            "Manage your profile"
+        ],
+
+        settings: [
+            "Settings",
+            "Account preferences"
+        ]
+
+    };
+
+
+    document.getElementById(
+        "dashboardPageTitle"
+    ).textContent =
+        titles[section]?.[0] ||
+        "Dashboard";
+
+
+    document.getElementById(
+        "dashboardPageSubtitle"
+    ).textContent =
+        titles[section]?.[1] ||
+        "";
+
+
+    if (
+        window.innerWidth <= 900
+    ) {
+
+        document
+            .getElementById("sidebar")
+            .classList.remove("open");
+
     }
 
-    closeSidebarOnMobile();
 
-    scrollToTop();
+    if (section === "history") {
+
+        renderTransactions();
+
+    }
+
 }
 
-
-/* =========================================================
-   SIDEBAR
-========================================================= */
 
 function toggleSidebar() {
 
-    const sidebar = $("sidebar");
-    const overlay = $("sidebarOverlay");
+    document
+        .getElementById("sidebar")
+        .classList.toggle("open");
 
-    const isOpen =
-        sidebar.classList.toggle("open");
-
-    if (isOpen) {
-        overlay.classList.remove("hidden");
-    } else {
-        overlay.classList.add("hidden");
-    }
-}
-
-function closeSidebarOnMobile() {
-
-    if (window.innerWidth <= 850) {
-
-        $("sidebar").classList.remove("open");
-        $("sidebarOverlay").classList.add("hidden");
-    }
 }
 
 
 /* =========================================================
-   PROFILE MENU
+   LOGOUT
 ========================================================= */
 
-function toggleProfileMenu() {
+async function logout() {
 
-    $("profileMenu").classList.toggle("hidden");
+    try {
+
+        await auth.signOut();
+
+        currentAccount = null;
+
+        toast(
+            "You have been signed out.",
+            "success"
+        );
+
+    } catch (error) {
+
+        console.error(error);
+
+    }
+
 }
 
 
 /* =========================================================
-   THEME
+   PASSWORD RESET
 ========================================================= */
 
-function applyTheme() {
+async function forgotPassword() {
 
-    if (state.theme === "dark") {
+    const email =
+        currentUser?.email ||
+        document.getElementById(
+            "loginEmail"
+        ).value.trim();
 
-        document.body.classList.add("dark");
 
-        $("themeIcon")
-            .setAttribute("data-lucide", "sun");
+    if (!email) {
 
-    } else {
+        toast(
+            "Enter your email address first.",
+            "error"
+        );
 
-        document.body.classList.remove("dark");
+        return;
 
-        $("themeIcon")
-            .setAttribute("data-lucide", "moon");
     }
 
-    if (window.lucide) {
-        lucide.createIcons();
+
+    try {
+
+        await auth.sendPasswordResetEmail(
+            email
+        );
+
+
+        toast(
+            "Password reset email sent.",
+            "success"
+        );
+
+    } catch (error) {
+
+        console.error(error);
+
+        toast(
+            firebaseError(error),
+            "error"
+        );
+
     }
-}
 
-function toggleTheme() {
-
-    state.theme =
-        state.theme === "dark"
-            ? "light"
-            : "dark";
-
-    saveState();
-
-    applyTheme();
 }
 
 
@@ -3241,50 +3405,17 @@ function toggleTheme() {
    PASSWORD VISIBILITY
 ========================================================= */
 
-function togglePassword(id, button) {
+function toggleFieldPassword(id) {
 
-    const input = $(id);
-
-    if (!input) return;
-
-    if (input.type === "password") {
-
-        input.type = "text";
-
-        button.innerHTML =
-            '<i data-lucide="eye-off" class="w-5 h-5"></i>';
-
-    } else {
-
-        input.type = "password";
-
-        button.innerHTML =
-            '<i data-lucide="eye" class="w-5 h-5"></i>';
-    }
-
-    if (window.lucide) {
-        lucide.createIcons();
-    }
-}
+    const input =
+        document.getElementById(id);
 
 
-/* =========================================================
-   FORGOT PASSWORD
-========================================================= */
+    input.type =
+        input.type === "password"
+            ? "text"
+            : "password";
 
-function forgotPassword() {
-
-    if (!state.user) {
-        toast(
-            "Create an account first, then use your registered email for password recovery.",
-            "error"
-        );
-        return;
-    }
-
-    toast(
-        "Password recovery is a demo feature. Connect an email/backend service to enable real recovery."
-    );
 }
 
 
@@ -3292,205 +3423,182 @@ function forgotPassword() {
    DEMO SERVICES
 ========================================================= */
 
-function showDemo(title) {
+function demoFeature(name) {
 
-    $("demoTitle").textContent =
-        title;
+    toast(
+        `${name} is available as a demo feature.`,
+        "success"
+    );
 
-    $("demoMessage").textContent =
-        title +
-        " is currently available as a demonstration interface. " +
-        "A production version would require a secure backend and the appropriate service integration.";
-
-    $("demoModal").classList.remove("hidden");
-
-    if (window.lucide) {
-        lucide.createIcons();
-    }
-}
-
-function closeDemo() {
-    $("demoModal").classList.add("hidden");
 }
 
 
 /* =========================================================
-   SEARCH
+   TAWK CHAT
 ========================================================= */
 
-function searchDashboard(value) {
+function openTawkChat() {
 
-    const query =
-        value.trim().toLowerCase();
+    if (
+        typeof Tawk_API !== "undefined" &&
+        Tawk_API.toggle
+    ) {
 
-    const rows =
-        document.querySelectorAll("#historyTable tr");
+        Tawk_API.toggle();
 
-    rows.forEach(row => {
+    } else {
 
-        const text =
-            row.textContent.toLowerCase();
-
-        row.style.display =
-            !query || text.includes(query)
-                ? ""
-                : "none";
-    });
-}
-
-
-/* =========================================================
-   RESET DEMO DATA
-========================================================= */
-
-function resetDemoData() {
-
-    const confirmed =
-        confirm(
-            "Reset your demo account and all saved data?"
+        toast(
+            "Live chat is loading. Please try again in a moment.",
+            "error"
         );
 
-    if (!confirmed) return;
+    }
 
-    localStorage.removeItem(STORAGE_KEY);
+}
 
-    state = {
-        user: null,
-        transactions: [],
-        theme: "light",
-        balanceHidden: false
+
+/* =========================================================
+   HELPERS
+========================================================= */
+
+function money(value) {
+
+    return new Intl.NumberFormat(
+        "en-US",
+        {
+            style: "currency",
+            currency: "USD"
+        }
+    ).format(
+        Number(value || 0)
+    );
+
+}
+
+
+function formatDate(timestamp) {
+
+    if (!timestamp) return "—";
+
+
+    return new Intl.DateTimeFormat(
+        "en-US",
+        {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+            hour: "numeric",
+            minute: "2-digit"
+        }
+    ).format(
+        new Date(timestamp)
+    );
+
+}
+
+
+function capitalize(value) {
+
+    if (!value) return "";
+
+    return value.charAt(0).toUpperCase() +
+        value.slice(1);
+
+}
+
+
+function escapeHtml(value) {
+
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+function firebaseError(error) {
+
+    const messages = {
+
+        "auth/email-already-in-use":
+            "That email address is already registered.",
+
+        "auth/invalid-email":
+            "Please enter a valid email address.",
+
+        "auth/weak-password":
+            "Password must be at least 6 characters.",
+
+        "auth/user-not-found":
+            "No account was found with that email.",
+
+        "auth/wrong-password":
+            "Incorrect password.",
+
+        "auth/invalid-credential":
+            "Incorrect email or password.",
+
+        "auth/too-many-requests":
+            "Too many attempts. Please try again later."
+
     };
 
-    document.body.classList.remove("dark");
 
-    $("dashboardView").classList.add("hidden");
-    $("landingView").classList.remove("hidden");
+    return (
+        messages[error.code] ||
+        error.message ||
+        "Something went wrong."
+    );
 
-    setAuthMode("register");
+}
 
-    toast("Demo account data has been reset.", "success");
 
-    scrollToTop();
+function toast(
+    message,
+    type = ""
+) {
+
+    const container =
+        document.getElementById(
+            "toastContainer"
+        );
+
+
+    const element =
+        document.createElement("div");
+
+
+    element.className =
+        "toast " + type;
+
+
+    element.textContent =
+        message;
+
+
+    container.appendChild(element);
+
+
+    setTimeout(() => {
+
+        element.style.opacity = "0";
+
+        setTimeout(
+            () => element.remove(),
+            300
+        );
+
+    }, 3500);
+
 }
 
 
 /* =========================================================
    TAWK.TO
-========================================================= */
-
-function openTawkChat() {
-
-    /*
-       Tawk normally creates its own floating chat button.
-
-       If Tawk_API is available, try opening the chat directly.
-    */
-
-    if (
-        typeof Tawk_API !== "undefined" &&
-        Tawk_API &&
-        typeof Tawk_API.maximize === "function"
-    ) {
-        Tawk_API.maximize();
-    } else {
-        toast(
-            "Live chat is loading. Please use the chat button in the bottom corner."
-        );
-    }
-}
-
-
-/* =========================================================
-   CLOSE MENUS WHEN CLICKING OUTSIDE
-========================================================= */
-
-document.addEventListener("click", function(event) {
-
-    const menu =
-        $("profileMenu");
-
-    const button =
-        event.target.closest(
-            '[onclick="toggleProfileMenu()"]'
-        );
-
-    if (
-        menu &&
-        !menu.contains(event.target) &&
-        !button
-    ) {
-        menu.classList.add("hidden");
-    }
-
-});
-
-
-/* =========================================================
-   CLOSE MODAL WITH ESCAPE
-========================================================= */
-
-document.addEventListener("keydown", function(event) {
-
-    if (event.key === "Escape") {
-
-        closeDemo();
-
-        $("profileMenu")
-            .classList.add("hidden");
-    }
-
-});
-
-
-/* =========================================================
-   REGISTRATION PIN — NUMBERS ONLY
-========================================================= */
-
-$("regPin").addEventListener("input", function() {
-
-    this.value =
-        this.value
-            .replace(/\D/g, "")
-            .slice(0, 4);
-});
-
-
-/* =========================================================
-   ACCOUNT NUMBER — NUMBERS ONLY
-========================================================= */
-
-$("transferAccount").addEventListener("input", function() {
-
-    this.value =
-        this.value
-            .replace(/\D/g, "")
-            .slice(0, 10);
-});
-
-
-/* =========================================================
-   INITIALIZE APPLICATION
-========================================================= */
-
-loadState();
-
-$("footerYear").textContent =
-    new Date().getFullYear();
-
-applyTheme();
-
-if (state.user) {
-    updateDashboard();
-}
-
-if (window.lucide) {
-    lucide.createIcons();
-}
-
-
-/* =========================================================
-   TAWK.TO LIVE CHAT
-   CASH FLOW BANK PROPERTY
 ========================================================= */
 
 var Tawk_API = Tawk_API || {};
