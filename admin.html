@@ -24,7 +24,7 @@
 
         #login-box { max-width: 380px; margin: 120px auto; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; }
         #login-box h3 { margin: 10px 0 5px 0; color: #002b1d; }
-        #login-box input { width: 100%; margin-bottom: 15px; padding: 12px; }
+        #login-box input { width: 100%; margin-bottom: 15px; padding: 12px; box-sizing: border-box; }
         #login-box button { width: 100%; padding: 12px; justify-content: center; }
     </style>
 </head>
@@ -77,67 +77,75 @@
 
     <script>
         async function adminLogin() {
-            const res = await fetch('/api/admin/login', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    username: document.getElementById('adminUser').value,
-                    password: document.getElementById('adminPass').value
-                })
-            });
-            if (res.ok) {
-                document.getElementById('login-box').style.display = 'none';
-                document.getElementById('panel').style.display = 'block';
-                loadUsers();
-            } else {
-                alert('Invalid admin credentials.');
+            const username = document.getElementById('adminUser').value;
+            const password = document.getElementById('adminPass').value;
+
+            try {
+                const res = await fetch('/api/admin/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                if (res.ok) {
+                    document.getElementById('login-box').style.display = 'none';
+                    document.getElementById('panel').style.display = 'block';
+                    loadUsers();
+                } else {
+                    alert('Invalid admin credentials.');
+                }
+            } catch (err) {
+                alert('Connection error during login.');
             }
         }
 
         async function loadUsers() {
-            const res = await fetch('/api/admin/users');
-            const users = await res.json();
-            const tbody = document.getElementById('userTableBody');
-            tbody.innerHTML = '';
+            try {
+                const res = await fetch('/api/admin/users');
+                const users = await res.json();
+                const tbody = document.getElementById('userTableBody');
+                tbody.innerHTML = '';
 
-            if (users.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#888;">No bank accounts registered yet.</td></tr>`;
-                return;
+                if (!Array.isArray(users) || users.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#888;">No bank accounts registered yet.</td></tr>`;
+                    return;
+                }
+
+                users.forEach(u => {
+                    tbody.innerHTML += `
+                        <tr>
+                            <td>
+                                <b>Acc: ${u.account_number}</b><br>
+                                <span style="font-size:1rem; color:#222;">${u.full_name}</span><br>
+                                <small style="color:#666;">${u.email} | ${u.account_type} (${u.country})</small>
+                            </td>
+                            <td>
+                                <select id="status_${u.id}">
+                                    <option value="pending" ${u.status === 'pending' ? 'selected' : ''}>Pending (Hold)</option>
+                                    <option value="approved" ${u.status === 'approved' ? 'selected' : ''}>Approved (Active)</option>
+                                    <option value="frozen" ${u.status === 'frozen' ? 'selected' : ''}>Frozen (Locked)</option>
+                                </select>
+                            </td>
+                            <td><input type="number" step="any" id="balance_${u.id}" value="${u.balance}" style="width:100px;"></td>
+                            <td><input type="number" step="any" id="limit_${u.id}" value="${u.account_limit}" style="width:100px;"></td>
+                            <td>
+                                <input type="text" id="date_${u.id}" value="${u.created_at || ''}" style="width:170px;" title="Edit date, day or year freely">
+                            </td>
+                            <td>
+                                <button onclick="updateUser('${u.id}')">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                                    Save
+                                </button>
+                                <button class="delete" onclick="deleteUser('${u.id}')">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                                    Delete
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                });
+            } catch (err) {
+                alert('Failed to load user accounts.');
             }
-
-            users.forEach(u => {
-                tbody.innerHTML += `
-                    <tr>
-                        <td>
-                            <b>Acc: ${u.account_number}</b><br>
-                            <span style="font-size:1rem; color:#222;">${u.full_name}</span><br>
-                            <small style="color:#666;">${u.email} | ${u.account_type} (${u.country})</small>
-                        </td>
-                        <td>
-                            <select id="status_${u.id}">
-                                <option value="pending" ${u.status === 'pending' ? 'selected' : ''}>Pending (Hold Approval)</option>
-                                <option value="approved" ${u.status === 'approved' ? 'selected' : ''}>Approved (Active)</option>
-                                <option value="frozen" ${u.status === 'frozen' ? 'selected' : ''}>Frozen (Locked)</option>
-                            </select>
-                        </td>
-                        <td><input type="number" step="any" id="balance_${u.id}" value="${u.balance}" style="width:100px;"></td>
-                        <td><input type="number" step="any" id="limit_${u.id}" value="${u.account_limit}" style="width:100px;"></td>
-                        <td>
-                            <input type="text" id="date_${u.id}" value="${u.created_at}" style="width:170px;" title="Edit date, day or year freely">
-                        </td>
-                        <td>
-                            <button onclick="updateUser('${u.id}')">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
-                                Save
-                            </button>
-                            <button class="delete" onclick="deleteUser('${u.id}')">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-                                Delete
-                            </button>
-                        </td>
-                    </tr>
-                `;
-            });
         }
 
         async function updateUser(id) {
@@ -146,27 +154,36 @@
             const account_limit = document.getElementById(`limit_${id}`).value;
             const created_at = document.getElementById(`date_${id}`).value;
 
-            const res = await fetch('/api/admin/update-user', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ userId: id, status, balance, account_limit, created_at })
-            });
+            try {
+                const res = await fetch('/api/admin/update-user', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ userId: id, status, balance, account_limit, created_at })
+                });
 
-            if (res.ok) {
-                alert('Account updated successfully!');
-                loadUsers();
-            } else {
-                alert('Failed to update account.');
+                if (res.ok) {
+                    alert('Account configurations updated successfully!');
+                    loadUsers();
+                } else {
+                    alert('Failed to update account settings.');
+                }
+            } catch (err) {
+                alert('Network error during update.');
             }
         }
 
         async function deleteUser(id) {
             if (confirm('Are you sure you want to permanently delete this bank account?')) {
-                const res = await fetch(`/api/admin/delete-user/${id}`, { method: 'DELETE' });
-                if (res.ok) {
-                    loadUsers();
-                } else {
-                    alert('Failed to delete account.');
+                try {
+                    const res = await fetch(`/api/admin/delete-user/${id}`, { method: 'DELETE' });
+                    if (res.ok) {
+                        alert('Account deleted successfully.');
+                        loadUsers();
+                    } else {
+                        alert('Failed to delete account.');
+                    }
+                } catch (err) {
+                    alert('Network error during deletion.');
                 }
             }
         }
