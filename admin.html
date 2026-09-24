@@ -5,8 +5,9 @@
     <title>Cash Flow Bank - Admin Control Panel</title>
     <style>
         body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f7f6; margin: 0; padding: 20px; }
-        .header-bar { display: flex; justify-content: space-between; align-items: center; background: #002b1d; color: #fff; padding: 15px 25px; border-radius: 8px; }
-        .header-bar h2 { margin: 0; font-size: 1.4rem; }
+        .header-bar { display: flex; justify-content: space-between; align-items: center; background: #002b1d; color: #fff; padding: 15px 25px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .header-title-group { display: flex; align-items: center; gap: 12px; }
+        .header-bar h2 { margin: 0; font-size: 1.3rem; font-weight: 600; }
         
         table { width: 100%; border-collapse: collapse; background: #fff; margin-top: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border-radius: 8px; overflow: hidden; }
         th, td { padding: 14px 12px; border-bottom: 1px solid #eee; text-align: left; font-size: 0.9rem; }
@@ -14,33 +15,49 @@
         
         input, select { padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 0.85rem; }
         
-        button { padding: 8px 14px; background: #008744; color: white; border: none; cursor: pointer; border-radius: 4px; font-weight: 600; }
+        button { padding: 8px 14px; background: #008744; color: white; border: none; cursor: pointer; border-radius: 4px; font-weight: 600; display: inline-flex; align-items: center; gap: 5px; }
         button:hover { background: #006c35; }
         button.delete { background: #d32f2f; }
         button.delete:hover { background: #b71c1c; }
+        button.logout-btn { background: rgba(255,255,255,0.15); }
+        button.logout-btn:hover { background: rgba(255,255,255,0.25); }
 
         #login-box { max-width: 380px; margin: 120px auto; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; }
-        #login-box h3 { margin-top: 0; color: #002b1d; }
+        #login-box h3 { margin: 10px 0 5px 0; color: #002b1d; }
         #login-box input { width: 100%; margin-bottom: 15px; padding: 12px; }
-        #login-box button { width: 100%; padding: 12px; }
-
-        .status-badge { padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; text-transform: uppercase; }
+        #login-box button { width: 100%; padding: 12px; justify-content: center; }
     </style>
 </head>
 <body>
 
     <div id="login-box">
+        <svg width="48" height="48" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="50" fill="#008744"/>
+            <path d="M68 32H40C33.3726 32 28 37.3726 28 44V56C28 62.6274 33.3726 68 40 68H55V56H42V44H68V68H72V44C72 37.3726 66.6274 32 60 32H68Z" fill="#ffffff"/>
+        </svg>
         <h3>Cash Flow Bank</h3>
-        <p style="color:#666; font-size:0.85rem; margin-bottom:20px;">Secure Administrative Portal</p>
+        <p style="color:#666; font-size:0.85rem; margin-bottom:20px;">Secure Administrative Control Portal</p>
         <input type="text" id="adminUser" placeholder="Admin Username">
         <input type="password" id="adminPass" placeholder="Admin Password">
-        <button onclick="adminLogin()">Sign In to Dashboard</button>
+        <button onclick="adminLogin()">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+            Sign In to Dashboard
+        </button>
     </div>
 
     <div id="panel" style="display:none;">
         <div class="header-bar">
-            <h2>Cash Flow Bank — Admin Management Panel</h2>
-            <button onclick="location.reload()" style="background:#444;">Log Out</button>
+            <div class="header-title-group">
+                <svg width="34" height="34" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="50" r="50" fill="#00c853"/>
+                    <path d="M68 32H40C33.3726 32 28 37.3726 28 44V56C28 62.6274 33.3726 68 40 68H55V56H42V44H68V68H72V44C72 37.3726 66.6274 32 60 32H68Z" fill="#002b1d"/>
+                </svg>
+                <h2>Cash Flow Bank — Admin Management Panel</h2>
+            </div>
+            <button class="logout-btn" onclick="location.reload()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                Log Out
+            </button>
         </div>
 
         <table>
@@ -109,8 +126,14 @@
                             <input type="text" id="date_${u.id}" value="${u.created_at}" style="width:170px;" title="Edit date, day or year freely">
                         </td>
                         <td>
-                            <button onclick="updateUser('${u.id}')">Save Changes</button>
-                            <button class="delete" onclick="deleteUser('${u.id}')">Delete</button>
+                            <button onclick="updateUser('${u.id}')">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+                                Save
+                            </button>
+                            <button class="delete" onclick="deleteUser('${u.id}')">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                                Delete
+                            </button>
                         </td>
                     </tr>
                 `;
