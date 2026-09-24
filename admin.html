@@ -2,696 +2,328 @@
 <html lang="en">
 <head>
 
-    <meta charset="UTF-8">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#002b1d">
 
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+  <title>Cash Flow Bank — Admin Panel</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
 
-    <title>
-        Cash Flow Bank — Admin Panel
-    </title>
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore-compat.js"></script>
+
+
+  <style>
 
-    <meta
-        name="theme-color"
-        content="#002b1d"
-    >
+    :root {
+      --dark:#002b1d;
+      --green:#006c35;
+      --green2:#008744;
+      --bg:#f4f7f6;
+      --border:#e2e8e5;
+      --danger:#dc2626;
+      --warning:#d97706;
+      --success:#16a34a;
+    }
 
-    <!-- Tailwind -->
-    <script src="https://cdn.tailwindcss.com"></script>
 
-    <!-- Lucide -->
-    <script src="https://unpkg.com/lucide@latest"></script>
+    * {
+      box-sizing:border-box;
+    }
 
-    <!-- Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app-compat.js"></script>
 
-    <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-auth-compat.js"></script>
+    body {
+      margin:0;
+      font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      background:var(--bg);
+      color:#10231c;
+    }
 
-    <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-database-compat.js"></script>
 
+    button,input,select {
+      font:inherit;
+    }
 
-    <style>
 
-        :root {
+    button {
+      cursor:pointer;
+    }
 
-            --primary-dark: #002b1d;
-            --primary: #006c35;
-            --button: #008744;
-            --button-hover: #006c35;
-            --bg: #f4f7f6;
-            --border: #e2e8e5;
 
-        }
+    .hidden {
+      display:none!important;
+    }
 
 
-        * {
-            box-sizing: border-box;
-        }
+    .admin-sidebar {
+      width:250px;
+      position:fixed;
+      left:0;
+      top:0;
+      bottom:0;
+      background:var(--dark);
+      color:white;
+      z-index:100;
+      transition:.25s;
+    }
 
 
-        body {
+    .admin-main {
+      margin-left:250px;
+      min-height:100vh;
+    }
 
-            margin: 0;
 
-            font-family:
-                Inter,
-                Arial,
-                Helvetica,
-                sans-serif;
+    .admin-topbar {
+      height:72px;
+      background:white;
+      border-bottom:1px solid var(--border);
+      position:sticky;
+      top:0;
+      z-index:50;
+    }
 
-            background:
-                var(--bg);
 
-            color:
-                #10231c;
+    .side-button {
+      width:calc(100% - 20px);
+      margin:3px 10px;
+      padding:12px 15px;
+      border:0;
+      border-radius:10px;
+      background:transparent;
+      color:rgba(255,255,255,.7);
+      display:flex;
+      align-items:center;
+      gap:12px;
+      text-align:left;
+    }
 
-        }
 
+    .side-button:hover,
+    .side-button.active {
+      background:rgba(255,255,255,.1);
+      color:white;
+    }
 
-        button,
-        input,
-        select {
-            font: inherit;
-        }
 
+    .card {
+      background:white;
+      border:1px solid var(--border);
+      border-radius:18px;
+      box-shadow:0 10px 30px rgba(0,43,29,.06);
+    }
 
-        .hidden {
-            display: none !important;
-        }
 
+    .input {
+      width:100%;
+      border:1px solid var(--border);
+      padding:12px 14px;
+      border-radius:10px;
+      outline:none;
+      background:white;
+    }
 
-        .login-bg {
 
-            min-height: 100vh;
+    .input:focus {
+      border-color:var(--green);
+      box-shadow:0 0 0 3px rgba(0,108,53,.1);
+    }
 
-            background:
-                linear-gradient(
-                    rgba(0,43,29,.95),
-                    rgba(0,43,29,.95)
-                );
 
-        }
+    .btn {
+      border:0;
+      border-radius:9px;
+      padding:10px 14px;
+      font-weight:700;
+    }
 
 
-        .login-card {
+    .btn-green {
+      background:var(--green2);
+      color:white;
+    }
 
-            width:
-                min(
-                    430px,
-                    calc(100% - 32px)
-                );
 
-            background:
-                white;
+    .btn-green:hover {
+      background:var(--green);
+    }
 
-            border-radius:
-                22px;
 
-            padding:
-                32px;
+    .btn-red {
+      background:#fee2e2;
+      color:#b91c1c;
+    }
 
-            box-shadow:
-                0 25px 80px
-                rgba(0,0,0,.25);
 
-        }
+    .btn-yellow {
+      background:#fef3c7;
+      color:#92400e;
+    }
 
 
-        .logo-mark {
+    .btn-gray {
+      background:#f3f4f6;
+      color:#374151;
+    }
 
-            width: 52px;
-            height: 52px;
 
-            border-radius: 15px;
+    .stat-card {
+      background:white;
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:20px;
+    }
 
-            background:
-                var(--primary-dark);
 
-            color: white;
+    .stat-number {
+      font-size:30px;
+      font-weight:900;
+      margin-top:5px;
+    }
 
-            display:
-                flex;
 
-            align-items:
-                center;
+    .status {
+      display:inline-flex;
+      align-items:center;
+      padding:5px 9px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:800;
+    }
 
-            justify-content:
-                center;
 
-            font-weight: 900;
+    .status-pending {
+      background:#fef3c7;
+      color:#92400e;
+    }
 
-        }
 
+    .status-approved {
+      background:#dcfce7;
+      color:#166534;
+    }
 
-        .sidebar {
 
-            width: 260px;
+    .status-declined {
+      background:#fee2e2;
+      color:#991b1b;
+    }
 
-            position: fixed;
 
-            left: 0;
-            top: 0;
-            bottom: 0;
+    .table-wrap {
+      overflow-x:auto;
+    }
 
-            background:
-                var(--primary-dark);
 
-            color: white;
+    table {
+      width:100%;
+      border-collapse:collapse;
+      min-width:850px;
+    }
 
-            z-index: 50;
 
-            overflow-y: auto;
+    th {
+      text-align:left;
+      padding:14px;
+      font-size:12px;
+      color:#6b7280;
+      background:#f8faf9;
+      border-bottom:1px solid var(--border);
+      text-transform:uppercase;
+      letter-spacing:.04em;
+    }
 
-        }
 
+    td {
+      padding:14px;
+      border-bottom:1px solid var(--border);
+      font-size:14px;
+    }
 
-        .main {
 
-            margin-left: 260px;
+    tr:last-child td {
+      border-bottom:0;
+    }
 
-            min-height: 100vh;
 
-        }
+    .login-bg {
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+      background:
+        linear-gradient(rgba(0,43,29,.9),rgba(0,43,29,.94)),
+        url("https://images.unsplash.com/photo-1556761175-b413da4baf72?auto=format&fit=crop&w=1800&q=85")
+        center/cover;
+    }
 
 
-        .topbar {
+    .login-card {
+      width:100%;
+      max-width:420px;
+      background:white;
+      border-radius:20px;
+      padding:30px;
+      box-shadow:0 30px 80px rgba(0,0,0,.3);
+    }
 
-            height: 76px;
 
-            background:
-                white;
+    .modal-bg {
+      position:fixed;
+      inset:0;
+      background:rgba(0,0,0,.55);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+      z-index:200;
+    }
 
-            border-bottom:
-                1px solid var(--border);
 
-            display:
-                flex;
+    .modal {
+      background:white;
+      width:100%;
+      max-width:600px;
+      max-height:90vh;
+      overflow-y:auto;
+      border-radius:18px;
+    }
 
-            align-items:
-                center;
 
-            justify-content:
-                space-between;
+    .toast {
+      position:fixed;
+      right:20px;
+      bottom:20px;
+      z-index:500;
+      color:white;
+      padding:14px 18px;
+      border-radius:10px;
+      box-shadow:0 15px 40px rgba(0,0,0,.2);
+    }
 
-            padding:
-                0 28px;
 
-            position:
-                sticky;
+    @media(max-width:900px) {
 
-            top: 0;
+      .admin-sidebar {
+        transform:translateX(-100%);
+      }
 
-            z-index: 30;
+      .admin-sidebar.open {
+        transform:translateX(0);
+      }
 
-        }
+      .admin-main {
+        margin-left:0;
+      }
 
+    }
 
-        .content {
-
-            padding: 28px;
-
-        }
-
-
-        .card {
-
-            background: white;
-
-            border:
-                1px solid var(--border);
-
-            border-radius:
-                18px;
-
-            box-shadow:
-                0 8px 30px
-                rgba(0,43,29,.05);
-
-        }
-
-
-        .nav-item {
-
-            width: 100%;
-
-            display:
-                flex;
-
-            align-items:
-                center;
-
-            gap: 12px;
-
-            padding:
-                12px 14px;
-
-            border: 0;
-
-            border-radius: 10px;
-
-            background:
-                transparent;
-
-            color:
-                #c9d7d1;
-
-            text-align:
-                left;
-
-            transition:
-                .2s;
-
-        }
-
-
-        .nav-item:hover,
-        .nav-item.active {
-
-            background:
-                rgba(255,255,255,.10);
-
-            color:
-                white;
-
-        }
-
-
-        .input {
-
-            width: 100%;
-
-            border:
-                1px solid var(--border);
-
-            border-radius: 10px;
-
-            padding:
-                11px 13px;
-
-            outline: none;
-
-            background:
-                white;
-
-        }
-
-
-        .input:focus {
-
-            border-color:
-                var(--primary);
-
-            box-shadow:
-                0 0 0 3px
-                rgba(0,108,53,.10);
-
-        }
-
-
-        .btn {
-
-            border: 0;
-
-            border-radius: 10px;
-
-            padding:
-                10px 14px;
-
-            font-weight:
-                700;
-
-            cursor:
-                pointer;
-
-            display:
-                inline-flex;
-
-            align-items:
-                center;
-
-            justify-content:
-                center;
-
-            gap: 7px;
-
-        }
-
-
-        .btn-primary {
-
-            background:
-                var(--button);
-
-            color:
-                white;
-
-        }
-
-
-        .btn-primary:hover {
-
-            background:
-                var(--button-hover);
-
-        }
-
-
-        .btn-secondary {
-
-            background:
-                #eef2f0;
-
-            color:
-                #34443e;
-
-        }
-
-
-        .btn-success {
-
-            background:
-                #dcfce7;
-
-            color:
-                #166534;
-
-        }
-
-
-        .btn-danger {
-
-            background:
-                #fee2e2;
-
-            color:
-                #991b1b;
-
-        }
-
-
-        .btn-warning {
-
-            background:
-                #fef3c7;
-
-            color:
-                #92400e;
-
-        }
-
-
-        .btn-sm {
-
-            padding:
-                7px 10px;
-
-            font-size:
-                12px;
-
-        }
-
-
-        .table-wrap {
-
-            overflow-x:
-                auto;
-
-        }
-
-
-        table {
-
-            width:
-                100%;
-
-            border-collapse:
-                collapse;
-
-            min-width:
-                950px;
-
-        }
-
-
-        th,
-        td {
-
-            padding:
-                14px 16px;
-
-            border-bottom:
-                1px solid var(--border);
-
-            text-align:
-                left;
-
-        }
-
-
-        th {
-
-            background:
-                #f8faf9;
-
-            color:
-                #4b5b55;
-
-            font-size:
-                13px;
-
-        }
-
-
-        td {
-
-            font-size:
-                14px;
-
-        }
-
-
-        .status {
-
-            display:
-                inline-flex;
-
-            padding:
-                5px 10px;
-
-            border-radius:
-                999px;
-
-            font-size:
-                12px;
-
-            font-weight:
-                800;
-
-        }
-
-
-        .status-pending {
-
-            color:
-                #92400e;
-
-            background:
-                #fef3c7;
-
-        }
-
-
-        .status-approved {
-
-            color:
-                #166534;
-
-            background:
-                #dcfce7;
-
-        }
-
-
-        .status-declined {
-
-            color:
-                #991b1b;
-
-            background:
-                #fee2e2;
-
-        }
-
-
-        .modal-overlay {
-
-            position:
-                fixed;
-
-            inset:
-                0;
-
-            background:
-                rgba(0,0,0,.55);
-
-            display:
-                flex;
-
-            align-items:
-                center;
-
-            justify-content:
-                center;
-
-            padding:
-                20px;
-
-            z-index:
-                100;
-
-        }
-
-
-        .modal {
-
-            width:
-                min(620px,100%);
-
-            max-height:
-                90vh;
-
-            overflow-y:
-                auto;
-
-            background:
-                white;
-
-            border-radius:
-                20px;
-
-        }
-
-
-        .toast-container {
-
-            position:
-                fixed;
-
-            right:
-                20px;
-
-            bottom:
-                20px;
-
-            z-index:
-                200;
-
-            display:
-                flex;
-
-            flex-direction:
-                column;
-
-            gap:
-                10px;
-
-        }
-
-
-        .toast {
-
-            min-width:
-                280px;
-
-            max-width:
-                380px;
-
-            background:
-                #10231c;
-
-            color:
-                white;
-
-            padding:
-                14px 16px;
-
-            border-radius:
-                12px;
-
-            box-shadow:
-                0 15px 40px
-                rgba(0,0,0,.18);
-
-        }
-
-
-        .toast.success {
-            background:
-                #166534;
-        }
-
-
-        .toast.error {
-            background:
-                #991b1b;
-        }
-
-
-        .mobile-menu {
-            display:
-                none;
-        }
-
-
-        @media(max-width:900px) {
-
-            .sidebar {
-
-                transform:
-                    translateX(-100%);
-
-                transition:
-                    .25s;
-
-            }
-
-
-            .sidebar.open {
-
-                transform:
-                    translateX(0);
-
-            }
-
-
-            .main {
-
-                margin-left:
-                    0;
-
-            }
-
-
-            .mobile-menu {
-
-                display:
-                    inline-flex;
-
-            }
-
-
-            .content {
-
-                padding:
-                    18px;
-
-            }
-
-        }
-
-    </style>
+  </style>
 
 </head>
 
@@ -699,2354 +331,1972 @@
 <body>
 
 
-<!-- =========================================================
+<!-- =====================================================
      ADMIN LOGIN
-========================================================= -->
+===================================================== -->
 
-<section
-    id="loginView"
-    class="login-bg min-h-screen flex items-center justify-center"
->
+<div id="adminLogin">
+
+  <div class="login-bg">
 
     <div class="login-card">
 
-        <div class="flex items-center gap-3 mb-8">
+      <div class="text-center">
 
-            <div class="logo-mark">
-                CF
-            </div>
+        <div class="w-14 h-14 rounded-2xl bg-[#002b1d] mx-auto flex items-center justify-center">
 
-            <div>
-
-                <div class="font-black text-xl">
-                    CASH FLOW BANK
-                </div>
-
-                <div class="text-sm text-gray-500">
-                    Administrator Portal
-                </div>
-
-            </div>
+          <span class="text-white text-xl font-black">
+            CF
+          </span>
 
         </div>
 
-
-        <h1 class="text-2xl font-black">
-            Admin Sign In
+        <h1 class="text-2xl font-black mt-5">
+          Cash Flow Bank
         </h1>
 
-        <p class="text-sm text-gray-500 mt-1 mb-6">
-            Sign in to manage customer accounts.
+        <p class="text-gray-500 text-sm mt-1">
+          Administrator Panel
         </p>
 
+      </div>
 
-        <form id="adminLoginForm">
 
-            <div class="mb-4">
+      <form onsubmit="adminLogin(event)"
+        class="mt-8 space-y-5">
 
-                <label class="block text-sm font-bold mb-2">
-                    Admin Email
-                </label>
+        <div>
 
-                <input
-                    id="adminEmail"
-                    type="email"
-                    class="input"
-                    placeholder="admin@example.com"
-                    required
-                >
+          <label class="block text-sm font-bold mb-2">
+            Admin Password
+          </label>
 
-            </div>
-
-
-            <div class="mb-5">
-
-                <label class="block text-sm font-bold mb-2">
-                    Password
-                </label>
-
-                <input
-                    id="adminPassword"
-                    type="password"
-                    class="input"
-                    placeholder="Password"
-                    required
-                >
-
-            </div>
-
-
-            <button
-                id="adminLoginBtn"
-                type="submit"
-                class="btn btn-primary w-full py-3"
-            >
-                <i data-lucide="log-in"></i>
-                Sign In
-            </button>
-
-        </form>
-
-
-        <div class="mt-6 p-4 rounded-xl bg-amber-50 border border-amber-200 text-sm text-amber-800">
-
-            This is the administration area for the
-            Cash Flow Bank demo application.
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- =========================================================
-     ADMIN APPLICATION
-========================================================= -->
-
-<section
-    id="adminApp"
-    class="hidden"
->
-
-
-    <!-- SIDEBAR -->
-
-    <aside
-        id="adminSidebar"
-        class="sidebar"
-    >
-
-        <div class="p-5 border-b border-white/10">
-
-            <div class="flex items-center gap-3">
-
-                <div class="w-11 h-11 rounded-xl bg-white text-[#002b1d] flex items-center justify-center font-black">
-                    CF
-                </div>
-
-                <div>
-
-                    <div class="font-black">
-                        CASH FLOW
-                    </div>
-
-                    <div class="text-xs text-white/60">
-                        ADMIN PANEL
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <div class="p-4">
-
-            <button
-                class="nav-item active"
-                onclick="showAdminSection('overview', this)"
-            >
-                <i data-lucide="layout-dashboard"></i>
-                Overview
-            </button>
-
-
-            <button
-                class="nav-item"
-                onclick="showAdminSection('accounts', this)"
-            >
-                <i data-lucide="users"></i>
-                Customer Accounts
-            </button>
-
-
-            <button
-                class="nav-item"
-                onclick="showAdminSection('pending', this)"
-            >
-                <i data-lucide="clock-3"></i>
-                Pending Approval
-            </button>
-
-
-            <button
-                class="nav-item mt-5"
-                onclick="logoutAdmin()"
-            >
-                <i data-lucide="log-out"></i>
-                Sign Out
-            </button>
-
-        </div>
-
-
-        <div class="absolute bottom-0 left-0 right-0 p-4">
-
-            <div class="rounded-xl bg-white/5 border border-white/10 p-4">
-
-                <div class="text-xs text-white/50">
-                    Administrator
-                </div>
-
-                <div
-                    id="adminEmailDisplay"
-                    class="text-sm font-bold mt-1 truncate"
-                >
-                    —
-                </div>
-
-            </div>
-
-        </div>
-
-    </aside>
-
-
-    <!-- MAIN -->
-
-    <main class="main">
-
-
-        <!-- TOPBAR -->
-
-        <header class="topbar">
-
-            <div class="flex items-center gap-3">
-
-                <button
-                    onclick="toggleAdminSidebar()"
-                    class="btn btn-secondary mobile-menu"
-                >
-                    <i data-lucide="menu"></i>
-                </button>
-
-                <div>
-
-                    <div
-                        id="adminTitle"
-                        class="font-black text-lg"
-                    >
-                        Overview
-                    </div>
-
-                    <div class="text-xs text-gray-500">
-                        Cash Flow Bank Administration
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <button
-                onclick="loadAccounts()"
-                class="btn btn-secondary"
-            >
-                <i data-lucide="refresh-cw"></i>
-                Refresh
-            </button>
-
-        </header>
-
-
-        <div class="content">
-
-
-            <!-- OVERVIEW -->
-
-            <section id="admin-overview">
-
-                <div class="mb-7">
-
-                    <h1 class="text-2xl md:text-3xl font-black">
-                        Overview
-                    </h1>
-
-                    <p class="text-gray-500 mt-1">
-                        Manage Cash Flow Bank customer demo accounts.
-                    </p>
-
-                </div>
-
-
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-7">
-
-
-                    <div class="card p-6">
-
-                        <div class="text-sm text-gray-500">
-                            Total Accounts
-                        </div>
-
-                        <div
-                            id="totalAccounts"
-                            class="text-3xl font-black mt-2"
-                        >
-                            0
-                        </div>
-
-                    </div>
-
-
-                    <div class="card p-6">
-
-                        <div class="text-sm text-gray-500">
-                            Pending
-                        </div>
-
-                        <div
-                            id="pendingAccounts"
-                            class="text-3xl font-black mt-2"
-                        >
-                            0
-                        </div>
-
-                    </div>
-
-
-                    <div class="card p-6">
-
-                        <div class="text-sm text-gray-500">
-                            Approved
-                        </div>
-
-                        <div
-                            id="approvedAccounts"
-                            class="text-3xl font-black mt-2"
-                        >
-                            0
-                        </div>
-
-                    </div>
-
-
-                    <div class="card p-6">
-
-                        <div class="text-sm text-gray-500">
-                            Demo Funds
-                        </div>
-
-                        <div
-                            id="totalFunds"
-                            class="text-2xl font-black mt-2"
-                        >
-                            $0.00
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <div class="card">
-
-                    <div class="p-6 border-b">
-
-                        <h2 class="font-black text-lg">
-                            Recent Accounts
-                        </h2>
-
-                    </div>
-
-
-                    <div class="table-wrap">
-
-                        <table>
-
-                            <thead>
-
-                                <tr>
-
-                                    <th>
-                                        Customer
-                                    </th>
-
-                                    <th>
-                                        Account
-                                    </th>
-
-                                    <th>
-                                        Type
-                                    </th>
-
-                                    <th>
-                                        Status
-                                    </th>
-
-                                    <th>
-                                        Created
-                                    </th>
-
-                                </tr>
-
-                            </thead>
-
-                            <tbody
-                                id="recentAccounts"
-                            ></tbody>
-
-                        </table>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <!-- ACCOUNTS -->
-
-            <section
-                id="admin-accounts"
-                class="hidden"
-            >
-
-                <div class="mb-6">
-
-                    <h1 class="text-2xl md:text-3xl font-black">
-                        Customer Accounts
-                    </h1>
-
-                    <p class="text-gray-500 mt-1">
-                        Manage registered accounts.
-                    </p>
-
-                </div>
-
-
-                <div class="card p-4 mb-5">
-
-                    <div class="grid md:grid-cols-2 gap-3">
-
-                        <input
-                            id="searchAccounts"
-                            class="input"
-                            placeholder="Search name, email or account number"
-                            oninput="renderAccounts()"
-                        >
-
-
-                        <select
-                            id="filterStatus"
-                            class="input"
-                            onchange="renderAccounts()"
-                        >
-
-                            <option value="all">
-                                All statuses
-                            </option>
-
-                            <option value="pending">
-                                Pending
-                            </option>
-
-                            <option value="approved">
-                                Approved
-                            </option>
-
-                            <option value="declined">
-                                Declined
-                            </option>
-
-                        </select>
-
-                    </div>
-
-                </div>
-
-
-                <div class="card">
-
-                    <div class="table-wrap">
-
-                        <table>
-
-                            <thead>
-
-                                <tr>
-
-                                    <th>
-                                        Customer
-                                    </th>
-
-                                    <th>
-                                        Email
-                                    </th>
-
-                                    <th>
-                                        Account
-                                    </th>
-
-                                    <th>
-                                        Type
-                                    </th>
-
-                                    <th>
-                                        Status
-                                    </th>
-
-                                    <th>
-                                        Balance
-                                    </th>
-
-                                    <th>
-                                        Limit
-                                    </th>
-
-                                    <th>
-                                        Actions
-                                    </th>
-
-                                </tr>
-
-                            </thead>
-
-
-                            <tbody
-                                id="accountsTable"
-                            ></tbody>
-
-                        </table>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <!-- PENDING -->
-
-            <section
-                id="admin-pending"
-                class="hidden"
-            >
-
-                <div class="mb-6">
-
-                    <h1 class="text-2xl md:text-3xl font-black">
-                        Pending Approval
-                    </h1>
-
-                    <p class="text-gray-500 mt-1">
-                        Review newly registered accounts.
-                    </p>
-
-                </div>
-
-
-                <div
-                    id="pendingList"
-                    class="grid lg:grid-cols-2 gap-5"
-                ></div>
-
-            </section>
-
-        </div>
-
-    </main>
-
-</section>
-
-
-<!-- =========================================================
-     EDIT MODAL
-========================================================= -->
-
-<div
-    id="editModal"
-    class="modal-overlay hidden"
->
-
-    <div class="modal">
-
-        <div class="p-6 border-b flex justify-between">
-
-            <div>
-
-                <h2 class="text-xl font-black">
-                    Manage Account
-                </h2>
-
-                <p class="text-sm text-gray-500">
-                    Update account settings.
-                </p>
-
-            </div>
-
-            <button
-                onclick="closeModal('editModal')"
-                class="btn btn-secondary"
-            >
-                <i data-lucide="x"></i>
-            </button>
-
-        </div>
-
-
-        <form
-            id="editForm"
-            class="p-6"
-        >
+          <div class="relative">
 
             <input
-                id="editId"
-                type="hidden"
-            >
+              id="adminPassword"
+              type="password"
+              class="input pr-12"
+              placeholder="Enter admin password"
+              required>
+
+            <button
+              type="button"
+              onclick="toggleAdminPassword()"
+              class="absolute right-3 top-3 text-gray-500">
+
+              <i data-lucide="eye"></i>
+
+            </button>
+
+          </div>
+
+        </div>
 
 
-            <div class="grid md:grid-cols-2 gap-4">
+        <button
+          id="adminLoginButton"
+          type="submit"
+          class="btn btn-green w-full py-3">
+
+          Login to Admin Panel
+
+        </button>
+
+      </form>
 
 
-                <div>
+      <div class="mt-6 p-4 rounded-xl bg-yellow-50 border border-yellow-100 text-yellow-800 text-xs leading-5">
 
-                    <label class="block text-sm font-bold mb-2">
-                        Status
-                    </label>
+        Demo administrator access.<br>
 
-                    <select
-                        id="editStatus"
-                        class="input"
-                    >
+        Initial password:
+        <strong>admin123</strong>
 
-                        <option value="pending">
-                            Pending
-                        </option>
-
-                        <option value="approved">
-                            Approved
-                        </option>
-
-                        <option value="declined">
-                            Declined
-                        </option>
-
-                    </select>
-
-                </div>
+      </div>
 
 
-                <div>
+      <a
+        href="index.html"
+        class="block text-center text-sm text-[#006c35] font-bold mt-6">
 
-                    <label class="block text-sm font-bold mb-2">
-                        Account Type
-                    </label>
+        ← Return to Customer Website
 
-                    <select
-                        id="editType"
-                        class="input"
-                    >
-
-                        <option>
-                            Savings
-                        </option>
-
-                        <option>
-                            Current
-                        </option>
-
-                        <option>
-                            Business
-                        </option>
-
-                        <option>
-                            Student
-                        </option>
-
-                    </select>
-
-                </div>
-
-
-                <div>
-
-                    <label class="block text-sm font-bold mb-2">
-                        Demo Balance
-                    </label>
-
-                    <input
-                        id="editBalance"
-                        type="number"
-                        min="0"
-                        step="0.01"
-                        class="input"
-                    >
-
-                </div>
-
-
-                <div>
-
-                    <label class="block text-sm font-bold mb-2">
-                        Demo Account Limit
-                    </label>
-
-                    <input
-                        id="editLimit"
-                        type="number"
-                        min="0"
-                        step="0.01"
-                        class="input"
-                    >
-
-                </div>
-
-            </div>
-
-
-            <div class="mt-5 p-4 bg-amber-50 border border-amber-200 rounded-xl text-sm text-amber-800">
-
-                Balance changes are simulated demo values and
-                do not represent real funds.
-
-            </div>
-
-
-            <div class="flex justify-end gap-3 mt-6">
-
-                <button
-                    type="button"
-                    onclick="closeModal('editModal')"
-                    class="btn btn-secondary"
-                >
-                    Cancel
-                </button>
-
-
-                <button
-                    type="submit"
-                    class="btn btn-primary"
-                >
-                    <i data-lucide="save"></i>
-                    Save Changes
-                </button>
-
-            </div>
-
-        </form>
+      </a>
 
     </div>
+
+  </div>
 
 </div>
 
 
-<!-- =========================================================
-     DELETE MODAL
-========================================================= -->
+<!-- =====================================================
+     ADMIN DASHBOARD
+===================================================== -->
 
-<div
-    id="deleteModal"
-    class="modal-overlay hidden"
->
-
-    <div class="modal">
-
-        <div class="p-6">
-
-            <div class="w-12 h-12 rounded-full bg-red-100 text-red-600 flex items-center justify-center">
-
-                <i data-lucide="trash-2"></i>
-
-            </div>
+<div id="adminDashboard" class="hidden">
 
 
-            <h2 class="text-xl font-black mt-4">
-                Delete Account?
-            </h2>
+  <!-- SIDEBAR -->
 
+  <aside id="adminSidebar" class="admin-sidebar">
 
-            <p class="text-sm text-gray-500 mt-2">
-                This permanently removes the customer's
-                database account record.
-            </p>
+    <div class="p-5 border-b border-white/10">
 
+      <div class="flex items-center gap-3">
 
-            <input
-                id="deleteId"
-                type="hidden"
-            >
+        <div class="w-10 h-10 bg-white rounded-xl flex items-center justify-center">
 
-
-            <div class="flex justify-end gap-3 mt-6">
-
-                <button
-                    onclick="closeModal('deleteModal')"
-                    class="btn btn-secondary"
-                >
-                    Cancel
-                </button>
-
-
-                <button
-                    onclick="confirmDelete()"
-                    class="btn btn-danger"
-                >
-                    Delete
-                </button>
-
-            </div>
+          <span class="text-[#006c35] font-black">
+            CF
+          </span>
 
         </div>
 
+        <div>
+
+          <div class="font-black">
+            Cash Flow Bank
+          </div>
+
+          <div class="text-xs text-white/40">
+            Admin Panel
+          </div>
+
+        </div>
+
+      </div>
+
     </div>
+
+
+    <div class="p-3">
+
+      <button
+        class="side-button active"
+        onclick="adminPage('overview')"
+        data-admin-page="overview">
+
+        <i data-lucide="layout-dashboard"></i>
+
+        Overview
+
+      </button>
+
+
+      <button
+        class="side-button"
+        onclick="adminPage('customers')"
+        data-admin-page="customers">
+
+        <i data-lucide="users"></i>
+
+        Customers
+
+      </button>
+
+
+      <button
+        class="side-button"
+        onclick="adminPage('transactions')"
+        data-admin-page="transactions">
+
+        <i data-lucide="arrow-left-right"></i>
+
+        Transactions
+
+      </button>
+
+
+      <button
+        class="side-button"
+        onclick="adminPage('settings')"
+        data-admin-page="settings">
+
+        <i data-lucide="settings"></i>
+
+        Admin Settings
+
+      </button>
+
+
+      <button
+        class="side-button"
+        onclick="adminLogout()">
+
+        <i data-lucide="log-out"></i>
+
+        Logout
+
+      </button>
+
+    </div>
+
+
+    <div class="absolute bottom-0 left-0 right-0 p-4">
+
+      <div class="rounded-xl bg-white/5 p-4">
+
+        <div class="text-xs text-white/40">
+          Administrator
+        </div>
+
+        <div class="font-bold mt-1">
+          Cash Flow Admin
+        </div>
+
+      </div>
+
+    </div>
+
+  </aside>
+
+
+  <!-- MAIN -->
+
+  <main class="admin-main">
+
+
+    <!-- TOPBAR -->
+
+    <header class="admin-topbar px-4 md:px-7 flex items-center justify-between">
+
+      <div class="flex items-center gap-4">
+
+        <button
+          onclick="toggleAdminSidebar()"
+          class="lg:hidden w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center">
+
+          <i data-lucide="menu"></i>
+
+        </button>
+
+
+        <div>
+
+          <div class="text-xs text-gray-400">
+            Administration
+          </div>
+
+          <div class="font-black">
+            Cash Flow Bank
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <div class="flex items-center gap-3">
+
+        <div class="w-10 h-10 rounded-full bg-[#006c35] text-white flex items-center justify-center">
+
+          <i data-lucide="shield-check"></i>
+
+        </div>
+
+      </div>
+
+    </header>
+
+
+    <div class="p-4 md:p-7">
+
+
+      <!-- OVERVIEW -->
+
+      <section id="adminPage-overview">
+
+        <div class="mb-7">
+
+          <h1 class="text-3xl font-black">
+            Admin Dashboard
+          </h1>
+
+          <p class="text-gray-500 mt-2">
+            Manage customer demonstration accounts.
+          </p>
+
+        </div>
+
+
+        <div class="grid sm:grid-cols-2 xl:grid-cols-4 gap-5">
+
+          <div class="stat-card">
+
+            <div class="text-sm text-gray-500">
+              Total Customers
+            </div>
+
+            <div id="statTotal"
+              class="stat-number">
+              0
+            </div>
+
+          </div>
+
+
+          <div class="stat-card">
+
+            <div class="text-sm text-gray-500">
+              Pending
+            </div>
+
+            <div id="statPending"
+              class="stat-number text-yellow-600">
+              0
+            </div>
+
+          </div>
+
+
+          <div class="stat-card">
+
+            <div class="text-sm text-gray-500">
+              Approved
+            </div>
+
+            <div id="statApproved"
+              class="stat-number text-green-600">
+              0
+            </div>
+
+          </div>
+
+
+          <div class="stat-card">
+
+            <div class="text-sm text-gray-500">
+              Declined
+            </div>
+
+            <div id="statDeclined"
+              class="stat-number text-red-600">
+              0
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="card p-6 mt-6">
+
+          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+
+            <div>
+
+              <h2 class="text-xl font-black">
+                Recent Customers
+              </h2>
+
+              <p class="text-sm text-gray-400 mt-1">
+                Recently created customer records.
+              </p>
+
+            </div>
+
+            <button
+              onclick="adminPage('customers')"
+              class="btn btn-green">
+
+              View Customers
+
+            </button>
+
+          </div>
+
+
+          <div class="table-wrap mt-5">
+
+            <table>
+
+              <thead>
+
+                <tr>
+                  <th>Name</th>
+                  <th>Account</th>
+                  <th>Type</th>
+                  <th>Status</th>
+                  <th>Balance</th>
+                </tr>
+
+              </thead>
+
+              <tbody id="overviewCustomers"></tbody>
+
+            </table>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- CUSTOMERS -->
+
+      <section id="adminPage-customers" class="hidden">
+
+        <div class="mb-7">
+
+          <h1 class="text-3xl font-black">
+            Customers
+          </h1>
+
+          <p class="text-gray-500 mt-2">
+            Approve, decline and manage customer accounts.
+          </p>
+
+        </div>
+
+
+        <div class="card p-5">
+
+          <div class="grid md:grid-cols-2 gap-4">
+
+            <input
+              id="customerSearch"
+              oninput="renderCustomers()"
+              class="input"
+              placeholder="Search name, email or account number">
+
+
+            <select
+              id="statusFilter"
+              onchange="renderCustomers()"
+              class="input">
+
+              <option value="all">
+                All Statuses
+              </option>
+
+              <option value="pending">
+                Pending
+              </option>
+
+              <option value="approved">
+                Approved
+              </option>
+
+              <option value="declined">
+                Declined
+              </option>
+
+            </select>
+
+          </div>
+
+        </div>
+
+
+        <div class="card mt-5">
+
+          <div class="table-wrap">
+
+            <table>
+
+              <thead>
+
+                <tr>
+                  <th>Customer</th>
+                  <th>Account</th>
+                  <th>Type</th>
+                  <th>Status</th>
+                  <th>Balance</th>
+                  <th>Limit</th>
+                  <th>Actions</th>
+                </tr>
+
+              </thead>
+
+              <tbody id="customersTable"></tbody>
+
+            </table>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- TRANSACTIONS -->
+
+      <section id="adminPage-transactions" class="hidden">
+
+        <div class="mb-7">
+
+          <h1 class="text-3xl font-black">
+            Transactions
+          </h1>
+
+          <p class="text-gray-500 mt-2">
+            Review customer transfer requests.
+          </p>
+
+        </div>
+
+
+        <div class="card">
+
+          <div class="table-wrap">
+
+            <table>
+
+              <thead>
+
+                <tr>
+                  <th>Customer</th>
+                  <th>Recipient</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                  <th>Date</th>
+                  <th>Action</th>
+                </tr>
+
+              </thead>
+
+              <tbody id="transactionsTable"></tbody>
+
+            </table>
+
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- SETTINGS -->
+
+      <section id="adminPage-settings" class="hidden">
+
+        <div class="mb-7">
+
+          <h1 class="text-3xl font-black">
+            Admin Settings
+          </h1>
+
+          <p class="text-gray-500 mt-2">
+            Manage administrator access.
+          </p>
+
+        </div>
+
+
+        <div class="card p-6 max-w-2xl">
+
+          <h2 class="text-xl font-black">
+            Change Admin Password
+          </h2>
+
+          <p class="text-sm text-gray-500 mt-2">
+            Change the password used to access this browser-based
+            administrator panel.
+          </p>
+
+
+          <form
+            onsubmit="changeAdminPassword(event)"
+            class="space-y-4 mt-6">
+
+
+            <div>
+
+              <label class="block text-sm font-bold mb-2">
+                Current Password
+              </label>
+
+              <input
+                id="currentAdminPassword"
+                type="password"
+                class="input"
+                required>
+
+            </div>
+
+
+            <div>
+
+              <label class="block text-sm font-bold mb-2">
+                New Password
+              </label>
+
+              <input
+                id="newAdminPassword"
+                type="password"
+                minlength="6"
+                class="input"
+                placeholder="At least 6 characters"
+                required>
+
+            </div>
+
+
+            <div>
+
+              <label class="block text-sm font-bold mb-2">
+                Confirm New Password
+              </label>
+
+              <input
+                id="confirmAdminPassword"
+                type="password"
+                minlength="6"
+                class="input"
+                required>
+
+            </div>
+
+
+            <button
+              type="submit"
+              class="btn btn-green">
+
+              Change Password
+
+            </button>
+
+          </form>
+
+
+          <div class="mt-7 p-4 rounded-xl bg-yellow-50 border border-yellow-100 text-yellow-800 text-sm">
+
+            <strong>Demo security notice:</strong>
+
+            This browser-based admin password is not suitable for
+            protecting a real financial system. For production,
+            use Firebase Authentication with server-side authorization.
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </div>
+
+  </main>
+
+</div>
+
+
+<!-- CUSTOMER MODAL -->
+
+<div id="customerModal" class="modal-bg hidden">
+
+  <div class="modal">
+
+    <div class="p-6 border-b flex items-center justify-between">
+
+      <div>
+
+        <h2 class="text-xl font-black">
+          Customer Account
+        </h2>
+
+        <p class="text-sm text-gray-500 mt-1">
+          Account management
+        </p>
+
+      </div>
+
+      <button
+        onclick="closeCustomerModal()"
+        class="w-9 h-9 bg-gray-100 rounded-lg flex items-center justify-center">
+
+        <i data-lucide="x"></i>
+
+      </button>
+
+    </div>
+
+
+    <div class="p-6">
+
+      <div id="customerModalContent"></div>
+
+
+      <div class="border-t mt-6 pt-6">
+
+        <h3 class="font-black text-lg">
+          Change Account Settings
+        </h3>
+
+
+        <div class="grid md:grid-cols-2 gap-4 mt-4">
+
+          <div>
+
+            <label class="block text-sm font-bold mb-2">
+              Balance
+            </label>
+
+            <input
+              id="editBalance"
+              type="number"
+              step="0.01"
+              class="input">
+
+          </div>
+
+
+          <div>
+
+            <label class="block text-sm font-bold mb-2">
+              Account Limit
+            </label>
+
+            <input
+              id="editLimit"
+              type="number"
+              step="0.01"
+              class="input">
+
+          </div>
+
+        </div>
+
+
+        <button
+          onclick="saveCustomerFinancials()"
+          class="btn btn-green w-full mt-4">
+
+          Save Balance & Limit
+
+        </button>
+
+
+        <button
+          onclick="deleteCustomerRecord()"
+          class="btn btn-red w-full mt-3">
+
+          Delete Customer Record
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
 
 </div>
 
 
 <!-- TOAST -->
 
-<div
-    id="toastContainer"
-    class="toast-container"
-></div>
+<div id="toast" class="toast hidden"></div>
 
 
 <script>
 
-/* =========================================================
-   FIREBASE CONFIG
-========================================================= */
+/* =====================================================
+   FIREBASE
+===================================================== */
 
 const firebaseConfig = {
-
-    apiKey:
-        "AIzaSyB6M6TtGnHPWOnDr9xO4JYJbx4qtZr9W2w",
-
-    authDomain:
-        "cashflowbank-9068.firebaseapp.com",
-
-    projectId:
-        "cashflowbank-9068",
-
-    storageBucket:
-        "cashflowbank-9068.firebasestorage.app",
-
-    messagingSenderId:
-        "38012287371",
-
-    appId:
-        "1:38012287371:web:e3e8df73166ae0fc84d78e"
-
+  apiKey: "AIzaSyB6M6TtGnHPWOnDr9xO4JYJbx4qtZr9W2w",
+  authDomain: "cashflowbank-9068.firebaseapp.com",
+  projectId: "cashflowbank-9068",
+  storageBucket: "cashflowbank-9068.firebasestorage.app",
+  messagingSenderId: "38012287371",
+  appId: "1:38012287371:web:e3e8df73166ae0fc84d78e"
 };
 
+firebase.initializeApp(firebaseConfig);
 
-firebase.initializeApp(
-    firebaseConfig
-);
+const db = firebase.firestore();
 
 
-const auth =
-    firebase.auth();
+/* =====================================================
+   ADMIN PASSWORD
+===================================================== */
 
+const DEFAULT_ADMIN_PASSWORD = "admin123";
 
-const db =
-    firebase.database();
+const ADMIN_PASSWORD_KEY =
+  "cashflowbank_admin_password";
 
 
-let accounts = [];
+let adminPassword =
+  localStorage.getItem(ADMIN_PASSWORD_KEY) ||
+  DEFAULT_ADMIN_PASSWORD;
 
 
-/* =========================================================
-   START
-========================================================= */
+let customers = [];
+let transactions = [];
+let selectedCustomerId = null;
 
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
 
-        lucide.createIcons();
-
-
-        document
-            .getElementById(
-                "adminLoginForm"
-            )
-            .addEventListener(
-                "submit",
-                loginAdmin
-            );
-
-
-        document
-            .getElementById(
-                "editForm"
-            )
-            .addEventListener(
-                "submit",
-                saveEdit
-            );
-
-
-        auth.onAuthStateChanged(
-            async user => {
-
-                if (user) {
-
-                    /*
-                      For production, verify an admin
-                      custom claim here.
-
-                      Example:
-
-                      const token =
-                          await user.getIdTokenResult();
-
-                      if (!token.claims.admin) {
-                          await auth.signOut();
-                          return;
-                      }
-                    */
-
-                    showAdmin(user);
-
-                    await loadAccounts();
-
-                } else {
-
-                    showLogin();
-
-                }
-
-            }
-        );
-
-    }
-);
-
-
-/* =========================================================
-   ADMIN LOGIN
-========================================================= */
-
-async function loginAdmin(event) {
-
-    event.preventDefault();
-
-
-    const email =
-        document
-            .getElementById(
-                "adminEmail"
-            )
-            .value
-            .trim();
-
-
-    const password =
-        document
-            .getElementById(
-                "adminPassword"
-            )
-            .value;
-
-
-    const button =
-        document
-            .getElementById(
-                "adminLoginBtn"
-            );
-
-
-    button.disabled = true;
-
-    button.textContent =
-        "Signing in...";
-
-
-    try {
-
-        await auth
-            .signInWithEmailAndPassword(
-                email,
-                password
-            );
-
-
-        toast(
-            "Admin signed in.",
-            "success"
-        );
-
-    } catch (error) {
-
-        console.error(error);
-
-        toast(
-            firebaseError(error),
-            "error"
-        );
-
-    } finally {
-
-        button.disabled = false;
-
-        button.innerHTML = `
-            <i data-lucide="log-in"></i>
-            Sign In
-        `;
-
-        lucide.createIcons();
-
-    }
-
-}
-
-
-/* =========================================================
-   SHOW ADMIN
-========================================================= */
-
-function showAdmin(user) {
-
-    document
-        .getElementById(
-            "loginView"
-        )
-        .classList.add("hidden");
-
-
-    document
-        .getElementById(
-            "adminApp"
-        )
-        .classList.remove("hidden");
-
-
-    document
-        .getElementById(
-            "adminEmailDisplay"
-        )
-        .textContent =
-        user.email || "Admin";
-
-
-    lucide.createIcons();
-
-}
-
-
-/* =========================================================
-   SHOW LOGIN
-========================================================= */
-
-function showLogin() {
-
-    document
-        .getElementById(
-            "adminApp"
-        )
-        .classList.add("hidden");
-
-
-    document
-        .getElementById(
-            "loginView"
-        )
-        .classList.remove("hidden");
-
-}
-
-
-/* =========================================================
-   LOAD ACCOUNTS
-========================================================= */
-
-async function loadAccounts() {
-
-    try {
-
-        const snapshot =
-            await db
-                .ref("accounts")
-                .once("value");
-
-
-        const data =
-            snapshot.val() || {};
-
-
-        accounts =
-            Object
-                .entries(data)
-                .map(
-                    ([id, account]) => ({
-                        id,
-                        ...account
-                    })
-                );
-
-
-        updateStats();
-
-        renderAccounts();
-
-        renderRecent();
-
-        renderPending();
-
-    } catch (error) {
-
-        console.error(error);
-
-        toast(
-            "Unable to load accounts.",
-            "error"
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   STATISTICS
-========================================================= */
-
-function updateStats() {
-
-    const total =
-        accounts.length;
-
-
-    const pending =
-        accounts.filter(
-            a =>
-                a.status === "pending"
-        ).length;
-
-
-    const approved =
-        accounts.filter(
-            a =>
-                a.status === "approved"
-        ).length;
-
-
-    const funds =
-        accounts.reduce(
-            (sum, a) =>
-                sum +
-                Number(
-                    a.balance || 0
-                ),
-            0
-        );
-
-
-    document.getElementById(
-        "totalAccounts"
-    ).textContent =
-        total;
-
-
-    document.getElementById(
-        "pendingAccounts"
-    ).textContent =
-        pending;
-
-
-    document.getElementById(
-        "approvedAccounts"
-    ).textContent =
-        approved;
-
-
-    document.getElementById(
-        "totalFunds"
-    ).textContent =
-        money(funds);
-
-}
-
-
-/* =========================================================
-   RENDER ACCOUNTS
-========================================================= */
-
-function renderAccounts() {
-
-    const table =
-        document.getElementById(
-            "accountsTable"
-        );
-
-
-    const search =
-        (
-            document.getElementById(
-                "searchAccounts"
-            )?.value || ""
-        )
-        .toLowerCase()
-        .trim();
-
-
-    const status =
-        document.getElementById(
-            "filterStatus"
-        )?.value || "all";
-
-
-    const filtered =
-        accounts.filter(
-            account => {
-
-                const searchable = [
-
-                    account.name,
-
-                    account.email,
-
-                    account.accountNumber
-
-                ]
-                    .filter(Boolean)
-                    .join(" ")
-                    .toLowerCase();
-
-
-                const searchMatch =
-                    !search ||
-                    searchable.includes(
-                        search
-                    );
-
-
-                const statusMatch =
-                    status === "all" ||
-                    account.status === status;
-
-
-                return (
-                    searchMatch &&
-                    statusMatch
-                );
-
-            }
-        );
-
-
-    if (!filtered.length) {
-
-        table.innerHTML = `
-
-            <tr>
-
-                <td
-                    colspan="8"
-                    class="text-center py-12 text-gray-500"
-                >
-                    No accounts found.
-                </td>
-
-            </tr>
-
-        `;
-
-        return;
-
-    }
-
-
-    table.innerHTML =
-        filtered
-            .sort(
-                (a,b) =>
-                    Number(
-                        b.createdAt || 0
-                    ) -
-                    Number(
-                        a.createdAt || 0
-                    )
-            )
-            .map(
-                account => `
-
-                <tr>
-
-                    <td>
-
-                        <div class="font-bold">
-                            ${escapeHtml(account.name || "Unknown")}
-                        </div>
-
-                        <div class="text-xs text-gray-500">
-                            ${escapeHtml(account.country || "")}
-                        </div>
-
-                    </td>
-
-
-                    <td>
-                        ${escapeHtml(account.email || "—")}
-                    </td>
-
-
-                    <td class="font-bold">
-                        ${escapeHtml(account.accountNumber || "—")}
-                    </td>
-
-
-                    <td>
-                        ${escapeHtml(account.accountType || "—")}
-                    </td>
-
-
-                    <td>
-                        ${statusBadge(account.status)}
-                    </td>
-
-
-                    <td class="font-bold">
-                        ${money(account.balance)}
-                    </td>
-
-
-                    <td>
-                        ${money(account.accountLimit)}
-                    </td>
-
-
-                    <td>
-
-                        <div class="flex gap-2">
-
-                            <button
-                                class="btn btn-primary btn-sm"
-                                onclick="editAccount('${account.id}')"
-                                title="Manage"
-                            >
-                                <i data-lucide="pencil"></i>
-                            </button>
-
-
-                            <button
-                                class="btn btn-danger btn-sm"
-                                onclick="deleteAccount('${account.id}')"
-                                title="Delete"
-                            >
-                                <i data-lucide="trash-2"></i>
-                            </button>
-
-                        </div>
-
-                    </td>
-
-                </tr>
-
-                `
-            )
-            .join("");
-
-
-    lucide.createIcons();
-
-}
-
-
-/* =========================================================
-   RECENT
-========================================================= */
-
-function renderRecent() {
-
-    const table =
-        document.getElementById(
-            "recentAccounts"
-        );
-
-
-    const recent =
-        [...accounts]
-            .sort(
-                (a,b) =>
-                    Number(
-                        b.createdAt || 0
-                    ) -
-                    Number(
-                        a.createdAt || 0
-                    )
-            )
-            .slice(0, 7);
-
-
-    if (!recent.length) {
-
-        table.innerHTML = `
-
-            <tr>
-
-                <td
-                    colspan="5"
-                    class="text-center py-10 text-gray-500"
-                >
-                    No accounts yet.
-                </td>
-
-            </tr>
-
-        `;
-
-        return;
-
-    }
-
-
-    table.innerHTML =
-        recent
-            .map(
-                account => `
-
-                <tr>
-
-                    <td class="font-bold">
-                        ${escapeHtml(account.name || "Unknown")}
-                    </td>
-
-                    <td>
-                        ${escapeHtml(account.accountNumber || "—")}
-                    </td>
-
-                    <td>
-                        ${escapeHtml(account.accountType || "—")}
-                    </td>
-
-                    <td>
-                        ${statusBadge(account.status)}
-                    </td>
-
-                    <td>
-                        ${formatDate(account.createdAt)}
-                    </td>
-
-                </tr>
-
-                `
-            )
-            .join("");
-
-
-    lucide.createIcons();
-
-}
-
-
-/* =========================================================
-   PENDING
-========================================================= */
-
-function renderPending() {
-
-    const container =
-        document.getElementById(
-            "pendingList"
-        );
-
-
-    const pending =
-        accounts.filter(
-            account =>
-                account.status === "pending"
-        );
-
-
-    if (!pending.length) {
-
-        container.innerHTML = `
-
-            <div class="card p-10 text-center lg:col-span-2">
-
-                <div class="w-14 h-14 mx-auto rounded-full bg-green-100 text-green-700 flex items-center justify-center">
-
-                    <i
-                        data-lucide="check-circle"
-                        class="w-7 h-7"
-                    ></i>
-
-                </div>
-
-
-                <h2 class="font-black text-lg mt-4">
-                    No Pending Accounts
-                </h2>
-
-
-                <p class="text-sm text-gray-500 mt-1">
-                    There are no accounts waiting for approval.
-                </p>
-
-            </div>
-
-        `;
-
-        lucide.createIcons();
-
-        return;
-
-    }
-
-
-    container.innerHTML =
-        pending
-            .map(
-                account => `
-
-                <div class="card p-6">
-
-                    <div class="flex justify-between gap-4">
-
-                        <div>
-
-                            <h2 class="font-black">
-                                ${escapeHtml(account.name || "Unknown")}
-                            </h2>
-
-                            <div class="text-sm text-gray-500 mt-1">
-                                ${escapeHtml(account.email || "—")}
-                            </div>
-
-                        </div>
-
-
-                        ${statusBadge(account.status)}
-
-                    </div>
-
-
-                    <div class="grid grid-cols-2 gap-4 mt-6">
-
-                        <div>
-
-                            <div class="text-xs text-gray-500">
-                                Account
-                            </div>
-
-                            <div class="font-bold mt-1">
-                                ${escapeHtml(account.accountNumber || "—")}
-                            </div>
-
-                        </div>
-
-
-                        <div>
-
-                            <div class="text-xs text-gray-500">
-                                Type
-                            </div>
-
-                            <div class="font-bold mt-1">
-                                ${escapeHtml(account.accountType || "—")}
-                            </div>
-
-                        </div>
-
-
-                        <div>
-
-                            <div class="text-xs text-gray-500">
-                                Country
-                            </div>
-
-                            <div class="font-bold mt-1">
-                                ${escapeHtml(account.country || "—")}
-                            </div>
-
-                        </div>
-
-
-                        <div>
-
-                            <div class="text-xs text-gray-500">
-                                Created
-                            </div>
-
-                            <div class="font-bold mt-1">
-                                ${formatDate(account.createdAt)}
-                            </div>
-
-                        </div>
-
-                    </div>
-
-
-                    <div class="flex flex-wrap gap-2 mt-6">
-
-                        <button
-                            class="btn btn-success"
-                            onclick="approveAccount('${account.id}')"
-                        >
-                            <i data-lucide="check"></i>
-                            Approve
-                        </button>
-
-
-                        <button
-                            class="btn btn-warning"
-                            onclick="declineAccount('${account.id}')"
-                        >
-                            <i data-lucide="x"></i>
-                            Decline
-                        </button>
-
-
-                        <button
-                            class="btn btn-secondary"
-                            onclick="editAccount('${account.id}')"
-                        >
-                            <i data-lucide="pencil"></i>
-                            Manage
-                        </button>
-
-                    </div>
-
-                </div>
-
-                `
-            )
-            .join("");
-
-
-    lucide.createIcons();
-
-}
-
-
-/* =========================================================
-   APPROVE
-========================================================= */
-
-async function approveAccount(id) {
-
-    const account =
-        findAccount(id);
-
-
-    if (!account) return;
-
-
-    if (
-        !confirm(
-            `Approve ${account.name || "this account"}?`
-        )
-    ) {
-        return;
-    }
-
-
-    try {
-
-        await db
-            .ref(
-                "accounts/" + id
-            )
-            .update({
-
-                status:
-                    "approved",
-
-                approvedAt:
-                    Date.now(),
-
-                updatedAt:
-                    Date.now()
-
-            });
-
-
-        await loadAccounts();
-
-
-        toast(
-            "Account approved.",
-            "success"
-        );
-
-    } catch (error) {
-
-        console.error(error);
-
-        toast(
-            "Unable to approve account.",
-            "error"
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   DECLINE
-========================================================= */
-
-async function declineAccount(id) {
-
-    const account =
-        findAccount(id);
-
-
-    if (!account) return;
-
-
-    if (
-        !confirm(
-            `Decline ${account.name || "this account"}?`
-        )
-    ) {
-        return;
-    }
-
-
-    try {
-
-        await db
-            .ref(
-                "accounts/" + id
-            )
-            .update({
-
-                status:
-                    "declined",
-
-                declinedAt:
-                    Date.now(),
-
-                updatedAt:
-                    Date.now()
-
-            });
-
-
-        await loadAccounts();
-
-
-        toast(
-            "Account declined.",
-            "success"
-        );
-
-    } catch (error) {
-
-        console.error(error);
-
-        toast(
-            "Unable to decline account.",
-            "error"
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   EDIT ACCOUNT
-========================================================= */
-
-function editAccount(id) {
-
-    const account =
-        findAccount(id);
-
-
-    if (!account) return;
-
-
-    document.getElementById(
-        "editId"
-    ).value =
-        id;
-
-
-    document.getElementById(
-        "editStatus"
-    ).value =
-        account.status ||
-        "pending";
-
-
-    document.getElementById(
-        "editType"
-    ).value =
-        account.accountType ||
-        "Savings";
-
-
-    document.getElementById(
-        "editBalance"
-    ).value =
-        Number(
-            account.balance || 0
-        );
-
-
-    document.getElementById(
-        "editLimit"
-    ).value =
-        Number(
-            account.accountLimit || 0
-        );
-
-
-    document
-        .getElementById(
-            "editModal"
-        )
-        .classList.remove(
-            "hidden"
-        );
-
-}
-
-
-/* =========================================================
-   SAVE EDIT
-========================================================= */
-
-async function saveEdit(event) {
-
-    event.preventDefault();
-
-
-    const id =
-        document.getElementById(
-            "editId"
-        ).value;
-
-
-    const status =
-        document.getElementById(
-            "editStatus"
-        ).value;
-
-
-    const accountType =
-        document.getElementById(
-            "editType"
-        ).value;
-
-
-    const balance =
-        Number(
-            document.getElementById(
-                "editBalance"
-            ).value
-        );
-
-
-    const accountLimit =
-        Number(
-            document.getElementById(
-                "editLimit"
-            ).value
-        );
-
-
-    if (
-        balance < 0 ||
-        accountLimit < 0
-    ) {
-
-        toast(
-            "Amounts cannot be negative.",
-            "error"
-        );
-
-        return;
-
-    }
-
-
-    try {
-
-        await db
-            .ref(
-                "accounts/" + id
-            )
-            .update({
-
-                status,
-
-                accountType,
-
-                balance,
-
-                accountLimit,
-
-                updatedAt:
-                    Date.now(),
-
-                updatedBy:
-                    auth.currentUser?.email ||
-                    ""
-
-            });
-
-
-        closeModal(
-            "editModal"
-        );
-
-
-        await loadAccounts();
-
-
-        toast(
-            "Account updated.",
-            "success"
-        );
-
-    } catch (error) {
-
-        console.error(error);
-
-        toast(
-            "Unable to update account.",
-            "error"
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   DELETE
-========================================================= */
-
-function deleteAccount(id) {
-
-    document.getElementById(
-        "deleteId"
-    ).value =
-        id;
-
-
-    document
-        .getElementById(
-            "deleteModal"
-        )
-        .classList.remove(
-            "hidden"
-        );
-
-}
-
-
-async function confirmDelete() {
-
-    const id =
-        document.getElementById(
-            "deleteId"
-        ).value;
-
-
-    const account =
-        findAccount(id);
-
-
-    if (!account) {
-
-        closeModal(
-            "deleteModal"
-        );
-
-        return;
-
-    }
-
-
-    if (
-        !confirm(
-            `Permanently delete ${account.name || "this account"}?`
-        )
-    ) {
-
-        return;
-
-    }
-
-
-    try {
-
-        /*
-          Delete customer account record.
-        */
-
-        await db
-            .ref(
-                "accounts/" + id
-            )
-            .remove();
-
-
-        /*
-          Delete demo transaction history.
-        */
-
-        await db
-            .ref(
-                "transactions/" + id
-            )
-            .remove();
-
-
-        /*
-          Remove account number reservation.
-        */
-
-        if (account.accountNumber) {
-
-            await db
-                .ref(
-                    "accountNumbers/" +
-                    account.accountNumber
-                )
-                .remove();
-
-        }
-
-
-        closeModal(
-            "deleteModal"
-        );
-
-
-        await loadAccounts();
-
-
-        toast(
-            "Account deleted.",
-            "success"
-        );
-
-    } catch (error) {
-
-        console.error(error);
-
-        toast(
-            "Unable to delete account.",
-            "error"
-        );
-
-    }
-
-}
-
-
-/* =========================================================
-   FIND
-========================================================= */
-
-function findAccount(id) {
-
-    return accounts.find(
-        account =>
-            String(account.id) ===
-            String(id)
-    );
-
-}
-
-
-/* =========================================================
-   NAVIGATION
-========================================================= */
-
-function showAdminSection(
-    section,
-    button
-) {
-
-    [
-        "overview",
-        "accounts",
-        "pending"
-    ].forEach(
-        name => {
-
-            document
-                .getElementById(
-                    "admin-" + name
-                )
-                .classList.toggle(
-                    "hidden",
-                    name !== section
-                );
-
-        }
-    );
-
-
-    document
-        .querySelectorAll(
-            "#adminSidebar .nav-item"
-        )
-        .forEach(
-            item =>
-                item.classList.remove(
-                    "active"
-                )
-        );
-
-
-    if (button) {
-
-        button.classList.add(
-            "active"
-        );
-
-    }
-
-
-    const titles = {
-
-        overview:
-            "Overview",
-
-        accounts:
-            "Customer Accounts",
-
-        pending:
-            "Pending Approval"
-
-    };
-
-
-    document.getElementById(
-        "adminTitle"
-    ).textContent =
-        titles[section] ||
-        "Overview";
-
-
-    if (
-        window.innerWidth <= 900
-    ) {
-
-        document
-            .getElementById(
-                "adminSidebar"
-            )
-            .classList.remove(
-                "open"
-            );
-
-    }
-
-}
-
-
-function toggleAdminSidebar() {
-
-    document
-        .getElementById(
-            "adminSidebar"
-        )
-        .classList.toggle(
-            "open"
-        );
-
-}
-
-
-/* =========================================================
-   LOGOUT
-========================================================= */
-
-async function logoutAdmin() {
-
-    await auth.signOut();
-
-}
-
-
-/* =========================================================
-   MODAL
-========================================================= */
-
-function closeModal(id) {
-
-    document
-        .getElementById(id)
-        .classList.add(
-            "hidden"
-        );
-
-}
-
-
-/* =========================================================
-   STATUS
-========================================================= */
-
-function statusBadge(status) {
-
-    const className =
-        status === "approved"
-            ? "status-approved"
-            : status === "declined"
-                ? "status-declined"
-                : "status-pending";
-
-
-    return `
-
-        <span class="status ${className}">
-            ${capitalize(status || "pending")}
-        </span>
-
-    `;
-
-}
-
-
-/* =========================================================
+/* =====================================================
    HELPERS
-========================================================= */
+===================================================== */
 
 function money(value) {
 
-    return new Intl.NumberFormat(
-        "en-US",
-        {
-            style: "currency",
-            currency: "USD"
-        }
-    ).format(
-        Number(value || 0)
-    );
-
-}
-
-
-function formatDate(timestamp) {
-
-    if (!timestamp) {
-        return "—";
-    }
-
-
-    return new Intl.DateTimeFormat(
-        "en-US",
-        {
-            year: "numeric",
-            month: "short",
-            day: "numeric",
-            hour: "numeric",
-            minute: "2-digit"
-        }
-    ).format(
-        new Date(timestamp)
-    );
-
-}
-
-
-function capitalize(value) {
-
-    if (!value) return "";
-
-    return value.charAt(0).toUpperCase() +
-        value.slice(1);
+  return new Intl.NumberFormat("en-US", {
+    style:"currency",
+    currency:"USD"
+  }).format(Number(value || 0));
 
 }
 
 
 function escapeHtml(value) {
 
-    return String(value ?? "")
-        .replace(
-            /&/g,
-            "&amp;"
-        )
-        .replace(
-            /</g,
-            "&lt;"
-        )
-        .replace(
-            />/g,
-            "&gt;"
-        )
-        .replace(
-            /"/g,
-            "&quot;"
-        )
-        .replace(
-            /'/g,
-            "&#039;"
-        );
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 
 }
 
 
-function firebaseError(error) {
+function showToast(message,type="success") {
 
-    const messages = {
+  const toast =
+    document.getElementById("toast");
 
-        "auth/invalid-credential":
-            "Incorrect admin email or password.",
+  toast.textContent = message;
 
-        "auth/user-not-found":
-            "Admin account was not found.",
+  toast.classList.remove("hidden");
 
-        "auth/wrong-password":
-            "Incorrect admin password.",
-
-        "auth/invalid-email":
-            "Enter a valid email address.",
-
-        "auth/too-many-requests":
-            "Too many attempts. Try again later."
-
-    };
+  toast.style.background =
+    type === "error"
+      ? "#b91c1c"
+      : type === "warning"
+        ? "#b45309"
+        : "#006c35";
 
 
-    return (
-        messages[error.code] ||
-        error.message ||
-        "Something went wrong."
+  setTimeout(() => {
+
+    toast.classList.add("hidden");
+
+  },3500);
+}
+
+
+/* =====================================================
+   ADMIN LOGIN
+===================================================== */
+
+function adminLogin(event) {
+
+  event.preventDefault();
+
+  const entered =
+    document.getElementById("adminPassword")
+      .value;
+
+
+  if(entered !== adminPassword) {
+
+    showToast(
+      "Incorrect admin password.",
+      "error"
     );
 
+    return;
+  }
+
+
+  sessionStorage.setItem(
+    "cashflow_admin_logged_in",
+    "true"
+  );
+
+
+  document.getElementById("adminLogin")
+    .classList.add("hidden");
+
+  document.getElementById("adminDashboard")
+    .classList.remove("hidden");
+
+
+  loadAdminData();
+
+  showToast("Welcome to the admin panel.");
+
 }
 
 
-function toast(
-    message,
-    type = ""
+function adminLogout() {
+
+  sessionStorage.removeItem(
+    "cashflow_admin_logged_in"
+  );
+
+  location.reload();
+
+}
+
+
+function toggleAdminPassword() {
+
+  const input =
+    document.getElementById("adminPassword");
+
+  input.type =
+    input.type === "password"
+      ? "text"
+      : "password";
+}
+
+
+/* =====================================================
+   PASSWORD CHANGE
+===================================================== */
+
+function changeAdminPassword(event) {
+
+  event.preventDefault();
+
+
+  const current =
+    document.getElementById("currentAdminPassword")
+      .value;
+
+
+  const newPassword =
+    document.getElementById("newAdminPassword")
+      .value;
+
+
+  const confirm =
+    document.getElementById("confirmAdminPassword")
+      .value;
+
+
+  if(current !== adminPassword) {
+
+    showToast(
+      "Current password is incorrect.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  if(newPassword.length < 6) {
+
+    showToast(
+      "New password must be at least 6 characters.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  if(newPassword !== confirm) {
+
+    showToast(
+      "New passwords do not match.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  adminPassword = newPassword;
+
+
+  localStorage.setItem(
+    ADMIN_PASSWORD_KEY,
+    newPassword
+  );
+
+
+  document.getElementById(
+    "currentAdminPassword"
+  ).value = "";
+
+
+  document.getElementById(
+    "newAdminPassword"
+  ).value = "";
+
+
+  document.getElementById(
+    "confirmAdminPassword"
+  ).value = "";
+
+
+  showToast(
+    "Admin password changed successfully."
+  );
+
+}
+
+
+/* =====================================================
+   ADMIN DATA
+===================================================== */
+
+function loadAdminData() {
+
+  db.collection("users")
+    .onSnapshot(snapshot => {
+
+      customers =
+        snapshot.docs.map(doc => ({
+          id:doc.id,
+          ...doc.data()
+        }));
+
+      updateStats();
+      renderCustomers();
+      renderOverview();
+
+    },error => {
+
+      console.error(error);
+
+      showToast(
+        "Unable to load customers. Check Firestore rules.",
+        "error"
+      );
+
+    });
+
+
+  db.collection("transactions")
+    .onSnapshot(snapshot => {
+
+      transactions =
+        snapshot.docs.map(doc => ({
+          id:doc.id,
+          ...doc.data()
+        }))
+        .sort((a,b) => {
+
+          const aTime =
+            a.createdAt?.toMillis?.() || 0;
+
+          const bTime =
+            b.createdAt?.toMillis?.() || 0;
+
+          return bTime-aTime;
+
+        });
+
+
+      renderTransactions();
+
+    });
+
+}
+
+
+/* =====================================================
+   STATS
+===================================================== */
+
+function updateStats() {
+
+  const total =
+    customers.length;
+
+
+  const pending =
+    customers.filter(
+      c => c.status === "pending"
+    ).length;
+
+
+  const approved =
+    customers.filter(
+      c => c.status === "approved"
+    ).length;
+
+
+  const declined =
+    customers.filter(
+      c => c.status === "declined"
+    ).length;
+
+
+  document.getElementById("statTotal")
+    .textContent = total;
+
+
+  document.getElementById("statPending")
+    .textContent = pending;
+
+
+  document.getElementById("statApproved")
+    .textContent = approved;
+
+
+  document.getElementById("statDeclined")
+    .textContent = declined;
+
+}
+
+
+/* =====================================================
+   OVERVIEW
+===================================================== */
+
+function renderOverview() {
+
+  const tbody =
+    document.getElementById("overviewCustomers");
+
+
+  const list =
+    [...customers]
+      .sort((a,b) => {
+
+        const aTime =
+          a.createdAt?.toMillis?.() || 0;
+
+        const bTime =
+          b.createdAt?.toMillis?.() || 0;
+
+        return bTime-aTime;
+
+      })
+      .slice(0,8);
+
+
+  tbody.innerHTML =
+    list.map(customer => `
+
+      <tr>
+
+        <td>
+          <div class="font-bold">
+            ${escapeHtml(customer.name || "—")}
+          </div>
+
+          <div class="text-xs text-gray-400">
+            ${escapeHtml(customer.email || "")}
+          </div>
+        </td>
+
+        <td>
+          ${escapeHtml(customer.accountNumber || "—")}
+        </td>
+
+        <td>
+          ${escapeHtml(customer.accountType || "—")}
+        </td>
+
+        <td>
+          ${statusBadge(customer.status)}
+        </td>
+
+        <td>
+          ${money(customer.balance)}
+        </td>
+
+      </tr>
+
+    `).join("");
+
+}
+
+
+/* =====================================================
+   CUSTOMER TABLE
+===================================================== */
+
+function renderCustomers() {
+
+  const tbody =
+    document.getElementById("customersTable");
+
+
+  const search =
+    (
+      document.getElementById("customerSearch")
+        ?.value || ""
+    )
+    .toLowerCase()
+    .trim();
+
+
+  const filter =
+    document.getElementById("statusFilter")
+      ?.value || "all";
+
+
+  const list =
+    customers.filter(customer => {
+
+      const matchesSearch =
+        !search ||
+
+        String(customer.name || "")
+          .toLowerCase()
+          .includes(search) ||
+
+        String(customer.email || "")
+          .toLowerCase()
+          .includes(search) ||
+
+        String(customer.accountNumber || "")
+          .includes(search);
+
+
+      const matchesStatus =
+        filter === "all" ||
+        customer.status === filter;
+
+
+      return matchesSearch && matchesStatus;
+
+    });
+
+
+  if(!list.length) {
+
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="7"
+          class="text-center py-12 text-gray-400">
+          No customers found.
+        </td>
+      </tr>
+    `;
+
+    return;
+  }
+
+
+  tbody.innerHTML =
+    list.map(customer => `
+
+      <tr>
+
+        <td>
+
+          <div class="font-bold">
+            ${escapeHtml(customer.name || "—")}
+          </div>
+
+          <div class="text-xs text-gray-400">
+            ${escapeHtml(customer.email || "")}
+          </div>
+
+        </td>
+
+
+        <td>
+          <span class="font-bold">
+            ${escapeHtml(customer.accountNumber || "—")}
+          </span>
+        </td>
+
+
+        <td>
+          ${escapeHtml(customer.accountType || "—")}
+        </td>
+
+
+        <td>
+          ${statusBadge(customer.status)}
+        </td>
+
+
+        <td>
+          ${money(customer.balance)}
+        </td>
+
+
+        <td>
+          ${money(customer.accountLimit)}
+        </td>
+
+
+        <td>
+
+          <div class="flex flex-wrap gap-2">
+
+            <button
+              class="btn btn-gray"
+              onclick="openCustomer('${customer.id}')">
+
+              View
+
+            </button>
+
+
+            ${
+              customer.status !== "approved"
+              ? `
+                <button
+                  class="btn btn-green"
+                  onclick="approveCustomer('${customer.id}')">
+                  Approve
+                </button>
+              `
+              : ""
+            }
+
+
+            ${
+              customer.status !== "declined"
+              ? `
+                <button
+                  class="btn btn-yellow"
+                  onclick="declineCustomer('${customer.id}')">
+                  Decline
+                </button>
+              `
+              : ""
+            }
+
+          </div>
+
+        </td>
+
+      </tr>
+
+    `).join("");
+
+}
+
+
+function statusBadge(status) {
+
+  const value = status || "pending";
+
+  const className =
+    value === "approved"
+      ? "status-approved"
+      : value === "declined"
+        ? "status-declined"
+        : "status-pending";
+
+
+  return `
+    <span class="status ${className}">
+      ${escapeHtml(
+        value.charAt(0).toUpperCase() +
+        value.slice(1)
+      )}
+    </span>
+  `;
+}
+
+
+/* =====================================================
+   CUSTOMER ACTIONS
+===================================================== */
+
+async function approveCustomer(id) {
+
+  if(!confirm("Approve this customer account?")) {
+    return;
+  }
+
+
+  try {
+
+    await db.collection("users")
+      .doc(id)
+      .update({
+
+        status:"approved",
+
+        updatedAt:
+          firebase.firestore.FieldValue.serverTimestamp()
+
+      });
+
+
+    showToast(
+      "Customer account approved."
+    );
+
+  } catch(error) {
+
+    console.error(error);
+
+    showToast(
+      "Unable to approve account.",
+      "error"
+    );
+
+  }
+}
+
+
+async function declineCustomer(id) {
+
+  if(!confirm("Decline this customer account?")) {
+    return;
+  }
+
+
+  try {
+
+    await db.collection("users")
+      .doc(id)
+      .update({
+
+        status:"declined",
+
+        updatedAt:
+          firebase.firestore.FieldValue.serverTimestamp()
+
+      });
+
+
+    showToast(
+      "Customer account declined."
+    );
+
+  } catch(error) {
+
+    console.error(error);
+
+    showToast(
+      "Unable to decline account.",
+      "error"
+    );
+
+  }
+}
+
+
+/* =====================================================
+   CUSTOMER MODAL
+===================================================== */
+
+function openCustomer(id) {
+
+  const customer =
+    customers.find(
+      item => item.id === id
+    );
+
+
+  if(!customer) return;
+
+
+  selectedCustomerId = id;
+
+
+  document.getElementById("customerModalContent")
+    .innerHTML = `
+
+      <div class="grid md:grid-cols-2 gap-5">
+
+        <div>
+          <div class="text-xs text-gray-400">
+            Full Name
+          </div>
+
+          <div class="font-bold mt-1">
+            ${escapeHtml(customer.name || "—")}
+          </div>
+        </div>
+
+
+        <div>
+          <div class="text-xs text-gray-400">
+            Email
+          </div>
+
+          <div class="font-bold mt-1 break-all">
+            ${escapeHtml(customer.email || "—")}
+          </div>
+        </div>
+
+
+        <div>
+          <div class="text-xs text-gray-400">
+            Account Number
+          </div>
+
+          <div class="font-bold mt-1">
+            ${escapeHtml(customer.accountNumber || "—")}
+          </div>
+        </div>
+
+
+        <div>
+          <div class="text-xs text-gray-400">
+            Account Type
+          </div>
+
+          <div class="font-bold mt-1">
+            ${escapeHtml(customer.accountType || "—")}
+          </div>
+        </div>
+
+
+        <div>
+          <div class="text-xs text-gray-400">
+            Country
+          </div>
+
+          <div class="font-bold mt-1">
+            ${escapeHtml(customer.country || "—")}
+          </div>
+        </div>
+
+
+        <div>
+          <div class="text-xs text-gray-400">
+            Status
+          </div>
+
+          <div class="mt-1">
+            ${statusBadge(customer.status)}
+          </div>
+        </div>
+
+      </div>
+
+    `;
+
+
+  document.getElementById("editBalance")
+    .value =
+      Number(customer.balance || 0);
+
+
+  document.getElementById("editLimit")
+    .value =
+      Number(customer.accountLimit || 0);
+
+
+  document.getElementById("customerModal")
+    .classList.remove("hidden");
+
+
+  lucide.createIcons();
+
+}
+
+
+function closeCustomerModal() {
+
+  document.getElementById("customerModal")
+    .classList.add("hidden");
+
+  selectedCustomerId = null;
+}
+
+
+/* =====================================================
+   SAVE BALANCE / LIMIT
+===================================================== */
+
+async function saveCustomerFinancials() {
+
+  if(!selectedCustomerId) return;
+
+
+  const balance =
+    Number(
+      document.getElementById("editBalance")
+        .value
+    );
+
+
+  const limit =
+    Number(
+      document.getElementById("editLimit")
+        .value
+    );
+
+
+  if(balance < 0 || limit < 0) {
+
+    showToast(
+      "Values cannot be negative.",
+      "error"
+    );
+
+    return;
+  }
+
+
+  try {
+
+    await db.collection("users")
+      .doc(selectedCustomerId)
+      .update({
+
+        balance,
+        accountLimit:limit,
+
+        updatedAt:
+          firebase.firestore.FieldValue.serverTimestamp()
+
+      });
+
+
+    showToast(
+      "Balance and account limit updated."
+    );
+
+    closeCustomerModal();
+
+  } catch(error) {
+
+    console.error(error);
+
+    showToast(
+      "Unable to update account.",
+      "error"
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   DELETE CUSTOMER RECORD
+===================================================== */
+
+async function deleteCustomerRecord() {
+
+  if(!selectedCustomerId) return;
+
+
+  const customer =
+    customers.find(
+      item => item.id === selectedCustomerId
+    );
+
+
+  if(!customer) return;
+
+
+  const confirmed =
+    confirm(
+      "Delete the Firestore customer record for " +
+      (customer.name || "this customer") +
+      "?\n\n" +
+      "This does not delete the customer's Firebase Authentication login."
+    );
+
+
+  if(!confirmed) return;
+
+
+  try {
+
+    await db.collection("users")
+      .doc(selectedCustomerId)
+      .delete();
+
+
+    showToast(
+      "Customer record deleted."
+    );
+
+    closeCustomerModal();
+
+  } catch(error) {
+
+    console.error(error);
+
+    showToast(
+      "Unable to delete customer record.",
+      "error"
+    );
+
+  }
+
+}
+
+
+/* =====================================================
+   TRANSACTIONS
+===================================================== */
+
+function renderTransactions() {
+
+  const tbody =
+    document.getElementById("transactionsTable");
+
+
+  if(!transactions.length) {
+
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="6"
+          class="text-center py-12 text-gray-400">
+          No transactions found.
+        </td>
+      </tr>
+    `;
+
+    return;
+  }
+
+
+  tbody.innerHTML =
+    transactions.map(tx => `
+
+      <tr>
+
+        <td>
+
+          <div class="font-bold">
+            ${escapeHtml(tx.userName || "Customer")}
+          </div>
+
+          <div class="text-xs text-gray-400">
+            ${escapeHtml(tx.userEmail || "")}
+          </div>
+
+        </td>
+
+
+        <td>
+
+          <div class="font-bold">
+            ${escapeHtml(tx.recipientName || "—")}
+          </div>
+
+          <div class="text-xs text-gray-400">
+            ${escapeHtml(tx.recipientAccount || "")}
+          </div>
+
+        </td>
+
+
+        <td>
+          <strong>
+            ${money(tx.amount)}
+          </strong>
+        </td>
+
+
+        <td>
+          ${statusBadge(tx.status)}
+        </td>
+
+
+        <td>
+          ${formatDate(tx.createdAt)}
+        </td>
+
+
+        <td>
+
+          ${
+            tx.status === "pending"
+            ? `
+              <div class="flex gap-2">
+
+                <button
+                  class="btn btn-green"
+                  onclick="completeTransaction('${tx.id}')">
+                  Complete
+                </button>
+
+                <button
+                  class="btn btn-red"
+                  onclick="declineTransaction('${tx.id}')">
+                  Decline
+                </button>
+
+              </div>
+            `
+            : "—"
+          }
+
+        </td>
+
+      </tr>
+
+    `).join("");
+
+}
+
+
+function formatDate(timestamp) {
+
+  if(!timestamp) return "—";
+
+  try {
+
+    const date =
+      timestamp.toDate
+        ? timestamp.toDate()
+        : new Date(timestamp);
+
+    return date.toLocaleString();
+
+  } catch {
+
+    return "—";
+  }
+}
+
+
+async function completeTransaction(id) {
+
+  if(!confirm("Mark this transfer as completed?")) {
+    return;
+  }
+
+
+  try {
+
+    await db.collection("transactions")
+      .doc(id)
+      .update({
+
+        status:"completed",
+
+        updatedAt:
+          firebase.firestore.FieldValue.serverTimestamp()
+
+      });
+
+
+    showToast(
+      "Transaction marked completed."
+    );
+
+  } catch(error) {
+
+    console.error(error);
+
+    showToast(
+      "Unable to update transaction.",
+      "error"
+    );
+
+  }
+}
+
+
+async function declineTransaction(id) {
+
+  if(!confirm("Decline this transfer?")) {
+    return;
+  }
+
+
+  try {
+
+    await db.collection("transactions")
+      .doc(id)
+      .update({
+
+        status:"declined",
+
+        updatedAt:
+          firebase.firestore.FieldValue.serverTimestamp()
+
+      });
+
+
+    showToast(
+      "Transaction declined."
+    );
+
+  } catch(error) {
+
+    console.error(error);
+
+    showToast(
+      "Unable to update transaction.",
+      "error"
+    );
+
+  }
+}
+
+
+/* =====================================================
+   ADMIN NAVIGATION
+===================================================== */
+
+function adminPage(page) {
+
+  const pages = [
+    "overview",
+    "customers",
+    "transactions",
+    "settings"
+  ];
+
+
+  pages.forEach(name => {
+
+    document.getElementById(
+      "adminPage-"+name
+    ).classList.toggle(
+      "hidden",
+      name !== page
+    );
+
+  });
+
+
+  document
+    .querySelectorAll("[data-admin-page]")
+    .forEach(button => {
+
+      button.classList.toggle(
+        "active",
+        button.dataset.adminPage === page
+      );
+
+    });
+
+
+  closeAdminSidebar();
+}
+
+
+function toggleAdminSidebar() {
+
+  document.getElementById("adminSidebar")
+    .classList.toggle("open");
+
+}
+
+
+function closeAdminSidebar() {
+
+  document.getElementById("adminSidebar")
+    .classList.remove("open");
+
+}
+
+
+/* =====================================================
+   START
+===================================================== */
+
+lucide.createIcons();
+
+
+if(
+  sessionStorage.getItem(
+    "cashflow_admin_logged_in"
+  ) === "true"
 ) {
 
-    const container =
-        document.getElementById(
-            "toastContainer"
-        );
+  document.getElementById("adminLogin")
+    .classList.add("hidden");
 
+  document.getElementById("adminDashboard")
+    .classList.remove("hidden");
 
-    const element =
-        document.createElement(
-            "div"
-        );
-
-
-    element.className =
-        "toast " + type;
-
-
-    element.textContent =
-        message;
-
-
-    container.appendChild(
-        element
-    );
-
-
-    setTimeout(
-        () => element.remove(),
-        3500
-    );
+  loadAdminData();
 
 }
 
