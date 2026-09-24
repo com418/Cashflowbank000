@@ -1,7 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cash Flow Bank - Your Goals. Our Priority.</title>
     <style>
         :root {
@@ -9,22 +10,46 @@
             --accent-green: #00c853;
             --button-green: #008744;
             --button-hover: #006c35;
+            --accent-red: #ef4444;
+            --bg-color: #f4f7f6;
+            --card-bg: #ffffff;
+            --text-main: #333333;
+            --text-muted: #666666;
+            --border-color: #e2e8f0;
+            --sidebar-width: 260px;
+        }
+
+        [data-theme="dark"] {
+            --primary-dark: #001810;
+            --bg-color: #0b1310;
+            --card-bg: #13221b;
+            --text-main: #f1f5f9;
+            --text-muted: #94a3b8;
+            --border-color: #1e3328;
         }
 
         body { 
             margin: 0; 
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
-            background: #ffffff; 
-            color: #333; 
+            background: var(--bg-color); 
+            color: var(--text-main); 
+            transition: background 0.3s, color 0.3s;
         }
 
-        header {
+        /* --- VIEW CONTROLLER --- */
+        .app-view { display: none; }
+        .app-view.active { display: block; }
+
+        /* ==========================================
+           1. LANDING PAGE STYLES
+           ========================================== */
+        .landing-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 20px 60px;
-            background: #fff;
-            border-bottom: 1px solid #eee;
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
         }
 
         .logo-area {
@@ -42,25 +67,25 @@
             font-weight: 800;
             font-size: 1.3rem;
             letter-spacing: 0.5px;
-            color: #002b1d;
+            color: var(--text-main);
         }
         .logo-title span { color: var(--button-green); }
-        .logo-sub { font-size: 0.72rem; color: #555; font-weight: 600; }
+        .logo-sub { font-size: 0.72rem; color: var(--text-muted); font-weight: 600; }
 
-        nav {
+        .landing-nav {
             display: flex;
             align-items: center;
             gap: 30px;
         }
 
-        nav a {
-            color: #333;
+        .landing-nav a {
+            color: var(--text-main);
             text-decoration: none;
             font-size: 0.95rem;
             font-weight: 500;
         }
 
-        nav a.active {
+        .landing-nav a.active {
             color: var(--button-green);
             border-bottom: 2px solid var(--button-green);
             padding-bottom: 4px;
@@ -78,23 +103,12 @@
         }
         .open-account-btn:hover { background: var(--button-hover); }
 
-        /* Hero Section with Real Skyscraper Bank Background */
         .hero-section {
             background: linear-gradient(135deg, rgba(0,43,29,0.88) 0%, rgba(0,77,51,0.82) 100%), url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&q=80&w=1920') center/cover no-repeat;
             position: relative;
             padding: 60px 60px 100px 60px;
             color: #fff;
             overflow: hidden;
-        }
-
-        .hero-section::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            height: 60px;
-            background: linear-gradient(to top, #ffffff, transparent);
         }
 
         .main-container { 
@@ -132,8 +146,7 @@
         .feature-item h4 { margin: 0 0 4px 0; font-size: 1.02rem; color: #fff; }
         .feature-item p { margin: 0; font-size: 0.88rem; color: #ccc; }
 
-        /* Unified Card Container */
-        .card { 
+        .landing-card { 
             background: #fff; 
             color: #333; 
             padding: 35px; 
@@ -142,7 +155,7 @@
             box-shadow: 0 20px 40px rgba(0,0,0,0.3); 
             box-sizing: border-box;
         }
-        
+
         .card-header-area {
             display: flex;
             align-items: center;
@@ -150,10 +163,9 @@
             margin-bottom: 8px;
         }
 
-        .card h2 { margin: 0 0 4px 0; color: #002b1d; font-size: 1.7rem; }
+        .landing-card h2 { margin: 0 0 4px 0; color: #002b1d; font-size: 1.7rem; }
         .card-subtitle { font-size: 0.85rem; color: #666; margin-bottom: 20px; }
 
-        /* Tab Switcher */
         .form-switch-tabs {
             display: flex;
             background: #f0f4f1;
@@ -176,7 +188,7 @@
 
         .switch-tab.active {
             background: #fff;
-            color: var(--primary-dark);
+            color: #002b1d;
             box-shadow: 0 2px 6px rgba(0,0,0,0.08);
         }
 
@@ -232,7 +244,6 @@
         }
         .options-row a { color: var(--button-green); text-decoration: none; font-weight: 600; }
 
-        /* Bottom Feature Grid */
         .features-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -243,12 +254,12 @@
         }
 
         .feature-card {
-            background: #fff;
+            background: var(--card-bg);
             padding: 35px 20px;
             border-radius: 12px;
             text-align: center;
             box-shadow: 0 4px 15px rgba(0,0,0,0.04);
-            border: 1px solid #f0f0f0;
+            border: 1px solid var(--border-color);
         }
 
         .feature-card-icon {
@@ -262,11 +273,11 @@
             margin: 0 auto 18px auto;
         }
 
-        .feature-card h3 { font-size: 1.1rem; color: #002b1d; margin: 0 0 8px 0; }
-        .feature-card p { font-size: 0.85rem; color: #666; margin: 0 0 15px 0; line-height: 1.5; }
+        .feature-card h3 { font-size: 1.1rem; color: var(--text-main); margin: 0 0 8px 0; }
+        .feature-card p { font-size: 0.85rem; color: var(--text-muted); margin: 0 0 15px 0; line-height: 1.5; }
         .feature-card a { color: var(--button-green); text-decoration: none; font-size: 0.85rem; font-weight: 600; display: inline-flex; align-items: center; gap: 4px; }
 
-        footer {
+        .landing-footer {
             background: #001f14;
             color: #888;
             padding: 40px 60px;
@@ -277,236 +288,959 @@
             border-top: 1px solid rgba(255,255,255,0.05);
         }
 
-        .footer-logo-group {
+        /* ==========================================
+           2. DASHBOARD VIEW STYLES
+           ========================================== */
+        .dashboard-layout {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        aside {
+            width: var(--sidebar-width);
+            background: var(--card-bg);
+            border-right: 1px solid var(--border-color);
+            position: fixed;
+            height: 100vh;
+            top: 0;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
+            transition: transform 0.3s ease;
+        }
+
+        .sidebar-brand {
+            padding: 24px 20px;
             display: flex;
             align-items: center;
             gap: 12px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .sidebar-brand h2 {
+            font-size: 1.1rem;
+            margin: 0;
+            font-weight: 800;
+            color: var(--text-main);
+        }
+        .sidebar-brand span { color: var(--accent-green); }
+
+        .sidebar-menu-scroll {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px 0;
+        }
+
+        .menu-category {
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: var(--text-muted);
+            padding: 0 20px 8px 20px;
+            font-weight: 700;
+        }
+
+        .sidebar-menu {
+            list-style: none;
+            padding: 0;
+            margin: 0 0 20px 0;
+        }
+
+        .sidebar-menu li a {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 24px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .sidebar-menu li.active a, .sidebar-menu li a:hover {
+            background: rgba(0, 200, 83, 0.1);
+            color: var(--accent-green);
+            border-left: 4px solid var(--accent-green);
+        }
+
+        .main-wrapper {
+            margin-left: var(--sidebar-width);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+        }
+
+        header.dashboard-header {
+            background: var(--card-bg);
+            border-bottom: 1px solid var(--border-color);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 90;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .hamburger-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            display: none;
+            color: var(--text-main);
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            color: var(--text-main);
+            padding: 6px;
+            border-radius: 50%;
+            transition: background 0.2s;
+        }
+        .icon-btn:hover { background: rgba(0,0,0,0.05); }
+
+        .notification-badge {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            width: 8px;
+            height: 8px;
+            background: var(--accent-red);
+            border-radius: 50%;
+        }
+
+        .profile-dropdown-container {
+            position: relative;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .user-avatar {
+            width: 38px;
+            height: 38px;
+            background: var(--button-green);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 50px;
+            right: 0;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+            width: 200px;
+            display: none;
+            z-index: 110;
+        }
+        .dropdown-menu.show { display: block; }
+        .dropdown-menu a {
+            display: block;
+            padding: 12px 18px;
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 0.85rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .dropdown-menu a:hover { background: rgba(0,200,83,0.08); }
+
+        .content-body {
+            padding: 30px;
+            max-width: 1300px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+
+        .welcome-title {
+            margin: 0 0 5px 0;
+            font-size: 1.6rem;
+            font-weight: 800;
+        }
+        .welcome-subtitle {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 25px;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+
+        .dashboard-grid-equal {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+            margin-bottom: 25px;
+        }
+
+        .balance-card {
+            background: linear-gradient(135deg, #002b1d 0%, #004d33 100%);
+            color: white;
+            border-radius: 20px;
+            padding: 30px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0,43,29,0.2);
+        }
+
+        .balance-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
             margin-bottom: 15px;
+            font-size: 0.85rem;
+            color: #a0f0d0;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .balance-amount-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .balance-amount {
+            font-size: 2.4rem;
+            font-weight: 800;
+            margin: 0;
+        }
+
+        .balance-details-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255,255,255,0.12);
+            font-size: 0.82rem;
+        }
+
+        .balance-details-grid div span {
+            display: block;
+            color: #a0f0d0;
+            margin-bottom: 3px;
+        }
+        .balance-details-grid div strong {
+            font-size: 0.95rem;
+        }
+
+        .btn-transfer {
+            background: var(--accent-green);
+            color: #002b1d;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: 700;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+        .btn-transfer:hover { opacity: 0.9; }
+
+        .card-box {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+            margin-bottom: 25px;
+        }
+
+        .card-header-flex {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .card-header-flex h3 {
+            margin: 0;
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        .btn-sm-outline {
+            background: none;
+            border: 1px solid var(--border-color);
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            color: var(--text-main);
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 600;
+        }
+        .btn-sm-outline:hover { background: rgba(0,0,0,0.03); }
+
+        .account-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .account-item:last-child { border-bottom: none; }
+
+        .account-badge {
+            background: #dcfce7;
+            color: #166534;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.72rem;
+            font-weight: 700;
+        }
+
+        .shortcuts-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .shortcut-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 18px 10px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            color: var(--text-main);
+        }
+
+        .shortcut-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--accent-green);
+            box-shadow: 0 6px 16px rgba(0,200,83,0.1);
+        }
+
+        .shortcut-icon {
+            width: 44px;
+            height: 44px;
+            background: rgba(0,135,68,0.08);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px auto;
+            color: var(--button-green);
+        }
+
+        .shortcut-card span {
+            font-size: 0.82rem;
+            font-weight: 600;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        th {
+            text-align: left;
+            padding: 12px 14px;
+            color: var(--text-muted);
+            font-weight: 600;
+            border-bottom: 2px solid var(--border-color);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+
+        td {
+            padding: 14px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .badge-status {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .status-success { background: #dcfce7; color: #166534; }
+        .status-pending { background: #fef9c3; color: #854d0e; }
+
+        @media(max-width: 1024px) {
+            aside { transform: translateX(-100%); }
+            aside.mobile-open { transform: translateX(0); }
+            .main-wrapper { margin-left: 0; }
+            .hamburger-btn { display: block; }
+            .dashboard-grid, .dashboard-grid-equal { grid-template-columns: 1fr; }
+            .shortcuts-grid { grid-template-columns: repeat(2, 1fr); }
+            .landing-header { padding: 15px 20px; }
+            .hero-section { padding: 40px 20px; }
+            .main-container { flex-direction: column; gap: 30px; }
+            .left-hero, .landing-card { width: 100%; }
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="logo-area">
-            <svg width="45" height="45" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="50" cy="50" r="50" fill="#008744"/>
-                <path d="M68 32H40C33.3726 32 28 37.3726 28 44V56C28 62.6274 33.3726 68 40 68H55V56H42V44H68V68H72V44C72 37.3726 66.6274 32 60 32H68Z" fill="#ffffff"/>
-            </svg>
-            <div class="logo-text-group">
-                <div class="logo-title">CASH FLOW <span>BANK</span></div>
-                <div class="logo-sub">Your Goals. Our Priority.</div>
+    <!-- ==========================================
+       VIEW 1: LANDING & AUTH PAGE
+       ========================================== -->
+    <div id="landingView" class="app-view active">
+        <header class="landing-header">
+            <div class="logo-area">
+                <svg width="45" height="45" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <circle cx="50" cy="50" r="50" fill="#008744"/>
+                    <path d="M68 32H40C33.3726 32 28 37.3726 28 44V56C28 62.6274 33.3726 68 40 68H55V56H42V44H68V68H72V44C72 37.3726 66.6274 32 60 32H68Z" fill="#ffffff"/>
+                </svg>
+                <div class="logo-text-group">
+                    <div class="logo-title">CASH FLOW <span>BANK</span></div>
+                    <div class="logo-sub">Your Goals. Our Priority.</div>
+                </div>
+            </div>
+            <nav class="landing-nav">
+                <a href="#" class="active">Home</a>
+                <a href="#">About</a>
+                <a href="#">Services</a>
+                <a href="#">Blog</a>
+                <a href="#">Contact</a>
+            </nav>
+            <a href="admin.html" class="open-account-btn">Admin Panel</a>
+        </header>
+
+        <section class="hero-section">
+            <div class="main-container">
+                <div class="left-hero">
+                    <h3>Welcome to Cash Flow Bank</h3>
+                    <h1>Modern Financial Services, <span>Made Simple.</span></h1>
+                    <p>Secure, convenient and reliable banking solutions to help you manage your money, reach your goals and build a better future[span_0](start_span)[span_0](end_span).</p>
+                    
+                    <div class="feature-item">
+                        <div class="feature-icon-box">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00c853" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                        </div>
+                        <div>
+                            <h4>Safe & Secure</h4>
+                            <p>Your money is protected with advanced security layers[span_1](start_span)[span_1](end_span).</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon-box">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00c853" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                        </div>
+                        <div>
+                            <h4>Fast & Easy</h4>
+                            <p>Banking made simple and seamless[span_2](start_span)[span_2](end_span).</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon-box">
+                            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00c853" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                        </div>
+                        <div>
+                            <h4>24/7 Support</h4>
+                            <p>We're always here for you anytime you need us[span_3](start_span)[span_3](end_span).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Unified Interactive Card -->
+                <div class="landing-card">
+                    <div class="card-header-area">
+                        <svg width="30" height="30" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="50" cy="50" r="50" fill="#008744"/>
+                            <path d="M68 32H40C33.3726 32 28 37.3726 28 44V56C28 62.6274 33.3726 68 40 68H55V56H42V44H68V68H72V44C72 37.3726 66.6274 32 60 32H68Z" fill="#ffffff"/>
+                        </svg>
+                        <div>
+                            <div style="font-weight:800; font-size:0.95rem; color:#002b1d;">CASH FLOW <span style="color:#008744;">BANK</span></div>
+                            <div style="font-size:0.68rem; color:#666;">Your Goals. Our Priority.</div>
+                        </div>
+                    </div>
+
+                    <div class="form-switch-tabs">
+                        <div class="switch-tab active" onclick="switchLandingTab('register')">Create Account</div>
+                        <div class="switch-tab" onclick="switchLandingTab('login')">Log In</div>
+                    </div>
+
+                    <!-- Registration Panel -->
+                    <div id="registerPanel" class="form-panel active">
+                        <h2>Create Account</h2>
+                        <div class="card-subtitle">Fill in the details below to get started.</div>
+                        
+                        <form id="regForm" onsubmit="handleAuthSubmit(event, 'register')">
+                            <div class="input-group">
+                                <label>Account Type</label>
+                                <select id="account_type" required>
+                                    <option value="Savings Account">Savings Account</option>
+                                    <option value="Current Account">Current Account</option>
+                                    <option value="Business Account">Business Account</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label>Country</label>
+                                <select id="country" required>
+                                    <option value="United States">United States</option>
+                                    <option value="Nigeria">Nigeria</option>
+                                    <option value="United Kingdom">United Kingdom</option>
+                                    <option value="Canada">Canada</option>
+                                </select>
+                            </div>
+                            <div class="input-group">
+                                <label>Full Name</label>
+                                <input type="text" id="full_name" placeholder="Enter your full name" required>
+                            </div>
+                            <div class="input-group">
+                                <label>Email Address</label>
+                                <input type="email" id="email" placeholder="you@example.com" required>
+                            </div>
+                            <div class="input-group">
+                                <label>Password</label>
+                                <input type="password" id="password" placeholder="Create a password" required>
+                            </div>
+                            <div class="input-group">
+                                <label>PIN</label>
+                                <input type="password" id="pin" maxlength="4" placeholder="Enter 4-digit PIN" required>
+                            </div>
+
+                            <div class="terms-row">
+                                <input type="checkbox" id="terms" required>
+                                <label for="terms" style="display:inline; font-weight:normal; color:#666;">I agree to the <a href="#">Terms & Conditions</a></label>
+                            </div>
+
+                            <button type="submit" class="btn">
+                                Create Account 
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Login Panel -->
+                    <div id="loginPanel" class="form-panel">
+                        <h2>Welcome Back</h2>
+                        <div class="card-subtitle">Log in to your account to continue[span_4](start_span)[span_4](end_span).</div>
+                        
+                        <form id="loginForm" onsubmit="handleAuthSubmit(event, 'login')">
+                            <div class="input-group">
+                                <label>Account Number or Email</label>
+                                <input type="text" id="login_identifier" placeholder="10-digit account number or email" required>
+                            </div>
+                            <div class="input-group">
+                                <label>Password</label>
+                                <input type="password" id="login_password" placeholder="Your password" required>
+                            </div>
+
+                            <div class="options-row">
+                                <div>
+                                    <input type="checkbox" id="remember"> <label for="remember" style="color:#666;">Remember me</label>
+                                </div>
+                                <a href="#">Forgot password?</a>
+                            </div>
+
+                            <button type="submit" class="btn">
+                                Log In 
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+                            </button>
+                        </form>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-card-icon">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#008744" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                </div>
+                <h3>Savings Accounts</h3>
+                <p>Grow your savings with competitive rates[span_5](start_span)[span_5](end_span).</p>
+                <a href="#">Learn More &rarr;</a>
+            </div>
+            <div class="feature-card">
+                <div class="feature-card-icon">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#008744" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                </div>
+                <h3>Current Accounts</h3>
+                <p>Manage your daily transactions with ease[span_6](start_span)[span_6](end_span).</p>
+                <a href="#">Learn More &rarr;</a>
+            </div>
+            <div class="feature-card">
+                <div class="feature-card-icon">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#008744" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+                </div>
+                <h3>Money Transfers</h3>
+                <p>Send and receive money locally and globally[span_7](start_span)[span_7](end_span).</p>
+                <a href="#">Learn More &rarr;</a>
+            </div>
+            <div class="feature-card">
+                <div class="feature-card-icon">
+                    <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#008744" stroke-width="2"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
+                </div>
+                <h3>Business Banking</h3>
+                <p>Powering your business to greater heights[span_8](start_span)[span_8](end_span).</p>
+                <a href="#">Learn More &rarr;</a>
             </div>
         </div>
-        <nav>
-            <a href="index.html" class="active">Home</a>
-            <a href="#">About</a>
-            <a href="#">Services</a>
-            <a href="#">Blog</a>
-            <a href="#">Contact</a>
-        </nav>
-        <a href="admin.html" class="open-account-btn">Admin Panel</a>
-    </header>
 
-    <section class="hero-section">
-        <div class="main-container">
-            <div class="left-hero">
-                <h3>Welcome to Cash Flow Bank</h3>
-                <h1>Modern Financial Services, <span>Made Simple.</span></h1>
-                <p>Secure, convenient and reliable banking solutions to help you manage your money, reach your goals and build a better future[span_1](start_span)[span_1](end_span).</p>
-                
-                <div class="feature-item">
-                    <div class="feature-icon-box">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00c853" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-                    </div>
-                    <div>
-                        <h4>Safe & Secure</h4>
-                        <p>Your money is protected with advanced security layers[span_2](start_span)[span_2](end_span).</p>
-                    </div>
-                </div>
-                <div class="feature-item">
-                    <div class="feature-icon-box">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00c853" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-                    </div>
-                    <div>
-                        <h4>Fast & Easy</h4>
-                        <p>Banking made simple and seamless[span_3](start_span)[span_3](end_span).</p>
-                    </div>
-                </div>
-                <div class="feature-item">
-                    <div class="feature-icon-box">
-                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#00c853" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-                    </div>
-                    <div>
-                        <h4>24/7 Support</h4>
-                        <p>We're always here for you anytime you need us[span_4](start_span)[span_4](end_span).</p>
-                    </div>
-                </div>
+        <footer class="landing-footer">
+            <div>
+                <div style="font-weight:700; color:#fff; margin-bottom:5px;">CASH FLOW <span style="color:#00c853;">BANK</span></div>
+                © 2026 Cash Flow Bank. All rights reserved[span_9](start_span)[span_9](end_span).
             </div>
+            <div style="display: flex; align-items: center; gap: 20px;">
+                <a href="#" style="color:#aaa; text-decoration:none;">Privacy Policy</a>
+                <a href="#" style="color:#aaa; text-decoration:none;">Terms & Conditions</a>
+                <span style="color: #00c853;">Secure Banking | FDIC Insured</span>
+            </div>
+        </footer>
+    </div>
 
-            <!-- Unified Interactive Card containing both Register and Login Panels -->
-            <div class="card">
-                <div class="card-header-area">
-                    <svg width="30" height="30" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+
+    <!-- ==========================================
+       VIEW 2: USER DASHBOARD PAGE
+       ========================================== -->
+    <div id="dashboardView" class="app-view">
+        <div class="dashboard-layout">
+            <!-- Sidebar / Drawer -->
+            <aside id="sidebarNav">
+                <div class="sidebar-brand">
+                    <svg width="34" height="34" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                         <circle cx="50" cy="50" r="50" fill="#008744"/>
                         <path d="M68 32H40C33.3726 32 28 37.3726 28 44V56C28 62.6274 33.3726 68 40 68H55V56H42V44H68V68H72V44C72 37.3726 66.6274 32 60 32H68Z" fill="#ffffff"/>
                     </svg>
                     <div>
-                        <div style="font-weight:800; font-size:0.95rem; color:#002b1d;">CASH FLOW <span style="color:#008744;">BANK</span></div>
-                        <div style="font-size:0.68rem; color:#666;">Your Goals. Our Priority.</div>
+                        <h2>CASH FLOW <span>BANK</span></h2>
                     </div>
                 </div>
 
-                <!-- Tab Switcher -->
-                <div class="form-switch-tabs">
-                    <div class="switch-tab active" onclick="switchTab('register')">Create Account</div>
-                    <div class="switch-tab" onclick="switchTab('login')">Log In</div>
+                <div class="sidebar-menu-scroll">
+                    <div class="menu-category">Main</div>
+                    <ul class="sidebar-menu">
+                        <li class="active"><a href="#">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                            Dashboard
+                        </a></li>
+                        <li><a href="#">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg>
+                            Account Summary
+                        </a></li>
+                        <li><a href="#">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                            Transfer
+                        </a></li>
+                        <li><a href="#">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+                            Deposit Check
+                        </a></li>
+                        <li><a href="#">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                            Deposit Crypto
+                        </a></li>
+                    </ul>
+
+                    <div class="menu-category">Services</div>
+                    <ul class="sidebar-menu">
+                        <li><a href="#">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+                            Loans
+                        </a></li>
+                        <li><a href="#">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
+                            Cards
+                        </a></li>
+                    </ul>
+
+                    <div class="menu-category">Account</div>
+                    <ul class="sidebar-menu">
+                        <li><a href="#">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                            KYC Verification
+                        </a></li>
+                        <li><a href="#">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                            Profile
+                        </a></li>
+                        <li><a href="#">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                            Settings
+                        </a></li>
+                        <li><a href="#">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                            Support
+                        </a></li>
+                        <li><a href="#" onclick="logoutToLanding(event)" style="color: var(--accent-red);">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                            Sign Out
+                        </a></li>
+                    </ul>
                 </div>
+            </aside>
 
-                <!-- Registration Panel -->
-                <div id="registerPanel" class="form-panel active">
-                    <h2>Create Account</h2>
-                    <div class="card-subtitle">Fill in the details below to get started.</div>
-                    
-                    <form id="regForm">
-                        <div class="input-group">
-                            <label>Account Type</label>
-                            <select id="account_type" required>
-                                <option value="Savings Account">Savings Account</option>
-                                <option value="Current Account">Current Account</option>
-                                <option value="Business Account">Business Account</option>
-                            </select>
-                        </div>
-                        <div class="input-group">
-                            <label>Country</label>
-                            <select id="country" required>
-                                <option value="United States">United States</option>
-                                <option value="Nigeria">Nigeria</option>
-                                <option value="United Kingdom">United Kingdom</option>
-                                <option value="Canada">Canada</option>
-                            </select>
-                        </div>
-                        <div class="input-group">
-                            <label>Full Name</label>
-                            <input type="text" id="full_name" placeholder="Enter your full name" required>
-                        </div>
-                        <div class="input-group">
-                            <label>Email Address</label>
-                            <input type="email" id="email" placeholder="you@example.com" required>
-                        </div>
-                        <div class="input-group">
-                            <label>Password</label>
-                            <input type="password" id="password" placeholder="Create a password" required>
-                        </div>
-                        <div class="input-group">
-                            <label>PIN</label>
-                            <input type="password" id="pin" maxlength="4" placeholder="Enter 4-digit PIN" required>
-                        </div>
-
-                        <div class="terms-row">
-                            <input type="checkbox" id="terms" required>
-                            <label for="terms" style="display:inline; font-weight:normal; color:#666;">I agree to the <a href="#">Terms & Conditions</a></label>
-                        </div>
-
-                        <button type="submit" class="btn">
-                            Create Account 
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            <!-- Main Workspace -->
+            <div class="main-wrapper">
+                <header class="dashboard-header">
+                    <div class="header-left">
+                        <button class="hamburger-btn" onclick="toggleSidebar()">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
                         </button>
-                    </form>
-                </div>
-
-                <!-- Login Panel -->
-                <div id="loginPanel" class="form-panel">
-                    <h2>Welcome Back</h2>
-                    <div class="card-subtitle">Log in to your account to continue[span_5](start_span)[span_5](end_span).</div>
-                    
-                    <form id="loginForm">
-                        <div class="input-group">
-                            <label>Account Number or Email</label>
-                            <input type="text" id="login_identifier" placeholder="10-digit account number or email" required>
-                        </div>
-                        <div class="input-group">
-                            <label>Password</label>
-                            <input type="password" id="login_password" placeholder="Your password" required>
-                        </div>
-
-                        <div class="options-row">
-                            <div>
-                                <input type="checkbox" id="remember"> <label for="remember" style="color:#666;">Remember me</label>
+                        <div style="font-weight: 700; font-size: 1rem;">Dashboard</div>
+                    </div>
+                    <div class="header-right">
+                        <button class="icon-btn" onclick="toggleTheme()" title="Toggle Theme">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+                        </button>
+                        <button class="icon-btn" onclick="toggleNotifications()">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+                            <span class="notification-badge"></span>
+                        </button>
+                        <div class="profile-dropdown-container" onclick="toggleProfileDropdown()">
+                            <div class="user-avatar" id="userAvatarInitial">JS</div>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
+                            
+                            <div id="profileDropdown" class="dropdown-menu">
+                                <a href="#">Profile Settings</a>
+                                <a href="#">Account Status</a>
+                                <a href="#" onclick="logoutToLanding(event)" style="color: var(--accent-red);">Log Out</a>
                             </div>
-                            <a href="#">Forgot password?</a>
+                        </div>
+                    </div>
+                </header>
+
+                <div class="content-body">
+                    <h1 class="welcome-title">Dashboard</h1>
+                    <div class="welcome-subtitle" id="welcomeUserText">Good Evening, John Smith</div>
+
+                    <!-- Total Balance Card & My Accounts Grid -->
+                    <div class="dashboard-grid">
+                        <div class="balance-card">
+                            <div class="balance-header">
+                                <span>Total Balance</span>
+                                <button onclick="toggleBalance()" style="background:none; border:none; color:#a0f0d0; cursor:pointer;" title="Hide/Show Balance">
+                                    <svg id="eyeIcon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                                </button>
+                            </div>
+                            <div class="balance-amount-row">
+                                <h2 class="balance-amount" id="balanceText">$42,850.00</h2>
+                            </div>
+                            <div style="margin-bottom: 20px;">
+                                <a href="#" class="btn-transfer">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/></svg>
+                                    Transfer Funds
+                                </a>
+                            </div>
+                            <div class="balance-details-grid">
+                                <div>
+                                    <span>Linked Cards</span>
+                                    <strong>2 Active</strong>
+                                </div>
+                                <div>
+                                    <span>Account Holder</span>
+                                    <strong id="holderNameDisplay">John Smith</strong>
+                                </div>
+                                <div>
+                                    <span>Primary A/C</span>
+                                    <strong>****8271</strong>
+                                </div>
+                            </div>
                         </div>
 
-                        <button type="submit" class="btn">
-                            Log In 
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-                        </button>
-                    </form>
+                        <div class="card-box" style="margin-bottom:0;">
+                            <div class="card-header-flex">
+                                <h3>My Accounts</h3>
+                                <button class="btn-sm-outline">+ Add</button>
+                            </div>
+                            <div class="account-item">
+                                <div>
+                                    <div style="font-weight: 700; font-size: 0.95rem;">Savings Account</div>
+                                    <div style="font-size: 0.78rem; color: var(--text-muted);">****8271 • USD</div>
+                                </div>
+                                <div style="text-align: right;">
+                                    <div style="font-weight: 700;">$38,200.00</div>
+                                    <span class="account-badge">Primary</span>
+                                </div>
+                            </div>
+                            <div class="account-item">
+                                <div>
+                                    <div style="font-weight: 700; font-size: 0.95rem;">Business Checking</div>
+                                    <div style="font-size: 0.78rem; color: var(--text-muted);">****9104 • USD</div>
+                                </div>
+                                <div style="text-align: right;">
+                                    <div style="font-weight: 700;">$4,650.00</div>
+                                    <span style="font-size: 0.75rem; color: var(--text-muted);">Active</span>
+                                </div>
+                            </div>
+                            <div style="margin-top: 15px; text-align: right;">
+                                <a href="#" style="font-size: 0.82rem; color: var(--button-green); font-weight: 600; text-decoration: none;">View all accounts &rarr;</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Shortcuts -->
+                    <div class="shortcuts-grid">
+                        <a href="#" class="shortcut-card">
+                            <div class="shortcut-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></div>
+                            <span>Send Money</span>
+                        </a>
+                        <a href="#" class="shortcut-card">
+                            <div class="shortcut-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg></div>
+                            <span>Pay Bills</span>
+                        </a>
+                        <a href="#" class="shortcut-card">
+                            <div class="shortcut-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/></svg></div>
+                            <span>History</span>
+                        </a>
+                        <a href="#" class="shortcut-card">
+                            <div class="shortcut-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div>
+                            <span>Airtime</span>
+                        </a>
+                    </div>
+
+                    <!-- Analytics Grid -->
+                    <div class="dashboard-grid-equal">
+                        <div class="card-box">
+                            <div class="card-header-flex">
+                                <h3>Cashflow Analytics</h3>
+                                <select class="btn-sm-outline" style="background:var(--card-bg);">
+                                    <option>1 Month</option>
+                                    <option>6 Months</option>
+                                    <option>1 Year</option>
+                                </select>
+                            </div>
+                            <div style="display:flex; justify-content:space-between; margin-bottom:15px; font-size:0.85rem;">
+                                <div><span style="color:var(--text-muted);">Credit:</span> <strong>$12,400</strong></div>
+                                <div><span style="color:var(--text-muted);">Debit:</span> <strong>$4,210</strong></div>
+                            </div>
+                            <div style="height: 180px; background: rgba(0,200,83,0.04); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: var(--text-muted); font-size: 0.85rem;">
+                                [Interactive Cashflow Line Chart Preview]
+                            </div>
+                        </div>
+
+                        <div class="card-box">
+                            <div class="card-header-flex">
+                                <h3>Spending Overview</h3>
+                                <button class="btn-sm-outline">Filter</button>
+                            </div>
+                            <div style="display: flex; flex-direction: column; gap: 10px; font-size: 0.85rem;">
+                                <div style="display:flex; justify-content:space-between;"><span>Food & Dining (35%)</span><strong>$1,470</strong></div>
+                                <div style="display:flex; justify-content:space-between;"><span>Bills & Utilities (25%)</span><strong>$1,050</strong></div>
+                                <div style="display:flex; justify-content:space-between;"><span>Shopping (20%)</span><strong>$840</strong></div>
+                                <div style="display:flex; justify-content:space-between;"><span>Transfers & Other (20%)</span><strong>$850</strong></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Transactions & Credit Score -->
+                    <div class="dashboard-grid">
+                        <div class="card-box" style="margin-bottom:0;">
+                            <div class="card-header-flex">
+                                <h3>Recent Transactions</h3>
+                                <a href="#" class="btn-sm-outline">View All</a>
+                            </div>
+                            <table>
+                               <thead>
+                                    <tr>
+                                        <th>Description</th>
+                                        <th>Date</th>
+                                        <th>Amount</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>
+                                            <div style="font-weight:600;">Amazon Marketplace</div>
+                                            <div style="font-size:0.75rem; color:var(--text-muted);">Shopping</div>
+                                        </td>
+                                        <td>Sep 24, 2026</td>
+                                        <td style="color: var(--accent-red); font-weight:600;">-$142.50</td>
+                                        <td><span class="badge-status status-success">Success</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div style="font-weight:600;">Direct Deposit - Employer</div>
+                                            <div style="font-size:0.75rem; color:var(--text-muted);">Credit</div>
+                                        </td>
+                                        <td>Sep 22, 2026</td>
+                                        <td style="color: var(--accent-green); font-weight:600;">+$4,200.00</td>
+                                        <td><span class="badge-status status-success">Success</span></td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <div style="font-weight:600;">Electricity Utility Bill</div>
+                                            <div style="font-size:0.75rem; color:var(--text-muted);">Bills</div>
+                                        </td>
+                                        <td>Sep 20, 2026</td>
+                                        <td style="color: var(--accent-red); font-weight:600;">-$85.20</td>
+                                        <td><span class="badge-status status-pending">Pending</span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div>
+                            <div class="card-box" style="margin-bottom: 25px;">
+                                <div class="card-header-flex">
+                                    <h3>Credit Score</h3>
+                                    <span style="font-size: 0.75rem; background: #dcfce7; color: #166534; padding: 3px 8px; border-radius:10px; font-weight:700;">Excellent</span>
+                                </div>
+                                <div style="text-align: center; padding: 10px 0;">
+                                    <div style="font-size: 2.5rem; font-weight: 800; color: var(--button-green);">785</div>
+                                    <p style="font-size: 0.8rem; color: var(--text-muted); margin: 5px 0 0 0;">Out of 850 • Updated Today</p>
+                                </div>
+                            </div>
+
+                            <div class="card-box" style="margin-bottom: 0;">
+                                <div class="card-header-flex">
+                                    <h3>Active Loans</h3>
+                                    <button class="btn-sm-outline">Apply</button>
+                                </div>
+                                <div style="text-align: center; padding: 15px 0; color: var(--text-muted); font-size: 0.85rem;">
+                                    No active loan. You are eligible for up to $25,000 pre-approved.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
-
             </div>
-        </div>
-    </section>
-
-    <!-- Bottom Feature Grid -->
-    <div class="features-grid">
-        <div class="feature-card">
-            <div class="feature-card-icon">
-                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#008744" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            </div>
-            <h3>Savings Accounts</h3>
-            <p>Grow your savings with competitive rates[span_6](start_span)[span_6](end_span).</p>
-            <a href="#">Learn More &rarr;</a>
-        </div>
-        <div class="feature-card">
-            <div class="feature-card-icon">
-                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#008744" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
-            </div>
-            <h3>Current Accounts</h3>
-            <p>Manage your daily transactions with ease[span_7](start_span)[span_7](end_span).</p>
-            <a href="#">Learn More &rarr;</a>
-        </div>
-        <div class="feature-card">
-            <div class="feature-card-icon">
-                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#008744" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-            </div>
-            <h3>Money Transfers</h3>
-            <p>Send and receive money locally and globally[span_8](start_span)[span_8](end_span).</p>
-            <a href="#">Learn More &rarr;</a>
-        </div>
-        <div class="feature-card">
-            <div class="feature-card-icon">
-                <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="#008744" stroke-width="2"><path d="M3 18v-6a9 9 0 0 1 18 0v6"/><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"/></svg>
-            </div>
-            <h3>Business Banking</h3>
-            <p>Powering your business to greater heights[span_9](start_span)[span_9](end_span).</p>
-            <a href="#">Learn More &rarr;</a>
         </div>
     </div>
 
-    <footer>
-        <div>
-            <div class="footer-logo-group">
-                <svg width="30" height="30" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <circle cx="50" cy="50" r="50" fill="#00c853"/>
-                    <path d="M68 32H40C33.3726 32 28 37.3726 28 44V56C28 62.6274 33.3726 68 40 68H55V56H42V44H68V68H72V44C72 37.3726 66.6274 32 60 32H68Z" fill="#002b1d"/>
-                </svg>
-                <div>
-                    <div style="font-weight:700; color:#fff;">CASH FLOW <span style="color:#00c853;">BANK</span></div>
-                    <div style="font-size: 0.65rem; color: #888;">Your Goals. Our Priority.</div>
-                </div>
-            </div>
-            © 2026 Cash Flow Bank. All rights reserved[span_10](start_span)[span_10](end_span).
-        </div>
-        <div style="display: flex; align-items: center; gap: 20px;">
-            <a href="#" style="color:#aaa; text-decoration:none;">Privacy Policy</a>
-            <a href="#" style="color:#aaa; text-decoration:none;">Terms & Conditions</a>
-            <span style="color: #00c853; display:inline-flex; align-items:center; gap:5px;">Secure Banking | FDIC Insured</span>
-        </div>
-    </footer>
-
+    <!-- ==========================================
+       JAVASCRIPT APP CONTROLLERS
+       ========================================== -->
     <script>
-        function switchTab(tabName) {
+        // Tab switcher for Landing Page (Register / Login)
+        function switchLandingTab(tabName) {
             const tabs = document.querySelectorAll('.switch-tab');
             tabs.forEach(t => t.classList.remove('active'));
 
@@ -519,6 +1253,94 @@
             } else {
                 tabs[1].classList.add('active');
                 document.getElementById('loginPanel').classList.add('active');
+            }
+        }
+
+        // Handle Authentication Form Submit -> Transitions to Dashboard View
+        function handleAuthSubmit(event, type) {
+            event.preventDefault();
+            
+            let userName = "John Smith";
+            if (type === 'register') {
+                const nameInput = document.getElementById('full_name').value;
+                if (nameInput) userName = nameInput;
+            } else {
+                const identifier = document.getElementById('login_identifier').value;
+                if (identifier && !identifier.includes('@')) {
+                    userName = "Account Holder";
+                }
+            }
+
+            // Update user name in dashboard
+            document.getElementById('welcomeUserText').textContent = "Good Evening, " + userName;
+            document.getElementById('holderNameDisplay').textContent = userName;
+            
+            // Set Avatar Initials
+            const initials = userName.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase();
+            document.getElementById('userAvatarInitial').textContent = initials || "JS";
+
+            // Switch views from Landing to Dashboard
+            document.getElementById('landingView').classList.remove('active');
+            document.getElementById('dashboardView').classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        // Logout -> Transitions back to Landing Page
+        function logoutToLanding(event) {
+            event.preventDefault();
+            document.getElementById('dashboardView').classList.remove('active');
+            document.getElementById('landingView').classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        // Dashboard Sidebar & Drawer Toggle
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebarNav');
+            sidebar.classList.toggle('mobile-open');
+        }
+
+        // Dashboard Profile Dropdown Toggle
+        function toggleProfileDropdown() {
+            const dropdown = document.getElementById('profileDropdown');
+            dropdown.classList.toggle('show');
+        }
+
+        // Total Balance Hide/Show Toggle
+        let isBalanceVisible = true;
+        function toggleBalance() {
+            const balanceText = document.getElementById('balanceText');
+            if (isBalanceVisible) {
+                balanceText.textContent = "$••••••••";
+                isBalanceVisible = false;
+            } else {
+                balanceText.textContent = "$42,850.00";
+                isBalanceVisible = true;
+            }
+        }
+
+        // Theme Toggle (Light / Dark)
+        function toggleTheme() {
+            const html = document.documentElement;
+            const currentTheme = html.getAttribute('data-theme');
+            if (currentTheme === 'light') {
+                html.setAttribute('data-theme', 'dark');
+            } else {
+                html.setAttribute('data-theme', 'light');
+            }
+        }
+
+        // Notifications Alert
+        function toggleNotifications() {
+            alert("You have 2 unread security notifications.");
+        }
+
+        // Close dropdowns on outside click
+        window.onclick = function(event) {
+            if (!event.target.closest('.profile-dropdown-container')) {
+                const dropdown = document.getElementById('profileDropdown');
+                if (dropdown && dropdown.classList.contains('show')) {
+                    dropdown.classList.remove('show');
+                }
             }
         }
     </script>
