@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Cash Flow Bank - Admin Control Panel</title>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; background: #f4f7f6; margin: 0; padding: 20px; }
+        .header-bar { display: flex; justify-content: space-between; align-items: center; background: #002b1d; color: #fff; padding: 15px 25px; border-radius: 8px; }
+        .header-bar h2 { margin: 0; font-size: 1.4rem; }
+        
+        table { width: 100%; border-collapse: collapse; background: #fff; margin-top: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); border-radius: 8px; overflow: hidden; }
+        th, td { padding: 14px 12px; border-bottom: 1px solid #eee; text-align: left; font-size: 0.9rem; }
+        th { background: #004d33; color: white; text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px; }
+        
+        input, select { padding: 8px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 0.85rem; }
+        
+        button { padding: 8px 14px; background: #008744; color: white; border: none; cursor: pointer; border-radius: 4px; font-weight: 600; }
+        button:hover { background: #006c35; }
+        button.delete { background: #d32f2f; }
+        button.delete:hover { background: #b71c1c; }
+
+        #login-box { max-width: 380px; margin: 120px auto; background: white; padding: 40px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; }
+        #login-box h3 { margin-top: 0; color: #002b1d; }
+        #login-box input { width: 100%; margin-bottom: 15px; padding: 12px; }
+        #login-box button { width: 100%; padding: 12px; }
+
+        .status-badge { padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: bold; text-transform: uppercase; }
+    </style>
+</head>
+<body>
+
+    <div id="login-box">
+        <h3>Cash Flow Bank</h3>
+        <p style="color:#666; font-size:0.85rem; margin-bottom:20px;">Secure Administrative Portal</p>
+        <input type="text" id="adminUser" placeholder="Admin Username">
+        <input type="password" id="adminPass" placeholder="Admin Password">
+        <button onclick="adminLogin()">Sign In to Dashboard</button>
+    </div>
+
+    <div id="panel" style="display:none;">
+        <div class="header-bar">
+            <h2>Cash Flow Bank — Admin Management Panel</h2>
+            <button onclick="location.reload()" style="background:#444;">Log Out</button>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Account & User Details</th>
+                    <th>Status / Approval</th>
+                    <th>Balance ($)</th>
+                    <th>Limit ($)</th>
+                    <th>Creation Date / Year</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody id="userTableBody"></tbody>
+        </table>
+    </div>
+
+    <script>
+        async function adminLogin() {
+            const res = await fetch('/api/admin/login', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    username: document.getElementById('adminUser').value,
+                    password: document.getElementById('adminPass').value
+                })
+            });
+            if (res.ok) {
+                document.getElementById('login-box').style.display = 'none';
+                document.getElementById('panel').style.display = 'block';
+                loadUsers();
+            } else {
+                alert('Invalid admin credentials.');
+            }
+        }
+
+        async function loadUsers() {
+            const res = await fetch('/api/admin/users');
+            const users = await res.json();
+            const tbody = document.getElementById('userTableBody');
+            tbody.innerHTML = '';
+
+            if (users.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" style="text-align:center; color:#888;">No bank accounts registered yet.</td></tr>`;
+                return;
+            }
+
+            users.forEach(u => {
+                tbody.innerHTML += `
+                    <tr>
+                        <td>
+                            <b>Acc: ${u.account_number}</b><br>
+                            <span style="font-size:1rem; color:#222;">${u.full_name}</span><br>
+                            <small style="color:#666;">${u.email} | ${u.account_type} (${u.country})</small>
+                        </td>
+                        <td>
+                            <select id="status_${u.id}">
+                                <option value="pending" ${u.status === 'pending' ? 'selected' : ''}>Pending (Hold Approval)</option>
+                                <option value="approved" ${u.status === 'approved' ? 'selected' : ''}>Approved (Active)</option>
+                                <option value="frozen" ${u.status === 'frozen' ? 'selected' : ''}>Frozen (Locked)</option>
+                            </select>
+                        </td>
+                        <td><input type="number" step="any" id="balance_${u.id}" value="${u.balance}" style="width:100px;"></td>
+                        <td><input type="number" step="any" id="limit_${u.id}" value="${u.account_limit}" style="width:100px;"></td>
+                        <td>
+                            <input type="text" id="date_${u.id}" value="${u.created_at}" style="width:170px;" title="Edit date, day or year freely">
+                        </td>
+                        <td>
+                            <button onclick="updateUser('${u.id}')">Save Changes</button>
+                            <button class="delete" onclick="deleteUser('${u.id}')">Delete</button>
+                        </td>
+                    </tr>
+                `;
+            });
+        }
+
+        async function updateUser(id) {
+            const status = document.getElementById(`status_${id}`).value;
+            const balance = document.getElementById(`balance_${id}`).value;
+            const account_limit = document.getElementById(`limit_${id}`).value;
+            const created_at = document.getElementById(`date_${id}`).value;
+
+            const res = await fetch('/api/admin/update-user', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ userId: id, status, balance, account_limit, created_at })
+            });
+
+            if (res.ok) {
+                alert('Account updated successfully!');
+                loadUsers();
+            } else {
+                alert('Failed to update account.');
+            }
+        }
+
+        async function deleteUser(id) {
+            if (confirm('Are you sure you want to permanently delete this bank account?')) {
+                const res = await fetch(`/api/admin/delete-user/${id}`, { method: 'DELETE' });
+                if (res.ok) {
+                    loadUsers();
+                } else {
+                    alert('Failed to delete account.');
+                }
+            }
+        }
+    </script>
+</body>
+</html>
