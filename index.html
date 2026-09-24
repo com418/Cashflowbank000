@@ -80,14 +80,13 @@
         }
 
         .hero-section {
-            background: linear-gradient(135deg, #002b1d 0%, #004d33 100%), url('city-bg.jpg') center/cover;
+            background: linear-gradient(135deg, rgba(0,43,29,0.9) 0%, rgba(0,77,51,0.85) 100%), url('city-bg.jpg') center/cover;
             position: relative;
             padding: 60px 60px 80px 60px;
             color: #fff;
             overflow: hidden;
         }
 
-        /* Subtle wavy bottom accent matching design */
         .hero-section::after {
             content: '';
             position: absolute;
@@ -207,7 +206,7 @@
         .footer-link { text-align: center; font-size: 0.85rem; color: #666; }
         .footer-link a { color: var(--button-green); text-decoration: none; font-weight: bold; }
 
-        /* Bottom Feature Grid (Image 4 / 5 style) */
+        /* Bottom Feature Grid */
         .features-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -264,7 +263,6 @@
 
     <header>
         <div class="logo-area">
-            <!-- Inline SVG Logo Symbol matching Image 4/5 -->
             <svg width="42" height="42" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <circle cx="50" cy="50" r="50" fill="#008744"/>
                 <path d="M68 32H40C33.3726 32 28 37.3726 28 44V56C28 62.6274 33.3726 68 40 68H55V56H42V44H68V68H72V44C72 37.3726 66.6274 32 60 32H68Z" fill="#ffffff"/>
@@ -444,42 +442,5 @@
             </span>
         </div>
     </footer>
-
-    <script>
-        document.getElementById('regForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const btn = document.getElementById('submitBtn');
-            btn.disabled = true;
-            btn.innerText = 'Creating Account...';
-
-            try {
-                const res = await fetch('/api/register', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        account_type: document.getElementById('account_type').value,
-                        country: document.getElementById('country').value,
-                        full_name: document.getElementById('full_name').value,
-                        email: document.getElementById('email').value,
-                        password: document.getElementById('password').value,
-                        pin: document.getElementById('pin').value
-                    })
-                });
-                const data = await res.json();
-                if (res.ok) {
-                    alert(data.message);
-                    window.location.href = `verify.html?email=${encodeURIComponent(document.getElementById('email').value)}`;
-                } else {
-                    alert(data.error || 'Registration failed');
-                    btn.disabled = false;
-                    btn.innerHTML = `Create Account <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>`;
-                }
-            } catch (err) {
-                alert('Network connection error.');
-                btn.disabled = false;
-                btn.innerHTML = `Create Account <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>`;
-            }
-        });
-    </script>
 </body>
 </html>
