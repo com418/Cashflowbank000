@@ -417,10 +417,6 @@ button{
 
 <body>
 
-<!-- =========================
-     LOADING SCREEN
-========================= -->
-
 <div id="loadingScreen">
     <div class="loading-inner">
 
@@ -450,10 +446,6 @@ button{
     </div>
 </div>
 
-
-<!-- =========================
-     AUTH PAGE
-========================= -->
 
 <div id="authPage" class="auth-background hidden">
 
@@ -486,8 +478,6 @@ button{
 
         </div>
 
-
-        <!-- LOGIN -->
 
         <div id="loginBox">
 
@@ -524,10 +514,7 @@ button{
 
             </form>
 
-            <div
-                id="loginMessage"
-                class="text-sm mt-4"
-            ></div>
+            <div id="loginMessage" class="text-sm mt-4"></div>
 
             <button
                 onclick="forgotPassword()"
@@ -551,8 +538,6 @@ button{
 
         </div>
 
-
-        <!-- REGISTER -->
 
         <div id="registerBox" class="hidden">
 
@@ -630,10 +615,7 @@ button{
 
             </form>
 
-            <div
-                id="registerMessage"
-                class="text-sm mt-4"
-            ></div>
+            <div id="registerMessage" class="text-sm mt-4"></div>
 
             <p class="text-sm text-gray-500 mt-5">
 
@@ -655,13 +637,7 @@ button{
 </div>
 
 
-<!-- =========================
-     APPLICATION
-========================= -->
-
 <div id="application" class="hidden">
-
-    <!-- SIDEBAR -->
 
     <aside id="sidebar" class="sidebar">
 
@@ -857,11 +833,7 @@ button{
     </aside>
 
 
-    <!-- MAIN CONTENT -->
-
     <main class="main-content">
-
-        <!-- TOPBAR -->
 
         <header class="topbar">
 
@@ -885,10 +857,7 @@ button{
                         Welcome back
                     </div>
 
-                    <div
-                        id="headerName"
-                        class="font-black"
-                    >
+                    <div id="headerName" class="font-black">
                         Customer
                     </div>
 
@@ -947,8 +916,6 @@ button{
 
         <div class="content">
 
-
-            <!-- DASHBOARD -->
 
             <section id="page-dashboard">
 
@@ -1045,8 +1012,6 @@ button{
                     </div>
 
 
-                    <!-- CREDIT SCORE -->
-
                     <div class="card p-6">
 
                         <div class="flex justify-between">
@@ -1098,18 +1063,13 @@ button{
                 </div>
 
 
-                <!-- INFO CARDS -->
-
                 <div class="grid sm:grid-cols-2 xl:grid-cols-4 gap-4 mt-5">
 
                     <div class="card p-5">
                         <div class="text-xs text-gray-500">
                             Account created
                         </div>
-                        <div
-                            id="createdDate"
-                            class="font-black mt-2"
-                        >
+                        <div id="createdDate" class="font-black mt-2">
                             —
                         </div>
                     </div>
@@ -1119,10 +1079,7 @@ button{
                         <div class="text-xs text-gray-500">
                             Country
                         </div>
-                        <div
-                            id="dashboardCountry"
-                            class="font-black mt-2"
-                        >
+                        <div id="dashboardCountry" class="font-black mt-2">
                             —
                         </div>
                     </div>
@@ -1132,10 +1089,7 @@ button{
                         <div class="text-xs text-gray-500">
                             Account status
                         </div>
-                        <div
-                            id="dashboardStatus"
-                            class="font-black mt-2 capitalize"
-                        >
+                        <div id="dashboardStatus" class="font-black mt-2 capitalize">
                             —
                         </div>
                     </div>
@@ -1145,18 +1099,13 @@ button{
                         <div class="text-xs text-gray-500">
                             Transactions
                         </div>
-                        <div
-                            id="transactionCount"
-                            class="font-black mt-2"
-                        >
+                        <div id="transactionCount" class="font-black mt-2">
                             0
                         </div>
                     </div>
 
                 </div>
 
-
-                <!-- QUICK ACTIONS -->
 
                 <div class="card p-6 mt-5">
 
@@ -1203,8 +1152,6 @@ button{
                 </div>
 
 
-                <!-- RECENT -->
-
                 <div class="card p-6 mt-5">
 
                     <div class="flex justify-between items-center mb-4">
@@ -1230,8 +1177,6 @@ button{
 
             </section>
 
-
-            <!-- ACCOUNT SUMMARY -->
 
             <section id="page-accounts" class="hidden">
 
@@ -1353,8 +1298,6 @@ button{
             </section>
 
 
-            <!-- TRANSFER -->
-
             <section id="page-transfer" class="hidden">
 
                 <h1 class="text-3xl font-black">
@@ -1436,10 +1379,7 @@ button{
                     </form>
 
 
-                    <div
-                        id="transferMessage"
-                        class="text-sm mt-4"
-                    ></div>
+                    <div id="transferMessage" class="text-sm mt-4"></div>
 
                     <div class="text-xs text-gray-400 mt-4">
                         Demo platform — no real money is transferred.
@@ -1449,8 +1389,6 @@ button{
 
             </section>
 
-
-            <!-- HISTORY -->
 
             <section id="page-history" class="hidden">
 
@@ -1473,8 +1411,6 @@ button{
 
             </section>
 
-
-            <!-- PROFILE -->
 
             <section id="page-profile" class="hidden">
 
@@ -1519,20 +1455,14 @@ button{
                         </label>
 
 
-                        <div
-                            id="photoMessage"
-                            class="text-xs text-gray-500 mt-3"
-                        ></div>
+                        <div id="photoMessage" class="text-xs text-gray-500 mt-3"></div>
 
                     </div>
 
 
                     <div class="card p-6">
 
-                        <form
-                            id="profileForm"
-                            class="grid md:grid-cols-2 gap-4"
-                        >
+                        <form id="profileForm" class="grid md:grid-cols-2 gap-4">
 
                             <div>
                                 <label class="text-sm font-bold">
@@ -1577,10 +1507,7 @@ button{
                                     Country
                                 </label>
 
-                                <select
-                                    id="editCountry"
-                                    class="input mt-1"
-                                >
+                                <select id="editCountry" class="input mt-1">
                                     <option>Nigeria</option>
                                     <option>United States</option>
                                     <option>Canada</option>
@@ -1630,10 +1557,7 @@ button{
                                 Account number
                             </span>
 
-                            <b
-                                id="profileAccount"
-                                class="block mt-1"
-                            >
+                            <b id="profileAccount" class="block mt-1">
                                 —
                             </b>
                         </div>
@@ -1644,10 +1568,7 @@ button{
                                 Account created
                             </span>
 
-                            <b
-                                id="profileCreated"
-                                class="block mt-1"
-                            >
+                            <b id="profileCreated" class="block mt-1">
                                 —
                             </b>
                         </div>
@@ -1658,10 +1579,7 @@ button{
                                 Account status
                             </span>
 
-                            <b
-                                id="profileStatus"
-                                class="block mt-1 capitalize"
-                            >
+                            <b id="profileStatus" class="block mt-1 capitalize">
                                 —
                             </b>
                         </div>
@@ -1685,23 +1603,13 @@ button{
 </div>
 
 
-<!-- =========================
-     MODAL
-========================= -->
-
-<div
-    id="modalOverlay"
-    class="modal-overlay hidden"
->
+<div id="modalOverlay" class="modal-overlay hidden">
 
     <div class="modal">
 
         <div class="flex justify-between items-center mb-5">
 
-            <h2
-                id="modalTitle"
-                class="text-xl font-black"
-            >
+            <h2 id="modalTitle" class="text-xl font-black">
                 Notice
             </h2>
 
@@ -1723,10 +1631,6 @@ button{
 
 <script>
 
-/* =========================
-   FIREBASE CONFIG
-========================= */
-
 const firebaseConfig = {
     apiKey:"AIzaSyB6M6TtGnHPWOnDr9xO4JYJbx4qtZr9W2w",
     authDomain:"cashflowbank-9068.firebaseapp.com",
@@ -1742,25 +1646,14 @@ const auth=firebase.auth();
 const db=firebase.firestore();
 const storage=firebase.storage();
 
-
-/* =========================
-   VARIABLES
-========================= */
-
 let currentUser=null;
 let currentData=null;
 let transactions=[];
 let balanceHidden=false;
 
-
-/* =========================
-   HELPERS
-========================= */
-
 function $(id){
     return document.getElementById(id);
 }
-
 
 function money(value){
 
@@ -1770,7 +1663,6 @@ function money(value){
     }).format(Number(value||0));
 
 }
-
 
 function getDate(value){
 
@@ -1789,7 +1681,6 @@ function getDate(value){
         : date;
 
 }
-
 
 function formatDate(value){
 
@@ -1810,7 +1701,6 @@ function formatDate(value){
 
 }
 
-
 function formatDateTime(value){
 
     const date=getDate(value);
@@ -1829,7 +1719,6 @@ function formatDateTime(value){
 
 }
 
-
 function escapeHTML(value){
 
     return String(value??"")
@@ -1840,7 +1729,6 @@ function escapeHTML(value){
         .replace(/'/g,"&#039;");
 
 }
-
 
 function showMessage(id,text,success=false){
 
@@ -1862,11 +1750,6 @@ function showMessage(id,text,success=false){
 
 }
 
-
-/* =========================
-   AUTH SCREENS
-========================= */
-
 function showLogin(){
 
     $("loginBox").classList.remove("hidden");
@@ -1874,18 +1757,12 @@ function showLogin(){
 
 }
 
-
 function showRegister(){
 
     $("loginBox").classList.add("hidden");
     $("registerBox").classList.remove("hidden");
 
 }
-
-
-/* =========================
-   UNIQUE ACCOUNT NUMBER
-========================= */
 
 async function generateUniqueAccountNumber(){
 
@@ -1920,11 +1797,6 @@ async function generateUniqueAccountNumber(){
     );
 
 }
-
-
-/* =========================
-   REGISTER
-========================= */
 
 $("registerForm").addEventListener(
     "submit",
@@ -1972,7 +1844,6 @@ $("registerForm").addEventListener(
 
             const accountNumber=
                 await generateUniqueAccountNumber();
-
 
             await db
                 .collection("users")
@@ -2024,13 +1895,11 @@ $("registerForm").addEventListener(
 
                 });
 
-
             showMessage(
                 "registerMessage",
                 "Account created successfully. Your account is waiting for approval.",
                 true
             );
-
 
             setTimeout(
                 showLogin,
@@ -2065,11 +1934,6 @@ $("registerForm").addEventListener(
     }
 );
 
-
-/* =========================
-   LOGIN
-========================= */
-
 $("loginForm").addEventListener(
     "submit",
     async function(event){
@@ -2091,7 +1955,6 @@ $("loginForm").addEventListener(
 
             let email=login;
 
-
             if(/^\d{10}$/.test(login)){
 
                 const snapshot=
@@ -2105,7 +1968,6 @@ $("loginForm").addEventListener(
                         .limit(1)
                         .get();
 
-
                 if(snapshot.empty){
 
                     throw new Error(
@@ -2114,14 +1976,12 @@ $("loginForm").addEventListener(
 
                 }
 
-
                 email=
                     snapshot.docs[0]
                         .data()
                         .email;
 
             }
-
 
             await auth
                 .signInWithEmailAndPassword(
@@ -2147,18 +2007,12 @@ $("loginForm").addEventListener(
     }
 );
 
-
-/* =========================
-   PASSWORD RESET
-========================= */
-
 async function forgotPassword(){
 
     const value=
         $("loginId")
             .value
             .trim();
-
 
     if(
         !value ||
@@ -2171,7 +2025,6 @@ async function forgotPassword(){
 
         return;
     }
-
 
     try{
 
@@ -2189,11 +2042,6 @@ async function forgotPassword(){
     }
 
 }
-
-
-/* =========================
-   AUTH STATE
-========================= */
 
 auth.onAuthStateChanged(
     async function(user){
@@ -2215,7 +2063,6 @@ auth.onAuthStateChanged(
 
             return;
         }
-
 
         currentUser=user;
 
@@ -2250,11 +2097,6 @@ auth.onAuthStateChanged(
     }
 );
 
-
-/* =========================
-   LOAD USER
-========================= */
-
 async function loadUser(){
 
     const snapshot=
@@ -2262,7 +2104,6 @@ async function loadUser(){
             .collection("users")
             .doc(currentUser.uid)
             .get();
-
 
     if(!snapshot.exists){
 
@@ -2272,7 +2113,6 @@ async function loadUser(){
 
     }
 
-
     currentData=snapshot.data();
 
     populateUser();
@@ -2281,120 +2121,89 @@ async function loadUser(){
 
 }
 
-
-/* =========================
-   POPULATE USER
-========================= */
-
 function populateUser(){
 
     const data=currentData;
 
-
     $("headerName").textContent=
         data.name||"Customer";
-
 
     $("dashboardAccount").textContent=
         data.accountNumber||"—";
 
-
     $("dashboardType").textContent=
         data.accountType||"—";
-
 
     $("dashboardLimit").textContent=
         money(data.accountLimit);
 
-
     $("dashboardCountry").textContent=
         data.country||"—";
-
 
     $("dashboardStatus").textContent=
         data.status||"pending";
 
-
     $("createdDate").textContent=
         formatDate(data.createdAt);
-
 
     $("profileAccount").textContent=
         data.accountNumber||"—";
 
-
     $("profileCreated").textContent=
         formatDate(data.createdAt);
-
 
     $("profileStatus").textContent=
         data.status||"pending";
 
-
     $("creditScore").textContent=
         Number(data.creditScore||650);
-
 
     $("summaryAccount").textContent=
         data.accountNumber||"—";
 
-
     $("summaryType").textContent=
         data.accountType||"—";
-
 
     $("summaryCountry").textContent=
         data.country||"—";
 
-
     $("summaryCreated").textContent=
         formatDate(data.createdAt);
-
 
     $("summaryStatus").textContent=
         data.status||"pending";
 
-
     $("summaryBalance").textContent=
         money(data.balance);
-
 
     $("summaryLimit").textContent=
         money(data.accountLimit);
 
-
     $("summaryCredit").textContent=
         Number(data.creditScore||650);
 
-
     $("editName").value=
         data.name||"";
-
 
     $("editEmail").value=
         data.email||
         currentUser.email||
         "";
 
-
     $("editPhone").value=
         data.phone||"";
 
-
     $("editCountry").value=
         data.country||"Other";
-
 
     const status=
         String(
             data.status||"pending"
         ).toLowerCase();
 
-
     $("accountStatusBadge").textContent=
         status.charAt(0).toUpperCase()+
         status.slice(1);
-
 
     $("accountStatusBadge").className=
         "status "+
@@ -2406,13 +2215,11 @@ function populateUser(){
                     : "status-pending"
         );
 
-
     const limit=
         Number(data.accountLimit||0);
 
     const balance=
         Number(data.balance||0);
-
 
     let percentage=0;
 
@@ -2429,25 +2236,17 @@ function populateUser(){
 
     }
 
-
     $("balanceBar").style.width=
         percentage+"%";
-
 
     setProfileImage(
         data.photoURL,
         data.name||"Customer"
     );
 
-
     updateBalanceDisplay();
 
 }
-
-
-/* =========================
-   BALANCE DISPLAY
-========================= */
 
 function updateBalanceDisplay(){
 
@@ -2465,7 +2264,6 @@ function updateBalanceDisplay(){
 
 }
 
-
 function toggleBalance(){
 
     balanceHidden=!balanceHidden;
@@ -2473,11 +2271,6 @@ function toggleBalance(){
     updateBalanceDisplay();
 
 }
-
-
-/* =========================
-   PROFILE IMAGE
-========================= */
 
 function setProfileImage(url,name){
 
@@ -2487,13 +2280,11 @@ function setProfileImage(url,name){
             .charAt(0)
             .toUpperCase();
 
-
     $("headerInitial").textContent=
         initial;
 
     $("profileInitial").textContent=
         initial;
-
 
     if(url){
 
@@ -2517,11 +2308,6 @@ function setProfileImage(url,name){
 
 }
 
-
-/* =========================
-   PROFILE PHOTO
-========================= */
-
 $("profilePhotoInput").addEventListener(
     "change",
     async function(event){
@@ -2533,7 +2319,6 @@ $("profilePhotoInput").addEventListener(
             return;
         }
 
-
         if(!file.type.startsWith("image/")){
 
             $("photoMessage").textContent=
@@ -2541,7 +2326,6 @@ $("profilePhotoInput").addEventListener(
 
             return;
         }
-
 
         if(file.size>5*1024*1024){
 
@@ -2551,10 +2335,8 @@ $("profilePhotoInput").addEventListener(
             return;
         }
 
-
         $("photoMessage").textContent=
             "Uploading...";
-
 
         try{
 
@@ -2567,13 +2349,10 @@ $("profilePhotoInput").addEventListener(
                         "/profile.jpg"
                     );
 
-
             await reference.put(file);
-
 
             const url=
                 await reference.getDownloadURL();
-
 
             await db
                 .collection("users")
@@ -2589,15 +2368,12 @@ $("profilePhotoInput").addEventListener(
 
                 });
 
-
             currentData.photoURL=url;
-
 
             setProfileImage(
                 url,
                 currentData.name||"Customer"
             );
-
 
             $("photoMessage").textContent=
                 "Profile picture updated.";
@@ -2613,11 +2389,6 @@ $("profilePhotoInput").addEventListener(
 
     }
 );
-
-
-/* =========================
-   PROFILE UPDATE
-========================= */
 
 $("profileForm").addEventListener(
     "submit",
@@ -2653,9 +2424,7 @@ $("profileForm").addEventListener(
 
                 });
 
-
             await loadUser();
-
 
             $("profileMessage").textContent=
                 "Profile updated successfully.";
@@ -2676,11 +2445,6 @@ $("profileForm").addEventListener(
     }
 );
 
-
-/* =========================
-   LOAD TRANSACTIONS
-========================= */
-
 async function loadTransactions(){
 
     const snapshot=
@@ -2692,7 +2456,6 @@ async function loadTransactions(){
                 currentUser.uid
             )
             .get();
-
 
     transactions=
         snapshot.docs
@@ -2706,10 +2469,8 @@ async function loadTransactions(){
                     (a.createdAt?.seconds||0)
             );
 
-
     $("transactionCount").textContent=
         transactions.length;
-
 
     renderRecentTransactions();
 
@@ -2717,20 +2478,13 @@ async function loadTransactions(){
 
 }
 
-
-/* =========================
-   STATUS
-========================= */
-
 function transactionStatus(status){
 
     const value=
         String(status||"pending")
             .toLowerCase();
 
-
     let className="status-pending";
-
 
     if(value==="approved"){
         className="status-approved";
@@ -2752,7 +2506,6 @@ function transactionStatus(status){
         className="status-refunded";
     }
 
-
     return `
         <span class="status ${className}">
             ${escapeHTML(
@@ -2764,16 +2517,10 @@ function transactionStatus(status){
 
 }
 
-
-/* =========================
-   RECENT TRANSACTIONS
-========================= */
-
 function renderRecentTransactions(){
 
     const list=
         transactions.slice(0,5);
-
 
     if(!list.length){
 
@@ -2786,7 +2533,6 @@ function renderRecentTransactions(){
 
         return;
     }
-
 
     $("recentTransactions").innerHTML=
         list.map(transaction=>`
@@ -2810,7 +2556,6 @@ function renderRecentTransactions(){
 
                 </div>
 
-
                 <div class="text-right shrink-0">
 
                     <div class="font-black">
@@ -2831,11 +2576,6 @@ function renderRecentTransactions(){
 
 }
 
-
-/* =========================
-   HISTORY
-========================= */
-
 function renderHistory(){
 
     if(!transactions.length){
@@ -2849,7 +2589,6 @@ function renderHistory(){
         return;
     }
 
-
     $("historyList").innerHTML=
         transactions.map(transaction=>{
 
@@ -2859,10 +2598,8 @@ function renderHistory(){
                     "pending"
                 ).toLowerCase();
 
-
             const canCancel=
                 status==="pending";
-
 
             const refundAmount=
                 Number(
@@ -2870,7 +2607,6 @@ function renderHistory(){
                     transaction.amount||
                     0
                 );
-
 
             return `
 
@@ -2901,7 +2637,6 @@ function renderHistory(){
                                 )}
                             </div>
 
-
                             ${
                                 transaction.note
                                 ?
@@ -2914,7 +2649,6 @@ function renderHistory(){
                                 `
                                 :""
                             }
-
 
                             ${
                                 status==="refunded"
@@ -2938,7 +2672,6 @@ function renderHistory(){
 
                         </div>
 
-
                         <div class="md:text-right shrink-0">
 
                             <div class="text-lg font-black">
@@ -2952,7 +2685,6 @@ function renderHistory(){
                                     transaction.status
                                 )}
                             </div>
-
 
                             ${
                                 canCancel
@@ -2980,28 +2712,20 @@ function renderHistory(){
 
 }
 
-
-/* =========================
-   TRANSFER
-========================= */
-
 $("transferForm").addEventListener(
     "submit",
     async function(event){
 
         event.preventDefault();
 
-
         if(!currentUser||!currentData){
             return;
         }
-
 
         const accountStatus=
             String(
                 currentData.status||""
             ).toLowerCase();
-
 
         if(accountStatus!=="approved"){
 
@@ -3013,30 +2737,25 @@ $("transferForm").addEventListener(
             return;
         }
 
-
         const recipientName=
             $("recipientName")
                 .value
                 .trim();
-
 
         const recipientAccount=
             $("recipientAccount")
                 .value
                 .trim();
 
-
         const amount=
             Number(
                 $("transferAmount").value
             );
 
-
         const note=
             $("transferNote")
                 .value
                 .trim();
-
 
         if(
             !recipientName||
@@ -3053,12 +2772,10 @@ $("transferForm").addEventListener(
             return;
         }
 
-
         const currentBalance=
             Number(
                 currentData.balance||0
             );
-
 
         if(amount>currentBalance){
 
@@ -3070,15 +2787,12 @@ $("transferForm").addEventListener(
             return;
         }
 
-
         const button=
             $("transferButton");
-
 
         button.disabled=true;
         button.textContent=
             "Processing...";
-
 
         try{
 
@@ -3086,7 +2800,6 @@ $("transferForm").addEventListener(
                 db
                     .collection("transactions")
                     .doc();
-
 
             await db.runTransaction(
                 async transaction=>{
@@ -3096,12 +2809,10 @@ $("transferForm").addEventListener(
                             .collection("users")
                             .doc(currentUser.uid);
 
-
                     const userSnapshot=
                         await transaction.get(
                             userReference
                         );
-
 
                     if(!userSnapshot.exists){
 
@@ -3111,16 +2822,13 @@ $("transferForm").addEventListener(
 
                     }
 
-
                     const user=
                         userSnapshot.data();
-
 
                     const latestBalance=
                         Number(
                             user.balance||0
                         );
-
 
                     if(amount>latestBalance){
 
@@ -3129,7 +2837,6 @@ $("transferForm").addEventListener(
                         );
 
                     }
-
 
                     transaction.update(
                         userReference,
@@ -3146,7 +2853,6 @@ $("transferForm").addEventListener(
 
                         }
                     );
-
 
                     transaction.set(
                         transactionReference,
@@ -3193,11 +2899,9 @@ $("transferForm").addEventListener(
                 }
             );
 
-
             currentData.balance=
                 currentBalance-
                 amount;
-
 
             updateBalanceDisplay();
 
@@ -3205,13 +2909,11 @@ $("transferForm").addEventListener(
 
             $("transferForm").reset();
 
-
             showMessage(
                 "transferMessage",
                 `${money(amount)} was deducted from your demo balance and the transfer was submitted.`,
                 true
             );
-
 
         }catch(error){
 
@@ -3235,17 +2937,11 @@ $("transferForm").addEventListener(
     }
 );
 
-
-/* =========================
-   CANCEL + REFUND
-========================= */
-
 async function cancelTransaction(transactionId){
 
     if(!currentUser){
         return;
     }
-
 
     if(!confirm(
         "Cancel this pending transaction? The amount will be refunded to your demo balance."
@@ -3253,12 +2949,10 @@ async function cancelTransaction(transactionId){
         return;
     }
 
-
     const transactionReference=
         db
             .collection("transactions")
             .doc(transactionId);
-
 
     try{
 
@@ -3270,7 +2964,6 @@ async function cancelTransaction(transactionId){
                         transactionReference
                     );
 
-
                 if(!transactionSnapshot.exists){
 
                     throw new Error(
@@ -3279,10 +2972,8 @@ async function cancelTransaction(transactionId){
 
                 }
 
-
                 const transactionData=
                     transactionSnapshot.data();
-
 
                 if(
                     transactionData.userId !==
@@ -3294,7 +2985,6 @@ async function cancelTransaction(transactionId){
                     );
 
                 }
-
 
                 if(
                     String(
@@ -3308,18 +2998,15 @@ async function cancelTransaction(transactionId){
 
                 }
 
-
                 const userReference=
                     db
                         .collection("users")
                         .doc(currentUser.uid);
 
-
                 const userSnapshot=
                     await transaction.get(
                         userReference
                     );
-
 
                 if(!userSnapshot.exists){
 
@@ -3329,23 +3016,19 @@ async function cancelTransaction(transactionId){
 
                 }
 
-
                 const user=
                     userSnapshot.data();
-
 
                 const refund=
                     Number(
                         transactionData.amount||0
                     );
 
-
                 const newBalance=
                     Number(
                         user.balance||0
                     )+
                     refund;
-
 
                 transaction.update(
                     userReference,
@@ -3360,7 +3043,6 @@ async function cancelTransaction(transactionId){
 
                     }
                 );
-
 
                 transaction.update(
                     transactionReference,
@@ -3388,14 +3070,11 @@ async function cancelTransaction(transactionId){
             }
         );
 
-
         await loadUser();
-
 
         alert(
             "Transaction cancelled. The amount has been refunded to your demo balance."
         );
-
 
     }catch(error){
 
@@ -3406,11 +3085,6 @@ async function cancelTransaction(transactionId){
     }
 
 }
-
-
-/* =========================
-   PAGE NAVIGATION
-========================= */
 
 function showPage(page){
 
@@ -3423,15 +3097,12 @@ function showPage(page){
                 section.classList.add("hidden")
         );
 
-
     const target=
         $("page-"+page);
-
 
     if(target){
         target.classList.remove("hidden");
     }
-
 
     document
         .querySelectorAll(
@@ -3446,11 +3117,9 @@ function showPage(page){
 
         });
 
-
     $("sidebar")
         .classList
         .remove("open");
-
 
     window.scrollTo({
         top:0,
@@ -3458,11 +3127,6 @@ function showPage(page){
     });
 
 }
-
-
-/* =========================
-   MOBILE MENU
-========================= */
 
 function toggleMenu(){
 
@@ -3472,21 +3136,11 @@ function toggleMenu(){
 
 }
 
-
-/* =========================
-   LOGOUT
-========================= */
-
 async function logout(){
 
     await auth.signOut();
 
 }
-
-
-/* =========================
-   MODAL
-========================= */
 
 function openModal(title,content){
 
@@ -3502,7 +3156,6 @@ function openModal(title,content){
 
 }
 
-
 function closeModal(){
 
     $("modalOverlay")
@@ -3511,11 +3164,6 @@ function closeModal(){
 
 }
 
-
-/* =========================
-   CREDIT SCORE
-========================= */
-
 function showCreditScore(){
 
     const score=
@@ -3523,7 +3171,6 @@ function showCreditScore(){
             currentData?.creditScore||
             650
         );
-
 
     openModal(
         "Credit Score",
@@ -3551,11 +3198,6 @@ function showCreditScore(){
     );
 
 }
-
-
-/* =========================
-   DEMO FEATURES
-========================= */
 
 function showFeature(name){
 
@@ -3585,11 +3227,6 @@ function showFeature(name){
 
 }
 
-
-/* =========================
-   SUPPORT
-========================= */
-
 function openSupport(){
 
     if(
@@ -3614,11 +3251,6 @@ function openSupport(){
 
 }
 
-
-/* =========================
-   HIDE LOADING
-========================= */
-
 function hideLoading(){
 
     setTimeout(
@@ -3633,11 +3265,6 @@ function hideLoading(){
     );
 
 }
-
-
-/* =========================
-   TAWK
-========================= */
 
 var Tawk_API=Tawk_API||{};
 var Tawk_LoadStart=new Date();
@@ -3665,11 +3292,6 @@ var Tawk_LoadStart=new Date();
     );
 
 })();
-
-
-/* =========================
-   FALLBACK LOADING
-========================= */
 
 setTimeout(
     function(){
