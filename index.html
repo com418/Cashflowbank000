@@ -5,11 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#061b2a">
 <meta name="description" content="Cash Flow Bank — financial platform prototype.">
+
 <title>Cash Flow Bank — Your Goals. Our Priority.</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
 
-<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore-compat.js"></script>
@@ -28,11 +28,16 @@
   --muted:#647582;
   --border:#e2e9ed;
   --danger:#c83b48;
+  --success:#168653;
 }
 
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box;
+}
 
-html{scroll-behavior:smooth}
+html{
+  scroll-behavior:smooth;
+}
 
 body{
   margin:0;
@@ -41,134 +46,111 @@ body{
   color:var(--text);
 }
 
-button,input,select,textarea{font:inherit}
-button{cursor:pointer}
-.hidden{display:none!important}
-
-.icon{
-  width:20px;
-  height:20px;
-  stroke:currentColor;
-  stroke-width:1.8;
-  fill:none;
-  stroke-linecap:round;
-  stroke-linejoin:round;
+button,
+input,
+select,
+textarea{
+  font:inherit;
 }
 
-/* LOADING */
+button{
+  cursor:pointer;
+}
 
+.hidden{
+  display:none!important;
+}
+
+/* LOADER */
 #loadingScreen{
   position:fixed;
   inset:0;
+  background:var(--navy);
+  color:white;
+  display:grid;
+  place-items:center;
   z-index:99999;
-  background:linear-gradient(145deg,#04131f,#07283a);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  transition:.5s ease;
+  transition:.45s ease;
 }
 
-.loading-inner{
+.loader-box{
   text-align:center;
-  color:#fff;
 }
 
-.loading-logo{
-  width:72px;
-  height:72px;
-  margin:auto auto 18px;
+.loader-logo{
+  width:64px;
+  height:64px;
+  margin:auto;
+  border-radius:18px;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(145deg,#0aa35c,#087443);
+  font-weight:900;
+  font-size:22px;
+  box-shadow:0 20px 50px rgba(0,0,0,.3);
 }
 
-.loading-name{
-  font-size:27px;
-  font-weight:800;
+.loader-box p{
+  margin-top:16px;
+  color:#a9bdc7;
+  font-size:13px;
 }
 
-.loading-sub{
-  margin-top:5px;
-  color:#a9c0ca;
-  font-size:12px;
-}
-
-.spinner{
-  width:34px;
-  height:34px;
-  border:3px solid rgba(255,255,255,.15);
-  border-top-color:#52d796;
-  border-radius:50%;
-  margin:22px auto 0;
-  animation:spin .8s linear infinite;
-}
-
-@keyframes spin{
-  to{transform:rotate(360deg)}
-}
-
-/* NAVIGATION */
-
+/* NAV */
 .site-nav{
-  position:fixed;
+  position:absolute;
   top:0;
   left:0;
   right:0;
-  z-index:500;
-  background:rgba(6,27,42,.94);
-  backdrop-filter:blur(18px);
-  border-bottom:1px solid rgba(255,255,255,.08);
+  z-index:50;
+  padding:22px 24px;
 }
 
 .nav-inner{
   max-width:1240px;
-  height:76px;
   margin:auto;
-  padding:0 24px;
   display:flex;
   align-items:center;
   justify-content:space-between;
+  gap:20px;
 }
 
 .brand{
   display:flex;
   align-items:center;
   gap:11px;
-  border:0;
-  background:none;
-  color:#fff;
+  color:white;
+  text-decoration:none;
+  font-weight:850;
+  letter-spacing:-.4px;
 }
 
 .brand-mark{
-  width:40px;
-  height:40px;
-}
-
-.brand-name{
-  display:block;
-  font-size:18px;
-  font-weight:800;
-}
-
-.brand-small{
-  display:block;
-  color:#92aab5;
-  font-size:8px;
-  letter-spacing:1.4px;
-  text-transform:uppercase;
+  width:39px;
+  height:39px;
+  border-radius:11px;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(145deg,#0aa35c,#087443);
+  box-shadow:0 10px 30px rgba(0,0,0,.2);
 }
 
 .nav-links{
   display:flex;
-  gap:25px;
   align-items:center;
+  gap:25px;
 }
 
-.nav-links button{
-  border:0;
-  background:none;
-  color:#d9e6eb;
+.nav-links a{
+  color:#c3d1d7;
+  text-decoration:none;
   font-size:13px;
+  font-weight:650;
 }
 
-.nav-links button:hover{color:#69d79f}
+.nav-links a:hover{
+  color:white;
+}
 
 .nav-actions{
   display:flex;
@@ -176,74 +158,57 @@ button{cursor:pointer}
 }
 
 .nav-btn{
-  padding:11px 17px;
+  border:1px solid rgba(255,255,255,.18);
+  background:rgba(255,255,255,.07);
+  color:white;
+  padding:10px 15px;
   border-radius:8px;
-  font-size:13px;
-  font-weight:800;
+  font-weight:750;
+  font-size:12px;
 }
 
-.nav-sign{
-  background:transparent;
-  border:1px solid rgba(255,255,255,.23);
-  color:#fff;
-}
-
-.nav-open{
+.nav-btn.primary{
   background:#0aa35c;
-  border:1px solid #0aa35c;
-  color:#fff;
-}
-
-.mobile-nav-btn{
-  display:none;
-  background:none;
-  border:0;
-  color:#fff;
+  border-color:#0aa35c;
 }
 
 /* HERO */
-
 .hero{
-  min-height:1450px;
-  padding:155px 24px 105px;
+  min-height:1500px;
+  padding:175px 24px 110px;
   position:relative;
   overflow:hidden;
-  color:#fff;
+  color:white;
   background:
-    radial-gradient(circle at 77% 15%,rgba(17,137,91,.42),transparent 26%),
-    radial-gradient(circle at 10% 72%,rgba(15,75,104,.52),transparent 36%),
-    radial-gradient(circle at 60% 78%,rgba(9,123,74,.2),transparent 30%),
-    linear-gradient(125deg,#041521 0%,#062536 50%,#063d36 100%);
+    radial-gradient(circle at 75% 15%,rgba(17,137,91,.38),transparent 25%),
+    radial-gradient(circle at 15% 70%,rgba(15,75,104,.48),transparent 34%),
+    radial-gradient(circle at 80% 80%,rgba(8,116,67,.22),transparent 30%),
+    linear-gradient(125deg,#041521 0%,#062536 52%,#063d36 100%);
 }
 
 .hero:before{
   content:"";
   position:absolute;
   inset:0;
-  pointer-events:none;
-  opacity:.12;
   background-image:
-    linear-gradient(rgba(255,255,255,.08) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(255,255,255,.08) 1px,transparent 1px);
+    linear-gradient(rgba(255,255,255,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.025) 1px,transparent 1px);
   background-size:70px 70px;
+  mask-image:linear-gradient(to bottom,black,transparent 90%);
+  pointer-events:none;
 }
 
-.hero-orb{
-  position:absolute;
-  width:500px;
-  height:500px;
-  right:-190px;
-  top:170px;
-  border:1px solid rgba(255,255,255,.06);
-  border-radius:50%;
-}
-
-.hero-orb:before{
+.hero:after{
   content:"";
   position:absolute;
-  inset:60px;
-  border:1px solid rgba(105,215,159,.08);
+  width:650px;
+  height:650px;
   border-radius:50%;
+  right:-260px;
+  top:380px;
+  background:rgba(82,215,150,.08);
+  filter:blur(20px);
+  pointer-events:none;
 }
 
 .hero-grid{
@@ -251,8 +216,8 @@ button{cursor:pointer}
   margin:auto;
   display:grid;
   grid-template-columns:1.05fr .95fr;
+  align-items:start;
   gap:65px;
-  align-items:center;
   position:relative;
   z-index:2;
 }
@@ -280,26 +245,29 @@ button{cursor:pointer}
 
 .hero h1{
   margin:25px 0 22px;
-  font-size:clamp(50px,6vw,82px);
-  line-height:.96;
-  letter-spacing:-4px;
+  font-size:clamp(48px,6vw,82px);
+  line-height:.98;
+  letter-spacing:-4.5px;
   font-weight:850;
+  max-width:800px;
 }
 
-.hero h1 span{color:#69d79f}
+.hero h1 span{
+  color:#69d79f;
+}
 
 .hero-copy{
   max-width:650px;
-  color:#bdd0d9;
   font-size:18px;
   line-height:1.75;
+  color:#bdd0d9;
 }
 
 .hero-actions{
   display:flex;
-  gap:12px;
+  gap:13px;
+  margin-top:35px;
   flex-wrap:wrap;
-  margin-top:34px;
 }
 
 .hero-primary,
@@ -312,100 +280,87 @@ button{cursor:pointer}
 
 .hero-primary{
   background:#0aa35c;
-  color:#fff;
+  color:white;
   box-shadow:0 15px 35px rgba(0,0,0,.2);
 }
 
 .hero-secondary{
   background:rgba(255,255,255,.06);
-  color:#fff;
+  color:white;
   border-color:rgba(255,255,255,.2);
 }
 
 .hero-note{
-  margin-top:19px;
+  margin-top:20px;
   color:#8fa7b2;
   font-size:12px;
-}
-
-.hero-trust-row{
-  margin-top:30px;
-  display:flex;
-  gap:10px;
-  flex-wrap:wrap;
-}
-
-.hero-trust-pill{
-  padding:8px 12px;
-  border-radius:999px;
-  background:rgba(255,255,255,.045);
-  border:1px solid rgba(255,255,255,.1);
-  color:#b7c8cf;
-  font-size:11px;
+  line-height:1.6;
+  max-width:610px;
 }
 
 .hero-visual{
-  min-height:700px;
+  min-height:720px;
   position:relative;
 }
 
 .bank-card{
   position:absolute;
   right:15px;
-  top:35px;
-  width:min(405px,90%);
+  top:15px;
+  width:min(410px,90%);
   padding:27px;
-  border:1px solid rgba(255,255,255,.17);
+  border:1px solid rgba(255,255,255,.16);
   border-radius:20px;
-  background:linear-gradient(145deg,rgba(255,255,255,.16),rgba(255,255,255,.045));
-  backdrop-filter:blur(17px);
+  background:linear-gradient(145deg,rgba(255,255,255,.15),rgba(255,255,255,.045));
+  backdrop-filter:blur(16px);
   box-shadow:0 30px 70px rgba(0,0,0,.3);
   z-index:5;
 }
 
 .card-top{
   display:flex;
-  align-items:center;
   justify-content:space-between;
+  align-items:center;
 }
 
 .card-label{
   color:#a9bdc7;
   font-size:11px;
-  letter-spacing:1.4px;
   text-transform:uppercase;
+  letter-spacing:1.4px;
+}
+
+.card-chip{
+  width:39px;
+  height:29px;
+  border-radius:7px;
+  background:linear-gradient(145deg,#e7c982,#a9823f);
 }
 
 .card-balance{
-  font-size:39px;
+  font-size:38px;
   font-weight:800;
-  margin:29px 0;
+  margin:32px 0;
 }
 
 .card-lines{
   display:flex;
   justify-content:space-between;
   color:#afc0c8;
-  font-size:10px;
-}
-
-.sample-label{
-  margin-top:15px;
-  color:#83a0ab;
-  font-size:10px;
+  font-size:11px;
 }
 
 .floating-stat{
   position:absolute;
   left:0;
-  bottom:175px;
-  width:200px;
+  bottom:180px;
+  width:205px;
   padding:18px;
   border-radius:15px;
-  background:#fff;
+  background:white;
   color:var(--text);
   box-shadow:0 22px 50px rgba(0,0,0,.24);
-  z-index:8;
+  z-index:7;
 }
 
 .floating-stat small{
@@ -421,59 +376,53 @@ button{cursor:pointer}
 .floating-transfer{
   position:absolute;
   right:-5px;
-  top:360px;
-  width:205px;
+  top:370px;
+  width:215px;
   padding:17px;
   border-radius:15px;
   background:#fff;
   color:var(--text);
-  box-shadow:0 20px 45px rgba(0,0,0,.25);
+  box-shadow:0 22px 50px rgba(0,0,0,.22);
   z-index:8;
 }
 
-.floating-transfer-title{
-  color:#74848d;
-  font-size:10px;
-  text-transform:uppercase;
-  letter-spacing:1px;
+.floating-transfer small{
+  color:#74838c;
 }
 
-.floating-transfer strong{
-  display:block;
-  margin-top:7px;
-  font-size:16px;
-}
-
-.floating-transfer span{
-  display:block;
-  margin-top:5px;
-  color:#087443;
-  font-size:11px;
-}
-
-.floating-security{
-  position:absolute;
-  left:70px;
-  top:445px;
-  width:175px;
-  padding:15px;
-  border-radius:15px;
-  background:rgba(8,38,53,.9);
-  border:1px solid rgba(255,255,255,.14);
-  box-shadow:0 20px 45px rgba(0,0,0,.22);
-  z-index:8;
-}
-
-.floating-security strong{
-  display:block;
+.transfer-mini{
+  display:flex;
+  justify-content:space-between;
+  margin-top:10px;
   font-size:12px;
 }
 
-.floating-security span{
+.transfer-mini strong{
+  color:#087443;
+}
+
+.security-mini{
+  position:absolute;
+  left:65px;
+  top:435px;
+  width:185px;
+  padding:15px;
+  border-radius:15px;
+  background:rgba(255,255,255,.09);
+  border:1px solid rgba(255,255,255,.13);
+  backdrop-filter:blur(15px);
+  z-index:6;
+}
+
+.security-mini strong{
   display:block;
-  color:#9fb5be;
-  font-size:10px;
-  margin-top:4px;
+  font-size:13px;
+  margin-bottom:5px;
+}
+
+.security-mini span{
+  color:#a8bdc6;
+  font-size:11px;
 }
 
 .skyline{
@@ -483,213 +432,154 @@ button{cursor:pointer}
   width:115%;
   height:400px;
   opacity:.78;
-  z-index:1;
 }
 
-.skyline rect{fill:#071c2a}
-.skyline .lit{fill:#20513f;opacity:.8}
+.skyline rect{
+  fill:#071c2a;
+}
 
-/* HERO SHOWCASE */
+.skyline .lit{
+  fill:#20513f;
+  opacity:.8;
+}
 
 .hero-showcase{
   max-width:1240px;
-  margin:65px auto 0;
+  margin:55px auto 0;
   position:relative;
-  z-index:10;
+  z-index:4;
 }
 
-.showcase-heading{
-  margin-bottom:18px;
-}
-
-.showcase-heading span{
-  display:block;
-  color:#75dca8;
-  font-size:11px;
-  text-transform:uppercase;
-  letter-spacing:1.7px;
-  font-weight:800;
-}
-
-.showcase-heading strong{
-  display:block;
-  margin-top:7px;
-  font-size:25px;
-  letter-spacing:-.8px;
-}
-
-.hero-mini-grid{
+.showcase-grid{
   display:grid;
   grid-template-columns:repeat(3,1fr);
   gap:15px;
 }
 
-.hero-mini-card{
-  padding:21px;
-  border-radius:16px;
-  background:rgba(255,255,255,.065);
-  border:1px solid rgba(255,255,255,.11);
-  backdrop-filter:blur(10px);
-}
-
-.hero-mini-icon{
-  width:43px;
-  height:43px;
-  display:grid;
-  place-items:center;
-  border-radius:12px;
-  background:rgba(10,163,92,.15);
-  color:#69d79f;
-}
-
-.hero-mini-card h3{
-  margin:16px 0 7px;
-  font-size:15px;
-}
-
-.hero-mini-card p{
-  margin:0;
-  color:#9db3bd;
-  font-size:12px;
-  line-height:1.7;
-}
-
-.hero-insight{
-  margin-top:17px;
-  padding:24px;
-  border-radius:20px;
-  background:rgba(255,255,255,.075);
-  border:1px solid rgba(255,255,255,.11);
+.showcase-card{
+  padding:22px;
+  border-radius:17px;
+  border:1px solid rgba(255,255,255,.1);
+  background:rgba(255,255,255,.055);
   backdrop-filter:blur(12px);
 }
 
-.hero-insight-grid{
+.showcase-card small{
+  color:#91a9b4;
+  font-size:11px;
+}
+
+.showcase-card strong{
+  display:block;
+  margin-top:9px;
+  font-size:20px;
+}
+
+.showcase-card p{
+  color:#9eb1ba;
+  font-size:12px;
+  line-height:1.6;
+  margin:8px 0 0;
+}
+
+.insight-card{
+  margin-top:18px;
   display:grid;
-  grid-template-columns:1.15fr .85fr;
-  gap:20px;
+  grid-template-columns:1fr 1.3fr;
+  gap:30px;
+  padding:26px;
+  border-radius:18px;
+  background:rgba(255,255,255,.065);
+  border:1px solid rgba(255,255,255,.11);
 }
 
-.hero-chart-box{
-  padding:20px;
-  border-radius:15px;
-  background:rgba(0,0,0,.12);
-  border:1px solid rgba(255,255,255,.07);
+.insight-card h3{
+  margin:0;
+  font-size:23px;
 }
 
-.chart-title{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  margin-bottom:15px;
-}
-
-.chart-title strong{
+.insight-card p{
+  color:#9fb3bd;
   font-size:13px;
+  line-height:1.7;
 }
 
-.chart-title span{
-  color:#8fa8b3;
-  font-size:10px;
-}
-
-.mini-chart{
-  height:145px;
+.chart-box{
+  min-height:190px;
   display:flex;
-  align-items:flex-end;
-  gap:9px;
+  align-items:end;
+  gap:8px;
+  padding:20px;
+  border-radius:13px;
+  background:rgba(0,0,0,.15);
 }
 
 .chart-bar{
   flex:1;
-  min-width:8px;
-  border-radius:5px 5px 2px 2px;
-  background:linear-gradient(to top,#0a8050,#62d99d);
-  opacity:.85;
+  border-radius:5px 5px 0 0;
+  background:linear-gradient(to top,#087443,#52d796);
+  min-height:20px;
 }
 
-.insight-stats{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
+.hero-reviews{
+  margin-top:22px;
 }
 
-.insight-stat{
-  padding:17px;
-  border-radius:14px;
-  background:rgba(255,255,255,.05);
-  border:1px solid rgba(255,255,255,.07);
+.hero-reviews-title{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-bottom:12px;
 }
 
-.insight-stat small{
-  display:block;
-  color:#91aab5;
-  font-size:10px;
+.hero-reviews-title strong{
+  font-size:16px;
 }
 
-.insight-stat strong{
-  display:block;
-  margin-top:8px;
-  font-size:20px;
+.stars{
+  color:#f2c86a;
+  letter-spacing:2px;
 }
 
-.hero-review-strip{
+.review-strip{
   display:grid;
   grid-template-columns:repeat(3,1fr);
-  gap:15px;
-  margin-top:17px;
+  gap:14px;
 }
 
-.hero-review-card{
+.mini-review{
   padding:20px;
   border-radius:16px;
   background:rgba(255,255,255,.06);
   border:1px solid rgba(255,255,255,.1);
 }
 
-.hero-stars{
-  color:#e8c56c;
-  letter-spacing:2px;
-  font-size:13px;
-}
-
-.hero-review-card p{
-  color:#c0d0d6;
+.mini-review p{
+  color:#b8c8cf;
   font-size:12px;
   line-height:1.7;
-  margin:10px 0;
+  margin:9px 0;
 }
 
-.hero-review-card strong{
-  font-size:11px;
+.mini-review strong{
+  font-size:12px;
 }
 
-.hero-review-card small{
+.mini-review small{
   display:block;
-  color:#7f99a4;
-  font-size:9px;
   margin-top:3px;
+  color:#7f969f;
 }
-
-.hero-disclaimer{
-  text-align:center;
-  color:#7e99a5;
-  font-size:10px;
-  line-height:1.6;
-  margin:25px auto 0;
-  max-width:700px;
-}
-
-/* HERO BOTTOM */
 
 .hero-bottom{
   max-width:1240px;
-  margin:45px auto 0;
+  margin:50px auto 0;
   display:grid;
   grid-template-columns:repeat(4,1fr);
   border-top:1px solid rgba(255,255,255,.1);
-  padding-top:25px;
+  padding-top:28px;
   position:relative;
-  z-index:10;
+  z-index:4;
 }
 
 .hero-bottom-item{
@@ -697,8 +587,13 @@ button{cursor:pointer}
   border-right:1px solid rgba(255,255,255,.1);
 }
 
-.hero-bottom-item:first-child{padding-left:0}
-.hero-bottom-item:last-child{border:0}
+.hero-bottom-item:first-child{
+  padding-left:0;
+}
+
+.hero-bottom-item:last-child{
+  border:0;
+}
 
 .hero-bottom-item strong{
   display:block;
@@ -713,104 +608,112 @@ button{cursor:pointer}
 }
 
 /* GENERAL LANDING SECTIONS */
-
 .landing-section{
-  padding:105px 24px;
+  padding:100px 24px;
 }
 
 .section-container{
-  max-width:1160px;
+  max-width:1200px;
   margin:auto;
 }
 
-.section-label{
+.section-heading{
+  max-width:680px;
+  margin-bottom:45px;
+}
+
+.section-heading .eyebrow{
   color:#087443;
-  font-size:11px;
-  text-transform:uppercase;
-  letter-spacing:1.7px;
+  font-size:12px;
   font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:1.5px;
 }
 
-.section-title{
-  margin:10px 0 15px;
+.section-heading h2{
   font-size:clamp(32px,4vw,52px);
-  line-height:1.02;
+  line-height:1.05;
   letter-spacing:-2px;
+  margin:13px 0;
 }
 
-.section-copy{
-  max-width:650px;
-  color:#71808a;
+.section-heading p{
+  color:#70808a;
   line-height:1.75;
   font-size:15px;
 }
 
-.services{
-  background:#fff;
-}
-
-.service-grid{
-  margin-top:45px;
+.feature-grid{
   display:grid;
   grid-template-columns:repeat(4,1fr);
-  gap:17px;
+  gap:16px;
 }
 
-.service-card{
-  padding:25px;
+.feature-card{
+  background:white;
   border:1px solid var(--border);
   border-radius:17px;
-  background:#fff;
-  transition:.25s ease;
+  padding:25px;
+  box-shadow:0 12px 35px rgba(10,35,45,.05);
 }
 
-.service-card:hover{
-  transform:translateY(-4px);
-  box-shadow:0 20px 45px rgba(13,40,55,.08);
-}
-
-.service-icon{
+.feature-icon{
   width:52px;
   height:52px;
+  border-radius:14px;
+  background:var(--mint);
+  color:var(--green);
   display:grid;
   place-items:center;
-  border-radius:14px;
-  color:#087443;
-  background:#eaf8f1;
 }
 
-.service-card h3{
-  margin:20px 0 9px;
+.feature-card h3{
+  margin:20px 0 8px;
   font-size:17px;
 }
 
-.service-card p{
-  margin:0;
-  color:#71808a;
+.feature-card p{
+  color:#71818b;
   font-size:13px;
   line-height:1.7;
 }
 
-/* SECURITY */
+.icon{
+  width:22px;
+  height:22px;
+  fill:none;
+  stroke:currentColor;
+  stroke-width:1.8;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
 
-.security-section{
-  background:#061b2a;
-  color:#fff;
+/* DARK SECTION */
+.dark-section{
+  background:var(--navy);
+  color:white;
 }
 
 .security-grid{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:70px;
+  gap:60px;
   align-items:center;
 }
 
-.security-section .section-copy{
-  color:#a8bac3;
+.security-grid h2{
+  font-size:clamp(34px,4vw,55px);
+  letter-spacing:-2px;
+  line-height:1.05;
+}
+
+.security-grid p{
+  color:#9eb1bb;
+  line-height:1.8;
 }
 
 .security-list{
-  margin-top:30px;
+  margin-top:28px;
   display:grid;
   gap:14px;
 }
@@ -821,316 +724,209 @@ button{cursor:pointer}
   align-items:flex-start;
 }
 
-.security-check{
-  width:30px;
-  height:30px;
-  flex-shrink:0;
+.security-item .check{
+  width:25px;
+  height:25px;
+  border-radius:50%;
+  background:rgba(82,215,150,.12);
+  color:#52d796;
   display:grid;
   place-items:center;
-  border-radius:9px;
-  background:rgba(10,163,92,.14);
-  color:#65d59b;
-}
-
-.security-item strong{
-  display:block;
-  font-size:13px;
-}
-
-.security-item span{
-  display:block;
-  margin-top:3px;
-  color:#8ea6b1;
-  font-size:11px;
-  line-height:1.5;
+  flex:none;
 }
 
 .security-panel{
-  padding:27px;
-  border-radius:21px;
-  background:linear-gradient(145deg,rgba(255,255,255,.11),rgba(255,255,255,.035));
-  border:1px solid rgba(255,255,255,.11);
+  padding:30px;
+  border-radius:20px;
+  background:linear-gradient(145deg,rgba(255,255,255,.09),rgba(255,255,255,.03));
+  border:1px solid rgba(255,255,255,.1);
 }
 
-.security-panel-top{
+.security-panel-row{
   display:flex;
   justify-content:space-between;
-  align-items:center;
+  padding:16px 0;
+  border-bottom:1px solid rgba(255,255,255,.08);
 }
 
-.status-badge{
-  display:inline-flex;
-  gap:7px;
-  align-items:center;
-  padding:7px 10px;
-  border-radius:999px;
-  background:rgba(10,163,92,.12);
-  color:#71dca5;
-  font-size:10px;
+.security-panel-row:last-child{
+  border:0;
 }
 
-.status-badge i{
-  width:6px;
-  height:6px;
-  border-radius:50%;
-  background:#55d895;
-}
-
-.security-demo-box{
-  margin-top:25px;
-  padding:20px;
-  border-radius:15px;
-  background:rgba(0,0,0,.15);
-}
-
-.security-demo-box small{
-  color:#8ca6b1;
-  font-size:10px;
-}
-
-.security-demo-box strong{
-  display:block;
-  margin-top:9px;
-  font-size:25px;
-}
-
-/* ANALYSIS */
-
-.analysis-section{
-  background:#f4f7f8;
-}
-
-.analysis-demo{
-  margin-top:45px;
-  display:grid;
-  grid-template-columns:1.15fr .85fr;
-  gap:18px;
-}
-
-.demo-panel{
-  padding:25px;
-  background:#fff;
-  border:1px solid var(--border);
-  border-radius:18px;
-}
-
-.demo-panel h3{
-  margin:0;
-  font-size:15px;
-}
-
-.demo-panel-sub{
-  color:#82919a;
-  font-size:11px;
-  margin-top:5px;
-}
-
-.big-bars{
-  height:230px;
-  display:flex;
-  align-items:flex-end;
-  gap:12px;
-  margin-top:30px;
-}
-
-.big-bar{
-  flex:1;
-  background:linear-gradient(to top,#087443,#69d79f);
-  border-radius:7px 7px 2px 2px;
-}
-
-.analysis-side{
-  display:grid;
-  gap:15px;
-}
-
-.analysis-number{
-  font-size:30px;
-  font-weight:800;
-  margin-top:8px;
-}
-
-.analysis-label{
-  color:#778891;
-  font-size:11px;
-}
-
-.health-box{
-  padding:22px;
-  border-radius:16px;
-  background:#eaf8f1;
-  color:#087443;
-}
-
-/* REVIEWS */
-
-.reviews-section{
-  background:#fff;
-}
-
-.review-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:17px;
-  margin-top:45px;
-}
-
-.review-card{
-  padding:25px;
-  border:1px solid var(--border);
-  border-radius:17px;
-}
-
-.review-stars{
-  color:#d7b15b;
-  letter-spacing:2px;
-}
-
-.review-card p{
-  color:#5f707b;
-  font-size:13px;
-  line-height:1.75;
-  margin:17px 0;
-}
-
-.review-author{
-  font-weight:800;
+.security-panel-row span{
+  color:#91a7b2;
   font-size:12px;
 }
 
-.review-type{
-  color:#9aa7ae;
-  font-size:10px;
-  margin-top:3px;
+.security-panel-row strong{
+  font-size:13px;
+}
+
+/* ANALYSIS */
+.analysis-card{
+  background:white;
+  border:1px solid var(--border);
+  border-radius:20px;
+  padding:30px;
+  box-shadow:0 15px 45px rgba(10,35,45,.05);
+}
+
+.analysis-stats{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:14px;
+  margin-bottom:25px;
+}
+
+.analysis-stat{
+  padding:20px;
+  border-radius:13px;
+  background:#f7fafb;
+}
+
+.analysis-stat small{
+  color:#74848d;
+}
+
+.analysis-stat strong{
+  display:block;
+  margin-top:8px;
+  font-size:23px;
+}
+
+.fake-analysis-chart{
+  height:230px;
+  display:flex;
+  align-items:end;
+  gap:8px;
+  padding:20px;
+  border-radius:14px;
+  background:#f5f8f9;
+}
+
+.fake-analysis-chart div{
+  flex:1;
+  background:linear-gradient(to top,#087443,#55cf91);
+  border-radius:5px 5px 0 0;
+}
+
+/* REVIEWS */
+.reviews-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:17px;
+}
+
+.review-card{
+  background:white;
+  border:1px solid var(--border);
+  border-radius:17px;
+  padding:25px;
+}
+
+.review-card p{
+  color:#647582;
+  line-height:1.75;
+  font-size:13px;
+}
+
+.review-card strong{
+  display:block;
+  margin-top:18px;
+  font-size:13px;
+}
+
+.review-card small{
+  color:#8a979f;
 }
 
 /* ABOUT */
-
-.about-section{
-  background:#f4f7f8;
-}
-
 .about-grid{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:70px;
+  gap:60px;
   align-items:center;
 }
 
 .about-box{
-  padding:32px;
+  padding:35px;
   border-radius:20px;
-  background:#061b2a;
-  color:#fff;
+  background:linear-gradient(145deg,#eaf8f1,#f5faf8);
 }
 
-.about-box h3{
-  margin:0 0 12px;
-  font-size:23px;
-}
-
-.about-box p{
-  color:#a8bbc4;
-  font-size:13px;
-  line-height:1.8;
+.about-box strong{
+  font-size:48px;
+  color:#087443;
 }
 
 /* CONTACT */
-
-.contact-section{
-  background:#fff;
-}
-
 .contact-grid{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:60px;
-  align-items:start;
+  gap:20px;
 }
 
 .contact-card{
-  padding:27px;
-  border:1px solid var(--border);
+  padding:30px;
   border-radius:18px;
+  background:white;
+  border:1px solid var(--border);
 }
 
-.contact-line{
-  padding:17px 0;
-  border-bottom:1px solid var(--border);
+.contact-card h3{
+  margin-top:0;
 }
 
-.contact-line:last-child{border-bottom:0}
-
-.contact-line small{
-  color:#82919a;
-  font-size:10px;
-  text-transform:uppercase;
-  letter-spacing:1px;
-}
-
-.contact-line strong{
-  display:block;
-  margin-top:5px;
+.contact-card p{
+  color:#70808a;
   font-size:13px;
+  line-height:1.7;
 }
 
 /* CTA */
-
 .final-cta{
-  padding:95px 24px;
-  background:
-    radial-gradient(circle at 70% 20%,rgba(10,163,92,.35),transparent 25%),
-    linear-gradient(120deg,#061b2a,#07382f);
-  color:#fff;
+  margin:30px auto 100px;
+  max-width:1200px;
+  padding:65px 45px;
+  border-radius:24px;
+  color:white;
+  background:linear-gradient(120deg,#061b2a,#087443);
   text-align:center;
 }
 
 .final-cta h2{
-  margin:0;
-  font-size:clamp(35px,5vw,58px);
+  font-size:clamp(32px,4vw,50px);
+  margin:0 0 14px;
   letter-spacing:-2px;
 }
 
 .final-cta p{
-  max-width:600px;
-  margin:17px auto 0;
-  color:#a9bdc6;
+  color:#b9d0d6;
+  max-width:650px;
+  margin:0 auto 25px;
   line-height:1.7;
-  font-size:14px;
-}
-
-.final-actions{
-  display:flex;
-  justify-content:center;
-  gap:12px;
-  flex-wrap:wrap;
-  margin-top:30px;
 }
 
 /* FOOTER */
-
-.site-footer{
-  background:#04141f;
-  color:#fff;
-  padding:50px 24px 25px;
+footer{
+  background:#04131d;
+  color:white;
+  padding:45px 24px;
 }
 
 .footer-inner{
-  max-width:1160px;
+  max-width:1200px;
   margin:auto;
-}
-
-.footer-top{
   display:flex;
   justify-content:space-between;
   gap:30px;
 }
 
 .footer-brand p{
-  max-width:390px;
-  color:#7f98a4;
-  font-size:11px;
+  color:#8197a1;
+  font-size:12px;
   line-height:1.7;
+  max-width:420px;
 }
 
 .footer-links{
@@ -1138,132 +934,113 @@ button{cursor:pointer}
   gap:20px;
 }
 
-.footer-links button{
-  background:none;
-  border:0;
-  color:#a9bdc6;
-  font-size:11px;
+.footer-links a{
+  color:#91a5ae;
+  font-size:12px;
+  text-decoration:none;
 }
 
-.footer-disclaimer{
-  margin-top:40px;
-  padding-top:20px;
-  border-top:1px solid rgba(255,255,255,.08);
-  color:#6f8995;
-  font-size:10px;
-  line-height:1.7;
-}
-
-.footer-copy{
-  margin-top:18px;
-  color:#526c78;
-  font-size:10px;
-}
-
-/* AUTH MODAL */
-
+/* AUTH */
 #authOverlay{
   position:fixed;
   inset:0;
-  z-index:1000;
-  background:rgba(2,14,22,.78);
+  background:rgba(2,12,19,.78);
   backdrop-filter:blur(8px);
-  overflow:auto;
-  padding:35px 18px;
+  z-index:5000;
+  display:grid;
+  place-items:center;
+  padding:20px;
 }
 
 .auth-box{
-  max-width:510px;
-  margin:30px auto;
-  background:#fff;
-  border-radius:22px;
+  width:min(480px,100%);
+  max-height:92vh;
+  overflow:auto;
+  background:white;
+  border-radius:20px;
   padding:28px;
-  box-shadow:0 30px 90px rgba(0,0,0,.3);
-  position:relative;
+  box-shadow:0 35px 100px rgba(0,0,0,.35);
 }
 
-.auth-close{
-  position:absolute;
-  right:18px;
-  top:16px;
-  border:0;
-  background:#f1f4f5;
-  width:34px;
-  height:34px;
-  border-radius:50%;
-}
-
-.auth-logo{
-  width:52px;
-  height:52px;
-  margin-bottom:17px;
+.auth-top{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:20px;
 }
 
 .auth-title{
+  margin:0;
   font-size:28px;
   letter-spacing:-1px;
-  margin:0;
 }
 
-.auth-sub{
-  color:#7b8a93;
-  font-size:12px;
-  margin:7px 0 22px;
+.auth-subtitle{
+  color:#74848d;
+  font-size:13px;
   line-height:1.6;
+  margin-top:7px;
+}
+
+.close-auth{
+  width:35px;
+  height:35px;
+  border:0;
+  border-radius:50%;
+  background:#f1f5f6;
+  color:#52636d;
 }
 
 .auth-tabs{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:5px;
+  background:#f1f5f6;
   padding:4px;
-  background:#f0f4f5;
-  border-radius:10px;
-  margin-bottom:22px;
+  border-radius:9px;
+  margin:22px 0;
 }
 
 .auth-tab{
-  padding:10px;
   border:0;
-  border-radius:8px;
+  padding:11px;
   background:transparent;
-  color:#70808a;
-  font-weight:700;
-  font-size:12px;
+  color:#71818b;
+  border-radius:7px;
+  font-weight:750;
 }
 
 .auth-tab.active{
-  background:#fff;
+  background:white;
   color:#087443;
-  box-shadow:0 2px 8px rgba(0,0,0,.06);
+  box-shadow:0 2px 8px rgba(0,0,0,.05);
 }
 
 .form-group{
-  margin-bottom:15px;
+  margin-bottom:16px;
 }
 
 .form-label{
   display:block;
-  color:#425661;
-  font-size:11px;
-  font-weight:700;
+  font-size:12px;
+  font-weight:750;
+  color:#42545e;
   margin-bottom:7px;
 }
 
 .form-control{
   width:100%;
-  border:1px solid #dbe4e8;
-  background:#fff;
+  border:1px solid #dce5e8;
+  background:white;
   border-radius:9px;
   padding:12px 13px;
   outline:none;
-  color:#172a34;
-  font-size:13px;
+  color:#172b36;
+  transition:.2s;
 }
 
 .form-control:focus{
-  border-color:#0a9b59;
-  box-shadow:0 0 0 3px rgba(10,155,89,.08);
+  border-color:#0aa35c;
+  box-shadow:0 0 0 3px rgba(10,163,92,.08);
 }
 
 .form-row{
@@ -1272,157 +1049,140 @@ button{cursor:pointer}
   gap:13px;
 }
 
-.auth-button{
-  width:100%;
-  border:0;
-  border-radius:9px;
-  background:#087443;
-  color:#fff;
-  padding:13px;
-  font-weight:800;
-  margin-top:5px;
-}
-
 .auth-message{
-  padding:11px 13px;
-  border-radius:8px;
-  margin-bottom:15px;
-  font-size:11px;
+  padding:12px;
+  border-radius:9px;
+  font-size:12px;
+  margin-bottom:14px;
   line-height:1.5;
 }
 
 .auth-message.error{
-  color:#a12835;
-  background:#fff0f1;
+  color:#8e2834;
+  background:#fff0f2;
+  border:1px solid #ffd6da;
 }
 
 .auth-message.success{
-  color:#08653b;
+  color:#12683f;
   background:#eaf8f1;
+  border:1px solid #ccebdc;
 }
 
-.auth-footer{
-  text-align:center;
-  color:#84939b;
-  font-size:10px;
-  margin-top:17px;
-}
-
-.forgot-link{
-  display:block;
-  margin-top:10px;
+.auth-button{
+  width:100%;
+  padding:13px;
   border:0;
-  background:none;
-  color:#087443;
+  border-radius:9px;
+  background:#087443;
+  color:white;
+  font-weight:800;
+}
+
+.auth-button:disabled{
+  opacity:.6;
+  cursor:not-allowed;
+}
+
+.auth-help{
+  color:#7c8a92;
   font-size:11px;
+  line-height:1.6;
+  margin-top:12px;
+}
+
+.auth-login-note{
+  margin:12px 0;
+  padding:11px;
+  border-radius:9px;
+  background:#f4f8f9;
+  color:#697a84;
+  font-size:11px;
+  line-height:1.6;
 }
 
 /* DASHBOARD */
-
 #dashboard{
   min-height:100vh;
   background:#f4f7f8;
 }
 
-.dashboard-shell{
+.dashboard-layout{
   min-height:100vh;
+  display:flex;
 }
 
 .sidebar{
+  width:255px;
+  flex:none;
+  background:#061b2a;
+  color:white;
+  padding:22px 14px;
   position:fixed;
   left:0;
   top:0;
   bottom:0;
-  width:245px;
-  background:#061b2a;
-  color:#fff;
-  z-index:800;
-  padding:22px 14px;
-  overflow-y:auto;
+  overflow:auto;
+  z-index:100;
 }
 
 .dashboard-brand{
   display:flex;
   align-items:center;
   gap:10px;
-  padding:4px 10px 25px;
+  padding:0 10px 25px;
+  font-weight:850;
 }
 
-.dashboard-brand svg{
-  width:38px;
+.dashboard-brand-mark{
+  width:37px;
+  height:37px;
+  border-radius:10px;
+  background:#0aa35c;
+  display:grid;
+  place-items:center;
 }
 
-.dashboard-brand strong{
-  display:block;
-  font-size:15px;
-}
-
-.dashboard-brand span{
-  display:block;
-  color:#7f9ba7;
-  font-size:8px;
-  letter-spacing:1px;
+.side-section{
+  margin:18px 8px 8px;
+  color:#66808e;
+  font-size:10px;
   text-transform:uppercase;
-}
-
-.side-section-label{
-  color:#5e7885;
-  font-size:9px;
-  letter-spacing:1.5px;
-  text-transform:uppercase;
-  margin:16px 10px 7px;
+  letter-spacing:1.4px;
+  font-weight:800;
 }
 
 .side-btn{
   width:100%;
   border:0;
   background:transparent;
-  color:#9fb4bd;
+  color:#9eb0b8;
   display:flex;
   align-items:center;
-  gap:10px;
-  padding:11px 11px;
-  border-radius:9px;
+  gap:11px;
+  padding:11px 12px;
+  border-radius:8px;
   text-align:left;
-  font-size:11px;
+  font-size:12px;
+  font-weight:700;
   margin:2px 0;
 }
 
 .side-btn:hover,
 .side-btn.active{
   background:rgba(255,255,255,.08);
-  color:#fff;
-}
-
-.side-btn.active{
-  box-shadow:inset 3px 0 #38c984;
-}
-
-.sidebar-bottom{
-  margin-top:25px;
-  padding-top:17px;
-  border-top:1px solid rgba(255,255,255,.08);
-}
-
-.logout-btn{
-  width:100%;
-  border:0;
-  background:rgba(200,59,72,.1);
-  color:#ee9aa3;
-  padding:11px;
-  border-radius:9px;
-  font-size:11px;
-  text-align:left;
+  color:white;
 }
 
 .dashboard-main{
-  margin-left:245px;
+  margin-left:255px;
+  width:calc(100% - 255px);
   min-height:100vh;
 }
 
 .dashboard-topbar{
-  height:76px;
-  background:#fff;
+  height:72px;
+  background:white;
   border-bottom:1px solid var(--border);
   display:flex;
   align-items:center;
@@ -1430,65 +1190,49 @@ button{cursor:pointer}
   padding:0 28px;
   position:sticky;
   top:0;
-  z-index:400;
+  z-index:80;
 }
 
-.dashboard-top-left{
+.dashboard-topbar h1{
+  margin:0;
+  font-size:19px;
+  letter-spacing:-.5px;
+}
+
+.top-user{
   display:flex;
   align-items:center;
-  gap:13px;
-}
-
-.menu-toggle{
-  display:none;
-  border:0;
-  background:#f0f4f5;
-  width:37px;
-  height:37px;
-  border-radius:9px;
-}
-
-.top-title{
-  font-size:16px;
-  font-weight:800;
-}
-
-.top-right{
-  display:flex;
-  align-items:center;
-  gap:12px;
-}
-
-.chat-top-btn{
-  border:0;
-  background:#eaf8f1;
-  color:#087443;
-  width:38px;
-  height:38px;
-  border-radius:9px;
-  display:grid;
-  place-items:center;
+  gap:10px;
 }
 
 .avatar{
   width:37px;
   height:37px;
   border-radius:50%;
+  background:#eaf8f1;
+  color:#087443;
   display:grid;
   place-items:center;
-  background:#087443;
-  color:#fff;
-  font-size:11px;
   font-weight:800;
+  font-size:12px;
+  overflow:hidden;
 }
 
-.top-user{
-  font-size:11px;
-  font-weight:700;
+.avatar img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.menu-button{
+  display:none;
+  border:0;
+  background:transparent;
 }
 
 .dashboard-content{
   padding:30px;
+  max-width:1400px;
 }
 
 .page{
@@ -1500,7 +1244,7 @@ button{cursor:pointer}
 }
 
 .page-title{
-  margin-bottom:23px;
+  margin-bottom:25px;
 }
 
 .page-title h2{
@@ -1510,252 +1254,197 @@ button{cursor:pointer}
 }
 
 .page-title p{
-  color:#7c8b93;
-  font-size:12px;
-  margin:6px 0 0;
+  color:#7b8991;
+  font-size:13px;
+  margin-top:6px;
 }
 
-/* DASHBOARD CARDS */
+.section-card{
+  background:white;
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:23px;
+  margin-top:17px;
+  box-shadow:0 8px 30px rgba(10,35,45,.035);
+}
 
-.dashboard-hero-card{
-  border-radius:19px;
-  padding:27px;
-  color:#fff;
-  background:
-    radial-gradient(circle at 80% 20%,rgba(76,209,143,.3),transparent 28%),
-    linear-gradient(125deg,#061b2a,#087443);
+.home-grid{
+  display:grid;
+  grid-template-columns:1.5fr 1fr;
+  gap:17px;
+}
+
+.balance-card{
+  padding:28px;
+  border-radius:17px;
+  background:linear-gradient(130deg,#061b2a,#087443);
+  color:white;
   position:relative;
   overflow:hidden;
 }
 
-.dashboard-hero-card:after{
+.balance-card:after{
   content:"";
   position:absolute;
   width:250px;
   height:250px;
-  border:1px solid rgba(255,255,255,.08);
   border-radius:50%;
   right:-100px;
-  bottom:-120px;
+  top:-100px;
+  background:rgba(255,255,255,.06);
 }
 
-.dashboard-welcome{
-  color:#a8c0c9;
-  font-size:11px;
+.balance-card small{
+  color:#a9c1ca;
 }
 
-.dashboard-welcome strong{
-  color:#fff;
-  font-size:18px;
-}
-
-.dashboard-balance-label{
-  margin-top:28px;
-  color:#a6bbc4;
-  font-size:10px;
-  text-transform:uppercase;
-  letter-spacing:1px;
-}
-
-.dashboard-balance{
+.balance-card .balance{
   font-size:42px;
-  font-weight:800;
-  letter-spacing:-2px;
-  margin-top:6px;
+  font-weight:850;
+  margin:13px 0 20px;
 }
 
-.balance-toggle{
-  border:0;
-  background:rgba(255,255,255,.08);
-  color:#fff;
-  border-radius:8px;
-  padding:6px 9px;
-  font-size:10px;
-}
-
-.dashboard-card-footer{
+.balance-actions{
   display:flex;
-  justify-content:space-between;
-  gap:15px;
-  margin-top:26px;
-  padding-top:17px;
-  border-top:1px solid rgba(255,255,255,.1);
+  gap:9px;
 }
 
-.dashboard-card-footer small{
-  display:block;
-  color:#82a0aa;
-  font-size:9px;
-}
-
-.dashboard-card-footer strong{
-  display:block;
-  margin-top:4px;
+.balance-action{
+  border:1px solid rgba(255,255,255,.15);
+  color:white;
+  background:rgba(255,255,255,.08);
+  padding:9px 12px;
+  border-radius:8px;
   font-size:11px;
+  font-weight:700;
+}
+
+.info-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
+}
+
+.info-item{
+  padding:15px;
+  border-radius:11px;
+  background:#f6f9fa;
+}
+
+.info-item small{
+  color:#829098;
+  font-size:10px;
+  display:block;
+}
+
+.info-item strong{
+  display:block;
+  margin-top:6px;
+  font-size:13px;
 }
 
 .status-pill{
   display:inline-flex;
   align-items:center;
-  gap:6px;
+  gap:7px;
   padding:6px 9px;
   border-radius:999px;
   background:#eaf8f1;
   color:#087443;
   font-size:10px;
+  font-weight:800;
 }
 
 .status-dot{
   width:6px;
   height:6px;
-  background:#19a968;
   border-radius:50%;
+  background:#16a05e;
 }
 
-.dashboard-grid{
+.quick-grid{
   display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:16px;
-  margin-top:16px;
-}
-
-.stat-card{
-  padding:20px;
-  border:1px solid var(--border);
-  background:#fff;
-  border-radius:15px;
-}
-
-.stat-card small{
-  color:#82919a;
-  font-size:10px;
-}
-
-.stat-card strong{
-  display:block;
-  margin-top:8px;
-  font-size:21px;
-}
-
-.quick-actions{
-  display:grid;
-  grid-template-columns:1fr 1fr;
+  grid-template-columns:repeat(2,1fr);
   gap:12px;
-  margin-top:16px;
 }
 
-.quick-action{
+.quick-card{
   border:1px solid var(--border);
-  background:#fff;
-  border-radius:15px;
-  padding:19px;
+  background:white;
+  border-radius:14px;
+  padding:20px;
   text-align:left;
 }
 
-.quick-action:hover{
-  border-color:#b7daca;
-}
-
-.quick-action-icon{
-  width:40px;
-  height:40px;
-  display:grid;
-  place-items:center;
-  border-radius:10px;
-  background:#eaf8f1;
-  color:#087443;
-}
-
-.quick-action strong{
+.quick-card strong{
   display:block;
-  margin-top:13px;
-  font-size:12px;
+  margin-top:11px;
 }
 
-.quick-action span{
+.quick-card span{
   display:block;
-  color:#81909a;
-  font-size:10px;
+  color:#84919a;
+  font-size:11px;
   margin-top:4px;
 }
-
-.section-card{
-  background:#fff;
-  border:1px solid var(--border);
-  border-radius:15px;
-  padding:23px;
-  margin-top:16px;
-}
-
-.section-card h3{
-  font-size:16px;
-}
-
-.recent-head{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-
-.text-button{
-  border:0;
-  background:none;
-  color:#087443;
-  font-size:11px;
-  font-weight:800;
-}
-
-/* TRANSACTIONS */
 
 .tx-row{
   display:grid;
   grid-template-columns:1fr auto auto;
+  gap:20px;
   align-items:center;
-  gap:15px;
   padding:15px 0;
-  border-bottom:1px solid #edf1f3;
+  border-bottom:1px solid #edf1f2;
 }
 
-.tx-row:last-child{border-bottom:0}
+.tx-row:last-child{
+  border-bottom:0;
+}
 
 .tx-main{
   display:flex;
   align-items:center;
-  gap:10px;
+  gap:11px;
 }
 
 .tx-icon{
-  width:35px;
-  height:35px;
+  width:37px;
+  height:37px;
+  border-radius:10px;
   display:grid;
   place-items:center;
-  border-radius:9px;
   background:#eaf8f1;
   color:#087443;
 }
 
 .tx-main strong{
   display:block;
-  font-size:11px;
+  font-size:12px;
 }
 
 .tx-main small{
   display:block;
-  color:#8a989f;
-  font-size:9px;
-  margin-top:4px;
+  color:#8a979e;
+  margin-top:3px;
+  font-size:10px;
 }
 
 .tx-amount{
-  font-size:11px;
   font-weight:800;
+  font-size:12px;
 }
 
 .tx-status{
-  padding:5px 8px;
+  padding:6px 8px;
   border-radius:999px;
-  font-size:8px;
+  font-size:9px;
+  font-weight:800;
   text-transform:capitalize;
+}
+
+.tx-status.pending{
+  background:#fff7e5;
+  color:#9b6b12;
 }
 
 .tx-status.completed{
@@ -1763,110 +1452,77 @@ button{cursor:pointer}
   color:#087443;
 }
 
-.tx-status.pending{
-  background:#fff6df;
-  color:#9a6c08;
+.tx-status.refunded{
+  background:#edf4ff;
+  color:#315c91;
 }
 
 .tx-status.declined{
-  background:#fff0f1;
-  color:#b12c39;
-}
-
-.tx-status.refunded{
-  background:#eef3ff;
-  color:#3f5e9b;
-}
-
-/* SUMMARY */
-
-.summary-grid{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:16px;
-}
-
-.info-row{
-  display:flex;
-  justify-content:space-between;
-  gap:15px;
-  padding:13px 0;
-  border-bottom:1px solid #edf1f3;
-}
-
-.info-row:last-child{border-bottom:0}
-
-.info-row span{
-  color:#7f8e96;
-  font-size:10px;
-}
-
-.info-row strong{
-  font-size:11px;
-  text-align:right;
-}
-
-/* TRANSFER */
-
-.transfer-choice{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:16px;
-}
-
-.transfer-choice-card{
-  padding:24px;
-  background:#fff;
-  border:1px solid var(--border);
-  border-radius:16px;
-  text-align:left;
-}
-
-.transfer-choice-card h3{
-  margin:17px 0 7px;
-  font-size:16px;
-}
-
-.transfer-choice-card p{
-  color:#81909a;
-  font-size:11px;
-  line-height:1.6;
-  margin:0 0 18px;
+  background:#fff0f2;
+  color:#a3313d;
 }
 
 .primary-btn,
 .secondary-btn{
   border-radius:8px;
-  padding:11px 16px;
-  font-size:11px;
+  padding:11px 15px;
+  font-size:12px;
   font-weight:800;
 }
 
 .primary-btn{
   border:1px solid #087443;
   background:#087443;
-  color:#fff;
+  color:white;
 }
 
 .secondary-btn{
   border:1px solid #dce5e8;
-  background:#fff;
-  color:#51636d;
+  background:white;
+  color:#43545e;
+}
+
+.transfer-choice{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:15px;
+}
+
+.transfer-choice-card{
+  padding:25px;
+  border:1px solid var(--border);
+  border-radius:16px;
+  background:white;
+  cursor:pointer;
+}
+
+.transfer-choice-card:hover{
+  border-color:#b9dfcd;
+}
+
+.transfer-choice-card h3{
+  margin:15px 0 7px;
+}
+
+.transfer-choice-card p{
+  color:#788790;
+  font-size:12px;
+  line-height:1.7;
 }
 
 .transfer-head{
   display:flex;
   align-items:center;
-  gap:14px;
+  gap:15px;
   margin-bottom:15px;
 }
 
 .back-btn{
   border:0;
-  background:none;
+  background:transparent;
   color:#087443;
-  font-size:11px;
   font-weight:800;
+  font-size:12px;
 }
 
 .transfer-actions{
@@ -1877,97 +1533,58 @@ button{cursor:pointer}
 }
 
 .review-box{
-  border:1px solid #e4ebee;
+  border:1px solid var(--border);
   border-radius:12px;
-  padding:5px 17px;
+  overflow:hidden;
 }
 
 .review-line{
   display:flex;
   justify-content:space-between;
   gap:20px;
-  padding:13px 0;
-  border-bottom:1px solid #edf1f3;
+  padding:14px;
+  border-bottom:1px solid var(--border);
 }
 
-.review-line:last-child{border-bottom:0}
+.review-line:last-child{
+  border-bottom:0;
+}
 
 .review-line span{
-  color:#82919a;
-  font-size:10px;
+  color:#7a8991;
+  font-size:12px;
 }
 
 .review-line strong{
-  font-size:11px;
+  font-size:12px;
   text-align:right;
 }
 
-/* ANALYSIS DASHBOARD */
-
-.dashboard-analysis-grid{
-  display:grid;
-  grid-template-columns:1.2fr .8fr;
-  gap:16px;
-}
-
-.analysis-chart{
-  height:260px;
-  display:flex;
-  align-items:flex-end;
-  gap:13px;
-  margin-top:25px;
-}
-
-.analysis-chart-bar{
-  flex:1;
-  background:linear-gradient(to top,#087443,#64d79c);
-  border-radius:7px 7px 2px 2px;
-}
-
-.metric-card{
-  padding:21px;
-  border-radius:15px;
-  background:#fff;
-  border:1px solid var(--border);
-}
-
-.metric-card small{
-  color:#81909a;
-  font-size:10px;
-}
-
-.metric-card strong{
-  display:block;
-  font-size:26px;
-  margin-top:7px;
-}
-
-/* PROFILE */
-
 .profile-layout{
   display:grid;
-  grid-template-columns:260px 1fr;
-  gap:16px;
+  grid-template-columns:280px 1fr;
+  gap:17px;
 }
 
 .profile-card{
-  background:#061b2a;
-  color:#fff;
-  border-radius:15px;
+  background:white;
+  border:1px solid var(--border);
+  border-radius:16px;
   padding:25px;
   text-align:center;
 }
 
 .profile-photo{
-  width:75px;
-  height:75px;
-  margin:0 auto 15px;
+  width:90px;
+  height:90px;
+  border-radius:50%;
+  background:#eaf8f1;
+  color:#087443;
   display:grid;
   place-items:center;
-  border-radius:50%;
-  background:#087443;
-  font-size:20px;
-  font-weight:800;
+  margin:0 auto 17px;
+  font-size:24px;
+  font-weight:850;
   overflow:hidden;
 }
 
@@ -1977,193 +1594,176 @@ button{cursor:pointer}
   object-fit:cover;
 }
 
-.profile-card h3{
-  margin:0;
-  font-size:15px;
-}
-
 .profile-card p{
-  margin:6px 0 0;
-  color:#8ea6b1;
-  font-size:10px;
+  color:#819099;
+  font-size:12px;
 }
 
-/* KYC */
+.settings-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:17px;
+}
 
 .verified-box{
-  max-width:650px;
-  padding:40px;
-  text-align:center;
-  background:#fff;
+  max-width:600px;
+  padding:45px;
+  background:white;
   border:1px solid var(--border);
-  border-radius:18px;
+  border-radius:17px;
+  text-align:center;
 }
 
 .verified-icon{
   width:80px;
   height:80px;
+  border-radius:50%;
   margin:auto;
   display:grid;
   place-items:center;
-  border-radius:50%;
   background:#eaf8f1;
   color:#087443;
 }
 
 .verified-box h2{
-  margin:20px 0 7px;
+  margin-bottom:5px;
 }
 
 .verified-box p{
-  margin:0;
-  color:#82919a;
-  font-size:12px;
+  color:#71818b;
+  font-size:13px;
 }
 
-/* SETTINGS */
-
-.settings-grid{
+.analysis-dashboard-grid{
   display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:16px;
+  grid-template-columns:repeat(3,1fr);
+  gap:15px;
 }
 
-/* SUPPORT */
-
-.support-card{
-  max-width:650px;
+.dashboard-analysis-stat{
+  background:white;
+  border:1px solid var(--border);
+  border-radius:15px;
+  padding:20px;
 }
 
-/* PIN */
+.dashboard-analysis-stat small{
+  color:#7e8d95;
+}
+
+.dashboard-analysis-stat strong{
+  display:block;
+  font-size:25px;
+  margin-top:7px;
+}
 
 #pinModal{
   display:none;
   position:fixed;
   inset:0;
-  z-index:2000;
-  background:rgba(2,14,22,.7);
-  backdrop-filter:blur(6px);
+  background:rgba(2,12,19,.72);
+  z-index:6000;
   align-items:center;
   justify-content:center;
   padding:20px;
 }
 
 .pin-box{
-  width:min(420px,100%);
-  background:#fff;
-  border-radius:20px;
-  padding:30px;
+  background:white;
+  border-radius:18px;
+  width:min(390px,100%);
+  padding:28px;
   text-align:center;
-  box-shadow:0 30px 80px rgba(0,0,0,.3);
 }
 
 .pin-box h3{
   margin:0;
-  font-size:20px;
 }
 
 .pin-box p{
-  color:#7d8d95;
-  font-size:11px;
+  color:#7c8991;
+  font-size:12px;
   line-height:1.6;
 }
 
 .pin-input{
   text-align:center;
-  font-size:22px;
-  letter-spacing:7px;
+  letter-spacing:8px;
+  font-size:20px;
 }
-
-/* FLOATING CHAT */
 
 .chat-float{
   position:fixed;
-  right:22px;
-  bottom:22px;
-  z-index:900;
-  width:58px;
-  height:58px;
-  border:0;
+  right:20px;
+  bottom:20px;
+  width:56px;
+  height:56px;
   border-radius:50%;
+  border:0;
   background:#087443;
-  color:#fff;
+  color:white;
   display:grid;
   place-items:center;
-  box-shadow:0 12px 30px rgba(0,0,0,.25);
-  transition:.2s ease;
+  box-shadow:0 12px 35px rgba(0,0,0,.22);
+  z-index:4000;
 }
-
-.chat-float:hover{
-  transform:translateY(-3px);
-  background:#0aa35c;
-}
-
-.chat-float:after{
-  content:"";
-  position:absolute;
-  inset:-5px;
-  border:1px solid rgba(8,116,67,.25);
-  border-radius:50%;
-}
-
-/* TOAST */
 
 #toast{
   position:fixed;
-  right:20px;
-  bottom:92px;
-  z-index:3000;
-  max-width:330px;
-  background:#061b2a;
-  color:#fff;
-  padding:12px 16px;
-  border-radius:10px;
-  font-size:11px;
-  box-shadow:0 15px 35px rgba(0,0,0,.22);
-  transform:translateY(20px);
+  left:50%;
+  bottom:25px;
+  transform:translate(-50%,20px);
   opacity:0;
   pointer-events:none;
-  transition:.25s ease;
+  padding:12px 17px;
+  border-radius:9px;
+  background:#061b2a;
+  color:white;
+  font-size:12px;
+  z-index:10000;
+  transition:.25s;
+  box-shadow:0 15px 35px rgba(0,0,0,.2);
 }
 
 #toast.show{
   opacity:1;
-  transform:translateY(0);
+  transform:translate(-50%,0);
 }
 
-/* RESPONSIVE */
-
-@media(max-width:1050px){
-
-  .nav-links{display:none}
-  .mobile-nav-btn{display:block}
+/* MOBILE */
+@media(max-width:1000px){
+  .nav-links{
+    display:none;
+  }
 
   .hero{
-    min-height:auto;
-    padding-top:125px;
+    min-height:1750px;
+    padding-top:145px;
   }
 
   .hero-grid{
     grid-template-columns:1fr;
   }
 
-  .hero-copy{
-    max-width:750px;
-  }
-
   .hero-visual{
-    min-height:650px;
-    max-width:700px;
-    width:100%;
-    margin:auto;
+    min-height:700px;
   }
 
-  .hero-showcase{
-    margin-top:45px;
-  }
-
-  .service-grid{
+  .feature-grid{
     grid-template-columns:1fr 1fr;
+  }
+
+  .showcase-grid{
+    grid-template-columns:1fr;
+  }
+
+  .insight-card{
+    grid-template-columns:1fr;
+  }
+
+  .review-strip,
+  .reviews-grid{
+    grid-template-columns:1fr;
   }
 
   .security-grid,
@@ -2172,18 +1772,114 @@ button{cursor:pointer}
     grid-template-columns:1fr;
   }
 
-  .analysis-demo,
-  .dashboard-analysis-grid{
+  .hero-bottom{
+    grid-template-columns:1fr 1fr;
+    gap:20px;
+  }
+
+  .hero-bottom-item{
+    border-right:0;
+  }
+
+  .home-grid{
     grid-template-columns:1fr;
   }
 
-  .review-grid{
-    grid-template-columns:1fr 1fr;
+  .profile-layout,
+  .settings-grid{
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:700px){
+  .site-nav{
+    padding:16px;
+  }
+
+  .nav-actions .nav-btn:first-child{
+    display:none;
+  }
+
+  .hero{
+    min-height:2100px;
+    padding:125px 17px 80px;
+  }
+
+  .hero h1{
+    font-size:50px;
+    letter-spacing:-3px;
+  }
+
+  .hero-copy{
+    font-size:15px;
+  }
+
+  .hero-visual{
+    min-height:620px;
+  }
+
+  .bank-card{
+    right:0;
+    width:94%;
+  }
+
+  .floating-stat{
+    left:0;
+    bottom:130px;
+    width:175px;
+  }
+
+  .floating-transfer{
+    right:0;
+    top:350px;
+    width:180px;
+  }
+
+  .security-mini{
+    left:20px;
+    top:420px;
+    width:170px;
+  }
+
+  .showcase-grid{
+    grid-template-columns:1fr;
+  }
+
+  .hero-bottom{
+    grid-template-columns:1fr;
+  }
+
+  .hero-bottom-item{
+    padding-left:0;
+  }
+
+  .feature-grid,
+  .analysis-stats,
+  .analysis-dashboard-grid,
+  .transfer-choice{
+    grid-template-columns:1fr;
+  }
+
+  .landing-section{
+    padding:75px 17px;
+  }
+
+  .final-cta{
+    margin:20px 17px 70px;
+    padding:45px 22px;
+  }
+
+  .footer-inner{
+    flex-direction:column;
+  }
+
+  .form-row{
+    grid-template-columns:1fr;
   }
 
   .sidebar{
     transform:translateX(-100%);
-    transition:.25s ease;
+    transition:.25s;
   }
 
   .sidebar.open{
@@ -2192,136 +1888,19 @@ button{cursor:pointer}
 
   .dashboard-main{
     margin-left:0;
-  }
-
-  .menu-toggle{
-    display:grid;
-    place-items:center;
-  }
-
-  .dashboard-grid{
-    grid-template-columns:1fr 1fr 1fr;
-  }
-}
-
-@media(max-width:700px){
-
-  .nav-inner{
-    padding:0 15px;
-  }
-
-  .nav-actions{
-    display:none;
-  }
-
-  .hero{
-    padding:115px 17px 70px;
-  }
-
-  .hero h1{
-    font-size:51px;
-    letter-spacing:-3px;
-  }
-
-  .hero-copy{
-    font-size:15px;
-  }
-
-  .hero-actions{
-    flex-direction:column;
-  }
-
-  .hero-primary,
-  .hero-secondary{
     width:100%;
-  }
-
-  .hero-visual{
-    min-height:560px;
-  }
-
-  .bank-card{
-    right:0;
-    width:100%;
-  }
-
-  .floating-stat{
-    left:0;
-    bottom:95px;
-    width:180px;
-  }
-
-  .floating-transfer{
-    right:0;
-    top:370px;
-    width:175px;
-  }
-
-  .floating-security{
-    left:15px;
-    top:455px;
-    width:160px;
-  }
-
-  .hero-mini-grid,
-  .hero-review-strip{
-    grid-template-columns:1fr;
-  }
-
-  .hero-insight-grid{
-    grid-template-columns:1fr;
-  }
-
-  .hero-bottom{
-    grid-template-columns:1fr;
-    gap:17px;
-  }
-
-  .hero-bottom-item{
-    border-right:0;
-    border-bottom:1px solid rgba(255,255,255,.1);
-    padding:0 0 16px;
-  }
-
-  .hero-bottom-item:last-child{
-    border-bottom:0;
-  }
-
-  .landing-section{
-    padding:75px 17px;
-  }
-
-  .service-grid,
-  .review-grid,
-  .summary-grid,
-  .settings-grid,
-  .profile-layout,
-  .transfer-choice{
-    grid-template-columns:1fr;
-  }
-
-  .form-row{
-    grid-template-columns:1fr;
-  }
-
-  .dashboard-content{
-    padding:18px 14px 80px;
   }
 
   .dashboard-topbar{
-    padding:0 15px;
+    padding:0 16px;
   }
 
-  .top-user{
-    display:none;
+  .menu-button{
+    display:block;
   }
 
-  .dashboard-grid{
-    grid-template-columns:1fr;
-  }
-
-  .quick-actions{
-    grid-template-columns:1fr;
+  .dashboard-content{
+    padding:17px;
   }
 
   .tx-row{
@@ -2338,28 +1917,8 @@ button{cursor:pointer}
     grid-row:2;
   }
 
-  .footer-top{
-    flex-direction:column;
-  }
-
-  .footer-links{
-    flex-wrap:wrap;
-  }
-
   .auth-box{
     padding:22px;
-    margin:10px auto;
-  }
-
-  .dashboard-balance{
-    font-size:35px;
-  }
-
-  .chat-float{
-    width:54px;
-    height:54px;
-    right:16px;
-    bottom:16px;
   }
 }
 </style>
@@ -2369,1120 +1928,682 @@ button{cursor:pointer}
 
 <!-- LOADING -->
 <div id="loadingScreen">
-  <div class="loading-inner">
-
-    <svg class="loading-logo" viewBox="0 0 80 80">
-      <rect width="80" height="80" rx="21" fill="#0a8b50"/>
-      <path d="M20 51V29L40 18L60 29V51"
-            fill="none"
-            stroke="white"
-            stroke-width="5"/>
-      <path d="M27 52V38M40 52V31M53 52V38"
-            stroke="white"
-            stroke-width="5"
-            stroke-linecap="round"/>
-    </svg>
-
-    <div class="loading-name">Cash Flow Bank</div>
-    <div class="loading-sub">Financial platform prototype</div>
-    <div class="spinner"></div>
-
+  <div class="loader-box">
+    <div class="loader-logo">CF</div>
+    <p>Loading Cash Flow Bank...</p>
   </div>
 </div>
 
-<!-- =========================================================
-     LANDING PAGE
-========================================================= -->
-
+<!-- ================= LANDING ================= -->
 <div id="landing">
 
-  <!-- NAV -->
-  <nav class="site-nav">
-    <div class="nav-inner">
+<header class="site-nav">
+  <div class="nav-inner">
 
-      <button class="brand" onclick="scrollToSection('home')">
-        <svg class="brand-mark" viewBox="0 0 80 80">
-          <rect width="80" height="80" rx="20" fill="#0a8b50"/>
-          <path d="M20 51V29L40 18L60 29V51"
-                fill="none"
-                stroke="white"
-                stroke-width="5"/>
-          <path d="M27 52V38M40 52V31M53 52V38"
-                stroke="white"
-                stroke-width="5"
-                stroke-linecap="round"/>
-        </svg>
+    <a href="#" class="brand">
+      <span class="brand-mark">CF</span>
+      <span>Cash Flow Bank</span>
+    </a>
 
-        <span>
-          <span class="brand-name">Cash Flow Bank</span>
-          <span class="brand-small">Financial Platform Prototype</span>
-        </span>
-      </button>
+    <nav class="nav-links">
+      <a href="#home">Home</a>
+      <a href="#services">Services</a>
+      <a href="#security">Security</a>
+      <a href="#reviews">Reviews</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </nav>
 
-      <div class="nav-links">
-        <button onclick="scrollToSection('home')">Home</button>
-        <button onclick="scrollToSection('services')">Services</button>
-        <button onclick="scrollToSection('security')">Security</button>
-        <button onclick="scrollToSection('reviews')">Reviews</button>
-        <button onclick="scrollToSection('about')">About</button>
-        <button onclick="scrollToSection('contact')">Contact</button>
+    <div class="nav-actions">
+      <button class="nav-btn" onclick="openAuth('login')">Sign In</button>
+      <button class="nav-btn primary" onclick="openAuth('register')">Open Account</button>
+    </div>
+
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero" id="home">
+
+  <div class="hero-grid">
+
+    <div>
+      <div class="hero-eyebrow">
+        <span class="eyebrow-dot"></span>
+        Financial platform prototype
       </div>
 
-      <div class="nav-actions">
-        <button class="nav-btn nav-sign" onclick="openAuth('login')">
+      <h1>
+        Your goals.<br>
+        Our <span>priority.</span>
+      </h1>
+
+      <p class="hero-copy">
+        A modern banking-style dashboard prototype designed to give customers
+        a clean way to view account information, monitor activity, manage
+        transfers and connect with support.
+      </p>
+
+      <div class="hero-actions">
+        <button class="hero-primary" onclick="openAuth('register')">
+          Create Account
+        </button>
+
+        <button class="hero-secondary" onclick="openAuth('login')">
           Sign In
         </button>
-
-        <button class="nav-btn nav-open" onclick="openAuth('register')">
-          Open Account
-        </button>
       </div>
 
-      <button class="mobile-nav-btn" onclick="openAuth('login')">
-        Sign In
-      </button>
+      <p class="hero-note">
+        Prototype preview only. This website is not a real bank, deposit-taking
+        institution, or real-money ledger. Example figures shown below are
+        interface demonstrations.
+      </p>
+    </div>
+
+    <div class="hero-visual">
+
+      <div class="bank-card">
+
+        <div class="card-top">
+          <div>
+            <div class="card-label">Prototype account</div>
+            <strong style="font-size:14px;">Cash Flow</strong>
+          </div>
+
+          <div class="card-chip"></div>
+        </div>
+
+        <div class="card-balance">$12,480.00</div>
+
+        <div class="card-lines">
+          <span>Example balance</span>
+          <span>•••• 4281</span>
+        </div>
+
+      </div>
+
+      <div class="floating-stat">
+        <small>Cashflow activity</small>
+        <strong>+18.4%</strong>
+        <div style="color:#087443;font-size:11px;margin-top:4px;">
+          Example analysis
+        </div>
+      </div>
+
+      <div class="floating-transfer">
+        <small>Sample transfer</small>
+        <div class="transfer-mini">
+          <span>Recipient</span>
+          <strong>Pending</strong>
+        </div>
+        <div class="transfer-mini">
+          <span>Amount</span>
+          <strong>$450.00</strong>
+        </div>
+      </div>
+
+      <div class="security-mini">
+        <strong>Account protection</strong>
+        <span>PIN confirmation enabled</span>
+      </div>
+
+      <svg class="skyline" viewBox="0 0 1000 400" preserveAspectRatio="none">
+        <rect x="0" y="250" width="70" height="150"/>
+        <rect x="65" y="190" width="85" height="210"/>
+        <rect x="140" y="230" width="60" height="170"/>
+        <rect x="195" y="130" width="90" height="270"/>
+        <rect x="280" y="215" width="75" height="185"/>
+        <rect x="345" y="160" width="115" height="240"/>
+        <rect x="455" y="235" width="70" height="165"/>
+        <rect x="515" y="115" width="95" height="285"/>
+        <rect x="600" y="205" width="75" height="195"/>
+        <rect x="665" y="145" width="120" height="255"/>
+        <rect x="775" y="220" width="70" height="180"/>
+        <rect x="835" y="175" width="95" height="225"/>
+        <rect class="lit" x="205" y="150" width="10" height="14"/>
+        <rect class="lit" x="230" y="190" width="10" height="14"/>
+        <rect class="lit" x="370" y="185" width="10" height="14"/>
+        <rect class="lit" x="400" y="220" width="10" height="14"/>
+        <rect class="lit" x="540" y="145" width="10" height="14"/>
+        <rect class="lit" x="570" y="185" width="10" height="14"/>
+        <rect class="lit" x="700" y="180" width="10" height="14"/>
+        <rect class="lit" x="740" y="220" width="10" height="14"/>
+      </svg>
 
     </div>
-  </nav>
 
-  <!-- HERO -->
-  <section class="hero" id="home">
+  </div>
 
-    <div class="hero-orb"></div>
+  <!-- HERO SHOWCASE -->
+  <div class="hero-showcase">
 
-    <div class="hero-grid">
+    <div class="showcase-grid">
+
+      <div class="showcase-card">
+        <small>ACCOUNT ACCESS</small>
+        <strong>10-digit account number</strong>
+        <p>
+          Customers can use their account number and password to access
+          the prototype dashboard.
+        </p>
+      </div>
+
+      <div class="showcase-card">
+        <small>TRANSFER CONTROL</small>
+        <strong>PIN confirmation</strong>
+        <p>
+          Transfer requests require the customer's four-digit security PIN
+          before submission.
+        </p>
+      </div>
+
+      <div class="showcase-card">
+        <small>LIVE SUPPORT</small>
+        <strong>Customer live chat</strong>
+        <p>
+          Connect with support directly through the integrated live chat.
+        </p>
+      </div>
+
+    </div>
+
+    <div class="insight-card">
 
       <div>
-
-        <div class="hero-eyebrow">
-          <span class="eyebrow-dot"></span>
-          Modern account management, designed around you
-        </div>
-
-        <h1>
-          Your Goals.<br>
-          <span>Our Priority.</span>
-        </h1>
-
-        <p class="hero-copy">
-          A polished financial management experience built for people
-          who want a clearer view of their account information,
-          simpler transfer workflows, useful cashflow insights and
-          support when they need it.
-        </p>
-
-        <div class="hero-actions">
-
-          <button
-            class="hero-primary"
-            onclick="openAuth('register')">
-            Open an Account
-          </button>
-
-          <button
-            class="hero-secondary"
-            onclick="openAuth('login')">
-            Sign In to Your Account
-          </button>
-
-          <button
-            class="hero-secondary"
-            onclick="openTawkChat()">
-            <svg class="icon"
-                 style="display:inline-block;vertical-align:-5px;margin-right:6px;">
-              <path d="M4 5h16v11H8l-4 4V5z"/>
-            </svg>
-            Live Chat
-          </button>
-
-        </div>
-
-        <div class="hero-note">
-          Secure sign-in • Account dashboard • Transfer workflows •
-          Cashflow insights • Live support
-        </div>
-
-        <div class="hero-trust-row">
-          <div class="hero-trust-pill">Account overview</div>
-          <div class="hero-trust-pill">Transfer workflow</div>
-          <div class="hero-trust-pill">Cashflow analysis</div>
-          <div class="hero-trust-pill">Support access</div>
-        </div>
-
-      </div>
-
-      <!-- HERO VISUAL -->
-      <div class="hero-visual">
-
-        <!-- ACCOUNT CARD -->
-        <div class="bank-card">
-
-          <div class="card-top">
-
-            <div class="card-label">
-              Example Account Preview
-            </div>
-
-            <svg width="38"
-                 height="38"
-                 viewBox="0 0 80 80">
-              <rect x="2"
-                    y="2"
-                    width="76"
-                    height="76"
-                    rx="20"
-                    fill="#0a8b50"/>
-
-              <path d="M20 51V29L40 18L60 29V51"
-                    fill="none"
-                    stroke="white"
-                    stroke-width="5"/>
-
-              <path d="M27 52V38M40 52V31M53 52V38"
-                    stroke="white"
-                    stroke-width="5"
-                    stroke-linecap="round"/>
-            </svg>
-
-          </div>
-
-          <div class="card-balance">
-            $24,850.00
-          </div>
-
-          <div class="card-lines">
-            <span>EXAMPLE BALANCE</span>
-            <span>•••• 4821</span>
-          </div>
-
-          <div class="sample-label">
-            Sample account display — not a real-money balance.
-          </div>
-
-        </div>
-
-        <!-- CASHFLOW CARD -->
-        <div class="floating-stat">
-          <small>Cashflow insight</small>
-
-          <strong>Healthy</strong>
-
-          <div style="
-            color:#087443;
-            font-size:11px;
-            margin-top:5px;">
-            Example activity status
-          </div>
-        </div>
-
-        <!-- TRANSFER CARD -->
-        <div class="floating-transfer">
-
-          <div class="floating-transfer-title">
-            Transfer workflow
-          </div>
-
-          <strong>
-            Transfer request
-          </strong>
-
-          <span>
-            ✓ Ready for review
-          </span>
-
-        </div>
-
-        <!-- SECURITY CARD -->
-        <div class="floating-security">
-
-          <strong>
-            Account Security
-          </strong>
-
-          <span>
-            Four-digit PIN confirmation
-          </span>
-
-        </div>
-
-        <!-- SKYLINE -->
-        <svg class="skyline"
-             viewBox="0 0 800 400"
-             preserveAspectRatio="none">
-
-          <rect x="0" y="250" width="75" height="150"/>
-          <rect x="82" y="185" width="82" height="215"/>
-          <rect x="172" y="220" width="65" height="180"/>
-          <rect x="244" y="135" width="95" height="265"/>
-          <rect x="347" y="205" width="65" height="195"/>
-          <rect x="420" y="165" width="90" height="235"/>
-          <rect x="518" y="240" width="72" height="160"/>
-          <rect x="598" y="115" width="96" height="285"/>
-          <rect x="703" y="195" width="97" height="205"/>
-
-          <rect class="lit" x="98" y="205" width="9" height="13"/>
-          <rect class="lit" x="119" y="205" width="9" height="13"/>
-          <rect class="lit" x="98" y="232" width="9" height="13"/>
-          <rect class="lit" x="119" y="232" width="9" height="13"/>
-
-          <rect class="lit" x="265" y="158" width="10" height="14"/>
-          <rect class="lit" x="289" y="158" width="10" height="14"/>
-          <rect class="lit" x="265" y="188" width="10" height="14"/>
-          <rect class="lit" x="289" y="188" width="10" height="14"/>
-          <rect class="lit" x="312" y="188" width="10" height="14"/>
-
-          <rect class="lit" x="443" y="188" width="10" height="14"/>
-          <rect class="lit" x="468" y="188" width="10" height="14"/>
-          <rect class="lit" x="443" y="218" width="10" height="14"/>
-          <rect class="lit" x="468" y="218" width="10" height="14"/>
-
-          <rect class="lit" x="622" y="142" width="10" height="14"/>
-          <rect class="lit" x="648" y="142" width="10" height="14"/>
-          <rect class="lit" x="674" y="142" width="10" height="14"/>
-          <rect class="lit" x="622" y="172" width="10" height="14"/>
-          <rect class="lit" x="648" y="172" width="10" height="14"/>
-          <rect class="lit" x="674" y="172" width="10" height="14"/>
-
-        </svg>
-
-      </div>
-
-    </div>
-
-    <!-- HERO SHOWCASE -->
-    <div class="hero-showcase">
-
-      <div class="showcase-heading">
-        <span>Platform preview</span>
-        <strong>Everything in one organized experience.</strong>
-      </div>
-
-      <div class="hero-mini-grid">
-
-        <div class="hero-mini-card">
-
-          <div class="hero-mini-icon">
-            <svg class="icon">
-              <rect x="3" y="5" width="18" height="14" rx="2"/>
-              <path d="M7 9h10"/>
-              <path d="M7 13h6"/>
-            </svg>
-          </div>
-
-          <h3>Smart Account Overview</h3>
-
-          <p>
-            Review account information, status, activity and
-            available dashboard tools from one place.
-          </p>
-
-        </div>
-
-        <div class="hero-mini-card">
-
-          <div class="hero-mini-icon">
-            <svg class="icon">
-              <path d="M5 12h14"/>
-              <path d="M13 6l6 6-6 6"/>
-            </svg>
-          </div>
-
-          <h3>Simple Transfer Workflow</h3>
-
-          <p>
-            Create a transfer request, review the information,
-            confirm your security PIN and submit it for processing.
-          </p>
-
-        </div>
-
-        <div class="hero-mini-card">
-
-          <div class="hero-mini-icon">
-            <svg class="icon">
-              <path d="M4 19V5"/>
-              <path d="M4 19h17"/>
-              <path d="M7 15l4-5 3 3 5-7"/>
-            </svg>
-          </div>
-
-          <h3>Cashflow Analysis</h3>
-
-          <p>
-            View activity totals and transfer patterns through
-            a simple dashboard analysis interface.
-          </p>
-
-        </div>
-
-      </div>
-
-      <!-- INSIGHT -->
-      <div class="hero-insight">
-
-        <div class="hero-insight-grid">
-
-          <div class="hero-chart-box">
-
-            <div class="chart-title">
-              <strong>Cashflow Activity</strong>
-              <span>Example preview</span>
-            </div>
-
-            <div class="mini-chart">
-              <div class="chart-bar" style="height:34%"></div>
-              <div class="chart-bar" style="height:47%"></div>
-              <div class="chart-bar" style="height:39%"></div>
-              <div class="chart-bar" style="height:61%"></div>
-              <div class="chart-bar" style="height:54%"></div>
-              <div class="chart-bar" style="height:74%"></div>
-              <div class="chart-bar" style="height:67%"></div>
-              <div class="chart-bar" style="height:86%"></div>
-              <div class="chart-bar" style="height:72%"></div>
-              <div class="chart-bar" style="height:92%"></div>
-            </div>
-
-          </div>
-
-          <div class="insight-stats">
-
-            <div class="insight-stat">
-              <small>Account activity</small>
-              <strong>Active</strong>
-            </div>
-
-            <div class="insight-stat">
-              <small>Transfers</small>
-              <strong>24</strong>
-            </div>
-
-            <div class="insight-stat">
-              <small>Requests</small>
-              <strong>08</strong>
-            </div>
-
-            <div class="insight-stat">
-              <small>Support</small>
-              <strong>Live</strong>
-            </div>
-
-          </div>
-
-        </div>
-
-      </div>
-
-      <!-- HERO REVIEWS -->
-      <div class="hero-review-strip">
-
-        <div class="hero-review-card">
-
-          <div class="hero-stars">
-            ★★★★★
-          </div>
-
-          <p>
-            “The dashboard makes it much easier to see everything
-            in one place.”
-          </p>
-
-          <strong>Jordan M.</strong>
-          <small>Prototype review</small>
-
-        </div>
-
-        <div class="hero-review-card">
-
-          <div class="hero-stars">
-            ★★★★★
-          </div>
-
-          <p>
-            “I like the separation between transfers, account
-            information and support.”
-          </p>
-
-          <strong>Sarah A.</strong>
-          <small>Prototype review</small>
-
-        </div>
-
-        <div class="hero-review-card">
-
-          <div class="hero-stars">
-            ★★★★★
-          </div>
-
-          <p>
-            “The mobile layout feels clean and simple to navigate.”
-          </p>
-
-          <strong>Daniel K.</strong>
-          <small>Prototype review</small>
-
-        </div>
-
-      </div>
-
-      <div class="hero-disclaimer">
-        Cash Flow Bank is a financial platform prototype for demonstration
-        and interface testing. It is not a real bank, deposit-taking
-        institution, or real-money ledger.
-      </div>
-
-    </div>
-
-    <!-- HERO FEATURES -->
-    <div class="hero-bottom">
-
-      <div class="hero-bottom-item">
-        <strong>Account Management</strong>
-        <span>
-          One clear place for your account information.
-        </span>
-      </div>
-
-      <div class="hero-bottom-item">
-        <strong>Transfer Tools</strong>
-        <span>
-          Instant and wire transfer workflows.
-        </span>
-      </div>
-
-      <div class="hero-bottom-item">
-        <strong>Cashflow Insights</strong>
-        <span>
-          Understand your financial activity.
-        </span>
-      </div>
-
-      <div class="hero-bottom-item">
-        <strong>Live Support</strong>
-        <span>
-          Connect with support through live chat.
-        </span>
-      </div>
-
-    </div>
-
-  </section>
-
-  <!-- SERVICES -->
-  <section class="landing-section services" id="services">
-
-    <div class="section-container">
-
-      <div class="section-label">
-        Platform
-      </div>
-
-      <h2 class="section-title">
-        Tools built around your financial workflow.
-      </h2>
-
-      <p class="section-copy">
-        The prototype brings common account-management workflows
-        together in a simple, organized experience.
-      </p>
-
-      <div class="service-grid">
-
-        <div class="service-card">
-          <div class="service-icon">
-            <svg class="icon">
-              <rect x="3" y="5" width="18" height="14" rx="2"/>
-              <path d="M7 9h10"/>
-              <path d="M7 13h6"/>
-            </svg>
-          </div>
-          <h3>Account Management</h3>
-          <p>
-            Review your profile, account type, account number,
-            status and account activity.
-          </p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">
-            <svg class="icon">
-              <path d="M5 12h14"/>
-              <path d="M13 6l6 6-6 6"/>
-            </svg>
-          </div>
-          <h3>Money Transfers</h3>
-          <p>
-            Create instant or wire transfer requests and review
-            the information before submitting.
-          </p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">
-            <svg class="icon">
-              <path d="M4 19V5"/>
-              <path d="M4 19h17"/>
-              <path d="M7 15l4-5 3 3 5-7"/>
-            </svg>
-          </div>
-          <h3>Cashflow Analysis</h3>
-          <p>
-            See transfer totals and activity information in a
-            clean dashboard visualization.
-          </p>
-        </div>
-
-        <div class="service-card">
-          <div class="service-icon">
-            <svg class="icon">
-              <rect x="5" y="10" width="14" height="10" rx="2"/>
-              <path d="M8 10V7a4 4 0 0 1 8 0v3"/>
-            </svg>
-          </div>
-          <h3>Account Security</h3>
-          <p>
-            Use password authentication and a four-digit security
-            PIN for transfer confirmation.
-          </p>
-        </div>
-
-      </div>
-
-    </div>
-
-  </section>
-
-  <!-- SECURITY -->
-  <section class="landing-section security-section" id="security">
-
-    <div class="section-container security-grid">
-
-      <div>
-
-        <div class="section-label" style="color:#69d79f;">
-          Security
-        </div>
-
-        <h2 class="section-title">
-          A cleaner way to manage account access.
-        </h2>
-
-        <p class="section-copy">
-          The prototype separates account access, customer profile
-          information and transfer confirmation into different
-          workflows.
-        </p>
-
-        <div class="security-list">
-
-          <div class="security-item">
-            <div class="security-check">✓</div>
-            <div>
-              <strong>Authenticated access</strong>
-              <span>
-                Customer dashboard access is connected to Firebase
-                Authentication.
-              </span>
-            </div>
-          </div>
-
-          <div class="security-item">
-            <div class="security-check">✓</div>
-            <div>
-              <strong>Protected account fields</strong>
-              <span>
-                Customers cannot directly modify protected balance,
-                status or account-number fields.
-              </span>
-            </div>
-          </div>
-
-          <div class="security-item">
-            <div class="security-check">✓</div>
-            <div>
-              <strong>Transfer confirmation</strong>
-              <span>
-                Transfer requests require the account's four-digit
-                security PIN.
-              </span>
-            </div>
-          </div>
-
-        </div>
-
-      </div>
-
-      <div class="security-panel">
-
-        <div class="security-panel-top">
-
-          <strong>Security Center</strong>
-
-          <div class="status-badge">
-            <i></i>
-            Prototype
-          </div>
-
-        </div>
-
-        <div class="security-demo-box">
-
-          <small>Transfer confirmation</small>
-
-          <strong>
-            ••••
-          </strong>
-
-          <div style="
-            margin-top:12px;
-            color:#81a0aa;
-            font-size:10px;">
-            Four-digit Security PIN
-          </div>
-
-        </div>
-
-        <div class="security-demo-box">
-
-          <small>Account access</small>
-
-          <strong style="font-size:18px;">
-            Authenticated
-          </strong>
-
-          <div style="
-            margin-top:12px;
-            color:#81a0aa;
-            font-size:10px;">
-            Firebase Authentication
-          </div>
-
-        </div>
-
-      </div>
-
-    </div>
-
-  </section>
-
-  <!-- ANALYSIS -->
-  <section class="landing-section analysis-section">
-
-    <div class="section-container">
-
-      <div class="section-label">
-        Cashflow analysis
-      </div>
-
-      <h2 class="section-title">
-        See your activity more clearly.
-      </h2>
-
-      <p class="section-copy">
-        The dashboard analysis gives customers a simple view of
-        activity and transfer-request totals.
-      </p>
-
-      <div class="analysis-demo">
-
-        <div class="demo-panel">
-
-          <h3>Outgoing Activity</h3>
-
-          <div class="demo-panel-sub">
-            Example prototype data
-          </div>
-
-          <div class="big-bars">
-            <div class="big-bar" style="height:30%"></div>
-            <div class="big-bar" style="height:42%"></div>
-            <div class="big-bar" style="height:37%"></div>
-            <div class="big-bar" style="height:60%"></div>
-            <div class="big-bar" style="height:53%"></div>
-            <div class="big-bar" style="height:74%"></div>
-            <div class="big-bar" style="height:66%"></div>
-            <div class="big-bar" style="height:84%"></div>
-          </div>
-
-        </div>
-
-        <div class="analysis-side">
-
-          <div class="metric-card">
-
-            <div class="analysis-label">
-              Example account activity
-            </div>
-
-            <div class="analysis-number">
-              Healthy
-            </div>
-
-            <div style="
-              color:#087443;
-              font-size:10px;
-              margin-top:5px;">
-              Prototype display
-            </div>
-
-          </div>
-
-          <div class="metric-card">
-
-            <div class="analysis-label">
-              Transfer workflow
-            </div>
-
-            <div class="analysis-number">
-              Simple
-            </div>
-
-            <div style="
-              color:#087443;
-              font-size:10px;
-              margin-top:5px;">
-              Review → PIN → Submit
-            </div>
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </div>
-
-  </section>
-
-  <!-- REVIEWS -->
-  <section class="landing-section reviews-section" id="reviews">
-
-    <div class="section-container">
-
-      <div class="section-label">
-        Reviews
-      </div>
-
-      <h2 class="section-title">
-        A simple experience from start to finish.
-      </h2>
-
-      <p class="section-copy">
-        Example feedback cards showing how customer comments can
-        appear inside the landing page.
-      </p>
-
-      <div class="review-grid">
-
-        <div class="review-card">
-          <div class="review-stars">★★★★★</div>
-          <p>
-            “The dashboard makes it much easier to see everything
-            in one place.”
-          </p>
-          <div class="review-author">Jordan M.</div>
-          <div class="review-type">Prototype review</div>
-        </div>
-
-        <div class="review-card">
-          <div class="review-stars">★★★★★</div>
-          <p>
-            “I like the separation between transfers, account
-            information and support.”
-          </p>
-          <div class="review-author">Sarah A.</div>
-          <div class="review-type">Prototype review</div>
-        </div>
-
-        <div class="review-card">
-          <div class="review-stars">★★★★★</div>
-          <p>
-            “The mobile layout feels clean and simple to navigate.”
-          </p>
-          <div class="review-author">Daniel K.</div>
-          <div class="review-type">Prototype review</div>
-        </div>
-
-      </div>
-
-    </div>
-
-  </section>
-
-  <!-- ABOUT -->
-  <section class="landing-section about-section" id="about">
-
-    <div class="section-container about-grid">
-
-      <div>
-
-        <div class="section-label">
-          About
-        </div>
-
-        <h2 class="section-title">
-          Designed around clarity.
-        </h2>
-
-        <p class="section-copy">
-          Cash Flow Bank is a financial platform prototype focused
-          on creating a polished account-management experience.
-          The interface demonstrates account creation, customer
-          dashboards, transfer workflows, cashflow analysis and
-          customer support.
-        </p>
-
-      </div>
-
-      <div class="about-box">
-
-        <h3>
-          One organized dashboard.
-        </h3>
+        <small style="color:#83a096;">CASHFLOW ANALYSIS</small>
+        <h3>Understand your activity.</h3>
 
         <p>
-          Customers can view account information, review activity,
-          create transfer requests, manage their profile, update
-          their security PIN and contact support through live chat.
+          The dashboard includes a simple activity view so customers can
+          review transaction counts and outgoing transfer activity.
         </p>
 
-        <div style="
-          margin-top:22px;
-          display:flex;
-          gap:8px;
-          flex-wrap:wrap;">
+        <div style="margin-top:20px;color:#69d79f;font-size:12px;font-weight:800;">
+          Example dashboard insight
+        </div>
+      </div>
 
-          <span style="
-            padding:7px 9px;
-            border-radius:999px;
-            background:rgba(255,255,255,.07);
-            color:#9fb6bf;
-            font-size:9px;">
-            Firebase
-          </span>
+      <div class="chart-box">
+        <div class="chart-bar" style="height:28%;"></div>
+        <div class="chart-bar" style="height:43%;"></div>
+        <div class="chart-bar" style="height:35%;"></div>
+        <div class="chart-bar" style="height:58%;"></div>
+        <div class="chart-bar" style="height:48%;"></div>
+        <div class="chart-bar" style="height:72%;"></div>
+        <div class="chart-bar" style="height:62%;"></div>
+        <div class="chart-bar" style="height:82%;"></div>
+      </div>
 
-          <span style="
-            padding:7px 9px;
-            border-radius:999px;
-            background:rgba(255,255,255,.07);
-            color:#9fb6bf;
-            font-size:9px;">
-            Authentication
-          </span>
+    </div>
 
-          <span style="
-            padding:7px 9px;
-            border-radius:999px;
-            background:rgba(255,255,255,.07);
-            color:#9fb6bf;
-            font-size:9px;">
-            Firestore
-          </span>
+    <div class="hero-reviews">
 
-          <span style="
-            padding:7px 9px;
-            border-radius:999px;
-            background:rgba(255,255,255,.07);
-            color:#9fb6bf;
-            font-size:9px;">
-            Live Chat
-          </span>
+      <div class="hero-reviews-title">
+        <strong>Prototype customer feedback</strong>
+        <span class="stars">★★★★★</span>
+      </div>
 
+      <div class="review-strip">
+
+        <div class="mini-review">
+          <div class="stars">★★★★★</div>
+          <p>
+            “The dashboard makes it much easier to see account activity.”
+          </p>
+          <strong>Jordan M.</strong>
+          <small>Prototype review</small>
+        </div>
+
+        <div class="mini-review">
+          <div class="stars">★★★★★</div>
+          <p>
+            “I like the separation between transfers, history and analysis.”
+          </p>
+          <strong>Sarah A.</strong>
+          <small>Prototype review</small>
+        </div>
+
+        <div class="mini-review">
+          <div class="stars">★★★★★</div>
+          <p>
+            “The mobile layout feels clean and easy to understand.”
+          </p>
+          <strong>Daniel K.</strong>
+          <small>Prototype review</small>
         </div>
 
       </div>
 
     </div>
 
-  </section>
+  </div>
 
-  <!-- CONTACT -->
-  <section class="landing-section contact-section" id="contact">
+  <div class="hero-bottom">
 
-    <div class="section-container contact-grid">
+    <div class="hero-bottom-item">
+      <strong>Account management</strong>
+      <span>View your account information</span>
+    </div>
 
-      <div>
+    <div class="hero-bottom-item">
+      <strong>Transfer requests</strong>
+      <span>Submit requests with PIN confirmation</span>
+    </div>
 
-        <div class="section-label">
-          Contact
+    <div class="hero-bottom-item">
+      <strong>Activity analysis</strong>
+      <span>Review your transaction activity</span>
+    </div>
+
+    <div class="hero-bottom-item">
+      <strong>Live support</strong>
+      <span>Chat with support through Tawk.to</span>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- SERVICES -->
+<section class="landing-section" id="services">
+
+  <div class="section-container">
+
+    <div class="section-heading">
+      <div class="eyebrow">Platform features</div>
+      <h2>Everything organized in one dashboard.</h2>
+      <p>
+        A clean interface for viewing account information, monitoring
+        activity and communicating with support.
+      </p>
+    </div>
+
+    <div class="feature-grid">
+
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg class="icon">
+            <rect x="3" y="5" width="18" height="14" rx="2"/>
+            <path d="M3 10h18"/>
+          </svg>
+        </div>
+        <h3>Account Management</h3>
+        <p>
+          Review your account number, account type, country and account status.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg class="icon">
+            <path d="M5 12h14"/>
+            <path d="M13 6l6 6-6 6"/>
+          </svg>
+        </div>
+        <h3>Money Transfers</h3>
+        <p>
+          Create instant or wire transfer requests and confirm them with your PIN.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg class="icon">
+            <path d="M4 19V9"/>
+            <path d="M9 19V5"/>
+            <path d="M14 19v-7"/>
+            <path d="M19 19V3"/>
+          </svg>
+        </div>
+        <h3>Cashflow Analysis</h3>
+        <p>
+          Review transaction counts and outgoing activity in one simple view.
+        </p>
+      </div>
+
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg class="icon">
+            <rect x="5" y="10" width="14" height="10" rx="2"/>
+            <path d="M8 10V7a4 4 0 0 1 8 0v3"/>
+          </svg>
+        </div>
+        <h3>Account Security</h3>
+        <p>
+          Use password authentication and a separate four-digit transfer PIN.
+        </p>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- SECURITY -->
+<section class="landing-section dark-section" id="security">
+
+  <div class="section-container security-grid">
+
+    <div>
+      <div class="section-heading" style="margin-bottom:0;">
+        <div class="eyebrow" style="color:#69d79f;">Security</div>
+        <h2>Designed around controlled access.</h2>
+        <p>
+          Customer account documents are tied to the authenticated Firebase
+          user. Customers cannot directly edit their account balance through
+          the customer interface.
+        </p>
+      </div>
+
+      <div class="security-list">
+
+        <div class="security-item">
+          <div class="check">✓</div>
+          <div>
+            <strong>Authenticated access</strong>
+            <div style="color:#8299a4;font-size:12px;margin-top:3px;">
+              Account access is handled through Firebase Authentication.
+            </div>
+          </div>
         </div>
 
-        <h2 class="section-title">
-          Need assistance?
-        </h2>
+        <div class="security-item">
+          <div class="check">✓</div>
+          <div>
+            <strong>Controlled account fields</strong>
+            <div style="color:#8299a4;font-size:12px;margin-top:3px;">
+              Sensitive account fields are protected by Firestore rules.
+            </div>
+          </div>
+        </div>
 
-        <p class="section-copy">
-          Connect with support through the integrated live chat
-          whenever the Tawk.to widget is available.
+        <div class="security-item">
+          <div class="check">✓</div>
+          <div>
+            <strong>Transfer PIN</strong>
+            <div style="color:#8299a4;font-size:12px;margin-top:3px;">
+              Transfers require an additional four-digit PIN.
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="security-panel">
+
+      <div class="security-panel-row">
+        <span>Authentication</span>
+        <strong style="color:#69d79f;">Firebase Auth</strong>
+      </div>
+
+      <div class="security-panel-row">
+        <span>Account balance</span>
+        <strong>Admin controlled</strong>
+      </div>
+
+      <div class="security-panel-row">
+        <span>Transfer status</span>
+        <strong>Pending review</strong>
+      </div>
+
+      <div class="security-panel-row">
+        <span>Live support</span>
+        <strong>Tawk.to</strong>
+      </div>
+
+      <div class="security-panel-row">
+        <span>Platform type</span>
+        <strong>Prototype</strong>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- ANALYSIS -->
+<section class="landing-section">
+
+  <div class="section-container">
+
+    <div class="section-heading">
+      <div class="eyebrow">Cashflow analysis</div>
+      <h2>A clearer view of account activity.</h2>
+      <p>
+        Example analytics are presented in a simple format designed for
+        quick understanding.
+      </p>
+    </div>
+
+    <div class="analysis-card">
+
+      <div class="analysis-stats">
+
+        <div class="analysis-stat">
+          <small>Example activity</small>
+          <strong>$4,820</strong>
+        </div>
+
+        <div class="analysis-stat">
+          <small>Outgoing example</small>
+          <strong>$2,140</strong>
+        </div>
+
+        <div class="analysis-stat">
+          <small>Transactions</small>
+          <strong>24</strong>
+        </div>
+
+      </div>
+
+      <div class="fake-analysis-chart">
+        <div style="height:30%;"></div>
+        <div style="height:42%;"></div>
+        <div style="height:35%;"></div>
+        <div style="height:55%;"></div>
+        <div style="height:47%;"></div>
+        <div style="height:69%;"></div>
+        <div style="height:60%;"></div>
+        <div style="height:78%;"></div>
+        <div style="height:65%;"></div>
+        <div style="height:86%;"></div>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- REVIEWS -->
+<section class="landing-section" id="reviews">
+
+  <div class="section-container">
+
+    <div class="section-heading">
+      <div class="eyebrow">Reviews</div>
+      <h2>Feedback from the prototype experience.</h2>
+      <p>
+        These are example prototype reviews used to demonstrate the review
+        section of the interface.
+      </p>
+    </div>
+
+    <div class="reviews-grid">
+
+      <div class="review-card">
+        <div class="stars">★★★★★</div>
+        <p>
+          “The dashboard makes it much easier to see my account activity
+          without everything feeling crowded.”
         </p>
+        <strong>Jordan M.</strong>
+        <small>Prototype review</small>
+      </div>
 
-        <button
-          class="primary-btn"
-          onclick="openTawkChat()"
-          style="margin-top:22px;padding:14px 20px;">
+      <div class="review-card">
+        <div class="stars">★★★★★</div>
+        <p>
+          “I like the separation between transfers, transaction history and
+          cashflow analysis.”
+        </p>
+        <strong>Sarah A.</strong>
+        <small>Prototype review</small>
+      </div>
 
-          <svg class="icon"
-               style="display:inline-block;vertical-align:-5px;margin-right:6px;">
-            <path d="M4 5h16v11H8l-4 4V5z"/>
-          </svg>
+      <div class="review-card">
+        <div class="stars">★★★★★</div>
+        <p>
+          “The mobile layout feels clean and easy to understand.”
+        </p>
+        <strong>Daniel K.</strong>
+        <small>Prototype review</small>
+      </div>
 
+    </div>
+
+  </div>
+
+</section>
+
+<!-- ABOUT -->
+<section class="landing-section" id="about">
+
+  <div class="section-container about-grid">
+
+    <div class="section-heading" style="margin:0;">
+      <div class="eyebrow">About the platform</div>
+      <h2>A modern banking-style experience.</h2>
+      <p>
+        Cash Flow Bank is a financial platform prototype focused on a clean
+        customer dashboard, controlled account information, transfer requests,
+        activity analysis and support.
+      </p>
+    </div>
+
+    <div class="about-box">
+      <strong>CF</strong>
+      <h3>Simple. Organized. Connected.</h3>
+      <p style="color:#647582;font-size:13px;line-height:1.7;">
+        The prototype brings common account functions into one responsive
+        customer experience.
+      </p>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- CONTACT -->
+<section class="landing-section" id="contact">
+
+  <div class="section-container">
+
+    <div class="section-heading">
+      <div class="eyebrow">Support</div>
+      <h2>Need assistance?</h2>
+      <p>
+        Use the integrated live chat to connect with support.
+      </p>
+    </div>
+
+    <div class="contact-grid">
+
+      <div class="contact-card">
+        <h3>Live Chat</h3>
+        <p>
+          Start a conversation with customer support through the integrated
+          Tawk.to chat.
+        </p>
+        <button class="primary-btn" onclick="openTawkChat()">
           Start Live Chat
-
         </button>
-
       </div>
 
       <div class="contact-card">
-
-        <div class="contact-line">
-          <small>Support</small>
-          <strong>Live Chat</strong>
-        </div>
-
-        <div class="contact-line">
-          <small>Platform</small>
-          <strong>Cash Flow Bank Prototype</strong>
-        </div>
-
-        <div class="contact-line">
-          <small>Account Help</small>
-          <strong>Available through the dashboard</strong>
-        </div>
-
-        <div class="contact-line">
-          <small>Transfer Help</small>
-          <strong>Use the Support section</strong>
-        </div>
-
+        <h3>Account access</h3>
+        <p>
+          Customers can create an account and access the dashboard using
+          their account number and password.
+        </p>
+        <button class="secondary-btn" onclick="openAuth('login')">
+          Sign In
+        </button>
       </div>
 
     </div>
 
-  </section>
+  </div>
 
-  <!-- FINAL CTA -->
-  <section class="final-cta">
+</section>
 
-    <h2>
-      Your Goals. Our Priority.
-    </h2>
+<div class="final-cta">
 
-    <p>
-      Explore the Cash Flow Bank prototype and experience the
-      complete account-management interface.
-    </p>
+  <h2>Ready to get started?</h2>
 
-    <div class="final-actions">
+  <p>
+    Create a prototype account and explore the customer dashboard.
+  </p>
 
-      <button
-        class="hero-primary"
-        onclick="openAuth('register')">
-        Open an Account
-      </button>
-
-      <button
-        class="hero-secondary"
-        onclick="openTawkChat()">
-        Live Chat with Support
-      </button>
-
-    </div>
-
-  </section>
-
-  <!-- FOOTER -->
-  <footer class="site-footer">
-
-    <div class="footer-inner">
-
-      <div class="footer-top">
-
-        <div class="footer-brand">
-
-          <div class="brand">
-            <svg class="brand-mark" viewBox="0 0 80 80">
-              <rect width="80" height="80" rx="20" fill="#0a8b50"/>
-              <path d="M20 51V29L40 18L60 29V51"
-                    fill="none"
-                    stroke="white"
-                    stroke-width="5"/>
-              <path d="M27 52V38M40 52V31M53 52V38"
-                    stroke="white"
-                    stroke-width="5"
-                    stroke-linecap="round"/>
-            </svg>
-
-            <span>
-              <span class="brand-name">Cash Flow Bank</span>
-              <span class="brand-small">Prototype</span>
-            </span>
-          </div>
-
-          <p>
-            A financial platform interface prototype created for
-            demonstration and development purposes.
-          </p>
-
-        </div>
-
-        <div class="footer-links">
-          <button onclick="scrollToSection('services')">Services</button>
-          <button onclick="scrollToSection('security')">Security</button>
-          <button onclick="scrollToSection('reviews')">Reviews</button>
-          <button onclick="openTawkChat()">Live Chat</button>
-        </div>
-
-      </div>
-
-      <div class="footer-disclaimer">
-        IMPORTANT: Cash Flow Bank is a financial platform prototype.
-        It is not a real bank, credit union, deposit-taking institution,
-        insured financial institution, or real-money ledger. Do not use
-        this prototype to represent real banking services or hold real
-        customer funds.
-      </div>
-
-      <div class="footer-copy">
-        © 2026 Cash Flow Bank Prototype. All interface rights reserved.
-      </div>
-
-    </div>
-
-  </footer>
+  <button class="hero-primary" onclick="openAuth('register')">
+    Create Account
+  </button>
 
 </div>
 
+<footer>
 
-<!-- =========================================================
-     AUTH MODAL
-========================================================= -->
+  <div class="footer-inner">
 
+    <div class="footer-brand">
+      <div class="brand">
+        <span class="brand-mark">CF</span>
+        <span>Cash Flow Bank</span>
+      </div>
+
+      <p>
+        Financial platform prototype. Not a real bank, deposit-taking
+        institution, or real-money ledger. Figures and reviews shown on the
+        landing page are examples for interface demonstration.
+      </p>
+    </div>
+
+    <div class="footer-links">
+      <a href="#home">Home</a>
+      <a href="#services">Services</a>
+      <a href="#security">Security</a>
+      <a href="#contact">Support</a>
+    </div>
+
+  </div>
+
+</footer>
+
+</div>
+<!-- END LANDING -->
+
+
+<!-- ================= AUTH ================= -->
 <div id="authOverlay" class="hidden">
 
   <div class="auth-box">
 
-    <button class="auth-close" onclick="closeAuth()">
-      ×
-    </button>
+    <div class="auth-top">
 
-    <svg class="auth-logo" viewBox="0 0 80 80">
-      <rect width="80" height="80" rx="20" fill="#0a8b50"/>
-      <path d="M20 51V29L40 18L60 29V51"
-            fill="none"
-            stroke="white"
-            stroke-width="5"/>
-      <path d="M27 52V38M40 52V31M53 52V38"
-            stroke="white"
-            stroke-width="5"
-            stroke-linecap="round"/>
-    </svg>
+      <div>
+        <h2 class="auth-title" id="authTitle">Welcome back</h2>
+        <div class="auth-subtitle">
+          Access your Cash Flow Bank prototype account.
+        </div>
+      </div>
 
-    <h2 class="auth-title" id="authTitle">
-      Welcome back
-    </h2>
+      <button class="close-auth" onclick="closeAuth()">✕</button>
 
-    <p class="auth-sub">
-      Access your Cash Flow Bank prototype account dashboard.
-    </p>
+    </div>
 
     <div class="auth-tabs">
 
@@ -3507,27 +2628,29 @@ button{cursor:pointer}
     <!-- LOGIN -->
     <form id="loginForm">
 
-      <div class="form-group">
+      <div class="auth-login-note">
+        Sign in using the <strong>10-digit account number</strong> and
+        password created for your account.
+      </div>
 
-        <label class="form-label">
-          Email address
-        </label>
+      <div class="form-group">
+        <label class="form-label">Account Number</label>
 
         <input
           id="loginIdentifier"
           class="form-control"
-          type="email"
-          placeholder="you@example.com"
-          autocomplete="email"
+          type="text"
+          inputmode="numeric"
+          maxlength="10"
+          pattern="[0-9]{10}"
+          placeholder="10-digit account number"
+          autocomplete="username"
           required>
-
       </div>
 
       <div class="form-group">
 
-        <label class="form-label">
-          Password
-        </label>
+        <label class="form-label">Password</label>
 
         <input
           id="loginPass"
@@ -3539,24 +2662,19 @@ button{cursor:pointer}
 
       </div>
 
-      <button class="auth-button" type="submit">
+      <button
+        id="loginBtn"
+        class="auth-button"
+        type="submit">
         Sign In
       </button>
 
-      <button
-        type="button"
-        class="forgot-link"
-        onclick="forgotPassword()">
-        Forgot your password?
-      </button>
-
-      <div class="auth-footer">
-        Account-number lookup is intentionally not used from the
-        customer browser because the Firestore rules protect other
-        customers' records.
+      <div class="auth-help">
+        Enter the account number you received when you created your account.
       </div>
 
     </form>
+
 
     <!-- REGISTER -->
     <form id="registerForm" class="hidden">
@@ -3564,33 +2682,23 @@ button{cursor:pointer}
       <div class="form-row">
 
         <div class="form-group">
-
-          <label class="form-label">
-            Full name
-          </label>
-
+          <label class="form-label">Full name</label>
           <input
             id="regName"
             class="form-control"
             type="text"
-            placeholder="Full name"
+            placeholder="Your full name"
             required>
-
         </div>
 
         <div class="form-group">
-
-          <label class="form-label">
-            Email
-          </label>
-
+          <label class="form-label">Email</label>
           <input
             id="regEmail"
             class="form-control"
             type="email"
             placeholder="you@example.com"
             required>
-
         </div>
 
       </div>
@@ -3598,24 +2706,17 @@ button{cursor:pointer}
       <div class="form-row">
 
         <div class="form-group">
-
-          <label class="form-label">
-            Phone
-          </label>
-
+          <label class="form-label">Phone</label>
           <input
             id="regPhone"
             class="form-control"
             type="tel"
-            placeholder="+234 800 000 0000">
-
+            placeholder="+234..."
+          >
         </div>
 
         <div class="form-group">
-
-          <label class="form-label">
-            Country
-          </label>
+          <label class="form-label">Country</label>
 
           <select id="regCountry" class="form-control" required>
             <option value="">Select country</option>
@@ -3636,9 +2737,7 @@ button{cursor:pointer}
 
       <div class="form-group">
 
-        <label class="form-label">
-          Account type
-        </label>
+        <label class="form-label">Account type</label>
 
         <select id="regType" class="form-control" required>
           <option value="">Select account type</option>
@@ -3653,26 +2752,19 @@ button{cursor:pointer}
       <div class="form-row">
 
         <div class="form-group">
-
-          <label class="form-label">
-            Password
-          </label>
+          <label class="form-label">Password</label>
 
           <input
             id="regPass"
             class="form-control"
             type="password"
             minlength="6"
-            placeholder="Minimum 6 characters"
+            placeholder="At least 6 characters"
             required>
-
         </div>
 
         <div class="form-group">
-
-          <label class="form-label">
-            Confirm password
-          </label>
+          <label class="form-label">Confirm password</label>
 
           <input
             id="regConfirm"
@@ -3681,7 +2773,6 @@ button{cursor:pointer}
             minlength="6"
             placeholder="Repeat password"
             required>
-
         </div>
 
       </div>
@@ -3698,28 +2789,23 @@ button{cursor:pointer}
           type="password"
           inputmode="numeric"
           maxlength="4"
+          pattern="[0-9]{4}"
           placeholder="••••"
           required>
 
       </div>
 
-      <label style="
-        display:flex;
-        gap:9px;
-        align-items:flex-start;
-        color:#6d7e87;
-        font-size:10px;
-        line-height:1.5;
-        margin:15px 0;">
+      <label style="display:flex;gap:9px;align-items:flex-start;font-size:11px;color:#687983;line-height:1.5;margin-bottom:17px;">
 
         <input
           id="regTerms"
           type="checkbox"
-          style="margin-top:2px;">
+          style="margin-top:2px;"
+          required>
 
         <span>
-          I understand this is a prototype financial platform
-          interface and not a real banking service.
+          I understand that this is a financial platform prototype and not a
+          real bank or real-money ledger.
         </span>
 
       </label>
@@ -3731,6 +2817,10 @@ button{cursor:pointer}
         Create Account
       </button>
 
+      <div class="auth-help">
+        Your 10-digit account number will be generated after account creation.
+      </div>
+
     </form>
 
   </div>
@@ -3738,154 +2828,90 @@ button{cursor:pointer}
 </div>
 
 
-<!-- =========================================================
-     DASHBOARD
-========================================================= -->
-
+<!-- ================= DASHBOARD ================= -->
 <div id="dashboard" class="hidden">
 
-  <div class="dashboard-shell">
+  <div class="dashboard-layout">
 
     <!-- SIDEBAR -->
     <aside id="sidebar" class="sidebar">
 
       <div class="dashboard-brand">
-
-        <svg viewBox="0 0 80 80">
-          <rect width="80" height="80" rx="20" fill="#0a8b50"/>
-          <path d="M20 51V29L40 18L60 29V51"
-                fill="none"
-                stroke="white"
-                stroke-width="5"/>
-          <path d="M27 52V38M40 52V31M53 52V38"
-                stroke="white"
-                stroke-width="5"
-                stroke-linecap="round"/>
-        </svg>
-
-        <span>
-          <strong>Cash Flow Bank</strong>
-          <span>Customer Dashboard</span>
-        </span>
-
+        <div class="dashboard-brand-mark">CF</div>
+        <span>Cash Flow Bank</span>
       </div>
 
-      <div class="side-section-label">
-        Dashboard
-      </div>
+      <div class="side-section">Overview</div>
 
-      <button class="side-btn active" data-page="home"
-              onclick="showPage('home')">
-        <svg class="icon">
-          <rect x="3" y="3" width="18" height="18" rx="3"/>
-          <path d="M7 14h3v4H7z"/>
-          <path d="M13 10h3v8h-3z"/>
-        </svg>
+      <button class="side-btn active" data-page="home" onclick="showPage('home')">
+        <span>⌂</span>
         Home
       </button>
 
-      <button class="side-btn" data-page="summary"
-              onclick="showPage('summary')">
-        <svg class="icon">
-          <rect x="3" y="4" width="18" height="16" rx="2"/>
-          <path d="M7 8h10"/>
-          <path d="M7 12h6"/>
-        </svg>
+      <button class="side-btn" data-page="summary" onclick="showPage('summary')">
+        <span>▣</span>
         Account Summary
       </button>
 
-      <button class="side-btn" data-page="analysis"
-              onclick="showPage('analysis')">
-        <svg class="icon">
-          <path d="M4 19V5"/>
-          <path d="M4 19h17"/>
-          <path d="M7 15l4-5 3 3 5-7"/>
-        </svg>
+      <button class="side-btn" data-page="analysis" onclick="showPage('analysis')">
+        <span>◫</span>
         Cashflow Analysis
       </button>
 
-      <button class="side-btn" data-page="transfer"
-              onclick="showPage('transfer')">
-        <svg class="icon">
-          <path d="M5 12h14"/>
-          <path d="M13 6l6 6-6 6"/>
-        </svg>
+      <div class="side-section">Money</div>
+
+      <button class="side-btn" data-page="transfer" onclick="showPage('transfer')">
+        <span>→</span>
         Transfer
       </button>
 
-      <button class="side-btn" data-page="history"
-              onclick="showPage('history')">
-        <svg class="icon">
-          <circle cx="12" cy="12" r="9"/>
-          <path d="M12 7v5l3 2"/>
-        </svg>
+      <button class="side-btn" data-page="history" onclick="showPage('history')">
+        <span>≡</span>
         History
       </button>
 
-      <div class="side-section-label">
-        Services
-      </div>
-
-      <button class="side-btn" data-page="deposit"
-              onclick="showPage('deposit')">
-        <svg class="icon">
-          <path d="M12 3v13"/>
-          <path d="M7 11l5 5 5-5"/>
-          <path d="M4 21h16"/>
-        </svg>
+      <button class="side-btn" data-page="deposit" onclick="showPage('deposit')">
+        <span>↓</span>
         Deposit
       </button>
 
-      <button class="side-btn" data-page="withdraw"
-              onclick="showPage('withdraw')">
-        <svg class="icon">
-          <path d="M12 21V8"/>
-          <path d="M7 13l5-5 5 5"/>
-          <path d="M4 3h16"/>
-        </svg>
+      <button class="side-btn" data-page="withdraw" onclick="showPage('withdraw')">
+        <span>↑</span>
         Withdraw
       </button>
 
-      <button class="side-btn" data-page="profile"
-              onclick="showPage('profile')">
-        <svg class="icon">
-          <circle cx="12" cy="8" r="3"/>
-          <path d="M5 20c0-3.5 3-6 7-6s7 2.5 7 6"/>
-        </svg>
+      <div class="side-section">Account</div>
+
+      <button class="side-btn" data-page="profile" onclick="showPage('profile')">
+        <span>◉</span>
         Profile
       </button>
 
-      <button class="side-btn" data-page="kyc"
-              onclick="showPage('kyc')">
-        <svg class="icon">
-          <path d="M20 6L9 17l-5-5"/>
-        </svg>
+      <button class="side-btn" data-page="kyc" onclick="showPage('kyc')">
+        <span>✓</span>
         KYC Verification
       </button>
 
-      <button class="side-btn" data-page="settings"
-              onclick="showPage('settings')">
-        <svg class="icon">
-          <circle cx="12" cy="12" r="3"/>
-          <path d="M19.4 15a1.7 1.7 0 0 0 .3 1.9l.1.1-2 2-.1-.1a1.7 1.7 0 0 0-1.9-.3 1.7 1.7 0 0 0-1 1.6V20h-3v-.1a1.7 1.7 0 0 0-1-1.6 1.7 1.7 0 0 0-1.9.3l-.1.1-2-2 .1-.1A1.7 1.7 0 0 0 7.3 15a1.7 1.7 0 0 0-1.6-1H5v-3h.7a1.7 1.7 0 0 0 1.6-1 1.7 1.7 0 0 0-.3-1.9l-.1-.1 2-2 .1.1a1.7 1.7 0 0 0 1.9.3 1.7 1.7 0 0 0 1-1.6V5h3v.7a1.7 1.7 0 0 0 1 1.6 1.7 1.7 0 0 0 1.9-.3l.1-.1 2 2-.1.1a1.7 1.7 0 0 0-.3 1.9 1.7 1.7 0 0 0 1.6 1h.7v3h-.7a1.7 1.7 0 0 0-1.6 1z"/>
-        </svg>
+      <button class="side-btn" data-page="settings" onclick="showPage('settings')">
+        <span>⚙</span>
         Settings
       </button>
 
-      <button class="side-btn" data-page="support"
-              onclick="showPage('support')">
-        <svg class="icon">
-          <path d="M4 5h16v11H8l-4 4V5z"/>
-        </svg>
+      <button class="side-btn" data-page="support" onclick="showPage('support')">
+        <span>?</span>
         Support
       </button>
 
-      <div class="sidebar-bottom">
+      <div style="height:20px;"></div>
 
-        <button class="logout-btn" onclick="logout()">
-          Sign Out
-        </button>
+      <button class="side-btn" onclick="logout()">
+        <span>↪</span>
+        Sign Out
+      </button>
 
+      <div style="padding:18px 10px 5px;color:#59717e;font-size:9px;line-height:1.6;">
+        Financial platform prototype.
+        Not a real bank or real-money ledger.
       </div>
 
     </aside>
@@ -3893,49 +2919,34 @@ button{cursor:pointer}
     <!-- MAIN -->
     <main class="dashboard-main">
 
-      <!-- TOP BAR -->
       <header class="dashboard-topbar">
 
-        <div class="dashboard-top-left">
+        <div style="display:flex;align-items:center;gap:12px;">
 
           <button
-            class="menu-toggle"
+            class="menu-button"
             onclick="toggleSidebar()">
-
-            <svg class="icon">
-              <path d="M4 7h16"/>
-              <path d="M4 12h16"/>
-              <path d="M4 17h16"/>
-            </svg>
-
+            ☰
           </button>
 
-          <div id="topTitle" class="top-title">
-            Home
-          </div>
+          <h1 id="topTitle">Home</h1>
 
         </div>
 
-        <div class="top-right">
+        <div class="top-user">
 
-          <!-- IMPORTANT LIVE CHAT BUTTON -->
-          <button
-            class="chat-top-btn"
-            onclick="openTawkChat()"
-            title="Live Chat">
+          <div class="avatar" id="topAvatar">CF</div>
 
-            <svg class="icon">
-              <path d="M4 5h16v11H8l-4 4V5z"/>
-            </svg>
+          <div>
+            <div
+              id="topUserName"
+              style="font-size:12px;font-weight:800;">
+              Customer
+            </div>
 
-          </button>
-
-          <div id="topAvatar" class="avatar">
-            CF
-          </div>
-
-          <div id="topUserName" class="top-user">
-            Customer
+            <div style="font-size:9px;color:#87949b;">
+              Customer account
+            </div>
           </div>
 
         </div>
@@ -3949,190 +2960,165 @@ button{cursor:pointer}
 
           <div class="page-title">
             <h2>
-              Welcome, <span id="welcomeName">Customer</span>
+              Welcome,
+              <span id="welcomeName">Customer</span>
             </h2>
 
             <p>
-              Here is your account overview.
+              Here's an overview of your account.
             </p>
           </div>
 
-          <div class="dashboard-hero-card">
+          <div class="home-grid">
 
-            <div class="dashboard-welcome">
-              Account status:
-              <strong id="welcomeStatus">
-                Active
-              </strong>
-            </div>
+            <div class="balance-card">
 
-            <div class="dashboard-balance-label">
-              Current balance
-            </div>
-
-            <div style="
-              display:flex;
-              align-items:center;
-              gap:12px;">
+              <small>Available prototype balance</small>
 
               <div
-                id="balanceDisplay"
-                class="dashboard-balance">
+                class="balance"
+                id="balanceDisplay">
                 $0.00
               </div>
 
-              <button
-                class="balance-toggle"
-                onclick="toggleBalance()">
-                Show / Hide
-              </button>
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:18px;">
+
+                <span class="status-pill">
+                  <span class="status-dot"></span>
+                  <span id="welcomeStatus">Pending</span>
+                </span>
+
+              </div>
+
+              <div class="balance-actions">
+
+                <button
+                  class="balance-action"
+                  onclick="toggleBalance()">
+                  Show / Hide
+                </button>
+
+                <button
+                  class="balance-action"
+                  onclick="showPage('transfer')">
+                  Send Money
+                </button>
+
+                <button
+                  class="balance-action"
+                  onclick="showPage('history')">
+                  History
+                </button>
+
+              </div>
 
             </div>
 
-            <div class="dashboard-card-footer">
+            <div class="section-card" style="margin-top:0;">
 
-              <div>
-                <small>ACCOUNT NUMBER</small>
-                <strong id="accountNumberDisplay">
-                  —
-                </strong>
-              </div>
+              <h3 style="margin-top:0;">Account information</h3>
 
-              <div>
-                <small>STATUS</small>
-                <strong>
-                  <span class="status-pill">
-                    <span class="status-dot"></span>
-                    <span id="homeStatus">Active</span>
-                  </span>
-                </strong>
+              <div class="info-grid">
+
+                <div class="info-item">
+                  <small>Account number</small>
+                  <strong id="accountNumberDisplay">—</strong>
+                </div>
+
+                <div class="info-item">
+                  <small>Country</small>
+                  <strong id="homeCountry">—</strong>
+                </div>
+
+                <div class="info-item">
+                  <small>Account type</small>
+                  <strong id="homeAccountType">—</strong>
+                </div>
+
+                <div class="info-item">
+                  <small>Status</small>
+                  <strong id="homeStatus">—</strong>
+                </div>
+
+                <div class="info-item">
+                  <small>Created</small>
+                  <strong id="homeCreated">—</strong>
+                </div>
+
+                <div class="info-item">
+                  <small>Transactions</small>
+                  <strong id="homeTransactionCount">0</strong>
+                </div>
+
               </div>
 
             </div>
-
-          </div>
-
-          <div class="dashboard-grid">
-
-            <div class="stat-card">
-              <small>Country</small>
-              <strong id="homeCountry">—</strong>
-            </div>
-
-            <div class="stat-card">
-              <small>Account Type</small>
-              <strong id="homeAccountType">—</strong>
-            </div>
-
-            <div class="stat-card">
-              <small>Transactions</small>
-              <strong id="homeTransactionCount">0</strong>
-            </div>
-
-          </div>
-
-          <div class="quick-actions">
-
-            <button
-              class="quick-action"
-              onclick="showPage('transfer')">
-
-              <div class="quick-action-icon">
-                <svg class="icon">
-                  <path d="M5 12h14"/>
-                  <path d="M13 6l6 6-6 6"/>
-                </svg>
-              </div>
-
-              <strong>Send Money</strong>
-
-              <span>
-                Create a transfer request.
-              </span>
-
-            </button>
-
-            <button
-              class="quick-action"
-              onclick="showPage('history')">
-
-              <div class="quick-action-icon">
-                <svg class="icon">
-                  <circle cx="12" cy="12" r="9"/>
-                  <path d="M12 7v5l3 2"/>
-                </svg>
-              </div>
-
-              <strong>View History</strong>
-
-              <span>
-                Review account activity.
-              </span>
-
-            </button>
-
-            <button
-              class="quick-action"
-              onclick="openTawkChat()">
-
-              <div class="quick-action-icon">
-                <svg class="icon">
-                  <path d="M4 5h16v11H8l-4 4V5z"/>
-                </svg>
-              </div>
-
-              <strong>Live Support</strong>
-
-              <span>
-                Chat with support.
-              </span>
-
-            </button>
-
-            <button
-              class="quick-action"
-              onclick="showPage('analysis')">
-
-              <div class="quick-action-icon">
-                <svg class="icon">
-                  <path d="M4 19V5"/>
-                  <path d="M4 19h17"/>
-                  <path d="M7 15l4-5 3 3 5-7"/>
-                </svg>
-              </div>
-
-              <strong>Cashflow Analysis</strong>
-
-              <span>
-                Review your activity.
-              </span>
-
-            </button>
 
           </div>
 
           <div class="section-card">
 
-            <div class="recent-head">
+            <h3 style="margin-top:0;">Quick actions</h3>
 
-              <h3 style="margin:0;">
-                Recent Transactions
-              </h3>
+            <div class="quick-grid">
 
               <button
-                class="text-button"
+                class="quick-card"
+                onclick="showPage('transfer')">
+
+                <div class="feature-icon">
+                  →
+                </div>
+
+                <strong>Send Money</strong>
+
+                <span>
+                  Create a transfer request
+                </span>
+
+              </button>
+
+              <button
+                class="quick-card"
+                onclick="showPage('analysis')">
+
+                <div class="feature-icon">
+                  ◫
+                </div>
+
+                <strong>Cashflow Analysis</strong>
+
+                <span>
+                  Review account activity
+                </span>
+
+              </button>
+
+            </div>
+
+          </div>
+
+          <div class="section-card">
+
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;">
+
+              <div>
+                <h3 style="margin:0;">Recent transactions</h3>
+                <p style="color:#8a979e;font-size:11px;">
+                  Latest account activity
+                </p>
+              </div>
+
+              <button
+                class="secondary-btn"
                 onclick="showPage('history')">
                 View All
               </button>
 
             </div>
 
-            <div
-              id="recentTransactions"
-              style="margin-top:10px;">
-              <div style="
-                color:#89979f;
-                font-size:12px;">
+            <div id="recentTransactions" style="margin-top:12px;">
+              <div style="padding:15px 0;color:#89979f;font-size:12px;">
                 No transactions yet.
               </div>
             </div>
@@ -4142,65 +3128,55 @@ button{cursor:pointer}
         </section>
 
 
-        <!-- ACCOUNT SUMMARY -->
+        <!-- SUMMARY -->
         <section class="page" id="page-summary">
 
           <div class="page-title">
             <h2>Account Summary</h2>
-            <p>
-              Review your account information.
-            </p>
+            <p>Review your account details.</p>
           </div>
 
-          <div class="summary-grid">
+          <div class="section-card">
 
-            <div class="section-card" style="margin-top:0;">
+            <div class="info-grid">
 
-              <h3>Personal Information</h3>
-
-              <div class="info-row">
-                <span>Name</span>
+              <div class="info-item">
+                <small>Name</small>
                 <strong id="summaryName">—</strong>
               </div>
 
-              <div class="info-row">
-                <span>Email</span>
+              <div class="info-item">
+                <small>Email</small>
                 <strong id="summaryEmail">—</strong>
               </div>
 
-              <div class="info-row">
-                <span>Phone</span>
+              <div class="info-item">
+                <small>Phone</small>
                 <strong id="summaryPhone">—</strong>
               </div>
 
-              <div class="info-row">
-                <span>Country</span>
+              <div class="info-item">
+                <small>Country</small>
                 <strong id="summaryCountry">—</strong>
               </div>
 
-            </div>
-
-            <div class="section-card" style="margin-top:0;">
-
-              <h3>Account Information</h3>
-
-              <div class="info-row">
-                <span>Account Number</span>
+              <div class="info-item">
+                <small>Account number</small>
                 <strong id="summaryAccount">—</strong>
               </div>
 
-              <div class="info-row">
-                <span>Account Type</span>
+              <div class="info-item">
+                <small>Account type</small>
                 <strong id="summaryType">—</strong>
               </div>
 
-              <div class="info-row">
-                <span>Status</span>
+              <div class="info-item">
+                <small>Status</small>
                 <strong id="summaryStatus">—</strong>
               </div>
 
-              <div class="info-row">
-                <span>Created</span>
+              <div class="info-item">
+                <small>Created</small>
                 <strong id="summaryCreated">—</strong>
               </div>
 
@@ -4216,66 +3192,48 @@ button{cursor:pointer}
 
           <div class="page-title">
             <h2>Cashflow Analysis</h2>
-            <p>
-              Review your transfer activity.
-            </p>
+            <p>Review your account activity.</p>
           </div>
 
-          <div class="dashboard-analysis-grid">
+          <div class="analysis-dashboard-grid">
 
-            <div class="section-card" style="margin-top:0;">
-
-              <h3>Outgoing Activity</h3>
-
-              <div style="
-                color:#82919a;
-                font-size:10px;
-                margin-top:4px;">
-                Based on recorded transfer requests.
-              </div>
-
-              <div
-                id="analysisChart"
-                class="analysis-chart">
-
-                <div class="analysis-chart-bar"
-                     style="height:25%"></div>
-                <div class="analysis-chart-bar"
-                     style="height:40%"></div>
-                <div class="analysis-chart-bar"
-                     style="height:32%"></div>
-                <div class="analysis-chart-bar"
-                     style="height:58%"></div>
-                <div class="analysis-chart-bar"
-                     style="height:47%"></div>
-                <div class="analysis-chart-bar"
-                     style="height:72%"></div>
-                <div class="analysis-chart-bar"
-                     style="height:61%"></div>
-                <div class="analysis-chart-bar"
-                     style="height:80%"></div>
-
-              </div>
-
+            <div class="dashboard-analysis-stat">
+              <small>Total recorded activity</small>
+              <strong id="analysisTotal">$0.00</strong>
             </div>
 
-            <div style="display:grid;gap:16px;">
+            <div class="dashboard-analysis-stat">
+              <small>Outgoing transfer activity</small>
+              <strong id="analysisOutgoing">$0.00</strong>
+            </div>
 
-              <div class="metric-card">
-                <small>Total recorded activity</small>
-                <strong id="analysisTotal">$0.00</strong>
-              </div>
+            <div class="dashboard-analysis-stat">
+              <small>Transactions</small>
+              <strong id="analysisTransactions">0</strong>
+            </div>
 
-              <div class="metric-card">
-                <small>Outgoing requests</small>
-                <strong id="analysisOutgoing">$0.00</strong>
-              </div>
+          </div>
 
-              <div class="metric-card">
-                <small>Transactions</small>
-                <strong id="analysisTransactions">0</strong>
-              </div>
+          <div class="section-card">
 
+            <h3 style="margin-top:0;">
+              Activity overview
+            </h3>
+
+            <p style="color:#7c8991;font-size:12px;line-height:1.7;">
+              This analysis is generated from transaction requests recorded
+              in the prototype dashboard.
+            </p>
+
+            <div class="fake-analysis-chart" style="margin-top:20px;">
+              <div id="analysisBar1" style="height:20%;"></div>
+              <div id="analysisBar2" style="height:30%;"></div>
+              <div id="analysisBar3" style="height:25%;"></div>
+              <div id="analysisBar4" style="height:45%;"></div>
+              <div id="analysisBar5" style="height:38%;"></div>
+              <div id="analysisBar6" style="height:55%;"></div>
+              <div id="analysisBar7" style="height:48%;"></div>
+              <div id="analysisBar8" style="height:68%;"></div>
             </div>
 
           </div>
@@ -4288,64 +3246,45 @@ button{cursor:pointer}
 
           <div class="page-title">
             <h2>Transfer</h2>
-            <p>
-              Create a transfer request.
-            </p>
+            <p>Create a transfer request.</p>
           </div>
 
-          <div id="transferChoice"
-               class="transfer-choice">
+          <div id="transferChoice" class="transfer-choice">
 
-            <button
+            <div
               class="transfer-choice-card"
               onclick="startTransfer('instant')">
 
-              <div class="service-icon">
-                <svg class="icon">
-                  <path d="M5 12h14"/>
-                  <path d="M13 6l6 6-6 6"/>
-                </svg>
+              <div class="feature-icon">
+                →
               </div>
 
               <h3>Instant Transfer</h3>
 
               <p>
-                Create a standard transfer request for review
-                and processing.
+                Create a standard transfer request for a recipient.
               </p>
 
-              <span class="primary-btn">
-                Start Transfer
-              </span>
+            </div>
 
-            </button>
-
-            <button
+            <div
               class="transfer-choice-card"
               onclick="startTransfer('wire')">
 
-              <div class="service-icon">
-                <svg class="icon">
-                  <path d="M4 7h16"/>
-                  <path d="M4 12h16"/>
-                  <path d="M4 17h16"/>
-                </svg>
+              <div class="feature-icon">
+                ⇄
               </div>
 
               <h3>Wire Transfer</h3>
 
               <p>
-                Create a wire transfer request with bank and
-                routing information.
+                Create a wire-style transfer request with bank details.
               </p>
 
-              <span class="primary-btn">
-                Start Wire
-              </span>
-
-            </button>
+            </div>
 
           </div>
+
 
           <!-- TRANSFER FORM -->
           <div id="transferFormWrap" class="hidden">
@@ -4369,7 +3308,6 @@ button{cursor:pointer}
               <div class="form-row">
 
                 <div class="form-group">
-
                   <label class="form-label">
                     Recipient name
                   </label>
@@ -4379,11 +3317,9 @@ button{cursor:pointer}
                     class="form-control"
                     type="text"
                     placeholder="Recipient full name">
-
                 </div>
 
                 <div class="form-group">
-
                   <label class="form-label">
                     Recipient account number
                   </label>
@@ -4393,7 +3329,6 @@ button{cursor:pointer}
                     class="form-control"
                     type="text"
                     placeholder="Account number">
-
                 </div>
 
               </div>
@@ -4403,7 +3338,6 @@ button{cursor:pointer}
                 <div class="form-row">
 
                   <div class="form-group">
-
                     <label class="form-label">
                       Bank name
                     </label>
@@ -4413,11 +3347,9 @@ button{cursor:pointer}
                       class="form-control"
                       type="text"
                       placeholder="Bank name">
-
                   </div>
 
                   <div class="form-group">
-
                     <label class="form-label">
                       Routing / SWIFT
                     </label>
@@ -4427,7 +3359,6 @@ button{cursor:pointer}
                       class="form-control"
                       type="text"
                       placeholder="Routing or SWIFT code">
-
                   </div>
 
                 </div>
@@ -4437,7 +3368,6 @@ button{cursor:pointer}
               <div class="form-row">
 
                 <div class="form-group">
-
                   <label class="form-label">
                     Amount
                   </label>
@@ -4449,7 +3379,6 @@ button{cursor:pointer}
                     min="0.01"
                     step="0.01"
                     placeholder="0.00">
-
                 </div>
 
                 <div class="form-group">
@@ -4519,9 +3448,7 @@ button{cursor:pointer}
                 ← Back
               </button>
 
-              <strong>
-                Review Transfer
-              </strong>
+              <strong>Review Transfer</strong>
 
             </div>
 
@@ -4589,17 +3516,13 @@ button{cursor:pointer}
 
           <div class="page-title">
             <h2>Transaction History</h2>
-            <p>
-              Review your recent account activity.
-            </p>
+            <p>Review your recent account activity.</p>
           </div>
 
           <div class="section-card">
 
             <div id="allTransactions">
-              <div style="
-                color:#89979f;
-                font-size:12px;">
+              <div style="color:#89979f;font-size:12px;">
                 No transactions yet.
               </div>
             </div>
@@ -4614,46 +3537,29 @@ button{cursor:pointer}
 
           <div class="page-title">
             <h2>Deposit</h2>
-            <p>
-              Review available deposit options.
-            </p>
+            <p>Review available deposit options.</p>
           </div>
 
-          <div class="section-card"
-               style="max-width:700px;">
+          <div class="section-card" style="max-width:700px;">
 
-            <div class="service-icon">
-
-              <svg class="icon">
-                <path d="M12 3v13"/>
-                <path d="M7 11l5 5 5-5"/>
-                <path d="M4 21h16"/>
-              </svg>
-
+            <div style="width:55px;height:55px;border-radius:13px;background:#eaf8f1;color:#087443;display:grid;place-items:center;">
+              ↓
             </div>
 
-            <h3>
+            <h3 style="margin-top:20px;">
               Deposit request
             </h3>
 
-            <p style="
-              color:#74848d;
-              font-size:13px;
-              line-height:1.7;">
-
-              Deposit requests can be submitted through your
-              account support workflow. Contact support for
-              assistance.
-
+            <p style="color:#74848d;font-size:13px;line-height:1.7;">
+              Deposit requests can be submitted through your account support
+              workflow. Contact support for assistance.
             </p>
 
             <button
               class="primary-btn"
               onclick="openTawkChat()"
               style="margin-top:10px;">
-
               Contact Support
-
             </button>
 
           </div>
@@ -4666,45 +3572,28 @@ button{cursor:pointer}
 
           <div class="page-title">
             <h2>Withdraw</h2>
-            <p>
-              Review withdrawal assistance options.
-            </p>
+            <p>Review withdrawal assistance options.</p>
           </div>
 
-          <div class="section-card"
-               style="max-width:700px;">
+          <div class="section-card" style="max-width:700px;">
 
-            <div class="service-icon">
-
-              <svg class="icon">
-                <path d="M12 21V8"/>
-                <path d="M7 13l5-5 5 5"/>
-                <path d="M4 3h16"/>
-              </svg>
-
+            <div style="width:55px;height:55px;border-radius:13px;background:#eaf8f1;color:#087443;display:grid;place-items:center;">
+              ↑
             </div>
 
-            <h3>
+            <h3 style="margin-top:20px;">
               Withdrawal request
             </h3>
 
-            <p style="
-              color:#74848d;
-              font-size:13px;
-              line-height:1.7;">
-
-              Contact support if you need assistance with a
-              withdrawal request.
-
+            <p style="color:#74848d;font-size:13px;line-height:1.7;">
+              Contact support if you need assistance with a withdrawal request.
             </p>
 
             <button
               class="primary-btn"
               onclick="openTawkChat()"
               style="margin-top:10px;">
-
               Contact Support
-
             </button>
 
           </div>
@@ -4717,18 +3606,14 @@ button{cursor:pointer}
 
           <div class="page-title">
             <h2>Profile</h2>
-            <p>
-              Manage your account profile information.
-            </p>
+            <p>Manage your account profile information.</p>
           </div>
 
           <div class="profile-layout">
 
             <div class="profile-card">
 
-              <div
-                class="profile-photo"
-                id="profilePhoto">
+              <div class="profile-photo" id="profilePhoto">
                 CF
               </div>
 
@@ -4742,8 +3627,7 @@ button{cursor:pointer}
 
             </div>
 
-            <div class="section-card"
-                 style="margin-top:0;">
+            <div class="section-card" style="margin-top:0;">
 
               <div class="form-row">
 
@@ -4831,35 +3715,24 @@ button{cursor:pointer}
 
           <div class="page-title">
             <h2>KYC Verification</h2>
-            <p>
-              Review your prototype verification status.
-            </p>
+            <p>Review your verification status.</p>
           </div>
 
           <div class="verified-box">
 
             <div class="verified-icon">
-
-              <svg class="icon"
-                   style="width:40px;height:40px;">
-                <path d="M20 6L8 18l-5-5"/>
-              </svg>
-
+              ✓
             </div>
 
             <h2>Verified</h2>
 
             <p>
-              Your prototype verification status is verified.
+              Prototype verification status.
             </p>
 
-            <div
-              class="status-pill"
-              style="margin:18px auto 0;">
-
+            <div class="status-pill" style="margin-top:18px;">
               <span class="status-dot"></span>
               Verified
-
             </div>
 
           </div>
@@ -4879,8 +3752,7 @@ button{cursor:pointer}
 
           <div class="settings-grid">
 
-            <div class="section-card"
-                 style="margin-top:0;">
+            <div class="section-card" style="margin-top:0;">
 
               <h3 style="margin-top:0;">
                 Change Password
@@ -4935,8 +3807,8 @@ button{cursor:pointer}
 
             </div>
 
-            <div class="section-card"
-                 style="margin-top:0;">
+
+            <div class="section-card" style="margin-top:0;">
 
               <h3 style="margin-top:0;">
                 Change Security PIN
@@ -5005,56 +3877,28 @@ button{cursor:pointer}
 
           <div class="page-title">
             <h2>Support</h2>
-            <p>
-              Connect with customer support through live chat.
-            </p>
+            <p>Connect with customer support.</p>
           </div>
 
-          <div class="section-card support-card">
+          <div class="section-card" style="max-width:650px;">
 
-            <div
-              style="
-                width:60px;
-                height:60px;
-                background:#eaf8f1;
-                color:#087443;
-                border-radius:14px;
-                display:grid;
-                place-items:center;">
-
-              <svg class="icon"
-                   style="width:28px;height:28px;">
-                <path d="M4 5h16v11H8l-4 4V5z"/>
-              </svg>
-
+            <div style="width:60px;height:60px;background:#eaf8f1;color:#087443;border-radius:14px;display:grid;place-items:center;font-size:24px;">
+              ?
             </div>
 
             <h3 style="margin-top:20px;">
               Live Chat
             </h3>
 
-            <p style="
-              color:#71818a;
-              font-size:13px;
-              line-height:1.7;">
-
-              Start a live conversation with support using the
-              integrated Tawk.to chat widget.
-
+            <p style="color:#71818a;font-size:13px;line-height:1.7;">
+              Start a live conversation with support.
             </p>
 
             <button
               class="primary-btn"
               onclick="openTawkChat()"
               style="margin-top:10px;">
-
-              <svg class="icon"
-                   style="display:inline-block;vertical-align:-5px;margin-right:5px;">
-                <path d="M4 5h16v11H8l-4 4V5z"/>
-              </svg>
-
               Start Live Chat
-
             </button>
 
           </div>
@@ -5070,34 +3914,16 @@ button{cursor:pointer}
 </div>
 
 
-<!-- =========================================================
-     PIN MODAL
-========================================================= -->
-
+<!-- PIN MODAL -->
 <div id="pinModal">
 
   <div class="pin-box">
 
-    <div style="
-      width:55px;
-      height:55px;
-      border-radius:50%;
-      background:#eaf8f1;
-      color:#087443;
-      display:grid;
-      place-items:center;
-      margin:0 auto 15px;">
-
-      <svg class="icon">
-        <rect x="5" y="10" width="14" height="10" rx="2"/>
-        <path d="M8 10V7a4 4 0 0 1 8 0v3"/>
-      </svg>
-
+    <div style="width:55px;height:55px;border-radius:50%;background:#eaf8f1;color:#087443;display:grid;place-items:center;margin:0 auto 15px;">
+      🔒
     </div>
 
-    <h3>
-      Confirm Transfer
-    </h3>
+    <h3>Confirm Transfer</h3>
 
     <p>
       Enter your four-digit Security PIN to continue.
@@ -5111,10 +3937,7 @@ button{cursor:pointer}
       maxlength="4"
       placeholder="••••">
 
-    <div style="
-      display:flex;
-      gap:10px;
-      margin-top:18px;">
+    <div style="display:flex;gap:10px;margin-top:18px;">
 
       <button
         class="secondary-btn"
@@ -5137,17 +3960,13 @@ button{cursor:pointer}
 </div>
 
 
-<!-- =========================================================
-     FLOATING LIVE CHAT
-========================================================= -->
-
+<!-- CHAT BUTTON -->
 <button
   class="chat-float"
   onclick="openTawkChat()"
   title="Live Chat">
 
-  <svg class="icon"
-       style="width:25px;height:25px;">
+  <svg class="icon" style="width:25px;height:25px;">
     <path d="M4 5h16v11H8l-4 4V5z"/>
   </svg>
 
@@ -5166,6 +3985,7 @@ button{cursor:pointer}
 const firebaseConfig = {
   apiKey: "AIzaSyB6M6TtGnHPWOnDr9xO4JYJbx4qtZr9W2w",
   authDomain: "cashflowbank-9068.firebaseapp.com",
+  databaseURL: "https://cashflowbank-9068-default-rtdb.firebaseio.com",
   projectId: "cashflowbank-9068",
   storageBucket: "cashflowbank-9068.firebasestorage.app",
   messagingSenderId: "38012287371",
@@ -5177,13 +3997,21 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
+
+/* =========================================================
+   GLOBAL STATE
+========================================================= */
+
 let currentUser = null;
 let customerData = null;
 let transactions = [];
+
 let currentTransferType = null;
 let pendingTransfer = null;
+
 let balanceVisible = true;
 let registrationInProgress = false;
+let createdRegistrationUser = null;
 
 
 /* =========================================================
@@ -5225,14 +4053,11 @@ function formatDate(value){
 
     if(isNaN(date.getTime())) return "—";
 
-    return date.toLocaleDateString(
-      "en-US",
-      {
-        year:"numeric",
-        month:"short",
-        day:"numeric"
-      }
-    );
+    return date.toLocaleDateString("en-US",{
+      year:"numeric",
+      month:"short",
+      day:"numeric"
+    });
 
   }catch(e){
 
@@ -5254,16 +4079,13 @@ function formatDateTime(value){
 
     if(isNaN(date.getTime())) return "—";
 
-    return date.toLocaleString(
-      "en-US",
-      {
-        year:"numeric",
-        month:"short",
-        day:"numeric",
-        hour:"numeric",
-        minute:"2-digit"
-      }
-    );
+    return date.toLocaleString("en-US",{
+      year:"numeric",
+      month:"short",
+      day:"numeric",
+      hour:"numeric",
+      minute:"2-digit"
+    });
 
   }catch(e){
 
@@ -5297,17 +4119,6 @@ function clearAuthMessage(){
   $("authMessage").innerHTML = "";
 }
 
-function scrollToSection(id){
-
-  const element = document.getElementById(id);
-
-  if(element){
-    element.scrollIntoView({
-      behavior:"smooth"
-    });
-  }
-}
-
 
 /* =========================================================
    AUTH UI
@@ -5335,25 +4146,13 @@ function switchAuth(mode){
 
   const login = mode === "login";
 
-  $("loginTab").classList.toggle(
-    "active",
-    login
-  );
+  $("loginTab").classList.toggle("active",login);
 
-  $("registerTab").classList.toggle(
-    "active",
-    !login
-  );
+  $("registerTab").classList.toggle("active",!login);
 
-  $("loginForm").classList.toggle(
-    "hidden",
-    !login
-  );
+  $("loginForm").classList.toggle("hidden",!login);
 
-  $("registerForm").classList.toggle(
-    "hidden",
-    login
-  );
+  $("registerForm").classList.toggle("hidden",login);
 
   $("authTitle").textContent =
     login
@@ -5365,7 +4164,7 @@ function switchAuth(mode){
 
 
 /* =========================================================
-   PIN HASH
+   HASH PIN
 ========================================================= */
 
 async function hashPin(pin){
@@ -5381,53 +4180,42 @@ async function hashPin(pin){
     );
 
   const hashArray =
-    Array.from(
-      new Uint8Array(hashBuffer)
-    );
+    Array.from(new Uint8Array(hashBuffer));
 
   return hashArray
-    .map(
-      b => b.toString(16).padStart(2,"0")
-    )
+    .map(b=>b.toString(16).padStart(2,"0"))
     .join("");
 }
 
 
 /* =========================================================
    ACCOUNT NUMBER
-   No collection-wide Firestore lookup is performed.
 ========================================================= */
 
-async function generateAccountNumber(uid){
+/*
+  The account number is used as the customer's visible login.
 
-  const buffer =
-    await crypto.subtle.digest(
-      "SHA-256",
-      new TextEncoder().encode(uid)
-    );
+  Firebase Auth itself requires an email-style identifier, so the site
+  creates an INTERNAL synthetic Auth email:
 
-  const bytes =
-    Array.from(new Uint8Array(buffer));
+  1234567890@cashflowbank.local
 
-  let digits = "";
+  The customer never sees or enters that internal address.
+*/
 
-  for(const byte of bytes){
+function generateAccountNumber(){
 
-    digits += String(byte % 10);
+  return String(
+    Math.floor(
+      1000000000 +
+      Math.random() * 9000000000
+    )
+  );
+}
 
-    if(digits.length >= 10){
-      break;
-    }
+function authEmailFromAccount(accountNumber){
 
-  }
-
-  digits = digits.padEnd(10,"0");
-
-  if(digits[0] === "0"){
-    digits = "1" + digits.slice(1);
-  }
-
-  return digits.slice(0,10);
+  return `${accountNumber}@cashflowbank.local`;
 }
 
 
@@ -5474,9 +4262,11 @@ $("registerForm").addEventListener(
       !country ||
       !accountType
     ){
+
       showAuthMessage(
         "Please complete all required fields."
       );
+
       return;
     }
 
@@ -5510,7 +4300,7 @@ $("registerForm").addEventListener(
     if(!terms){
 
       showAuthMessage(
-        "Please accept the prototype terms."
+        "Please accept the account terms."
       );
 
       return;
@@ -5520,33 +4310,71 @@ $("registerForm").addEventListener(
       $("registerBtn");
 
     button.disabled = true;
+
     button.textContent =
       "Creating account...";
 
     registrationInProgress = true;
 
+    let accountNumber = null;
+
     try{
 
-      const credential =
-        await auth.createUserWithEmailAndPassword(
-          email,
-          password
+      /*
+        Try account numbers until Firebase Auth accepts
+        the internal login identifier.
+      */
+
+      let credential = null;
+
+      for(let attempt=0;attempt<10;attempt++){
+
+        accountNumber =
+          generateAccountNumber();
+
+        const internalEmail =
+          authEmailFromAccount(accountNumber);
+
+        try{
+
+          credential =
+            await auth.createUserWithEmailAndPassword(
+              internalEmail,
+              password
+            );
+
+          break;
+
+        }catch(error){
+
+          if(
+            error.code ===
+            "auth/email-already-in-use"
+          ){
+
+            continue;
+
+          }
+
+          throw error;
+        }
+      }
+
+      if(!credential){
+
+        throw new Error(
+          "Unable to create a unique account number."
         );
+      }
 
       const user =
         credential.user;
 
-      const accountNumber =
-        await generateAccountNumber(user.uid);
+      createdRegistrationUser =
+        user;
 
       const securityPinHash =
         await hashPin(pin);
-
-      /*
-       IMPORTANT:
-       The fields below match the Firestore rules
-       you published.
-      */
 
       await db
         .collection("users")
@@ -5555,9 +4383,7 @@ $("registerForm").addEventListener(
 
           uid:user.uid,
 
-          accountNumber:
-
-            accountNumber,
+          accountNumber:accountNumber,
 
           name:name,
 
@@ -5578,15 +4404,26 @@ $("registerForm").addEventListener(
           creditScore:0,
 
           securityPinHash:
+
             securityPinHash,
 
           createdAt:
-            firebase.firestore.FieldValue.serverTimestamp(),
+            firebase.firestore
+              .FieldValue
+              .serverTimestamp(),
 
           updatedAt:
-            firebase.firestore.FieldValue.serverTimestamp()
+            firebase.firestore
+              .FieldValue
+              .serverTimestamp()
 
         });
+
+      /*
+        Store the customer's real email in their Firebase
+        display profile too. The Auth login identifier remains
+        the internal account-number email.
+      */
 
       await user.updateProfile({
         displayName:name
@@ -5595,65 +4432,111 @@ $("registerForm").addEventListener(
       registrationInProgress = false;
 
       /*
-       Sign out after account creation so the new customer
-       can return to the login screen normally.
+        Immediately sign out after account creation.
       */
 
       await auth.signOut();
+
+      createdRegistrationUser = null;
 
       $("registerForm").reset();
 
       switchAuth("login");
 
       $("loginIdentifier").value =
-        email;
+        accountNumber;
 
       showAuthMessage(
-        "Account created successfully. Your account number is " +
-        accountNumber +
-        ". Sign in with your email address.",
+        `Account created successfully. Your account number is ${accountNumber}. You can now sign in with your account number and password.`,
         "success"
       );
 
     }catch(error){
 
-      console.error(error);
+      console.error(
+        "REGISTRATION ERROR:",
+        error
+      );
 
       registrationInProgress = false;
 
       /*
-       If registration created an Auth account but the
-       Firestore write failed, attempt to sign out.
+        If Auth was created but Firestore failed,
+        clean up that newly-created Auth account.
       */
 
       try{
-        await auth.signOut();
-      }catch(e){}
+
+        if(
+          createdRegistrationUser &&
+          auth.currentUser &&
+          auth.currentUser.uid ===
+          createdRegistrationUser.uid
+        ){
+
+          await createdRegistrationUser.delete();
+
+        }
+
+      }catch(cleanupError){
+
+        console.error(
+          "Registration cleanup error:",
+          cleanupError
+        );
+
+      }
+
+      createdRegistrationUser = null;
 
       let message =
-        "Unable to create your account.";
-
-      if(error.code === "auth/email-already-in-use"){
-        message =
-          "An account with this email already exists.";
-      }
-
-      if(error.code === "auth/invalid-email"){
-        message =
-          "Please enter a valid email address.";
-      }
-
-      if(error.code === "auth/weak-password"){
-        message =
-          "Please choose a stronger password.";
-      }
+        "Unable to create the account.";
 
       if(
         error.code ===
+        "auth/email-already-in-use"
+      ){
+
+        message =
+          "Please try creating the account again.";
+
+      }else if(
+        error.code ===
+        "auth/operation-not-allowed"
+      ){
+
+        message =
+          "Email/password authentication is disabled in Firebase. Enable Email/Password under Firebase Authentication → Sign-in method.";
+
+      }else if(
+        error.code ===
+        "auth/invalid-api-key"
+      ){
+
+        message =
+          "Firebase configuration is invalid.";
+
+      }else if(
+        error.code ===
+        "auth/network-request-failed"
+      ){
+
+        message =
+          "Network error. Check your internet connection.";
+
+      }else if(
+        error.code ===
         "permission-denied"
       ){
+
         message =
-          "Account creation was blocked by the Firestore rules.";
+          "Firestore rejected the account document. Check your published Firestore rules.";
+
+      }else if(error.message){
+
+        message =
+          error.message;
+
       }
 
       showAuthMessage(message);
@@ -5681,35 +4564,90 @@ $("loginForm").addEventListener(
 
     e.preventDefault();
 
-    const email =
-      $("loginIdentifier").value.trim();
+    const accountNumber =
+      $("loginIdentifier")
+        .value
+        .trim();
 
     const password =
       $("loginPass").value;
 
-    if(!email || !password){
+    if(
+      !/^\d{10}$/.test(accountNumber)
+    ){
 
       showAuthMessage(
-        "Enter your email address and password."
+        "Enter your 10-digit account number."
       );
 
       return;
     }
 
+    if(!password){
+
+      showAuthMessage(
+        "Enter your password."
+      );
+
+      return;
+    }
+
+    const button =
+      $("loginBtn");
+
+    button.disabled = true;
+
+    button.textContent =
+      "Signing in...";
+
     try{
 
+      const internalEmail =
+        authEmailFromAccount(
+          accountNumber
+        );
+
       await auth.signInWithEmailAndPassword(
-        email,
+        internalEmail,
         password
       );
 
     }catch(error){
 
-      console.error(error);
-
-      showAuthMessage(
-        "Incorrect login details or account access is unavailable."
+      console.error(
+        "LOGIN ERROR:",
+        error
       );
+
+      let message =
+        "Incorrect account number or password.";
+
+      if(
+        error.code ===
+        "auth/operation-not-allowed"
+      ){
+
+        message =
+          "Email/password authentication is disabled. Enable Email/Password in Firebase Authentication.";
+
+      }else if(
+        error.code ===
+        "auth/network-request-failed"
+      ){
+
+        message =
+          "Network error. Check your internet connection.";
+
+      }
+
+      showAuthMessage(message);
+
+    }finally{
+
+      button.disabled = false;
+
+      button.textContent =
+        "Sign In";
 
     }
 
@@ -5718,63 +4656,18 @@ $("loginForm").addEventListener(
 
 
 /* =========================================================
-   PASSWORD RESET
-========================================================= */
-
-async function forgotPassword(){
-
-  const email =
-    $("loginIdentifier").value.trim();
-
-  if(!email){
-
-    showAuthMessage(
-      "Enter your email address first."
-    );
-
-    return;
-  }
-
-  try{
-
-    await auth.sendPasswordResetEmail(
-      email
-    );
-
-    showAuthMessage(
-      "Password reset instructions have been sent to your email.",
-      "success"
-    );
-
-  }catch(error){
-
-    console.error(error);
-
-    showAuthMessage(
-      "Unable to send the password reset email."
-    );
-
-  }
-}
-
-
-/* =========================================================
    AUTH STATE
 ========================================================= */
 
 auth.onAuthStateChanged(
-  async user => {
+  async function(user){
 
     currentUser = user;
 
     if(user){
 
-      /*
-       During account creation, the Auth account can appear
-       before its Firestore document has been written.
-      */
-
       if(registrationInProgress){
+
         return;
       }
 
@@ -5783,10 +4676,12 @@ auth.onAuthStateChanged(
     }else{
 
       $("dashboard")
-        .classList.add("hidden");
+        .classList
+        .add("hidden");
 
       $("landing")
-        .classList.remove("hidden");
+        .classList
+        .remove("hidden");
 
     }
 
@@ -5795,7 +4690,7 @@ auth.onAuthStateChanged(
 
 
 /* =========================================================
-   LOAD CUSTOMER
+   LOAD DASHBOARD
 ========================================================= */
 
 async function loadCustomerDashboard(){
@@ -5831,13 +4726,16 @@ async function loadCustomerDashboard(){
     populateDashboard();
 
     $("landing")
-      .classList.add("hidden");
+      .classList
+      .add("hidden");
 
     $("authOverlay")
-      .classList.add("hidden");
+      .classList
+      .add("hidden");
 
     $("dashboard")
-      .classList.remove("hidden");
+      .classList
+      .remove("hidden");
 
     document.body.style.overflow = "";
 
@@ -5845,13 +4743,17 @@ async function loadCustomerDashboard(){
 
   }catch(error){
 
-    console.error(error);
+    console.error(
+      "DASHBOARD ERROR:",
+      error
+    );
 
     showToast(
       "Unable to load your account."
     );
 
   }
+
 }
 
 
@@ -5878,7 +4780,7 @@ async function loadTransactions(){
 
     transactions =
       snapshot.docs.map(
-        doc => ({
+        doc=>({
           id:doc.id,
           ...doc.data()
         })
@@ -5910,11 +4812,15 @@ async function loadTransactions(){
 
   }catch(error){
 
-    console.error(error);
+    console.error(
+      "TRANSACTION LOAD ERROR:",
+      error
+    );
 
     transactions = [];
 
   }
+
 }
 
 
@@ -5937,30 +4843,38 @@ function populateDashboard(){
       .filter(Boolean)
       .slice(0,2)
       .map(
-        x => x[0].toUpperCase()
+        x=>x[0].toUpperCase()
       )
-      .join("") || "CF";
+      .join("") ||
+    "CF";
 
   $("welcomeName").textContent =
     name.split(" ")[0];
 
   $("welcomeStatus").textContent =
-    customerData.status || "Active";
+    customerData.status ||
+    "pending";
 
   $("balanceDisplay").textContent =
-    money(customerData.balance);
+    balanceVisible
+      ? money(customerData.balance)
+      : "••••••";
 
   $("accountNumberDisplay").textContent =
-    customerData.accountNumber || "—";
+    customerData.accountNumber ||
+    "—";
 
   $("homeCountry").textContent =
-    customerData.country || "—";
+    customerData.country ||
+    "—";
 
   $("homeAccountType").textContent =
-    customerData.accountType || "—";
+    customerData.accountType ||
+    "—";
 
   $("homeStatus").textContent =
-    customerData.status || "—";
+    customerData.status ||
+    "—";
 
   $("homeCreated").textContent =
     formatDate(customerData.createdAt);
@@ -5975,50 +4889,59 @@ function populateDashboard(){
     name;
 
   $("summaryName").textContent =
-    customerData.name || "—";
+    customerData.name ||
+    "—";
 
   $("summaryEmail").textContent =
     customerData.email ||
-    currentUser.email ||
     "—";
 
   $("summaryPhone").textContent =
-    customerData.phone || "—";
+    customerData.phone ||
+    "—";
 
   $("summaryCountry").textContent =
-    customerData.country || "—";
+    customerData.country ||
+    "—";
 
   $("summaryAccount").textContent =
-    customerData.accountNumber || "—";
+    customerData.accountNumber ||
+    "—";
 
   $("summaryType").textContent =
-    customerData.accountType || "—";
+    customerData.accountType ||
+    "—";
 
   $("summaryStatus").textContent =
-    customerData.status || "—";
+    customerData.status ||
+    "—";
 
   $("summaryCreated").textContent =
     formatDate(customerData.createdAt);
 
   $("profileDisplayName").textContent =
-    customerData.name || "Customer";
+    customerData.name ||
+    "Customer";
 
   $("profileDisplayEmail").textContent =
     customerData.email ||
-    currentUser.email ||
     "—";
 
   $("profileName").value =
-    customerData.name || "";
+    customerData.name ||
+    "";
 
   $("profilePhone").value =
-    customerData.phone || "";
+    customerData.phone ||
+    "";
 
   $("profileCountry").value =
-    customerData.country || "";
+    customerData.country ||
+    "";
 
   $("profilePhotoUrl").value =
-    customerData.photoURL || "";
+    customerData.photoURL ||
+    "";
 
   $("profilePhoto").innerHTML =
     customerData.photoURL
@@ -6037,7 +4960,7 @@ function populateDashboard(){
 
 
 /* =========================================================
-   BALANCE VISIBILITY
+   BALANCE
 ========================================================= */
 
 function toggleBalance(){
@@ -6049,12 +4972,11 @@ function toggleBalance(){
     balanceVisible
       ? money(customerData?.balance || 0)
       : "••••••";
-
 }
 
 
 /* =========================================================
-   DASHBOARD PAGES
+   DASHBOARD NAVIGATION
 ========================================================= */
 
 const pageTitles = {
@@ -6088,14 +5010,16 @@ function showPage(page){
   document
     .querySelectorAll(".page")
     .forEach(
-      p => p.classList.remove("active")
+      p=>p.classList.remove("active")
     );
 
   const target =
     $("page-" + page);
 
   if(target){
+
     target.classList.add("active");
+
   }
 
   document
@@ -6112,66 +5036,62 @@ function showPage(page){
     });
 
   $("topTitle").textContent =
-    pageTitles[page] || "Home";
+    pageTitles[page] ||
+    "Home";
 
   $("sidebar")
-    .classList.remove("open");
+    .classList
+    .remove("open");
 
-  if(page === "history"){
+  if(page === "history")
     renderTransactions();
-  }
 
-  if(page === "analysis"){
+  if(page === "analysis")
     renderAnalysis();
-  }
 
-  if(page === "profile"){
+  if(page === "profile")
     populateDashboard();
-  }
 
-  if(page === "transfer"){
+  if(page === "transfer")
     resetTransferInterface();
-  }
 
   window.scrollTo({
     top:0,
     behavior:"smooth"
   });
+
 }
 
 function toggleSidebar(){
 
   $("sidebar")
-    .classList.toggle("open");
+    .classList
+    .toggle("open");
 
 }
 
 
 /* =========================================================
-   TRANSACTION DISPLAY
+   TRANSACTION UI
 ========================================================= */
 
 function transactionStatusClass(status){
 
   const s =
-    String(
-      status || "pending"
-    ).toLowerCase();
+    String(status || "pending")
+      .toLowerCase();
 
   if(
     s === "completed" ||
     s === "approved"
-  ){
+  )
     return "completed";
-  }
 
-  if(s === "refunded"){
+  if(s === "refunded")
     return "refunded";
-  }
 
-  if(s === "declined"){
+  if(s === "declined")
     return "declined";
-  }
 
   return "pending";
 }
@@ -6192,10 +5112,7 @@ function renderTransactionRows(list){
   if(!list.length){
 
     return `
-      <div style="
-        padding:15px 0;
-        color:#89979f;
-        font-size:12px;">
+      <div style="padding:15px 0;color:#89979f;font-size:12px;">
         No transactions yet.
       </div>
     `;
@@ -6208,7 +5125,8 @@ function renderTransactionRows(list){
       Number(tx.amount || 0);
 
     const status =
-      tx.status || "pending";
+      tx.status ||
+      "pending";
 
     return `
 
@@ -6232,17 +5150,21 @@ function renderTransactionRows(list){
 
             <small>
               ${
-                tx.transferType === "wire"
-                  ? "Wire transfer"
-                  : "Instant transfer"
+                escapeHTML(
+                  tx.transferType === "wire"
+                    ? "Wire transfer"
+                    : "Instant transfer"
+                )
               }
 
               •
+
               ${escapeHTML(
                 formatDateTime(
                   tx.createdAt
                 )
               )}
+
             </small>
 
           </div>
@@ -6329,23 +5251,28 @@ function renderAnalysis(){
 
 
 /* =========================================================
-   TRANSFER
+   TRANSFERS
 ========================================================= */
 
 function resetTransferInterface(){
 
   $("transferChoice")
-    .classList.remove("hidden");
+    .classList
+    .remove("hidden");
 
   $("transferFormWrap")
-    .classList.add("hidden");
+    .classList
+    .add("hidden");
 
   $("transferReviewWrap")
-    .classList.add("hidden");
+    .classList
+    .add("hidden");
 
-  currentTransferType = null;
+  currentTransferType =
+    null;
 
-  pendingTransfer = null;
+  pendingTransfer =
+    null;
 
 }
 
@@ -6355,21 +5282,26 @@ function startTransfer(type){
     type;
 
   $("transferChoice")
-    .classList.add("hidden");
+    .classList
+    .add("hidden");
 
   $("transferFormWrap")
-    .classList.remove("hidden");
+    .classList
+    .remove("hidden");
 
   $("transferReviewWrap")
-    .classList.add("hidden");
+    .classList
+    .add("hidden");
 
-  $("transferTypeTitle").textContent =
-    type === "wire"
-      ? "Wire Transfer"
-      : "Instant Transfer";
+  $("transferTypeTitle")
+    .textContent =
+      type === "wire"
+        ? "Wire Transfer"
+        : "Instant Transfer";
 
   $("wireFields")
-    .classList.toggle(
+    .classList
+    .toggle(
       "hidden",
       type !== "wire"
     );
@@ -6378,26 +5310,19 @@ function startTransfer(type){
 
 function cancelTransferForm(){
 
-  $("transferRecipient").value =
-    "";
+  $("transferRecipient").value = "";
 
-  $("transferAccount").value =
-    "";
+  $("transferAccount").value = "";
 
-  $("transferAmount").value =
-    "";
+  $("transferAmount").value = "";
 
-  $("transferCurrency").value =
-    "USD";
+  $("transferCurrency").value = "USD";
 
-  $("transferNote").value =
-    "";
+  $("transferNote").value = "";
 
-  $("wireBank").value =
-    "";
+  $("wireBank").value = "";
 
-  $("wireRouting").value =
-    "";
+  $("wireRouting").value = "";
 
   resetTransferInterface();
 
@@ -6406,31 +5331,39 @@ function cancelTransferForm(){
 function backToTransferForm(){
 
   $("transferReviewWrap")
-    .classList.add("hidden");
+    .classList
+    .add("hidden");
 
   $("transferFormWrap")
-    .classList.remove("hidden");
+    .classList
+    .remove("hidden");
 
 }
 
 function reviewTransfer(){
 
-  if(!currentUser || !customerData){
+  if(
+    !currentUser ||
+    !customerData
+  ){
 
     showToast(
       "Please sign in first."
     );
 
     return;
+
   }
 
   const recipient =
     $("transferRecipient")
-      .value.trim();
+      .value
+      .trim();
 
   const account =
     $("transferAccount")
-      .value.trim();
+      .value
+      .trim();
 
   const amount =
     Number(
@@ -6439,15 +5372,18 @@ function reviewTransfer(){
 
   const note =
     $("transferNote")
-      .value.trim();
+      .value
+      .trim();
 
   const bank =
     $("wireBank")
-      .value.trim();
+      .value
+      .trim();
 
   const routing =
     $("wireRouting")
-      .value.trim();
+      .value
+      .trim();
 
   if(!recipient){
 
@@ -6456,6 +5392,7 @@ function reviewTransfer(){
     );
 
     return;
+
   }
 
   if(!account){
@@ -6465,6 +5402,7 @@ function reviewTransfer(){
     );
 
     return;
+
   }
 
   if(
@@ -6477,6 +5415,7 @@ function reviewTransfer(){
     );
 
     return;
+
   }
 
   if(
@@ -6489,6 +5428,7 @@ function reviewTransfer(){
     );
 
     return;
+
   }
 
   if(
@@ -6501,29 +5441,37 @@ function reviewTransfer(){
     );
 
     return;
+
   }
 
   pendingTransfer = {
 
-    recipientName:recipient,
+    recipientName:
+      recipient,
 
-    recipientAccount:account,
+    recipientAccount:
+      account,
 
-    amount:amount,
+    amount:
+      amount,
 
     currency:
       $("transferCurrency").value,
 
-    note:note,
+    note:
+      note,
 
-    bank:bank,
+    bank:
+      bank,
 
-    routing:routing,
+    routing:
+      routing,
 
     transferType:
       currentTransferType,
 
-    type:"transfer"
+    type:
+      "transfer"
 
   };
 
@@ -6539,9 +5487,7 @@ function reviewTransfer(){
     account;
 
   $("reviewAmount").textContent =
-    `${money(amount)} ${
-      pendingTransfer.currency
-    }`;
+    `${money(amount)} ${pendingTransfer.currency}`;
 
   $("reviewBank").textContent =
     bank || "—";
@@ -6550,28 +5496,29 @@ function reviewTransfer(){
     note || "—";
 
   $("transferFormWrap")
-    .classList.add("hidden");
+    .classList
+    .add("hidden");
 
   $("transferReviewWrap")
-    .classList.remove("hidden");
+    .classList
+    .remove("hidden");
 
 }
 
 
 /* =========================================================
-   PIN MODAL
+   PIN
 ========================================================= */
 
 function openPinModal(){
 
-  $("transferPin").value =
-    "";
+  $("transferPin").value = "";
 
   $("pinModal").style.display =
     "flex";
 
   setTimeout(
-    () => $("transferPin").focus(),
+    ()=>$("transferPin").focus(),
     100
   );
 
@@ -6583,11 +5530,6 @@ function closePinModal(){
     "none";
 
 }
-
-
-/* =========================================================
-   SUBMIT TRANSFER
-========================================================= */
 
 async function submitTransfer(){
 
@@ -6601,11 +5543,13 @@ async function submitTransfer(){
     );
 
     return;
+
   }
 
   const pin =
     $("transferPin")
-      .value.trim();
+      .value
+      .trim();
 
   if(!/^\d{4}$/.test(pin)){
 
@@ -6614,6 +5558,7 @@ async function submitTransfer(){
     );
 
     return;
+
   }
 
   try{
@@ -6633,10 +5578,12 @@ async function submitTransfer(){
       );
 
       return;
+
     }
 
     if(
-      enteredHash !== storedHash
+      enteredHash !==
+      storedHash
     ){
 
       showToast(
@@ -6644,15 +5591,13 @@ async function submitTransfer(){
       );
 
       return;
+
     }
 
     /*
       IMPORTANT:
-      This only creates a pending request.
-
-      It does NOT change the customer's balance.
-      Balance changes must remain under the admin/backend
-      workflow.
+      This only creates a PENDING transaction.
+      It does not modify the customer's balance.
     */
 
     await db
@@ -6663,7 +5608,8 @@ async function submitTransfer(){
           currentUser.uid,
 
         accountNumber:
-          customerData.accountNumber || "",
+          customerData.accountNumber ||
+          "",
 
         recipientName:
           pendingTransfer.recipientName,
@@ -6678,26 +5624,35 @@ async function submitTransfer(){
           pendingTransfer.currency,
 
         note:
-          pendingTransfer.note || "",
+          pendingTransfer.note ||
+          "",
 
         bank:
-          pendingTransfer.bank || "",
+          pendingTransfer.bank ||
+          "",
 
         routing:
-          pendingTransfer.routing || "",
+          pendingTransfer.routing ||
+          "",
 
         transferType:
           pendingTransfer.transferType,
 
-        type:"transfer",
+        type:
+          "transfer",
 
-        status:"pending",
+        status:
+          "pending",
 
         createdAt:
-          firebase.firestore.FieldValue.serverTimestamp(),
+          firebase.firestore
+            .FieldValue
+            .serverTimestamp(),
 
         updatedAt:
-          firebase.firestore.FieldValue.serverTimestamp()
+          firebase.firestore
+            .FieldValue
+            .serverTimestamp()
 
       });
 
@@ -6719,7 +5674,10 @@ async function submitTransfer(){
 
   }catch(error){
 
-    console.error(error);
+    console.error(
+      "TRANSFER ERROR:",
+      error
+    );
 
     showToast(
       "Unable to submit the transfer."
@@ -6740,18 +5698,21 @@ async function saveProfile(){
 
   const name =
     $("profileName")
-      .value.trim();
+      .value
+      .trim();
 
   const phone =
     $("profilePhone")
-      .value.trim();
+      .value
+      .trim();
 
   const country =
     $("profileCountry").value;
 
   const photoURL =
     $("profilePhotoUrl")
-      .value.trim();
+      .value
+      .trim();
 
   if(!name){
 
@@ -6760,6 +5721,7 @@ async function saveProfile(){
     );
 
     return;
+
   }
 
   try{
@@ -6778,7 +5740,9 @@ async function saveProfile(){
         photoURL:photoURL,
 
         updatedAt:
-          firebase.firestore.FieldValue.serverTimestamp()
+          firebase.firestore
+            .FieldValue
+            .serverTimestamp()
 
       });
 
@@ -6849,6 +5813,7 @@ async function changePassword(){
     );
 
     return;
+
   }
 
   if(newPassword.length < 6){
@@ -6858,18 +5823,29 @@ async function changePassword(){
     );
 
     return;
+
   }
 
-  if(newPassword !== confirmPassword){
+  if(
+    newPassword !==
+    confirmPassword
+  ){
 
     showToast(
       "New passwords do not match."
     );
 
     return;
+
   }
 
   try{
+
+    /*
+      Because the visible login is account number,
+      Firebase Auth internally uses the synthetic account
+      email created during registration.
+    */
 
     const credential =
       firebase.auth.EmailAuthProvider
@@ -6888,14 +5864,11 @@ async function changePassword(){
         newPassword
       );
 
-    $("currentPassword").value =
-      "";
+    $("currentPassword").value = "";
 
-    $("newPassword").value =
-      "";
+    $("newPassword").value = "";
 
-    $("confirmPassword").value =
-      "";
+    $("confirmPassword").value = "";
 
     showToast(
       "Password updated successfully."
@@ -6915,6 +5888,7 @@ async function changePassword(){
       );
 
       return;
+
     }
 
     if(
@@ -6927,6 +5901,7 @@ async function changePassword(){
       );
 
       return;
+
     }
 
     showToast(
@@ -6947,21 +5922,23 @@ async function changePin(){
   if(
     !currentUser ||
     !customerData
-  ){
+  )
     return;
-  }
 
   const currentPin =
     $("currentPin")
-      .value.trim();
+      .value
+      .trim();
 
   const newPin =
     $("newPin")
-      .value.trim();
+      .value
+      .trim();
 
   const confirmPin =
     $("confirmPin")
-      .value.trim();
+      .value
+      .trim();
 
   if(
     !/^\d{4}$/.test(currentPin) ||
@@ -6974,6 +5951,7 @@ async function changePin(){
     );
 
     return;
+
   }
 
   if(newPin !== confirmPin){
@@ -6983,6 +5961,7 @@ async function changePin(){
     );
 
     return;
+
   }
 
   try{
@@ -6993,7 +5972,7 @@ async function changePin(){
     if(
       !customerData.securityPinHash ||
       currentHash !==
-        customerData.securityPinHash
+      customerData.securityPinHash
     ){
 
       showToast(
@@ -7001,6 +5980,7 @@ async function changePin(){
       );
 
       return;
+
     }
 
     const newHash =
@@ -7015,21 +5995,20 @@ async function changePin(){
           newHash,
 
         updatedAt:
-          firebase.firestore.FieldValue.serverTimestamp()
+          firebase.firestore
+            .FieldValue
+            .serverTimestamp()
 
       });
 
     customerData.securityPinHash =
       newHash;
 
-    $("currentPin").value =
-      "";
+    $("currentPin").value = "";
 
-    $("newPin").value =
-      "";
+    $("newPin").value = "";
 
-    $("confirmPin").value =
-      "";
+    $("confirmPin").value = "";
 
     showToast(
       "Security PIN updated successfully."
@@ -7049,16 +6028,10 @@ async function changePin(){
 
 
 /* =========================================================
-   TAWK.TO LIVE CHAT
+   TAWK LIVE CHAT
 ========================================================= */
 
 function openTawkChat(){
-
-  /*
-    Your Tawk.to widget is loaded below.
-
-    If it has already loaded, maximize it immediately.
-  */
 
   if(
     window.Tawk_API &&
@@ -7069,6 +6042,7 @@ function openTawkChat(){
     window.Tawk_API.maximize();
 
     return;
+
   }
 
   showToast(
@@ -7088,15 +6062,19 @@ async function logout(){
 
     await auth.signOut();
 
+    currentUser = null;
+
     customerData = null;
 
     transactions = [];
 
     $("dashboard")
-      .classList.add("hidden");
+      .classList
+      .add("hidden");
 
     $("landing")
-      .classList.remove("hidden");
+      .classList
+      .remove("hidden");
 
     window.scrollTo({
       top:0,
@@ -7118,11 +6096,11 @@ async function logout(){
 
 /* =========================================================
    TAWK.TO
-   YOUR LIVE CHAT PROPERTY
 ========================================================= */
 
 var Tawk_API =
-  window.Tawk_API || {};
+  window.Tawk_API ||
+  {};
 
 var Tawk_LoadStart =
   new Date();
@@ -7133,7 +6111,9 @@ var Tawk_LoadStart =
     document.createElement("script");
 
   var s0 =
-    document.getElementsByTagName("script")[0];
+    document.getElementsByTagName(
+      "script"
+    )[0];
 
   s1.async = true;
 
@@ -7156,26 +6136,8 @@ var Tawk_LoadStart =
 })();
 
 
-/*
-  When Tawk finishes loading, the widget remains available
-  for every Live Chat button on the website.
-*/
-
-window.Tawk_API =
-  window.Tawk_API || {};
-
-window.Tawk_API.onLoad =
-  function(){
-
-    console.log(
-      "Tawk.to live chat loaded."
-    );
-
-  };
-
-
 /* =========================================================
-   PAGE LOAD
+   INITIAL LOAD
 ========================================================= */
 
 window.addEventListener(
