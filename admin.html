@@ -1,3115 +1,2348 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#063b2b">
-<title>Cash Flow Bank — Admin Panel</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cash Flow Bank — Admin Panel</title>
 
-<script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
 
-<script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore-compat.js"></script>
 
-<style>
-*{
-    box-sizing:border-box;
-}
-
-body{
-    margin:0;
-    background:#f4f7f5;
-    color:#17231e;
-    font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-}
-
-button,input,select{
-    font:inherit;
-}
-
-button{
-    cursor:pointer;
-}
-
-.hidden{
-    display:none!important;
-}
-
-.card{
-    background:#fff;
-    border:1px solid #e1e8e4;
-    border-radius:20px;
-    box-shadow:0 7px 25px rgba(0,0,0,.035);
-}
-
-.input{
-    width:100%;
-    border:1px solid #d7e0db;
-    background:#fff;
-    border-radius:12px;
-    padding:12px 14px;
-    outline:none;
-}
-
-.input:focus{
-    border-color:#087f5b;
-    box-shadow:0 0 0 3px rgba(8,127,91,.10);
-}
-
-.btn{
-    border:0;
-    border-radius:12px;
-    padding:11px 15px;
-    font-weight:800;
-    transition:.2s;
-}
-
-.btn-primary{
-    background:#063b2b;
-    color:#fff;
-}
-
-.btn-primary:hover{
-    background:#07523c;
-}
-
-.btn-light{
-    background:#edf4f0;
-    color:#063b2b;
-}
-
-.btn-light:hover{
-    background:#e1ebe6;
-}
-
-.btn-danger{
-    background:#fee2e2;
-    color:#991b1b;
-}
-
-.btn-blue{
-    background:#dbeafe;
-    color:#1d4ed8;
-}
-
-.badge{
-    display:inline-flex;
-    align-items:center;
-    padding:5px 9px;
-    border-radius:999px;
-    font-size:11px;
-    font-weight:900;
-}
-
-.badge-pending{
-    background:#fff4cf;
-    color:#805b00;
-}
-
-.badge-approved{
-    background:#dcfce7;
-    color:#166534;
-}
-
-.badge-declined{
-    background:#fee2e2;
-    color:#991b1b;
-}
-
-.badge-refunded{
-    background:#dbeafe;
-    color:#1d4ed8;
-}
-
-.badge-completed{
-    background:#dcfce7;
-    color:#166534;
-}
-
-.badge-admin{
-    background:#e0f2fe;
-    color:#0369a1;
-}
-
-/* LOGIN */
-
-#loginScreen{
-    min-height:100vh;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:25px;
-    background:
-        radial-gradient(circle at top right,rgba(8,127,91,.25),transparent 35%),
-        linear-gradient(135deg,#042d22,#087f5b);
-}
-
-.login-card{
-    width:100%;
-    max-width:420px;
-    background:white;
-    border-radius:27px;
-    padding:32px;
-    box-shadow:0 30px 80px rgba(0,0,0,.25);
-}
-
-.logo{
-    width:62px;
-    height:62px;
-    border-radius:18px;
-    background:#063b2b;
-    color:white;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    margin:auto;
-}
-
-/* ADMIN APP */
-
-#adminApp{
-    min-height:100vh;
-}
-
-.sidebar{
-    position:fixed;
-    left:0;
-    top:0;
-    bottom:0;
-    width:270px;
-    background:#042d22;
-    color:#dcefe8;
-    padding:20px;
-    z-index:100;
-    overflow-y:auto;
-    display:flex;
-    flex-direction:column;
-}
-
-.main{
-    margin-left:270px;
-    min-height:100vh;
-}
-
-.topbar{
-    height:76px;
-    background:#fff;
-    border-bottom:1px solid #e1e8e4;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:0 28px;
-    position:sticky;
-    top:0;
-    z-index:50;
-}
-
-.content{
-    padding:28px;
-    max-width:1600px;
-    margin:auto;
-}
-
-.nav-btn{
-    width:100%;
-    border:0;
-    background:transparent;
-    color:inherit;
-    display:flex;
-    align-items:center;
-    gap:12px;
-    padding:12px 14px;
-    border-radius:12px;
-    text-align:left;
-    margin-bottom:3px;
-}
-
-.nav-btn:hover,
-.nav-btn.active{
-    background:#0a4b38;
-    color:white;
-}
-
-.mobile-menu{
-    display:none;
-}
-
-.stat-number{
-    font-size:30px;
-    font-weight:900;
-    margin-top:7px;
-}
-
-.table-wrap{
-    overflow-x:auto;
-}
-
-table{
-    width:100%;
-    border-collapse:collapse;
-}
-
-th{
-    background:#f7faf8;
-    color:#6a7771;
-    font-size:11px;
-    text-transform:uppercase;
-    letter-spacing:.04em;
-    text-align:left;
-    padding:14px;
-    white-space:nowrap;
-}
-
-td{
-    border-top:1px solid #edf1ef;
-    padding:14px;
-    vertical-align:middle;
-}
-
-.modal-bg{
-    position:fixed;
-    inset:0;
-    z-index:1000;
-    background:rgba(0,0,0,.55);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    padding:20px;
-}
-
-.modal{
-    width:100%;
-    max-width:700px;
-    max-height:92vh;
-    overflow:auto;
-    background:#fff;
-    border-radius:24px;
-    padding:25px;
-}
-
-@media(max-width:900px){
-
-    .sidebar{
-        left:-285px;
-        transition:left .25s ease;
+  <style>
+    * {
+      box-sizing: border-box;
     }
 
-    .sidebar.open{
-        left:0;
-        box-shadow:15px 0 45px rgba(0,0,0,.25);
+    body {
+      margin: 0;
+      font-family: Inter, Arial, sans-serif;
+      background: #f4f7f5;
+      color: #10231a;
     }
 
-    .main{
-        margin-left:0;
+    .hidden {
+      display: none !important;
     }
 
-    .mobile-menu{
-        display:flex;
+    .glass {
+      background: rgba(255,255,255,.92);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
     }
 
-    .content{
-        padding:18px;
+    .sidebar {
+      background: linear-gradient(180deg, #003d2b 0%, #00271c 100%);
     }
 
-    .topbar{
-        padding:0 18px;
+    .brand-mark {
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      background: #c9f36b;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #003d2b;
+      font-weight: 900;
     }
-}
-</style>
+
+    .nav-item {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      color: #d9ebe4;
+      cursor: pointer;
+      transition: .2s;
+      border: 0;
+      background: transparent;
+      text-align: left;
+    }
+
+    .nav-item:hover,
+    .nav-item.active {
+      background: rgba(255,255,255,.12);
+      color: #fff;
+    }
+
+    .stat-card {
+      border: 1px solid #e4ebe7;
+      border-radius: 18px;
+      background: white;
+      padding: 20px;
+      box-shadow: 0 8px 30px rgba(0,0,0,.04);
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 760px;
+    }
+
+    th {
+      text-align: left;
+      padding: 13px 15px;
+      font-size: 12px;
+      color: #60736a;
+      background: #f7faf8;
+      border-bottom: 1px solid #e6ece8;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+    }
+
+    td {
+      padding: 14px 15px;
+      border-bottom: 1px solid #edf1ee;
+      font-size: 14px;
+    }
+
+    tr:hover td {
+      background: #fbfdfc;
+    }
+
+    .modal-bg {
+      background: rgba(0,0,0,.52);
+      backdrop-filter: blur(5px);
+    }
+
+    input,
+    select,
+    textarea {
+      outline: none;
+      transition: .2s;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: #00704d !important;
+      box-shadow: 0 0 0 3px rgba(0,112,77,.10);
+    }
+
+    .toast {
+      animation: slideIn .25s ease-out;
+    }
+
+    @keyframes slideIn {
+      from {
+        transform: translateY(20px);
+        opacity: 0;
+      }
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    .spinner {
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(255,255,255,.35);
+      border-top-color: white;
+      border-radius: 50%;
+      animation: spin .7s linear infinite;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      padding: 5px 9px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .status-pending {
+      background: #fff4d6;
+      color: #936b00;
+    }
+
+    .status-approved {
+      background: #dff7e9;
+      color: #08733e;
+    }
+
+    .status-declined {
+      background: #ffe2e2;
+      color: #a52323;
+    }
+
+    .status-refunded {
+      background: #e7e1ff;
+      color: #5732a4;
+    }
+
+    .status-completed {
+      background: #dcecff;
+      color: #18589d;
+    }
+
+    .status-active {
+      background: #dff7e9;
+      color: #08733e;
+    }
+
+    .status-suspended {
+      background: #ffe2e2;
+      color: #a52323;
+    }
+  </style>
 </head>
 
 <body>
 
-<!-- =====================================================
+<!-- =========================================================
      LOGIN
-===================================================== -->
+========================================================= -->
 
-<div id="loginScreen">
+<div id="loginScreen" class="min-h-screen flex items-center justify-center p-5"
+     style="background:linear-gradient(135deg,#003d2b,#001b13);">
 
-    <div class="login-card">
+  <div class="w-full max-w-md">
+    <div class="text-center mb-7">
+      <div class="brand-mark mx-auto mb-4">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2.3">
+          <path d="M3 10h18"/>
+          <path d="M5 10v8"/>
+          <path d="M9 10v8"/>
+          <path d="M15 10v8"/>
+          <path d="M19 10v8"/>
+          <path d="M3 20h18"/>
+          <path d="M12 4l9 5H3l9-5z"/>
+        </svg>
+      </div>
 
-        <div class="text-center">
+      <h1 class="text-3xl font-black text-white">Cash Flow Bank</h1>
+      <p class="text-green-100/70 mt-1">Administrator Portal</p>
+    </div>
 
-            <div class="logo">
+    <div class="glass rounded-3xl p-7 shadow-2xl">
+      <div class="mb-6">
+        <h2 class="text-xl font-bold text-gray-900">Admin Sign In</h2>
+        <p class="text-sm text-gray-500 mt-1">
+          Authorized administrators only.
+        </p>
+      </div>
 
-                <svg width="32" height="32" viewBox="0 0 24 24"
-                     fill="none" stroke="currentColor" stroke-width="1.8">
-                    <path d="M3 10h18"/>
-                    <path d="M5 10v8"/>
-                    <path d="M9 10v8"/>
-                    <path d="M15 10v8"/>
-                    <path d="M19 10v8"/>
-                    <path d="M2 20h20"/>
-                    <path d="M12 3l10 7H2l10-7Z"/>
-                </svg>
+      <form id="loginForm">
 
-            </div>
+        <label class="block text-sm font-semibold text-gray-700 mb-2">
+          Admin Email
+        </label>
 
-            <h1 class="text-2xl font-black mt-4">
-                Cash Flow Bank
+        <input
+          id="adminEmail"
+          type="email"
+          value="admin@cashflowbank.com"
+          readonly
+          class="w-full border border-gray-200 rounded-xl px-4 py-3 bg-gray-100 text-gray-700 mb-4"
+        >
+
+        <label class="block text-sm font-semibold text-gray-700 mb-2">
+          Password
+        </label>
+
+        <div class="relative">
+          <input
+            id="adminPassword"
+            type="password"
+            placeholder="Enter admin password"
+            autocomplete="current-password"
+            class="w-full border border-gray-200 rounded-xl px-4 py-3 pr-12"
+            required
+          >
+
+          <button
+            type="button"
+            onclick="togglePassword()"
+            class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
+          >
+            <svg id="eyeIcon" width="20" height="20" viewBox="0 0 24 24"
+                 fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+          </button>
+        </div>
+
+        <div id="loginError"
+             class="hidden mt-4 rounded-xl bg-red-50 border border-red-100 text-red-700 text-sm p-3">
+        </div>
+
+        <button
+          id="loginButton"
+          type="submit"
+          class="mt-5 w-full rounded-xl py-3.5 font-bold text-white flex items-center justify-center gap-3"
+          style="background:#00704d;"
+        >
+          <span id="loginButtonText">Sign In</span>
+          <span id="loginSpinner" class="spinner hidden"></span>
+        </button>
+
+      </form>
+
+      <div class="mt-6 pt-5 border-t border-gray-100 text-center">
+        <p class="text-xs text-gray-400">
+          Protected administrator area
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- =========================================================
+     ADMIN APP
+========================================================= -->
+
+<div id="adminApp" class="hidden min-h-screen">
+
+  <!-- Sidebar -->
+  <aside
+    id="sidebar"
+    class="sidebar fixed left-0 top-0 bottom-0 w-64 z-40 p-4 transition-transform duration-300"
+  >
+
+    <div class="flex items-center gap-3 px-2 py-3 mb-6">
+      <div class="brand-mark">
+        <svg width="23" height="23" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2.2">
+          <path d="M3 10h18"/>
+          <path d="M5 10v8"/>
+          <path d="M9 10v8"/>
+          <path d="M15 10v8"/>
+          <path d="M19 10v8"/>
+          <path d="M3 20h18"/>
+          <path d="M12 4l9 5H3l9-5z"/>
+        </svg>
+      </div>
+
+      <div>
+        <div class="font-black text-white">Cash Flow Bank</div>
+        <div class="text-xs text-green-200/60">Admin Panel</div>
+      </div>
+    </div>
+
+    <nav class="space-y-1">
+
+      <button class="nav-item active" data-section="dashboard"
+              onclick="showSection('dashboard')">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="7" height="7"/>
+          <rect x="14" y="3" width="7" height="7"/>
+          <rect x="3" y="14" width="7" height="7"/>
+          <rect x="14" y="14" width="7" height="7"/>
+        </svg>
+        Dashboard
+      </button>
+
+      <button class="nav-item" data-section="customers"
+              onclick="showSection('customers')">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2">
+          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+          <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+        </svg>
+        Customers
+      </button>
+
+      <button class="nav-item" data-section="transactions"
+              onclick="showSection('transactions')">
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2">
+          <path d="M3 7h18"/>
+          <path d="M3 12h18"/>
+          <path d="M3 17h18"/>
+          <circle cx="7" cy="7" r="1"/>
+          <circle cx="7" cy="12" r="1"/>
+          <circle cx="7" cy="17" r="1"/>
+        </svg>
+        Transactions
+      </button>
+
+    </nav>
+
+    <div class="absolute bottom-4 left-4 right-4">
+      <div class="rounded-2xl p-4 bg-white/10 border border-white/10 mb-3">
+        <div class="text-xs text-green-100/60">Signed in as</div>
+        <div id="adminEmailDisplay"
+             class="text-sm text-white font-semibold mt-1 truncate">
+          admin@cashflowbank.com
+        </div>
+      </div>
+
+      <button
+        onclick="logout()"
+        class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-200 hover:bg-red-500/10 transition"
+      >
+        <svg width="19" height="19" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2">
+          <path d="M10 17l5-5-5-5"/>
+          <path d="M15 12H3"/>
+          <path d="M21 19V5a2 2 0 0 0-2-2h-7"/>
+        </svg>
+        Sign Out
+      </button>
+    </div>
+  </aside>
+
+
+  <!-- Main -->
+  <main class="ml-64 min-h-screen">
+
+    <!-- Topbar -->
+    <header class="bg-white border-b border-gray-200 sticky top-0 z-30">
+      <div class="px-5 md:px-7 py-4 flex items-center justify-between">
+
+        <div class="flex items-center gap-3">
+
+          <button
+            onclick="toggleSidebar()"
+            class="lg:hidden p-2 rounded-lg hover:bg-gray-100"
+          >
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2">
+              <path d="M4 6h16"/>
+              <path d="M4 12h16"/>
+              <path d="M4 18h16"/>
+            </svg>
+          </button>
+
+          <div>
+            <h1 id="pageTitle" class="text-xl font-black text-gray-900">
+              Dashboard
             </h1>
-
-            <p class="text-gray-500 text-sm">
-                Administrator Portal
+            <p class="text-xs text-gray-500">
+              Cash Flow Bank administration
             </p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <div class="hidden sm:block text-right">
+            <div class="text-sm font-bold text-gray-800">Administrator</div>
+            <div class="text-xs text-gray-500">Authorized access</div>
+          </div>
+
+          <div class="w-10 h-10 rounded-full flex items-center justify-center"
+               style="background:#dff7e9;color:#00704d;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
+                 stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="8" r="4"/>
+              <path d="M4 21a8 8 0 0 1 16 0"/>
+            </svg>
+          </div>
+        </div>
+
+      </div>
+    </header>
+
+
+    <div class="p-5 md:p-7">
+
+      <!-- =====================================================
+           DASHBOARD
+      ====================================================== -->
+
+      <section id="section-dashboard">
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-7">
+
+          <div class="stat-card">
+            <div class="flex justify-between items-start">
+              <div>
+                <div class="text-sm text-gray-500">Total Customers</div>
+                <div id="totalCustomers"
+                     class="text-3xl font-black mt-2">0</div>
+              </div>
+
+              <div class="w-11 h-11 rounded-xl flex items-center justify-center"
+                   style="background:#e4f5ee;color:#00704d;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2">
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                  <circle cx="9" cy="7" r="4"/>
+                  <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="flex justify-between items-start">
+              <div>
+                <div class="text-sm text-gray-500">Pending</div>
+                <div id="pendingCustomers"
+                     class="text-3xl font-black mt-2">0</div>
+              </div>
+
+              <div class="w-11 h-11 rounded-xl flex items-center justify-center"
+                   style="background:#fff4d6;color:#936b00;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="9"/>
+                  <path d="M12 7v5l3 2"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="flex justify-between items-start">
+              <div>
+                <div class="text-sm text-gray-500">Approved</div>
+                <div id="approvedCustomers"
+                     class="text-3xl font-black mt-2">0</div>
+              </div>
+
+              <div class="w-11 h-11 rounded-xl flex items-center justify-center"
+                   style="background:#dff7e9;color:#08733e;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2">
+                  <path d="M20 6L9 17l-5-5"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+
+          <div class="stat-card">
+            <div class="flex justify-between items-start">
+              <div>
+                <div class="text-sm text-gray-500">Transactions</div>
+                <div id="totalTransactions"
+                     class="text-3xl font-black mt-2">0</div>
+              </div>
+
+              <div class="w-11 h-11 rounded-xl flex items-center justify-center"
+                   style="background:#dcecff;color:#18589d;">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2">
+                  <path d="M4 7h16"/>
+                  <path d="M4 12h16"/>
+                  <path d="M4 17h16"/>
+                </svg>
+              </div>
+            </div>
+          </div>
 
         </div>
 
 
-        <form id="adminLoginForm" class="mt-8">
+        <div class="grid grid-cols-1 xl:grid-cols-2 gap-6">
 
-            <label class="text-sm font-bold">
-                Admin password
-            </label>
+          <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden">
+            <div class="p-5 border-b border-gray-100">
+              <h2 class="font-bold text-lg">Recent Customers</h2>
+              <p class="text-sm text-gray-500 mt-1">
+                Recently created customer accounts
+              </p>
+            </div>
 
-            <input
-                id="adminPassword"
-                class="input mt-2"
-                type="password"
-                placeholder="Enter admin password"
-                autocomplete="current-password"
-                required
-            >
-
-            <button
-                id="adminLoginButton"
-                class="btn btn-primary w-full mt-4"
-                type="submit"
-            >
-                Sign in
-            </button>
-
-            <div
-                id="loginError"
-                class="text-sm text-red-600 mt-4"
-            ></div>
-
-        </form>
+            <div id="dashboardCustomers" class="divide-y divide-gray-100">
+              <div class="p-5 text-center text-gray-500">
+                Loading...
+              </div>
+            </div>
+          </div>
 
 
-        <div class="text-center text-xs text-gray-400 mt-7">
-            Authorized administrators only.
+          <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden">
+            <div class="p-5 border-b border-gray-100">
+              <h2 class="font-bold text-lg">Recent Transactions</h2>
+              <p class="text-sm text-gray-500 mt-1">
+                Latest transaction requests
+              </p>
+            </div>
+
+            <div id="dashboardTransactions" class="divide-y divide-gray-100">
+              <div class="p-5 text-center text-gray-500">
+                Loading...
+              </div>
+            </div>
+          </div>
+
         </div>
+
+      </section>
+
+
+      <!-- =====================================================
+           CUSTOMERS
+      ====================================================== -->
+
+      <section id="section-customers" class="hidden">
+
+        <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden">
+
+          <div class="p-5 border-b border-gray-100 flex flex-col md:flex-row gap-4 md:items-center md:justify-between">
+
+            <div>
+              <h2 class="text-lg font-bold">Customers</h2>
+              <p class="text-sm text-gray-500">
+                Manage customer accounts
+              </p>
+            </div>
+
+            <div class="relative">
+              <input
+                id="customerSearch"
+                oninput="renderCustomers()"
+                type="text"
+                placeholder="Search name, email or account..."
+                class="w-full md:w-80 border border-gray-200 rounded-xl px-4 py-3 pl-10"
+              >
+
+              <svg class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                   width="18" height="18" viewBox="0 0 24 24" fill="none"
+                   stroke="currentColor" stroke-width="2">
+                <circle cx="11" cy="11" r="7"/>
+                <path d="M20 20l-4-4"/>
+              </svg>
+            </div>
+
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Customer</th>
+                  <th>Account</th>
+                  <th>Type</th>
+                  <th>Balance</th>
+                  <th>Status</th>
+                  <th>Created</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+
+              <tbody id="customersTableBody">
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+
+      </section>
+
+
+      <!-- =====================================================
+           TRANSACTIONS
+      ====================================================== -->
+
+      <section id="section-transactions" class="hidden">
+
+        <div class="bg-white rounded-2xl border border-gray-200 overflow-hidden">
+
+          <div class="p-5 border-b border-gray-100 flex flex-col md:flex-row gap-4 md:items-center md:justify-between">
+
+            <div>
+              <h2 class="text-lg font-bold">Transactions</h2>
+              <p class="text-sm text-gray-500">
+                Review transfer requests and refunds
+              </p>
+            </div>
+
+            <select
+              id="transactionFilter"
+              onchange="renderTransactions()"
+              class="border border-gray-200 rounded-xl px-4 py-3"
+            >
+              <option value="all">All Transactions</option>
+              <option value="pending">Pending</option>
+              <option value="approved">Approved</option>
+              <option value="completed">Completed</option>
+              <option value="declined">Declined</option>
+              <option value="refunded">Refunded</option>
+            </select>
+
+          </div>
+
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Customer</th>
+                  <th>Recipient</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                  <th>Date</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+
+              <tbody id="transactionsTableBody">
+              </tbody>
+            </table>
+          </div>
+
+        </div>
+
+      </section>
 
     </div>
 
+  </main>
 </div>
 
 
-<!-- =====================================================
-     ADMIN APPLICATION
-===================================================== -->
-
-<div id="adminApp" class="hidden">
-
-    <!-- SIDEBAR -->
-
-    <aside id="sidebar" class="sidebar">
-
-        <div class="flex items-center gap-3 px-2 mb-8">
-
-            <div class="w-11 h-11 rounded-xl bg-white text-[#063b2b] flex items-center justify-center">
-
-                <svg width="25" height="25" viewBox="0 0 24 24"
-                     fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M3 10h18"/>
-                    <path d="M5 10v8"/>
-                    <path d="M9 10v8"/>
-                    <path d="M15 10v8"/>
-                    <path d="M19 10v8"/>
-                    <path d="M2 20h20"/>
-                    <path d="M12 3l10 7H2l10-7Z"/>
-                </svg>
-
-            </div>
-
-            <div>
-                <div class="font-black text-white">
-                    Cash Flow Bank
-                </div>
-
-                <div class="text-xs opacity-60">
-                    Admin Portal
-                </div>
-            </div>
-
-        </div>
-
-
-        <nav>
-
-            <button
-                class="nav-btn active"
-                data-page="overview"
-                onclick="showPage('overview')"
-            >
-                <svg width="19" height="19" viewBox="0 0 24 24"
-                     fill="none" stroke="currentColor" stroke-width="2">
-                    <rect x="3" y="3" width="7" height="7"/>
-                    <rect x="14" y="3" width="7" height="7"/>
-                    <rect x="3" y="14" width="7" height="7"/>
-                    <rect x="14" y="14" width="7" height="7"/>
-                </svg>
-                Overview
-            </button>
-
-
-            <button
-                class="nav-btn"
-                data-page="customers"
-                onclick="showPage('customers')"
-            >
-                <svg width="19" height="19" viewBox="0 0 24 24"
-                     fill="none" stroke="currentColor" stroke-width="2">
-                    <circle cx="9" cy="8" r="4"/>
-                    <path d="M3 21a6 6 0 0 1 12 0"/>
-                    <path d="M16 4a4 4 0 0 1 0 8"/>
-                    <path d="M18 14a6 6 0 0 1 3 5"/>
-                </svg>
-                Customers
-            </button>
-
-
-            <button
-                class="nav-btn"
-                data-page="transactions"
-                onclick="showPage('transactions')"
-            >
-                <svg width="19" height="19" viewBox="0 0 24 24"
-                     fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M7 7h13"/>
-                    <path d="m16 3 4 4-4 4"/>
-                    <path d="M17 17H4"/>
-                    <path d="m8 13-4 4 4 4"/>
-                </svg>
-                Transactions
-            </button>
-
-        </nav>
-
-
-        <div class="mt-auto border-t border-white/10 pt-4">
-
-            <div class="px-3 mb-3">
-
-                <div class="text-xs opacity-50">
-                    Signed in as
-                </div>
-
-                <div class="font-bold text-sm mt-1">
-                    Administrator
-                </div>
-
-            </div>
-
-
-            <button
-                class="nav-btn"
-                onclick="adminLogout()"
-            >
-                <svg width="19" height="19" viewBox="0 0 24 24"
-                     fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M10 17l5-5-5-5"/>
-                    <path d="M15 12H3"/>
-                    <path d="M21 3v18"/>
-                </svg>
-                Sign out
-            </button>
-
-        </div>
-
-    </aside>
-
-
-    <!-- MAIN -->
-
-    <main class="main">
-
-        <header class="topbar">
-
-            <div class="flex items-center gap-3">
-
-                <button
-                    onclick="toggleSidebar()"
-                    class="btn btn-light mobile-menu"
-                >
-                    <svg width="20" height="20" viewBox="0 0 24 24"
-                         fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M4 6h16"/>
-                        <path d="M4 12h16"/>
-                        <path d="M4 18h16"/>
-                    </svg>
-                </button>
-
-                <div>
-                    <div class="text-xs text-gray-500">
-                        Administration
-                    </div>
-
-                    <div class="font-black">
-                        Cash Flow Bank Admin
-                    </div>
-                </div>
-
-            </div>
-
-
-            <span class="badge badge-admin">
-                Administrator
-            </span>
-
-        </header>
-
-
-        <div class="content">
-
-            <!-- =================================================
-                 OVERVIEW
-            ================================================= -->
-
-            <section id="page-overview">
-
-                <div class="mb-6">
-
-                    <h1 class="text-3xl font-black">
-                        Overview
-                    </h1>
-
-                    <p class="text-gray-500 mt-1">
-                        Manage customer accounts and transactions.
-                    </p>
-
-                </div>
-
-
-                <div class="grid sm:grid-cols-2 xl:grid-cols-4 gap-4">
-
-                    <div class="card p-5">
-
-                        <div class="text-sm text-gray-500">
-                            Total customers
-                        </div>
-
-                        <div
-                            id="totalCustomers"
-                            class="stat-number"
-                        >
-                            0
-                        </div>
-
-                    </div>
-
-
-                    <div class="card p-5">
-
-                        <div class="text-sm text-gray-500">
-                            Pending accounts
-                        </div>
-
-                        <div
-                            id="pendingCustomers"
-                            class="stat-number"
-                        >
-                            0
-                        </div>
-
-                    </div>
-
-
-                    <div class="card p-5">
-
-                        <div class="text-sm text-gray-500">
-                            Approved accounts
-                        </div>
-
-                        <div
-                            id="approvedCustomers"
-                            class="stat-number"
-                        >
-                            0
-                        </div>
-
-                    </div>
-
-
-                    <div class="card p-5">
-
-                        <div class="text-sm text-gray-500">
-                            Transactions
-                        </div>
-
-                        <div
-                            id="totalTransactions"
-                            class="stat-number"
-                        >
-                            0
-                        </div>
-
-                    </div>
-
-                </div>
-
-
-                <div class="grid lg:grid-cols-2 gap-5 mt-5">
-
-                    <div class="card p-6">
-
-                        <div class="flex justify-between items-center mb-5">
-
-                            <div>
-                                <h2 class="font-black text-lg">
-                                    Recent customers
-                                </h2>
-
-                                <p class="text-sm text-gray-500">
-                                    Latest registered accounts.
-                                </p>
-                            </div>
-
-                            <button
-                                onclick="showPage('customers')"
-                                class="text-[#087f5b] font-bold text-sm"
-                            >
-                                View all
-                            </button>
-
-                        </div>
-
-                        <div id="recentCustomers">
-                            Loading...
-                        </div>
-
-                    </div>
-
-
-                    <div class="card p-6">
-
-                        <div class="flex justify-between items-center mb-5">
-
-                            <div>
-                                <h2 class="font-black text-lg">
-                                    Recent transactions
-                                </h2>
-
-                                <p class="text-sm text-gray-500">
-                                    Latest transaction activity.
-                                </p>
-                            </div>
-
-                            <button
-                                onclick="showPage('transactions')"
-                                class="text-[#087f5b] font-bold text-sm"
-                            >
-                                View all
-                            </button>
-
-                        </div>
-
-                        <div id="recentTransactions">
-                            Loading...
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <!-- =================================================
-                 CUSTOMERS
-            ================================================= -->
-
-            <section id="page-customers" class="hidden">
-
-                <div class="flex flex-col md:flex-row md:justify-between md:items-end gap-4 mb-6">
-
-                    <div>
-
-                        <h1 class="text-3xl font-black">
-                            Customers
-                        </h1>
-
-                        <p class="text-gray-500 mt-1">
-                            Manage customer accounts.
-                        </p>
-
-                    </div>
-
-                    <button
-                        onclick="loadCustomers()"
-                        class="btn btn-light"
-                    >
-                        Refresh
-                    </button>
-
-                </div>
-
-
-                <div class="card p-4 mb-5">
-
-                    <input
-                        id="customerSearch"
-                        class="input"
-                        placeholder="Search by name, email, phone, or account number..."
-                        oninput="renderCustomers()"
-                    >
-
-                </div>
-
-
-                <div class="card overflow-hidden">
-
-                    <div class="table-wrap">
-
-                        <table>
-
-                            <thead>
-
-                                <tr>
-                                    <th>Customer</th>
-                                    <th>Account</th>
-                                    <th>Type</th>
-                                    <th>Balance</th>
-                                    <th>Status</th>
-                                    <th>Created</th>
-                                    <th>Action</th>
-                                </tr>
-
-                            </thead>
-
-                            <tbody id="customersTable">
-                            </tbody>
-
-                        </table>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-
-            <!-- =================================================
-                 TRANSACTIONS
-            ================================================= -->
-
-            <section id="page-transactions" class="hidden">
-
-                <div class="flex flex-col md:flex-row md:justify-between md:items-end gap-4 mb-6">
-
-                    <div>
-
-                        <h1 class="text-3xl font-black">
-                            Transactions
-                        </h1>
-
-                        <p class="text-gray-500 mt-1">
-                            Review, approve, decline, or refund transfers.
-                        </p>
-
-                    </div>
-
-                    <button
-                        onclick="loadTransactions()"
-                        class="btn btn-light"
-                    >
-                        Refresh
-                    </button>
-
-                </div>
-
-
-                <div class="card overflow-hidden">
-
-                    <div class="table-wrap">
-
-                        <table>
-
-                            <thead>
-
-                                <tr>
-                                    <th>Date</th>
-                                    <th>Customer</th>
-                                    <th>Recipient</th>
-                                    <th>Amount</th>
-                                    <th>Status</th>
-                                    <th>Action</th>
-                                </tr>
-
-                            </thead>
-
-                            <tbody id="transactionsTable">
-                            </tbody>
-
-                        </table>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-        </div>
-
-
-        <footer class="px-7 pb-7 text-xs text-gray-400">
-            © 2026 Cash Flow Bank — Demo financial platform.
-        </footer>
-
-    </main>
-
-</div>
-
-
-<!-- =====================================================
+<!-- =========================================================
      CUSTOMER MODAL
-===================================================== -->
+========================================================= -->
 
-<div
-    id="customerModal"
-    class="modal-bg hidden"
->
+<div id="customerModal"
+     class="hidden fixed inset-0 z-50 modal-bg items-center justify-center p-4">
 
-    <div class="modal">
+  <div class="bg-white rounded-3xl w-full max-w-3xl max-h-[92vh] overflow-y-auto">
 
-        <div class="flex justify-between items-center mb-6">
+    <div class="p-5 border-b border-gray-100 flex items-center justify-between">
+      <div>
+        <h2 class="text-xl font-black">Manage Customer</h2>
+        <p id="modalCustomerSubtitle" class="text-sm text-gray-500"></p>
+      </div>
 
-            <div>
-
-                <h2 class="text-xl font-black">
-                    Manage Customer
-                </h2>
-
-                <p
-                    id="customerModalSubtitle"
-                    class="text-sm text-gray-500 mt-1"
-                >
-                    Customer account
-                </p>
-
-            </div>
-
-            <button
-                onclick="closeCustomerModal()"
-                class="text-3xl text-gray-400"
-            >
-                ×
-            </button>
-
-        </div>
-
-
-        <div id="customerDetails"></div>
-
+      <button onclick="closeCustomerModal()"
+              class="p-2 rounded-xl hover:bg-gray-100">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2">
+          <path d="M18 6L6 18"/>
+          <path d="M6 6l12 12"/>
+        </svg>
+      </button>
     </div>
 
+    <div class="p-5">
+
+      <input type="hidden" id="editUid">
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+        <div>
+          <label class="block text-sm font-semibold mb-2">Full Name</label>
+          <input id="editName"
+                 class="w-full border border-gray-200 rounded-xl px-4 py-3">
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold mb-2">Email</label>
+          <input id="editEmail"
+                 readonly
+                 class="w-full border border-gray-200 rounded-xl px-4 py-3 bg-gray-100">
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold mb-2">Phone</label>
+          <input id="editPhone"
+                 class="w-full border border-gray-200 rounded-xl px-4 py-3">
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold mb-2">Country</label>
+          <input id="editCountry"
+                 class="w-full border border-gray-200 rounded-xl px-4 py-3">
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold mb-2">Account Type</label>
+          <select id="editAccountType"
+                  class="w-full border border-gray-200 rounded-xl px-4 py-3">
+            <option value="Savings">Savings</option>
+            <option value="Current">Current</option>
+            <option value="Business">Business</option>
+            <option value="Student">Student</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold mb-2">Status</label>
+          <select id="editStatus"
+                  class="w-full border border-gray-200 rounded-xl px-4 py-3">
+            <option value="pending">Pending</option>
+            <option value="approved">Approved</option>
+            <option value="declined">Declined</option>
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold mb-2">
+            Demo Balance
+          </label>
+          <input id="editBalance"
+                 type="number"
+                 min="0"
+                 step="0.01"
+                 class="w-full border border-gray-200 rounded-xl px-4 py-3">
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold mb-2">
+            Account Limit
+          </label>
+          <input id="editLimit"
+                 type="number"
+                 min="0"
+                 step="0.01"
+                 class="w-full border border-gray-200 rounded-xl px-4 py-3">
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold mb-2">
+            Credit Score
+          </label>
+          <input id="editCreditScore"
+                 type="number"
+                 min="300"
+                 max="850"
+                 class="w-full border border-gray-200 rounded-xl px-4 py-3">
+        </div>
+
+        <div>
+          <label class="block text-sm font-semibold mb-2">
+            Account Created Date
+          </label>
+          <input id="editCreatedAt"
+                 type="datetime-local"
+                 class="w-full border border-gray-200 rounded-xl px-4 py-3">
+        </div>
+
+      </div>
+
+
+      <div class="mt-6 rounded-2xl bg-gray-50 border border-gray-100 p-4">
+        <div class="text-sm font-bold text-gray-800 mb-2">
+          Account Information
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+          <div>
+            <span class="text-gray-500">Account Number:</span>
+            <strong id="editAccountNumber" class="ml-1"></strong>
+          </div>
+
+          <div>
+            <span class="text-gray-500">UID:</span>
+            <strong id="editUidDisplay" class="ml-1 break-all"></strong>
+          </div>
+        </div>
+      </div>
+
+
+      <div id="customerModalError"
+           class="hidden mt-4 rounded-xl bg-red-50 border border-red-100 text-red-700 p-3 text-sm">
+      </div>
+
+
+      <div class="mt-6 flex flex-col sm:flex-row gap-3 sm:justify-between">
+
+        <button
+          onclick="deleteCustomer()"
+          class="px-5 py-3 rounded-xl border border-red-200 text-red-600 font-bold hover:bg-red-50"
+        >
+          Delete Record
+        </button>
+
+        <div class="flex gap-3">
+          <button
+            onclick="closeCustomerModal()"
+            class="px-5 py-3 rounded-xl border border-gray-200 font-bold"
+          >
+            Cancel
+          </button>
+
+          <button
+            onclick="saveCustomer()"
+            class="px-5 py-3 rounded-xl text-white font-bold"
+            style="background:#00704d;"
+          >
+            Save Changes
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- =========================================================
+     TRANSACTION MODAL
+========================================================= -->
+
+<div id="transactionModal"
+     class="hidden fixed inset-0 z-50 modal-bg items-center justify-center p-4">
+
+  <div class="bg-white rounded-3xl w-full max-w-lg">
+
+    <div class="p-5 border-b border-gray-100 flex items-center justify-between">
+      <div>
+        <h2 class="text-xl font-black">Transaction</h2>
+        <p id="transactionModalSubtitle" class="text-sm text-gray-500"></p>
+      </div>
+
+      <button onclick="closeTransactionModal()"
+              class="p-2 rounded-xl hover:bg-gray-100">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"
+             stroke="currentColor" stroke-width="2">
+          <path d="M18 6L6 18"/>
+          <path d="M6 6l12 12"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="p-5">
+
+      <input type="hidden" id="transactionId">
+
+      <div id="transactionDetails"
+           class="rounded-2xl bg-gray-50 p-4 space-y-3 text-sm">
+      </div>
+
+      <div class="mt-5">
+        <label class="block text-sm font-semibold mb-2">
+          Update Status
+        </label>
+
+        <select id="transactionStatus"
+                class="w-full border border-gray-200 rounded-xl px-4 py-3">
+          <option value="pending">Pending</option>
+          <option value="approved">Approved</option>
+          <option value="completed">Completed</option>
+          <option value="declined">Declined</option>
+          <option value="refunded">Refunded</option>
+        </select>
+      </div>
+
+      <div id="refundNotice"
+           class="hidden mt-4 rounded-xl bg-purple-50 border border-purple-100 text-purple-800 p-4 text-sm">
+        Marking this transaction as <strong>Refunded</strong> will record the
+        refund amount. The customer's balance should be adjusted by your
+        trusted backend/Cloud Function.
+      </div>
+
+      <div id="transactionModalError"
+           class="hidden mt-4 rounded-xl bg-red-50 border border-red-100 text-red-700 p-3 text-sm">
+      </div>
+
+      <div class="mt-6 flex justify-end gap-3">
+
+        <button
+          onclick="closeTransactionModal()"
+          class="px-5 py-3 rounded-xl border border-gray-200 font-bold"
+        >
+          Cancel
+        </button>
+
+        <button
+          onclick="saveTransaction()"
+          class="px-5 py-3 rounded-xl text-white font-bold"
+          style="background:#00704d;"
+        >
+          Save Status
+        </button>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
+<!-- =========================================================
+     TOAST
+========================================================= -->
+
+<div id="toast"
+     class="hidden fixed right-5 bottom-5 z-[70] toast max-w-sm">
+  <div id="toastInner"
+       class="bg-gray-900 text-white rounded-2xl px-5 py-4 shadow-2xl">
+    <div id="toastMessage" class="text-sm font-semibold"></div>
+  </div>
 </div>
 
 
 <script>
-
-/* =====================================================
+/* ============================================================
    FIREBASE
-===================================================== */
+============================================================ */
 
 const firebaseConfig = {
-    apiKey:"AIzaSyB6M6TtGnHPWOnDr9xO4JYJbx4qtZr9W2w",
-    authDomain:"cashflowbank-9068.firebaseapp.com",
-    projectId:"cashflowbank-9068",
-    storageBucket:"cashflowbank-9068.firebasestorage.app",
-    messagingSenderId:"38012287371",
-    appId:"1:38012287371:web:e3e8df73166ae0fc84d78e"
+  apiKey: "AIzaSyB6M6TtGnHPWOnDr9xO4JYJbx4qtZr9W2w",
+  authDomain: "cashflowbank-9068.firebaseapp.com",
+  projectId: "cashflowbank-9068",
+  storageBucket: "cashflowbank-9068.firebasestorage.app",
+  messagingSenderId: "38012287371",
+  appId: "1:38012287371:web:e3e8df73166ae0fc84d78e"
 };
 
 firebase.initializeApp(firebaseConfig);
 
-const auth=firebase.auth();
-const db=firebase.firestore();
+const auth = firebase.auth();
+const db = firebase.firestore();
 
 
-/* =====================================================
+/* ============================================================
    ADMIN SETTINGS
-===================================================== */
+============================================================ */
 
-const ADMIN_EMAIL="admin@cashflowbank.com";
+const ADMIN_EMAIL = "admin@cashflowbank.com";
 
+/*
+  The password is managed by Firebase Authentication.
 
-/* =====================================================
-   STATE
-===================================================== */
+  Set the Firebase Authentication user's password to:
+  admin123
 
-let adminUser=null;
-let customers=[];
-let transactions=[];
-let selectedCustomer=null;
-
-
-/* =====================================================
-   HELPERS
-===================================================== */
-
-function $(id){
-    return document.getElementById(id);
-}
+  Do NOT put the actual password in client-side JavaScript.
+*/
 
 
-function money(value){
-
-    return new Intl.NumberFormat(
-        "en-US",
-        {
-            style:"currency",
-            currency:"USD"
-        }
-    ).format(
-        Number(value||0)
-    );
-
-}
+let customers = [];
+let transactions = [];
+let currentCustomer = null;
+let currentTransaction = null;
 
 
-function dateValue(value){
+/* ============================================================
+   LOGIN
+============================================================ */
 
-    if(!value){
-        return null;
+document.getElementById("loginForm").addEventListener("submit", async function(e) {
+
+  e.preventDefault();
+
+  const email = ADMIN_EMAIL;
+  const password = document.getElementById("adminPassword").value.trim();
+
+  hideLoginError();
+
+  if (!password) {
+    showLoginError("Please enter the admin password.");
+    return;
+  }
+
+  setLoginLoading(true);
+
+  try {
+
+    /*
+      Password login only.
+      This does NOT create a user and does NOT use
+      Firebase Admin SDK operations.
+    */
+
+    const credential =
+      await auth.signInWithEmailAndPassword(email, password);
+
+    const user = credential.user;
+
+    /*
+      Verify that this Firebase Auth account is actually
+      registered as an administrator.
+    */
+
+    const adminDoc =
+      await db.collection("admins").doc(user.uid).get();
+
+    if (!adminDoc.exists) {
+
+      await auth.signOut();
+
+      throw new Error(
+        "This account is not authorized as an administrator."
+      );
     }
 
-    if(value.toDate){
-        return value.toDate();
+    const adminData = adminDoc.data() || {};
+
+    if (adminData.role !== "admin") {
+
+      await auth.signOut();
+
+      throw new Error(
+        "This account does not have administrator access."
+      );
     }
 
-    const date=new Date(value);
+    document.getElementById("adminEmailDisplay").textContent =
+      user.email || ADMIN_EMAIL;
 
-    return isNaN(date.getTime())
-        ? null
-        : date;
+    showAdminApp();
 
-}
+    await loadAllData();
 
+  } catch (error) {
 
-function formatDate(value){
+    console.error(error);
 
-    const date=dateValue(value);
+    let message = "Unable to sign in.";
 
-    if(!date){
-        return "—";
+    if (error.code === "auth/invalid-credential" ||
+        error.code === "auth/wrong-password" ||
+        error.code === "auth/user-not-found") {
+
+      message = "Incorrect admin password.";
     }
 
-    return date.toLocaleDateString(
-        "en-US",
-        {
-            year:"numeric",
-            month:"long",
-            day:"numeric"
-        }
-    );
-
-}
-
-
-function formatDateTime(value){
-
-    const date=dateValue(value);
-
-    if(!date){
-        return "—";
+    if (error.code === "auth/too-many-requests") {
+      message = "Too many login attempts. Please try again later.";
     }
 
-    return date.toLocaleString(
-        "en-US",
-        {
-            dateStyle:"medium",
-            timeStyle:"short"
-        }
-    );
+    if (error.message &&
+        error.message.includes("not authorized")) {
 
-}
-
-
-function escapeHTML(value){
-
-    return String(value??"")
-        .replace(/&/g,"&amp;")
-        .replace(/</g,"&lt;")
-        .replace(/>/g,"&gt;")
-        .replace(/"/g,"&quot;")
-        .replace(/'/g,"&#039;");
-
-}
-
-
-function statusBadge(status){
-
-    const value=
-        String(status||"pending")
-            .toLowerCase();
-
-    let className="badge-pending";
-
-    if(value==="approved"){
-        className="badge-approved";
+      message = error.message;
     }
 
-    if(value==="declined"){
-        className="badge-declined";
+    if (error.message &&
+        error.message.includes("does not have administrator")) {
+
+      message = error.message;
     }
 
-    if(value==="refunded"){
-        className="badge-refunded";
-    }
+    showLoginError(message);
 
-    if(value==="completed"){
-        className="badge-completed";
-    }
+  } finally {
 
-    return `
-        <span class="badge ${className}">
-            ${escapeHTML(
-                value.charAt(0).toUpperCase()+
-                value.slice(1)
-            )}
-        </span>
-    `;
+    setLoginLoading(false);
 
-}
+  }
+});
 
 
-/* =====================================================
-   ADMIN LOGIN
-===================================================== */
-
-$("adminLoginForm").addEventListener(
-    "submit",
-    async function(event){
-
-        event.preventDefault();
-
-        const button=
-            $("adminLoginButton");
-
-        const password=
-            $("adminPassword").value;
-
-
-        button.disabled=true;
-        button.textContent=
-            "Signing in...";
-
-        $("loginError").textContent="";
-
-
-        try{
-
-            /*
-             * IMPORTANT:
-             * We are ONLY signing in.
-             *
-             * We are NOT creating an admin user here.
-             */
-
-            const credential=
-                await auth.signInWithEmailAndPassword(
-                    ADMIN_EMAIL,
-                    password
-                );
-
-
-            adminUser=
-                credential.user;
-
-
-            /*
-             * Verify that this Firebase user
-             * actually exists inside /admins.
-             */
-
-            const adminDocument=
-                await db
-                    .collection("admins")
-                    .doc(adminUser.uid)
-                    .get();
-
-
-            if(!adminDocument.exists){
-
-                await auth.signOut();
-
-                throw new Error(
-                    "This account is not authorized as an administrator."
-                );
-
-            }
-
-
-            const adminData=
-                adminDocument.data();
-
-
-            if(
-                adminData.role &&
-                adminData.role!=="admin"
-            ){
-
-                await auth.signOut();
-
-                throw new Error(
-                    "This account does not have administrator permissions."
-                );
-
-            }
-
-
-            $("loginScreen")
-                .classList
-                .add("hidden");
-
-
-            $("adminApp")
-                .classList
-                .remove("hidden");
-
-
-            await loadEverything();
-
-
-        }catch(error){
-
-            console.error(error);
-
-            $("loginError").textContent=
-                friendlyFirebaseError(error);
-
-        }finally{
-
-            button.disabled=false;
-            button.textContent=
-                "Sign in";
-
-        }
-
-    }
-);
-
-
-/* =====================================================
-   FIREBASE ERROR
-===================================================== */
-
-function friendlyFirebaseError(error){
-
-    if(
-        error.code===
-        "auth/invalid-credential"
-    ){
-
-        return "Incorrect admin password.";
-
-    }
-
-    if(
-        error.code===
-        "auth/wrong-password"
-    ){
-
-        return "Incorrect admin password.";
-
-    }
-
-    if(
-        error.code===
-        "auth/user-not-found"
-    ){
-
-        return "The administrator account does not exist. Create it once in Firebase Authentication.";
-
-    }
-
-    if(
-        error.code===
-        "auth/admin-restricted-operation"
-    ){
-
-        return "The admin panel is trying to perform a restricted Firebase operation. This version only signs in an existing admin account.";
-
-    }
-
-    return error.message||
-        "Unable to sign in.";
-
-}
-
-
-/* =====================================================
+/* ============================================================
    AUTH STATE
-===================================================== */
+============================================================ */
 
-auth.onAuthStateChanged(
-    async function(user){
+auth.onAuthStateChanged(async function(user) {
 
-        if(!user){
+  if (!user) {
+    showLoginScreen();
+    return;
+  }
 
-            adminUser=null;
+  /*
+    Never trust the email alone.
+    Check admins/{UID}.
+  */
 
-            $("loginScreen")
-                .classList
-                .remove("hidden");
+  try {
 
-            $("adminApp")
-                .classList
-                .add("hidden");
+    const adminDoc =
+      await db.collection("admins").doc(user.uid).get();
 
-            return;
-        }
+    if (!adminDoc.exists ||
+        adminDoc.data().role !== "admin") {
 
-
-        /*
-         * Do not automatically trust the signed-in user.
-         * Check /admins.
-         */
-
-        try{
-
-            const adminDocument=
-                await db
-                    .collection("admins")
-                    .doc(user.uid)
-                    .get();
-
-
-            if(!adminDocument.exists){
-
-                await auth.signOut();
-
-                return;
-
-            }
-
-
-            adminUser=user;
-
-
-            $("loginScreen")
-                .classList
-                .add("hidden");
-
-            $("adminApp")
-                .classList
-                .remove("hidden");
-
-
-            await loadEverything();
-
-
-        }catch(error){
-
-            console.error(error);
-
-            await auth.signOut();
-
-        }
-
+      await auth.signOut();
+      showLoginScreen();
+      return;
     }
-);
+
+    document.getElementById("adminEmailDisplay").textContent =
+      user.email || ADMIN_EMAIL;
+
+    showAdminApp();
+
+    await loadAllData();
+
+  } catch (error) {
+
+    console.error(error);
+    await auth.signOut();
+    showLoginScreen();
+
+  }
+
+});
 
 
-/* =====================================================
-   LOAD EVERYTHING
-===================================================== */
+/* ============================================================
+   LOGIN UI
+============================================================ */
 
-async function loadEverything(){
+function setLoginLoading(loading) {
+
+  const button = document.getElementById("loginButton");
+  const text = document.getElementById("loginButtonText");
+  const spinner = document.getElementById("loginSpinner");
+
+  button.disabled = loading;
+
+  if (loading) {
+    text.textContent = "Signing In...";
+    spinner.classList.remove("hidden");
+  } else {
+    text.textContent = "Sign In";
+    spinner.classList.add("hidden");
+  }
+}
+
+
+function showLoginError(message) {
+
+  const el = document.getElementById("loginError");
+
+  el.textContent = message;
+  el.classList.remove("hidden");
+}
+
+
+function hideLoginError() {
+
+  document.getElementById("loginError")
+    .classList.add("hidden");
+
+}
+
+
+function togglePassword() {
+
+  const input = document.getElementById("adminPassword");
+
+  input.type =
+    input.type === "password" ? "text" : "password";
+}
+
+
+function showLoginScreen() {
+
+  document.getElementById("loginScreen")
+    .classList.remove("hidden");
+
+  document.getElementById("adminApp")
+    .classList.add("hidden");
+
+}
+
+
+function showAdminApp() {
+
+  document.getElementById("loginScreen")
+    .classList.add("hidden");
+
+  document.getElementById("adminApp")
+    .classList.remove("hidden");
+
+}
+
+
+/* ============================================================
+   NAVIGATION
+============================================================ */
+
+function showSection(section) {
+
+  const sections = [
+    "dashboard",
+    "customers",
+    "transactions"
+  ];
+
+  sections.forEach(name => {
+
+    const el =
+      document.getElementById("section-" + name);
+
+    if (name === section) {
+      el.classList.remove("hidden");
+    } else {
+      el.classList.add("hidden");
+    }
+
+  });
+
+
+  document.querySelectorAll(".nav-item").forEach(button => {
+
+    button.classList.toggle(
+      "active",
+      button.dataset.section === section
+    );
+
+  });
+
+
+  const titles = {
+    dashboard: "Dashboard",
+    customers: "Customers",
+    transactions: "Transactions"
+  };
+
+  document.getElementById("pageTitle").textContent =
+    titles[section] || "Dashboard";
+
+}
+
+
+function toggleSidebar() {
+
+  const sidebar =
+    document.getElementById("sidebar");
+
+  sidebar.classList.toggle("-translate-x-full");
+
+}
+
+
+/* ============================================================
+   DATA
+============================================================ */
+
+async function loadAllData() {
+
+  try {
 
     await Promise.all([
-        loadCustomers(),
-        loadTransactions()
+      loadCustomers(),
+      loadTransactions()
     ]);
 
-    updateOverview();
+    updateDashboard();
 
-}
+  } catch (error) {
 
+    console.error(error);
 
-/* =====================================================
-   LOAD CUSTOMERS
-===================================================== */
-
-async function loadCustomers(){
-
-    try{
-
-        const snapshot=
-            await db
-                .collection("users")
-                .get();
-
-
-        customers=
-            snapshot.docs
-                .map(doc=>({
-                    id:doc.id,
-                    ...doc.data()
-                }))
-                .sort(
-                    (a,b)=>
-                        (b.createdAt?.seconds||0)-
-                        (a.createdAt?.seconds||0)
-                );
-
-
-        renderCustomers();
-
-        renderRecentCustomers();
-
-        updateOverview();
-
-
-    }catch(error){
-
-        console.error(error);
-
-        $("customersTable").innerHTML=`
-
-            <tr>
-                <td colspan="7" class="text-center text-red-600 py-8">
-                    ${escapeHTML(error.message)}
-                </td>
-            </tr>
-
-        `;
-
-    }
-
-}
-
-
-/* =====================================================
-   LOAD TRANSACTIONS
-===================================================== */
-
-async function loadTransactions(){
-
-    try{
-
-        const snapshot=
-            await db
-                .collection("transactions")
-                .get();
-
-
-        transactions=
-            snapshot.docs
-                .map(doc=>({
-                    id:doc.id,
-                    ...doc.data()
-                }))
-                .sort(
-                    (a,b)=>
-                        (b.createdAt?.seconds||0)-
-                        (a.createdAt?.seconds||0)
-                );
-
-
-        renderTransactions();
-
-        renderRecentTransactions();
-
-        updateOverview();
-
-
-    }catch(error){
-
-        console.error(error);
-
-        $("transactionsTable").innerHTML=`
-
-            <tr>
-                <td colspan="6" class="text-center text-red-600 py-8">
-                    ${escapeHTML(error.message)}
-                </td>
-            </tr>
-
-        `;
-
-    }
-
-}
-
-
-/* =====================================================
-   OVERVIEW
-===================================================== */
-
-function updateOverview(){
-
-    const pending=
-        customers.filter(
-            customer=>
-                String(customer.status)
-                    .toLowerCase()==="pending"
-        ).length;
-
-
-    const approved=
-        customers.filter(
-            customer=>
-                String(customer.status)
-                    .toLowerCase()==="approved"
-        ).length;
-
-
-    $("totalCustomers").textContent=
-        customers.length;
-
-
-    $("pendingCustomers").textContent=
-        pending;
-
-
-    $("approvedCustomers").textContent=
-        approved;
-
-
-    $("totalTransactions").textContent=
-        transactions.length;
-
-}
-
-
-/* =====================================================
-   CUSTOMER TABLE
-===================================================== */
-
-function renderCustomers(){
-
-    const search=
-        $("customerSearch")
-            .value
-            .trim()
-            .toLowerCase();
-
-
-    const filtered=
-        customers.filter(customer=>{
-
-            const text=[
-                customer.name,
-                customer.email,
-                customer.phone,
-                customer.accountNumber
-            ]
-            .join(" ")
-            .toLowerCase();
-
-            return text.includes(search);
-
-        });
-
-
-    if(!filtered.length){
-
-        $("customersTable").innerHTML=`
-
-            <tr>
-                <td
-                    colspan="7"
-                    class="text-center text-gray-500 py-10"
-                >
-                    No customers found.
-                </td>
-            </tr>
-
-        `;
-
-        return;
-    }
-
-
-    $("customersTable").innerHTML=
-        filtered.map(customer=>`
-
-            <tr>
-
-                <td>
-
-                    <div class="font-bold">
-                        ${escapeHTML(
-                            customer.name||
-                            "Unnamed"
-                        )}
-                    </div>
-
-                    <div class="text-xs text-gray-500 mt-1">
-                        ${escapeHTML(
-                            customer.email||
-                            ""
-                        )}
-                    </div>
-
-                </td>
-
-
-                <td>
-                    <span class="font-bold">
-                        ${escapeHTML(
-                            customer.accountNumber||
-                            "—"
-                        )}
-                    </span>
-                </td>
-
-
-                <td>
-                    ${escapeHTML(
-                        customer.accountType||
-                        "—"
-                    )}
-                </td>
-
-
-                <td class="font-bold">
-                    ${money(
-                        customer.balance
-                    )}
-                </td>
-
-
-                <td>
-                    ${statusBadge(
-                        customer.status
-                    )}
-                </td>
-
-
-                <td>
-                    ${formatDate(
-                        customer.createdAt
-                    )}
-                </td>
-
-
-                <td>
-
-                    <button
-                        onclick="openCustomer('${customer.id}')"
-                        class="btn btn-light text-sm"
-                    >
-                        Manage
-                    </button>
-
-                </td>
-
-            </tr>
-
-        `).join("");
-
-}
-
-
-/* =====================================================
-   RECENT CUSTOMERS
-===================================================== */
-
-function renderRecentCustomers(){
-
-    const recent=
-        customers.slice(0,5);
-
-
-    if(!recent.length){
-
-        $("recentCustomers").innerHTML=
-            `<div class="text-gray-500 text-sm">
-                No customers yet.
-            </div>`;
-
-        return;
-    }
-
-
-    $("recentCustomers").innerHTML=
-        recent.map(customer=>`
-
-            <div class="flex justify-between gap-3 py-3 border-b last:border-0">
-
-                <div class="min-w-0">
-
-                    <div class="font-bold truncate">
-                        ${escapeHTML(
-                            customer.name||
-                            "Unnamed"
-                        )}
-                    </div>
-
-                    <div class="text-xs text-gray-500 mt-1">
-                        ${escapeHTML(
-                            customer.accountNumber||
-                            "—"
-                        )}
-                    </div>
-
-                </div>
-
-
-                <div class="text-right">
-
-                    ${statusBadge(
-                        customer.status
-                    )}
-
-                    <div class="text-xs text-gray-500 mt-1">
-                        ${formatDate(
-                            customer.createdAt
-                        )}
-                    </div>
-
-                </div>
-
-            </div>
-
-        `).join("");
-
-}
-
-
-/* =====================================================
-   TRANSACTION TABLE
-===================================================== */
-
-function renderTransactions(){
-
-    if(!transactions.length){
-
-        $("transactionsTable").innerHTML=`
-
-            <tr>
-                <td
-                    colspan="6"
-                    class="text-center text-gray-500 py-10"
-                >
-                    No transactions found.
-                </td>
-            </tr>
-
-        `;
-
-        return;
-    }
-
-
-    $("transactionsTable").innerHTML=
-        transactions.map(transaction=>`
-
-            <tr>
-
-                <td>
-                    ${formatDateTime(
-                        transaction.createdAt
-                    )}
-                </td>
-
-
-                <td>
-
-                    <div class="font-bold">
-                        ${escapeHTML(
-                            transaction.userName||
-                            "Customer"
-                        )}
-                    </div>
-
-                    <div class="text-xs text-gray-500 mt-1">
-                        ${escapeHTML(
-                            transaction.userEmail||
-                            ""
-                        )}
-                    </div>
-
-                </td>
-
-
-                <td>
-
-                    <div class="font-bold">
-                        ${escapeHTML(
-                            transaction.recipientName||
-                            "—"
-                        )}
-                    </div>
-
-                    <div class="text-xs text-gray-500 mt-1">
-                        ${escapeHTML(
-                            transaction.recipientAccount||
-                            ""
-                        )}
-                    </div>
-
-                </td>
-
-
-                <td class="font-black">
-                    ${money(
-                        transaction.amount
-                    )}
-                </td>
-
-
-                <td>
-                    ${statusBadge(
-                        transaction.status
-                    )}
-                </td>
-
-
-                <td>
-
-                    <button
-                        onclick="openTransaction('${transaction.id}')"
-                        class="btn btn-light text-sm"
-                    >
-                        Manage
-                    </button>
-
-                </td>
-
-            </tr>
-
-        `).join("");
-
-}
-
-
-/* =====================================================
-   RECENT TRANSACTIONS
-===================================================== */
-
-function renderRecentTransactions(){
-
-    const recent=
-        transactions.slice(0,5);
-
-
-    if(!recent.length){
-
-        $("recentTransactions").innerHTML=
-            `<div class="text-gray-500 text-sm">
-                No transactions yet.
-            </div>`;
-
-        return;
-    }
-
-
-    $("recentTransactions").innerHTML=
-        recent.map(transaction=>`
-
-            <div class="py-3 border-b last:border-0">
-
-                <div class="flex justify-between gap-3">
-
-                    <div>
-
-                        <div class="font-bold">
-                            ${escapeHTML(
-                                transaction.recipientName||
-                                "Transfer"
-                            )}
-                        </div>
-
-                        <div class="text-xs text-gray-500 mt-1">
-                            ${escapeHTML(
-                                transaction.userName||
-                                "Customer"
-                            )}
-                        </div>
-
-                    </div>
-
-
-                    <div class="text-right">
-
-                        <div class="font-black">
-                            ${money(
-                                transaction.amount
-                            )}
-                        </div>
-
-                        <div class="mt-1">
-                            ${statusBadge(
-                                transaction.status
-                            )}
-                        </div>
-
-                    </div>
-
-                </div>
-
-            </div>
-
-        `).join("");
-
-}
-
-
-/* =====================================================
-   OPEN CUSTOMER
-===================================================== */
-
-function openCustomer(id){
-
-    selectedCustomer=
-        customers.find(
-            customer=>
-                customer.id===id
-        );
-
-
-    if(!selectedCustomer){
-        return;
-    }
-
-
-    const customer=
-        selectedCustomer;
-
-
-    $("customerModalSubtitle").textContent=
-        customer.name||
-        "Customer account";
-
-
-    $("customerDetails").innerHTML=`
-
-        <div class="grid sm:grid-cols-2 gap-4">
-
-            <div>
-                <div class="text-xs text-gray-500">
-                    Full name
-                </div>
-
-                <input
-                    id="manageName"
-                    class="input mt-1"
-                    value="${escapeHTML(
-                        customer.name||
-                        ""
-                    )}"
-                >
-            </div>
-
-
-            <div>
-                <div class="text-xs text-gray-500">
-                    Email
-                </div>
-
-                <input
-                    class="input mt-1 bg-gray-50"
-                    value="${escapeHTML(
-                        customer.email||
-                        ""
-                    )}"
-                    disabled
-                >
-            </div>
-
-
-            <div>
-                <div class="text-xs text-gray-500">
-                    Phone
-                </div>
-
-                <input
-                    id="managePhone"
-                    class="input mt-1"
-                    value="${escapeHTML(
-                        customer.phone||
-                        ""
-                    )}"
-                >
-            </div>
-
-
-            <div>
-                <div class="text-xs text-gray-500">
-                    Country
-                </div>
-
-                <input
-                    id="manageCountry"
-                    class="input mt-1"
-                    value="${escapeHTML(
-                        customer.country||
-                        ""
-                    )}"
-                >
-            </div>
-
-
-            <div>
-                <div class="text-xs text-gray-500">
-                    Account number
-                </div>
-
-                <input
-                    class="input mt-1 bg-gray-50"
-                    value="${escapeHTML(
-                        customer.accountNumber||
-                        ""
-                    )}"
-                    disabled
-                >
-            </div>
-
-
-            <div>
-                <div class="text-xs text-gray-500">
-                    Account type
-                </div>
-
-                <select
-                    id="manageType"
-                    class="input mt-1"
-                >
-
-                    <option
-                        ${customer.accountType==="Savings"?"selected":""}
-                    >
-                        Savings
-                    </option>
-
-                    <option
-                        ${customer.accountType==="Current"?"selected":""}
-                    >
-                        Current
-                    </option>
-
-                    <option
-                        ${customer.accountType==="Business"?"selected":""}
-                    >
-                        Business
-                    </option>
-
-                    <option
-                        ${customer.accountType==="Student"?"selected":""}
-                    >
-                        Student
-                    </option>
-
-                </select>
-            </div>
-
-
-            <div>
-                <div class="text-xs text-gray-500">
-                    Account status
-                </div>
-
-                <select
-                    id="manageStatus"
-                    class="input mt-1"
-                >
-
-                    <option
-                        value="pending"
-                        ${customer.status==="pending"?"selected":""}
-                    >
-                        Pending
-                    </option>
-
-                    <option
-                        value="approved"
-                        ${customer.status==="approved"?"selected":""}
-                    >
-                        Approved
-                    </option>
-
-                    <option
-                        value="declined"
-                        ${customer.status==="declined"?"selected":""}
-                    >
-                        Declined
-                    </option>
-
-                </select>
-            </div>
-
-
-            <div>
-                <div class="text-xs text-gray-500">
-                    Credit score
-                </div>
-
-                <input
-                    id="manageCredit"
-                    class="input mt-1"
-                    type="number"
-                    min="300"
-                    max="850"
-                    value="${Number(
-                        customer.creditScore||
-                        650
-                    )}"
-                >
-            </div>
-
-
-            <div>
-                <div class="text-xs text-gray-500">
-                    Demo balance
-                </div>
-
-                <input
-                    id="manageBalance"
-                    class="input mt-1"
-                    type="number"
-                    step="0.01"
-                    min="0"
-                    value="${Number(
-                        customer.balance||
-                        0
-                    )}"
-                >
-            </div>
-
-
-            <div>
-                <div class="text-xs text-gray-500">
-                    Account limit
-                </div>
-
-                <input
-                    id="manageLimit"
-                    class="input mt-1"
-                    type="number"
-                    step="0.01"
-                    min="0"
-                    value="${Number(
-                        customer.accountLimit||
-                        0
-                    )}"
-                >
-            </div>
-
-
-            <div>
-                <div class="text-xs text-gray-500">
-                    Account created date
-                </div>
-
-                <input
-                    id="manageCreated"
-                    class="input mt-1"
-                    type="date"
-                    value="${dateInputValue(
-                        customer.createdAt
-                    )}"
-                >
-            </div>
-
-        </div>
-
-
-        <div class="mt-6 p-4 rounded-xl bg-gray-50">
-
-            <div class="grid sm:grid-cols-3 gap-4 text-sm">
-
-                <div>
-                    <span class="text-gray-500">
-                        Current balance
-                    </span>
-
-                    <b class="block mt-1">
-                        ${money(
-                            customer.balance
-                        )}
-                    </b>
-                </div>
-
-
-                <div>
-                    <span class="text-gray-500">
-                        Created
-                    </span>
-
-                    <b class="block mt-1">
-                        ${formatDate(
-                            customer.createdAt
-                        )}
-                    </b>
-                </div>
-
-
-                <div>
-                    <span class="text-gray-500">
-                        Status
-                    </span>
-
-                    <div class="mt-1">
-                        ${statusBadge(
-                            customer.status
-                        )}
-                    </div>
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <div
-            id="customerSaveMessage"
-            class="text-sm mt-4"
-        ></div>
-
-
-        <div class="flex flex-wrap gap-3 mt-5">
-
-            <button
-                onclick="saveCustomer()"
-                class="btn btn-primary"
-            >
-                Save Changes
-            </button>
-
-
-            <button
-                onclick="closeCustomerModal()"
-                class="btn btn-light"
-            >
-                Close
-            </button>
-
-
-            <button
-                onclick="deleteCustomerRecord()"
-                class="btn btn-danger ml-auto"
-            >
-                Delete Customer Record
-            </button>
-
-        </div>
-
-    `;
-
-
-    $("customerModal")
-        .classList
-        .remove("hidden");
-
-}
-
-
-function dateInputValue(value){
-
-    const date=
-        dateValue(value);
-
-    if(!date){
-        return "";
-    }
-
-    const year=
-        date.getFullYear();
-
-    const month=
-        String(
-            date.getMonth()+1
-        ).padStart(2,"0");
-
-    const day=
-        String(
-            date.getDate()
-        ).padStart(2,"0");
-
-    return `${year}-${month}-${day}`;
-
-}
-
-
-/* =====================================================
-   SAVE CUSTOMER
-===================================================== */
-
-async function saveCustomer(){
-
-    if(!selectedCustomer){
-        return;
-    }
-
-
-    const message=
-        $("customerSaveMessage");
-
-
-    message.className=
-        "text-sm mt-4 text-gray-500";
-
-
-    message.textContent=
-        "Saving...";
-
-
-    try{
-
-        const createdInput=
-            $("manageCreated").value;
-
-
-        let createdAt=
-            selectedCustomer.createdAt;
-
-
-        if(createdInput){
-
-            /*
-             * Store the selected date at midnight.
-             */
-
-            const localDate=
-                new Date(
-                    createdInput+
-                    "T00:00:00"
-                );
-
-
-            if(isNaN(localDate.getTime())){
-
-                throw new Error(
-                    "Invalid account creation date."
-                );
-
-            }
-
-
-            createdAt=
-                firebase.firestore
-                    .Timestamp
-                    .fromDate(
-                        localDate
-                    );
-
-        }
-
-
-        await db
-            .collection("users")
-            .doc(selectedCustomer.id)
-            .update({
-
-                name:
-                    $("manageName")
-                        .value
-                        .trim(),
-
-                phone:
-                    $("managePhone")
-                        .value
-                        .trim(),
-
-                country:
-                    $("manageCountry")
-                        .value
-                        .trim(),
-
-                accountType:
-                    $("manageType")
-                        .value,
-
-                status:
-                    $("manageStatus")
-                        .value,
-
-                creditScore:
-                    Number(
-                        $("manageCredit")
-                            .value
-                    ),
-
-                balance:
-                    Number(
-                        $("manageBalance")
-                            .value
-                    ),
-
-                accountLimit:
-                    Number(
-                        $("manageLimit")
-                            .value
-                    ),
-
-                createdAt,
-
-                updatedAt:
-                    firebase.firestore
-                        .FieldValue
-                        .serverTimestamp()
-
-            });
-
-
-        message.className=
-            "text-sm mt-4 text-green-700";
-
-
-        message.textContent=
-            "Customer account updated successfully.";
-
-
-        await loadCustomers();
-
-
-        setTimeout(
-            closeCustomerModal,
-            700
-        );
-
-
-    }catch(error){
-
-        console.error(error);
-
-        message.className=
-            "text-sm mt-4 text-red-600";
-
-        message.textContent=
-            error.message;
-
-    }
-
-}
-
-
-/* =====================================================
-   DELETE CUSTOMER FIRESTORE RECORD
-===================================================== */
-
-async function deleteCustomerRecord(){
-
-    if(!selectedCustomer){
-        return;
-    }
-
-
-    const confirmed=
-        confirm(
-            "Delete this customer's Firestore account record?\n\nThis does NOT delete the Firebase Authentication account."
-        );
-
-
-    if(!confirmed){
-        return;
-    }
-
-
-    try{
-
-        await db
-            .collection("users")
-            .doc(selectedCustomer.id)
-            .delete();
-
-
-        alert(
-            "Customer Firestore record deleted."
-        );
-
-
-        closeCustomerModal();
-
-        await loadCustomers();
-
-
-    }catch(error){
-
-        console.error(error);
-
-        alert(
-            error.message
-        );
-
-    }
-
-}
-
-
-/* =====================================================
-   CLOSE CUSTOMER MODAL
-===================================================== */
-
-function closeCustomerModal(){
-
-    $("customerModal")
-        .classList
-        .add("hidden");
-
-    selectedCustomer=null;
-
-}
-
-
-/* =====================================================
-   OPEN TRANSACTION
-===================================================== */
-
-function openTransaction(id){
-
-    const transaction=
-        transactions.find(
-            item=>item.id===id
-        );
-
-
-    if(!transaction){
-        return;
-    }
-
-
-    const status=
-        String(
-            transaction.status||
-            "pending"
-        ).toLowerCase();
-
-
-    const amount=
-        Number(
-            transaction.amount||
-            0
-        );
-
-
-    let actions="";
-
-
-    if(status==="pending"){
-
-        actions=`
-
-            <button
-                onclick="approveTransaction('${transaction.id}')"
-                class="btn btn-primary"
-            >
-                Approve
-            </button>
-
-
-            <button
-                onclick="refundTransaction('${transaction.id}')"
-                class="btn btn-danger"
-            >
-                Decline & Refund
-            </button>
-
-        `;
-
-    }
-
-
-    if(status==="approved"){
-
-        actions=`
-
-            <button
-                onclick="completeTransaction('${transaction.id}')"
-                class="btn btn-primary"
-            >
-                Mark Completed
-            </button>
-
-
-            <button
-                onclick="refundTransaction('${transaction.id}')"
-                class="btn btn-danger"
-            >
-                Cancel & Refund
-            </button>
-
-        `;
-
-    }
-
-
-    openSimpleModal(
-        "Transaction Details",
-        `
-
-        <div class="space-y-5">
-
-            <div class="flex justify-between items-center">
-
-                <div>
-
-                    <div class="text-xs text-gray-500">
-                        Status
-                    </div>
-
-                    <div class="mt-1">
-                        ${statusBadge(
-                            transaction.status
-                        )}
-                    </div>
-
-                </div>
-
-
-                <div class="text-2xl font-black">
-                    ${money(amount)}
-                </div>
-
-            </div>
-
-
-            <div class="grid sm:grid-cols-2 gap-4">
-
-                <div class="p-4 bg-gray-50 rounded-xl">
-
-                    <div class="text-xs text-gray-500">
-                        Customer
-                    </div>
-
-                    <div class="font-bold mt-1">
-                        ${escapeHTML(
-                            transaction.userName||
-                            "—"
-                        )}
-                    </div>
-
-                    <div class="text-sm text-gray-500 mt-1">
-                        ${escapeHTML(
-                            transaction.userEmail||
-                            "—"
-                        )}
-                    </div>
-
-                </div>
-
-
-                <div class="p-4 bg-gray-50 rounded-xl">
-
-                    <div class="text-xs text-gray-500">
-                        Recipient
-                    </div>
-
-                    <div class="font-bold mt-1">
-                        ${escapeHTML(
-                            transaction.recipientName||
-                            "—"
-                        )}
-                    </div>
-
-                    <div class="text-sm text-gray-500 mt-1">
-                        ${escapeHTML(
-                            transaction.recipientAccount||
-                            "—"
-                        )}
-                    </div>
-
-                </div>
-
-            </div>
-
-
-            <div>
-
-                <div class="text-xs text-gray-500">
-                    Created
-                </div>
-
-                <div class="font-bold mt-1">
-                    ${formatDateTime(
-                        transaction.createdAt
-                    )}
-                </div>
-
-            </div>
-
-
-            <div>
-
-                <div class="text-xs text-gray-500">
-                    Note
-                </div>
-
-                <div class="mt-1">
-                    ${escapeHTML(
-                        transaction.note||
-                        "No note"
-                    )}
-                </div>
-
-            </div>
-
-
-            ${
-                transaction.status==="refunded"
-                ?
-                `
-                <div class="rounded-xl bg-blue-50 p-4 text-blue-700">
-
-                    <div class="font-black">
-                        Refunded
-                    </div>
-
-                    <div class="text-sm mt-1">
-                        Refund amount:
-                        ${money(
-                            transaction.refundAmount||
-                            transaction.amount
-                        )}
-                    </div>
-
-                    <div class="text-sm mt-1">
-                        Cancelled by:
-                        ${escapeHTML(
-                            transaction.cancelledBy||
-                            "admin"
-                        )}
-                    </div>
-
-                </div>
-                `
-                :""
-            }
-
-
-            <div class="flex flex-wrap gap-3">
-
-                ${actions}
-
-                <button
-                    onclick="closeSimpleModal()"
-                    class="btn btn-light"
-                >
-                    Close
-                </button>
-
-            </div>
-
-        </div>
-
-        `
+    showToast(
+      "Could not load admin data: " + error.message,
+      "error"
     );
 
+  }
+
 }
 
 
-/* =====================================================
-   SIMPLE MODAL
-===================================================== */
+async function loadCustomers() {
 
-function openSimpleModal(title,content){
+  const snap =
+    await db.collection("users")
+      .orderBy("createdAt", "desc")
+      .get();
 
-    let existing=
-        document.getElementById(
-            "simpleModal"
-        );
+  customers = snap.docs.map(doc => ({
+    id: doc.id,
+    ...doc.data()
+  }));
 
+  renderCustomers();
+  renderDashboardCustomers();
 
-    if(existing){
-        existing.remove();
-    }
-
-
-    const modal=
-        document.createElement("div");
+}
 
 
-    modal.id="simpleModal";
+async function loadTransactions() {
 
-    modal.className=
-        "modal-bg";
+  const snap =
+    await db.collection("transactions")
+      .orderBy("createdAt", "desc")
+      .get();
+
+  transactions = snap.docs.map(doc => ({
+    id: doc.id,
+    ...doc.data()
+  }));
+
+  renderTransactions();
+  renderDashboardTransactions();
+
+}
 
 
-    modal.innerHTML=`
+/* ============================================================
+   DASHBOARD
+============================================================ */
 
-        <div class="modal">
+function updateDashboard() {
 
-            <div class="flex justify-between items-center mb-6">
+  const total = customers.length;
 
-                <h2 class="text-xl font-black">
-                    ${escapeHTML(title)}
-                </h2>
+  const pending =
+    customers.filter(c => c.status === "pending").length;
 
-                <button
-                    onclick="closeSimpleModal()"
-                    class="text-3xl text-gray-400"
-                >
-                    ×
-                </button>
+  const approved =
+    customers.filter(c => c.status === "approved").length;
 
+  document.getElementById("totalCustomers").textContent = total;
+  document.getElementById("pendingCustomers").textContent = pending;
+  document.getElementById("approvedCustomers").textContent = approved;
+  document.getElementById("totalTransactions").textContent =
+    transactions.length;
+
+}
+
+
+function renderDashboardCustomers() {
+
+  const container =
+    document.getElementById("dashboardCustomers");
+
+  const list =
+    customers.slice(0, 5);
+
+  if (!list.length) {
+
+    container.innerHTML =
+      `<div class="p-5 text-center text-gray-500">
+        No customers yet.
+      </div>`;
+
+    return;
+  }
+
+  container.innerHTML =
+    list.map(customer => {
+
+      const initials =
+        getInitials(customer.name);
+
+      return `
+        <div class="p-4 flex items-center justify-between gap-3">
+          <div class="flex items-center gap-3 min-w-0">
+
+            <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold"
+                 style="background:#e4f5ee;color:#00704d;">
+              ${escapeHtml(initials)}
             </div>
 
-            <div>
-                ${content}
+            <div class="min-w-0">
+              <div class="font-bold truncate">
+                ${escapeHtml(customer.name || "Unnamed")}
+              </div>
+              <div class="text-xs text-gray-500 truncate">
+                ${escapeHtml(customer.accountNumber || "—")}
+              </div>
             </div>
+
+          </div>
+
+          ${statusBadge(customer.status)}
+        </div>
+      `;
+
+    }).join("");
+
+}
+
+
+function renderDashboardTransactions() {
+
+  const container =
+    document.getElementById("dashboardTransactions");
+
+  const list =
+    transactions.slice(0, 5);
+
+  if (!list.length) {
+
+    container.innerHTML =
+      `<div class="p-5 text-center text-gray-500">
+        No transactions yet.
+      </div>`;
+
+    return;
+  }
+
+  container.innerHTML =
+    list.map(tx => {
+
+      return `
+        <div class="p-4 flex items-center justify-between gap-3">
+
+          <div class="min-w-0">
+            <div class="font-bold truncate">
+              ${escapeHtml(tx.recipientName || "Transfer")}
+            </div>
+
+            <div class="text-xs text-gray-500">
+              ${escapeHtml(tx.userName || "Customer")}
+            </div>
+          </div>
+
+          <div class="text-right">
+            <div class="font-bold">
+              ${money(tx.amount)}
+            </div>
+            ${statusBadge(tx.status)}
+          </div>
 
         </div>
+      `;
 
-    `;
-
-
-    document.body.appendChild(modal);
+    }).join("");
 
 }
 
 
-function closeSimpleModal(){
+/* ============================================================
+   CUSTOMERS
+============================================================ */
 
-    const modal=
-        document.getElementById(
-            "simpleModal"
-        );
+function renderCustomers() {
 
-    if(modal){
-        modal.remove();
-    }
+  const body =
+    document.getElementById("customersTableBody");
 
-}
+  const search =
+    (document.getElementById("customerSearch")?.value || "")
+      .trim()
+      .toLowerCase();
 
+  const filtered =
+    customers.filter(customer => {
 
-/* =====================================================
-   APPROVE TRANSACTION
-===================================================== */
+      if (!search) return true;
 
-async function approveTransaction(id){
+      return (
+        String(customer.name || "").toLowerCase().includes(search) ||
+        String(customer.email || "").toLowerCase().includes(search) ||
+        String(customer.accountNumber || "").includes(search)
+      );
 
-    try{
-
-        await db
-            .collection("transactions")
-            .doc(id)
-            .update({
-
-                status:"approved",
-
-                updatedAt:
-                    firebase.firestore
-                        .FieldValue
-                        .serverTimestamp()
-
-            });
-
-
-        closeSimpleModal();
-
-        await loadTransactions();
-
-        alert(
-            "Transaction approved."
-        );
-
-
-    }catch(error){
-
-        console.error(error);
-
-        alert(error.message);
-
-    }
-
-}
-
-
-/* =====================================================
-   COMPLETE TRANSACTION
-===================================================== */
-
-async function completeTransaction(id){
-
-    try{
-
-        await db
-            .collection("transactions")
-            .doc(id)
-            .update({
-
-                status:"completed",
-
-                updatedAt:
-                    firebase.firestore
-                        .FieldValue
-                        .serverTimestamp()
-
-            });
-
-
-        closeSimpleModal();
-
-        await loadTransactions();
-
-        alert(
-            "Transaction marked as completed."
-        );
-
-
-    }catch(error){
-
-        console.error(error);
-
-        alert(error.message);
-
-    }
-
-}
-
-
-/* =====================================================
-   ADMIN REFUND
-===================================================== */
-
-async function refundTransaction(id){
-
-    if(!confirm(
-        "Cancel this transaction and refund the amount to the customer's demo balance?"
-    )){
-        return;
-    }
-
-
-    try{
-
-        await db.runTransaction(
-            async transaction=>{
-
-                const transactionReference=
-                    db
-                        .collection("transactions")
-                        .doc(id);
-
-
-                const transactionSnapshot=
-                    await transaction.get(
-                        transactionReference
-                    );
-
-
-                if(
-                    !transactionSnapshot.exists
-                ){
-
-                    throw new Error(
-                        "Transaction not found."
-                    );
-
-                }
-
-
-                const transactionData=
-                    transactionSnapshot.data();
-
-
-                const currentStatus=
-                    String(
-                        transactionData.status||
-                        ""
-                    ).toLowerCase();
-
-
-                if(
-                    currentStatus==="refunded"
-                ){
-
-                    throw new Error(
-                        "This transaction has already been refunded."
-                    );
-
-                }
-
-
-                const userId=
-                    transactionData.userId;
-
-
-                if(!userId){
-
-                    throw new Error(
-                        "Transaction has no customer ID."
-                    );
-
-                }
-
-
-                const userReference=
-                    db
-                        .collection("users")
-                        .doc(userId);
-
-
-                const userSnapshot=
-                    await transaction.get(
-                        userReference
-                    );
-
-
-                if(!userSnapshot.exists){
-
-                    throw new Error(
-                        "Customer account was not found."
-                    );
-
-                }
-
-
-                const user=
-                    userSnapshot.data();
-
-
-                const refundAmount=
-                    Number(
-                        transactionData.amount||
-                        0
-                    );
-
-
-                const newBalance=
-                    Number(
-                        user.balance||
-                        0
-                    )+
-                    refundAmount;
-
-
-                transaction.update(
-                    userReference,
-                    {
-
-                        balance:newBalance,
-
-                        updatedAt:
-                            firebase.firestore
-                                .FieldValue
-                                .serverTimestamp()
-
-                    }
-                );
-
-
-                transaction.update(
-                    transactionReference,
-                    {
-
-                        status:"refunded",
-
-                        refundAmount,
-
-                        cancelledBy:"admin",
-
-                        refundedAt:
-                            firebase.firestore
-                                .FieldValue
-                                .serverTimestamp(),
-
-                        updatedAt:
-                            firebase.firestore
-                                .FieldValue
-                                .serverTimestamp()
-
-                    }
-                );
-
-            }
-        );
-
-
-        closeSimpleModal();
-
-        await Promise.all([
-            loadCustomers(),
-            loadTransactions()
-        ]);
-
-
-        alert(
-            "Transaction cancelled and refunded successfully."
-        );
-
-
-    }catch(error){
-
-        console.error(error);
-
-        alert(error.message);
-
-    }
-
-}
-
-
-/* =====================================================
-   PAGE NAVIGATION
-===================================================== */
-
-function showPage(page){
-
-    document
-        .querySelectorAll(
-            '[id^="page-"]'
-        )
-        .forEach(
-            section=>
-                section.classList.add("hidden")
-        );
-
-
-    const target=
-        $("page-"+page);
-
-
-    if(target){
-        target.classList.remove("hidden");
-    }
-
-
-    document
-        .querySelectorAll(
-            ".nav-btn[data-page]"
-        )
-        .forEach(button=>{
-
-            button.classList.toggle(
-                "active",
-                button.dataset.page===page
-            );
-
-        });
-
-
-    $("sidebar")
-        .classList
-        .remove("open");
-
-
-    window.scrollTo({
-        top:0,
-        behavior:"smooth"
     });
 
+
+  if (!filtered.length) {
+
+    body.innerHTML = `
+      <tr>
+        <td colspan="7" class="text-center py-10 text-gray-500">
+          No customers found.
+        </td>
+      </tr>
+    `;
+
+    return;
+  }
+
+
+  body.innerHTML =
+    filtered.map(customer => {
+
+      return `
+        <tr>
+
+          <td>
+            <div class="flex items-center gap-3">
+
+              <div class="w-9 h-9 rounded-full flex items-center justify-center font-bold"
+                   style="background:#e4f5ee;color:#00704d;">
+                ${escapeHtml(getInitials(customer.name))}
+              </div>
+
+              <div>
+                <div class="font-bold">
+                  ${escapeHtml(customer.name || "Unnamed")}
+                </div>
+
+                <div class="text-xs text-gray-500">
+                  ${escapeHtml(customer.email || "—")}
+                </div>
+              </div>
+
+            </div>
+          </td>
+
+          <td class="font-mono text-xs">
+            ${escapeHtml(customer.accountNumber || "—")}
+          </td>
+
+          <td>
+            ${escapeHtml(customer.accountType || "—")}
+          </td>
+
+          <td class="font-bold">
+            ${money(customer.balance)}
+          </td>
+
+          <td>
+            ${statusBadge(customer.status)}
+          </td>
+
+          <td class="text-gray-500 text-xs">
+            ${formatDate(customer.createdAt)}
+          </td>
+
+          <td>
+            <button
+              onclick="openCustomerModal('${customer.id}')"
+              class="px-3 py-2 rounded-lg text-sm font-bold"
+              style="background:#e4f5ee;color:#00704d;"
+            >
+              Manage
+            </button>
+          </td>
+
+        </tr>
+      `;
+
+    }).join("");
+
 }
 
 
-/* =====================================================
-   MOBILE SIDEBAR
-===================================================== */
+/* ============================================================
+   CUSTOMER MODAL
+============================================================ */
 
-function toggleSidebar(){
+function openCustomerModal(uid) {
 
-    $("sidebar")
-        .classList
-        .toggle("open");
+  const customer =
+    customers.find(c => c.id === uid);
+
+  if (!customer) return;
+
+  currentCustomer = customer;
+
+  document.getElementById("editUid").value = uid;
+  document.getElementById("editUidDisplay").textContent = uid;
+
+  document.getElementById("editName").value =
+    customer.name || "";
+
+  document.getElementById("editEmail").value =
+    customer.email || "";
+
+  document.getElementById("editPhone").value =
+    customer.phone || "";
+
+  document.getElementById("editCountry").value =
+    customer.country || "";
+
+  document.getElementById("editAccountType").value =
+    customer.accountType || "Savings";
+
+  document.getElementById("editStatus").value =
+    customer.status || "pending";
+
+  document.getElementById("editBalance").value =
+    Number(customer.balance || 0);
+
+  document.getElementById("editLimit").value =
+    Number(customer.accountLimit || 0);
+
+  document.getElementById("editCreditScore").value =
+    Number(customer.creditScore || 650);
+
+  document.getElementById("editAccountNumber").textContent =
+    customer.accountNumber || "—";
+
+  document.getElementById("modalCustomerSubtitle").textContent =
+    customer.email || customer.accountNumber || "";
+
+  document.getElementById("editCreatedAt").value =
+    timestampToDateTimeLocal(customer.createdAt);
+
+
+  document.getElementById("customerModalError")
+    .classList.add("hidden");
+
+
+  const modal =
+    document.getElementById("customerModal");
+
+  modal.classList.remove("hidden");
+  modal.classList.add("flex");
 
 }
 
 
-/* =====================================================
+function closeCustomerModal() {
+
+  const modal =
+    document.getElementById("customerModal");
+
+  modal.classList.add("hidden");
+  modal.classList.remove("flex");
+
+  currentCustomer = null;
+
+}
+
+
+async function saveCustomer() {
+
+  if (!currentCustomer) return;
+
+  const uid =
+    document.getElementById("editUid").value;
+
+  const createdInput =
+    document.getElementById("editCreatedAt").value;
+
+  const data = {
+
+    name:
+      document.getElementById("editName").value.trim(),
+
+    phone:
+      document.getElementById("editPhone").value.trim(),
+
+    country:
+      document.getElementById("editCountry").value.trim(),
+
+    accountType:
+      document.getElementById("editAccountType").value,
+
+    status:
+      document.getElementById("editStatus").value,
+
+    balance:
+      Number(document.getElementById("editBalance").value || 0),
+
+    accountLimit:
+      Number(document.getElementById("editLimit").value || 0),
+
+    creditScore:
+      Number(document.getElementById("editCreditScore").value || 650),
+
+    updatedAt:
+      firebase.firestore.FieldValue.serverTimestamp()
+  };
+
+
+  /*
+    Only add createdAt when admin explicitly changes it.
+  */
+
+  if (createdInput) {
+    data.createdAt =
+      firebase.firestore.Timestamp.fromDate(
+        new Date(createdInput)
+      );
+  }
+
+
+  try {
+
+    await db.collection("users")
+      .doc(uid)
+      .update(data);
+
+    showToast("Customer updated successfully.");
+
+    closeCustomerModal();
+
+    await loadCustomers();
+    updateDashboard();
+
+  } catch (error) {
+
+    console.error(error);
+
+    const el =
+      document.getElementById("customerModalError");
+
+    el.textContent =
+      "Could not save customer: " + error.message;
+
+    el.classList.remove("hidden");
+
+  }
+
+}
+
+
+/* ============================================================
+   DELETE CUSTOMER FIRESTORE RECORD
+============================================================ */
+
+async function deleteCustomer() {
+
+  if (!currentCustomer) return;
+
+  const name =
+    currentCustomer.name || currentCustomer.email || "this customer";
+
+  const confirmed =
+    confirm(
+      `Delete the Firestore customer record for ${name}?\n\n` +
+      `This does not delete the Firebase Authentication account.`
+    );
+
+  if (!confirmed) return;
+
+  try {
+
+    await db.collection("users")
+      .doc(currentCustomer.id)
+      .delete();
+
+    showToast("Customer record deleted.");
+
+    closeCustomerModal();
+
+    await loadCustomers();
+
+    updateDashboard();
+
+  } catch (error) {
+
+    console.error(error);
+
+    showToast(
+      "Could not delete customer: " + error.message,
+      "error"
+    );
+
+  }
+
+}
+
+
+/* ============================================================
+   TRANSACTIONS
+============================================================ */
+
+function renderTransactions() {
+
+  const body =
+    document.getElementById("transactionsTableBody");
+
+  const filter =
+    document.getElementById("transactionFilter")?.value || "all";
+
+  let list = transactions;
+
+  if (filter !== "all") {
+    list =
+      transactions.filter(tx =>
+        String(tx.status || "").toLowerCase() === filter
+      );
+  }
+
+
+  if (!list.length) {
+
+    body.innerHTML = `
+      <tr>
+        <td colspan="6" class="text-center py-10 text-gray-500">
+          No transactions found.
+        </td>
+      </tr>
+    `;
+
+    return;
+  }
+
+
+  body.innerHTML =
+    list.map(tx => {
+
+      return `
+        <tr>
+
+          <td>
+            <div class="font-bold">
+              ${escapeHtml(tx.userName || "Customer")}
+            </div>
+            <div class="text-xs text-gray-500">
+              ${escapeHtml(tx.userEmail || "")}
+            </div>
+          </td>
+
+          <td>
+            <div class="font-semibold">
+              ${escapeHtml(tx.recipientName || "—")}
+            </div>
+            <div class="text-xs text-gray-500 font-mono">
+              ${escapeHtml(tx.recipientAccount || "")}
+            </div>
+          </td>
+
+          <td class="font-bold">
+            ${money(tx.amount)}
+          </td>
+
+          <td>
+            ${statusBadge(tx.status)}
+          </td>
+
+          <td class="text-xs text-gray-500">
+            ${formatDate(tx.createdAt)}
+          </td>
+
+          <td>
+            <button
+              onclick="openTransactionModal('${tx.id}')"
+              class="px-3 py-2 rounded-lg text-sm font-bold"
+              style="background:#e4f5ee;color:#00704d;"
+            >
+              Manage
+            </button>
+          </td>
+
+        </tr>
+      `;
+
+    }).join("");
+
+}
+
+
+/* ============================================================
+   TRANSACTION MODAL
+============================================================ */
+
+function openTransactionModal(id) {
+
+  const tx =
+    transactions.find(t => t.id === id);
+
+  if (!tx) return;
+
+  currentTransaction = tx;
+
+  document.getElementById("transactionId").value =
+    tx.id;
+
+  document.getElementById("transactionModalSubtitle").textContent =
+    tx.id;
+
+  document.getElementById("transactionStatus").value =
+    tx.status || "pending";
+
+
+  document.getElementById("transactionDetails").innerHTML = `
+
+    <div class="flex justify-between gap-4">
+      <span class="text-gray-500">Customer</span>
+      <strong>${escapeHtml(tx.userName || "—")}</strong>
+    </div>
+
+    <div class="flex justify-between gap-4">
+      <span class="text-gray-500">Customer Account</span>
+      <strong class="font-mono">
+        ${escapeHtml(tx.userAccount || "—")}
+      </strong>
+    </div>
+
+    <div class="flex justify-between gap-4">
+      <span class="text-gray-500">Recipient</span>
+      <strong>${escapeHtml(tx.recipientName || "—")}</strong>
+    </div>
+
+    <div class="flex justify-between gap-4">
+      <span class="text-gray-500">Recipient Account</span>
+      <strong class="font-mono">
+        ${escapeHtml(tx.recipientAccount || "—")}
+      </strong>
+    </div>
+
+    <div class="flex justify-between gap-4">
+      <span class="text-gray-500">Amount</span>
+      <strong>${money(tx.amount)}</strong>
+    </div>
+
+    <div class="flex justify-between gap-4">
+      <span class="text-gray-500">Created</span>
+      <strong>${formatDate(tx.createdAt)}</strong>
+    </div>
+
+    ${
+      tx.refundAmount
+      ? `
+        <div class="flex justify-between gap-4">
+          <span class="text-gray-500">Refund Amount</span>
+          <strong>${money(tx.refundAmount)}</strong>
+        </div>
+      `
+      : ""
+    }
+
+    ${
+      tx.note
+      ? `
+        <div class="pt-2 border-t border-gray-200">
+          <div class="text-gray-500 mb-1">Note</div>
+          <div>${escapeHtml(tx.note)}</div>
+        </div>
+      `
+      : ""
+    }
+
+  `;
+
+
+  document.getElementById("transactionModalError")
+    .classList.add("hidden");
+
+  updateRefundNotice();
+
+
+  const modal =
+    document.getElementById("transactionModal");
+
+  modal.classList.remove("hidden");
+  modal.classList.add("flex");
+
+}
+
+
+function updateRefundNotice() {
+
+  const status =
+    document.getElementById("transactionStatus").value;
+
+  const notice =
+    document.getElementById("refundNotice");
+
+  if (status === "refunded") {
+    notice.classList.remove("hidden");
+  } else {
+    notice.classList.add("hidden");
+  }
+
+}
+
+
+document.getElementById("transactionStatus")
+  .addEventListener("change", updateRefundNotice);
+
+
+function closeTransactionModal() {
+
+  const modal =
+    document.getElementById("transactionModal");
+
+  modal.classList.add("hidden");
+  modal.classList.remove("flex");
+
+  currentTransaction = null;
+
+}
+
+
+async function saveTransaction() {
+
+  if (!currentTransaction) return;
+
+  const id =
+    currentTransaction.id;
+
+  const newStatus =
+    document.getElementById("transactionStatus").value;
+
+  const oldStatus =
+    currentTransaction.status || "pending";
+
+
+  const update = {
+
+    status: newStatus,
+
+    updatedAt:
+      firebase.firestore.FieldValue.serverTimestamp()
+
+  };
+
+
+  /*
+    If an admin marks a transaction as refunded,
+    preserve the original amount as refundAmount.
+
+    The actual customer's balance should be restored
+    by a trusted backend / Cloud Function rather than
+    allowing arbitrary browser balance writes.
+  */
+
+  if (
+    newStatus === "refunded" &&
+    oldStatus !== "refunded"
+  ) {
+
+    update.refundAmount =
+      Number(currentTransaction.amount || 0);
+
+    update.refundedAt =
+      firebase.firestore.FieldValue.serverTimestamp();
+
+    update.cancelledBy = "admin";
+
+  }
+
+
+  try {
+
+    await db.collection("transactions")
+      .doc(id)
+      .update(update);
+
+    showToast("Transaction status updated.");
+
+    closeTransactionModal();
+
+    await loadTransactions();
+
+    updateDashboard();
+
+  } catch (error) {
+
+    console.error(error);
+
+    const el =
+      document.getElementById("transactionModalError");
+
+    el.textContent =
+      "Could not update transaction: " + error.message;
+
+    el.classList.remove("hidden");
+
+  }
+
+}
+
+
+/* ============================================================
    LOGOUT
-===================================================== */
+============================================================ */
 
-async function adminLogout(){
+async function logout() {
+
+  try {
 
     await auth.signOut();
 
+    document.getElementById("adminPassword").value = "";
+
+    showLoginScreen();
+
+    showToast("Signed out.");
+
+  } catch (error) {
+
+    console.error(error);
+
+  }
+
 }
+
+
+/* ============================================================
+   HELPERS
+============================================================ */
+
+function money(value) {
+
+  const amount =
+    Number(value || 0);
+
+  return amount.toLocaleString("en-US", {
+    style: "currency",
+    currency: "USD"
+  });
+
+}
+
+
+function getInitials(name) {
+
+  if (!name) return "CF";
+
+  return name
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map(x => x.charAt(0).toUpperCase())
+    .join("");
+
+}
+
+
+function statusBadge(status) {
+
+  const value =
+    String(status || "pending").toLowerCase();
+
+  const labels = {
+    pending: "Pending",
+    approved: "Approved",
+    declined: "Declined",
+    refunded: "Refunded",
+    completed: "Completed",
+    active: "Active",
+    suspended: "Suspended"
+  };
+
+  const className =
+    "status-" + value;
+
+  return `
+    <span class="status ${className}">
+      ${escapeHtml(labels[value] || status || "Unknown")}
+    </span>
+  `;
+
+}
+
+
+function formatDate(timestamp) {
+
+  if (!timestamp) return "—";
+
+  try {
+
+    let date;
+
+    if (timestamp.toDate) {
+      date = timestamp.toDate();
+    } else if (timestamp.seconds) {
+      date = new Date(timestamp.seconds * 1000);
+    } else {
+      date = new Date(timestamp);
+    }
+
+    if (isNaN(date.getTime())) return "—";
+
+    return date.toLocaleString();
+
+  } catch {
+    return "—";
+  }
+
+}
+
+
+function timestampToDateTimeLocal(timestamp) {
+
+  if (!timestamp) return "";
+
+  try {
+
+    let date;
+
+    if (timestamp.toDate) {
+      date = timestamp.toDate();
+    } else if (timestamp.seconds) {
+      date = new Date(timestamp.seconds * 1000);
+    } else {
+      date = new Date(timestamp);
+    }
+
+    if (isNaN(date.getTime())) return "";
+
+    const offset =
+      date.getTimezoneOffset();
+
+    const localDate =
+      new Date(date.getTime() - offset * 60000);
+
+    return localDate
+      .toISOString()
+      .slice(0, 16);
+
+  } catch {
+
+    return "";
+
+  }
+
+}
+
+
+function escapeHtml(value) {
+
+  return String(value ?? "")
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+
+}
+
+
+function showToast(message, type = "success") {
+
+  const toast =
+    document.getElementById("toast");
+
+  const inner =
+    document.getElementById("toastInner");
+
+  document.getElementById("toastMessage").textContent =
+    message;
+
+  if (type === "error") {
+    inner.className =
+      "bg-red-700 text-white rounded-2xl px-5 py-4 shadow-2xl";
+  } else {
+    inner.className =
+      "bg-gray-900 text-white rounded-2xl px-5 py-4 shadow-2xl";
+  }
+
+  toast.classList.remove("hidden");
+
+  clearTimeout(window.__toastTimer);
+
+  window.__toastTimer =
+    setTimeout(() => {
+      toast.classList.add("hidden");
+    }, 3500);
+
+}
+
+
+/* ============================================================
+   CLOSE MODALS WHEN CLICKING OUTSIDE
+============================================================ */
+
+document.getElementById("customerModal")
+  .addEventListener("click", function(e) {
+
+    if (e.target === this) {
+      closeCustomerModal();
+    }
+
+  });
+
+
+document.getElementById("transactionModal")
+  .addEventListener("click", function(e) {
+
+    if (e.target === this) {
+      closeTransactionModal();
+    }
+
+  });
+
+
+/* ============================================================
+   MOBILE SIDEBAR
+============================================================ */
+
+window.addEventListener("resize", function() {
+
+  const sidebar =
+    document.getElementById("sidebar");
+
+  if (window.innerWidth >= 1024) {
+    sidebar.classList.remove("-translate-x-full");
+  }
+
+});
+
 
 </script>
 
