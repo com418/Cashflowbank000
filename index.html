@@ -2752,10 +2752,7 @@ async function submitTransfer(event){
 
     /*
       IMPORTANT:
-      This only creates a pending transfer.
-      The customer does NOT modify the balance.
-      An authorized admin/backend process must approve
-      and complete the transaction.
+      Make sure you check your everyithng befor you make any payment
     */
 
     const ref=await db.collection("transactions").add({
