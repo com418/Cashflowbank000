@@ -1,1726 +1,1970 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-  <meta name="theme-color" content="#087443" />
-  <title>Cash Flow Bank</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#087443">
+<meta name="description" content="Cash Flow Bank — financial platform prototype">
 
-  <script src="https://cdn.tailwindcss.com"></script>
+<title>Cash Flow Bank</title>
 
-  <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-storage-compat.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-storage-compat.js"></script>
 
-  <style>
-    :root {
-      --green: #087443;
-      --green-dark: #055c35;
-      --green-deep: #03472a;
-      --green-soft: #e8f5ee;
-      --green-light: #f1faf5;
-      --ink: #10251b;
-      --muted: #6b7b72;
-      --border: #dfe9e3;
-      --white: #ffffff;
-      --danger: #c62828;
-      --gold: #c89b3c;
-    }
+<style>
+:root{
+  --green:#087443;
+  --green2:#0a8a50;
+  --green3:#075c36;
+  --light:#f3faf6;
+  --white:#fff;
+  --ink:#10231b;
+  --muted:#68776f;
+  --line:#dcebe3;
+  --shadow:0 24px 70px rgba(6,69,40,.12);
+}
 
-    * {
-      box-sizing: border-box;
-    }
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;
+  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  color:var(--ink);
+  background:#fff;
+}
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+a{text-decoration:none;color:inherit}
 
-    html {
-      scroll-behavior: smooth;
-    }
+.prototype{
+  background:#10231b;
+  color:#fff;
+  text-align:center;
+  font-size:11px;
+  letter-spacing:.06em;
+  padding:8px 14px;
+}
 
-    body {
-      margin: 0;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
-        "Segoe UI", sans-serif;
-      background: #f7faf8;
-      color: var(--ink);
-      overflow-x: hidden;
-    }
+.header{
+  position:sticky;
+  top:0;
+  z-index:100;
+  background:rgba(255,255,255,.92);
+  backdrop-filter:blur(18px);
+  border-bottom:1px solid rgba(8,116,67,.09);
+}
 
-    button,
-    input,
-    select,
-    textarea {
-      font: inherit;
-    }
+.nav{
+  max-width:1250px;
+  margin:auto;
+  height:76px;
+  padding:0 22px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:25px;
+}
 
-    button {
-      cursor: pointer;
-    }
+.logo{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  font-weight:900;
+  letter-spacing:-.04em;
+  font-size:20px;
+  white-space:nowrap;
+}
+.logo-mark{
+  width:39px;
+  height:39px;
+  border-radius:13px;
+  background:var(--green);
+  color:#fff;
+  display:grid;
+  place-items:center;
+  box-shadow:0 10px 25px rgba(8,116,67,.2);
+}
 
-    .hidden {
-      display: none !important;
-    }
+.nav-links{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:34px;
+  font-size:14px;
+  font-weight:700;
+}
+.nav-links a{
+  color:#43524b;
+  transition:.2s;
+}
+.nav-links a:hover{color:var(--green)}
 
-    .green-text {
-      color: var(--green);
-    }
+.nav-actions{display:flex;gap:10px;align-items:center}
 
-    .green-bg {
-      background: var(--green);
-    }
+.btn{
+  border:0;
+  border-radius:13px;
+  padding:12px 18px;
+  font-weight:800;
+  transition:.2s;
+}
+.btn:hover{transform:translateY(-2px)}
+.btn-outline{
+  background:#fff;
+  color:var(--green);
+  border:1px solid var(--line);
+}
+.btn-green{
+  color:#fff;
+  background:var(--green);
+  box-shadow:0 12px 30px rgba(8,116,67,.18);
+}
+.btn-light{
+  background:#eaf7f0;
+  color:var(--green3);
+}
 
-    .green-dark-bg {
-      background: var(--green-dark);
-    }
+.menu-btn{
+  display:none;
+  border:0;
+  background:#edf8f2;
+  color:var(--green);
+  width:42px;
+  height:42px;
+  border-radius:12px;
+}
 
-    .soft-bg {
-      background: var(--green-light);
-    }
+.hero{
+  min-height:900px;
+  position:relative;
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 12% 25%,rgba(10,138,80,.10),transparent 25%),
+    radial-gradient(circle at 87% 35%,rgba(10,138,80,.13),transparent 28%),
+    linear-gradient(180deg,#fff 0%,#f3faf6 100%);
+}
 
-    .glass {
-      background: rgba(255,255,255,.82);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
-      border: 1px solid rgba(255,255,255,.75);
-      box-shadow: 0 20px 60px rgba(3,71,42,.12);
-    }
+.hero-grid{
+  max-width:1250px;
+  margin:auto;
+  min-height:850px;
+  padding:90px 22px 70px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  align-items:center;
+  gap:50px;
+}
 
-    .premium-shadow {
-      box-shadow: 0 25px 80px rgba(3,71,42,.14);
-    }
+.eyebrow{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  background:#e8f7ef;
+  color:var(--green3);
+  border:1px solid #ccebd9;
+  padding:8px 13px;
+  border-radius:999px;
+  font-size:12px;
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+}
 
-    .hero-grid {
-      background-image:
-        linear-gradient(rgba(8,116,67,.045) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(8,116,67,.045) 1px, transparent 1px);
-      background-size: 46px 46px;
-    }
+.eyebrow i{
+  width:7px;
+  height:7px;
+  background:#17a964;
+  border-radius:50%;
+  box-shadow:0 0 0 5px rgba(23,169,100,.1);
+}
 
-    .floating {
-      animation: float 5s ease-in-out infinite;
-    }
+.hero h1{
+  font-size:clamp(48px,6vw,82px);
+  line-height:.94;
+  letter-spacing:-.065em;
+  margin:24px 0;
+  max-width:760px;
+}
 
-    .floating-delay {
-      animation: float 6.5s ease-in-out infinite 1.2s;
-    }
+.hero h1 span{color:var(--green)}
 
-    .floating-delay-2 {
-      animation: float 7s ease-in-out infinite 2s;
-    }
+.hero-copy{
+  color:#65736c;
+  font-size:18px;
+  line-height:1.75;
+  max-width:630px;
+}
 
-    @keyframes float {
-      0%,100% {
-        transform: translateY(0) rotate(0deg);
-      }
-      50% {
-        transform: translateY(-13px) rotate(.5deg);
-      }
-    }
+.hero-actions{
+  display:flex;
+  gap:12px;
+  flex-wrap:wrap;
+  margin:30px 0;
+}
 
-    .pulse-dot {
-      animation: pulseDot 2s infinite;
-    }
+.hero-trust{
+  display:flex;
+  gap:10px;
+  flex-wrap:wrap;
+}
+.trust-pill{
+  border:1px solid var(--line);
+  background:#fff;
+  padding:9px 12px;
+  border-radius:10px;
+  font-size:12px;
+  color:#506159;
+  font-weight:700;
+}
 
-    @keyframes pulseDot {
-      0%,100% {
-        box-shadow: 0 0 0 0 rgba(8,116,67,.28);
-      }
-      50% {
-        box-shadow: 0 0 0 9px rgba(8,116,67,0);
-      }
-    }
+.hero-visual{
+  min-height:650px;
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
 
-    .reveal {
-      opacity: 0;
-      transform: translateY(25px);
-      transition: .8s ease;
-    }
+.skyscraper{
+  width:min(470px,90%);
+  height:650px;
+  position:relative;
+  z-index:2;
+  filter:drop-shadow(0 35px 50px rgba(7,92,54,.13));
+}
 
-    .reveal.show {
-      opacity: 1;
-      transform: translateY(0);
-    }
+.float-card{
+  position:absolute;
+  z-index:5;
+  background:rgba(255,255,255,.88);
+  backdrop-filter:blur(15px);
+  border:1px solid rgba(255,255,255,.85);
+  box-shadow:var(--shadow);
+  border-radius:18px;
+  padding:16px;
+}
+.float-card.one{top:75px;left:0}
+.float-card.two{right:-5px;top:180px}
+.float-card.three{left:15px;bottom:80px}
 
-    .nav-link {
-      color: #52645b;
-      transition: .2s ease;
-    }
+.mini-title{
+  color:#7a8981;
+  font-size:10px;
+  text-transform:uppercase;
+  font-weight:900;
+  letter-spacing:.08em;
+}
+.mini-value{
+  font-size:22px;
+  font-weight:900;
+  margin-top:4px;
+}
+.green-text{color:var(--green)}
 
-    .nav-link:hover {
-      color: var(--green);
-    }
+.section{
+  max-width:1250px;
+  margin:auto;
+  padding:105px 22px;
+}
+.section-soft{
+  background:#f5fbf7;
+  max-width:none;
+}
+.section-soft>.inner{
+  max-width:1250px;
+  margin:auto;
+  padding:105px 22px;
+}
+.section-head{
+  max-width:700px;
+  margin-bottom:45px;
+}
+.section-kicker{
+  color:var(--green);
+  font-size:12px;
+  font-weight:900;
+  text-transform:uppercase;
+  letter-spacing:.1em;
+}
+.section h2{
+  font-size:clamp(34px,5vw,58px);
+  line-height:1;
+  letter-spacing:-.055em;
+  margin:12px 0 18px;
+}
+.section-head p{
+  color:var(--muted);
+  line-height:1.75;
+}
 
-    .primary-btn {
-      background: var(--green);
-      color: white;
-      border: 1px solid var(--green);
-      transition: .2s ease;
-    }
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:16px;
+}
+.stat{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:20px;
+  padding:25px;
+}
+.stat strong{
+  display:block;
+  font-size:32px;
+  letter-spacing:-.04em;
+}
+.stat span{color:#74827b;font-size:13px}
 
-    .primary-btn:hover {
-      background: var(--green-dark);
-      transform: translateY(-1px);
-      box-shadow: 0 12px 28px rgba(8,116,67,.22);
-    }
+.service-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:18px;
+}
+.service{
+  padding:28px;
+  border:1px solid var(--line);
+  border-radius:24px;
+  background:#fff;
+  transition:.25s;
+}
+.service:hover{
+  transform:translateY(-5px);
+  box-shadow:var(--shadow);
+}
+.service-icon{
+  width:48px;
+  height:48px;
+  border-radius:14px;
+  background:#eaf7f0;
+  color:var(--green);
+  display:grid;
+  place-items:center;
+  margin-bottom:20px;
+}
+.service h3{margin:0 0 8px;font-size:20px}
+.service p{margin:0;color:var(--muted);line-height:1.7;font-size:14px}
 
-    .secondary-btn {
-      background: white;
-      color: var(--green);
-      border: 1px solid #cfe1d7;
-      transition: .2s ease;
-    }
+.analysis-preview{
+  display:grid;
+  grid-template-columns:1.4fr .6fr;
+  gap:20px;
+}
+.chart-card,.security-card{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:25px;
+  padding:28px;
+}
+.chart-wrap{height:300px}
+.chart-svg{width:100%;height:100%}
 
-    .secondary-btn:hover {
-      border-color: var(--green);
-      background: var(--green-light);
-    }
+.review-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:18px;
+}
+.review{
+  border:1px solid var(--line);
+  border-radius:22px;
+  padding:25px;
+  background:#fff;
+}
+.stars{color:#e1a400;letter-spacing:3px}
+.review p{color:#59675f;line-height:1.7}
+.reviewer{font-weight:900;font-size:14px}
 
-    .stat-number {
-      font-variant-numeric: tabular-nums;
-    }
+.global{
+  background:#082d1d;
+  color:#fff;
+  overflow:hidden;
+}
+.global .section-kicker{color:#65d89b}
+.global p{color:#b8cec2}
+.global-grid{
+  display:grid;
+  grid-template-columns:.8fr 1.2fr;
+  gap:40px;
+  align-items:center;
+}
+.city-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:15px;
+}
+.city{
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.05);
+  border-radius:20px;
+  padding:25px;
+}
+.city strong{display:block;font-size:20px}
+.city span{color:#9fb8aa;font-size:12px}
 
-    .chart-bar {
-      transform-origin: bottom;
-      animation: chartGrow 1.2s ease forwards;
-    }
+.security-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:16px;
+}
+.security-item{
+  border:1px solid var(--line);
+  border-radius:20px;
+  padding:22px;
+}
+.security-item svg{color:var(--green);margin-bottom:12px}
+.security-item strong{display:block;margin-bottom:7px}
+.security-item span{font-size:13px;color:var(--muted);line-height:1.6}
 
-    @keyframes chartGrow {
-      from {
-        transform: scaleY(0);
-      }
-      to {
-        transform: scaleY(1);
-      }
-    }
+.cta{
+  background:linear-gradient(135deg,#087443,#075c36);
+  color:#fff;
+  border-radius:32px;
+  padding:60px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:30px;
+}
+.cta p{color:#c4e1d2;max-width:650px;line-height:1.7}
+.cta .btn{background:#fff;color:var(--green)}
 
-    .dashboard-card {
-      background: white;
-      border: 1px solid var(--border);
-      border-radius: 24px;
-      box-shadow: 0 10px 35px rgba(16,37,27,.055);
-    }
+.footer{
+  background:#061b11;
+  color:#b8cec2;
+  padding:45px 22px;
+}
+.footer-inner{
+  max-width:1250px;
+  margin:auto;
+  display:flex;
+  justify-content:space-between;
+  gap:25px;
+  flex-wrap:wrap;
+}
+.footer strong{color:#fff}
 
-    .input {
-      width: 100%;
-      border: 1px solid #d6e2db;
-      background: white;
-      border-radius: 13px;
-      padding: 13px 14px;
-      outline: none;
-      transition: .2s ease;
-    }
+.view{
+  display:none;
+}
+.view.active{display:block}
 
-    .input:focus {
-      border-color: var(--green);
-      box-shadow: 0 0 0 4px rgba(8,116,67,.09);
-    }
+.auth-page{
+  min-height:calc(100vh - 76px);
+  background:#f4faf7;
+  padding:60px 20px;
+}
+.auth-card{
+  width:min(560px,100%);
+  margin:auto;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:28px;
+  padding:35px;
+  box-shadow:var(--shadow);
+}
+.auth-card h2{
+  margin:0;
+  font-size:34px;
+  letter-spacing:-.05em;
+}
+.auth-card>p{color:var(--muted);line-height:1.6}
+.form-grid{display:grid;gap:15px}
+.form-row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:13px;
+}
+.field label{
+  display:block;
+  font-size:12px;
+  font-weight:800;
+  color:#44534c;
+  margin-bottom:7px;
+}
+.field input,.field select,.field textarea{
+  width:100%;
+  border:1px solid #d8e7df;
+  border-radius:12px;
+  padding:13px 14px;
+  outline:none;
+  background:#fbfefd;
+}
+.field input:focus,.field select:focus,.field textarea:focus{
+  border-color:#5db589;
+  box-shadow:0 0 0 4px rgba(8,116,67,.07);
+}
+.file-box{
+  border:1px dashed #a9cdb9;
+  background:#f5fbf7;
+  border-radius:14px;
+  padding:18px;
+}
+.form-message{
+  display:none;
+  padding:12px 14px;
+  border-radius:12px;
+  font-size:13px;
+}
+.form-message.show{display:block}
+.error{background:#fff0f0;color:#a32020}
+.success{background:#eaf8ef;color:#17633b}
 
-    .sidebar {
-      transition: transform .3s ease;
-    }
+.dashboard-shell{
+  min-height:calc(100vh - 76px);
+  background:#f4faf7;
+  display:grid;
+  grid-template-columns:245px 1fr;
+}
+.side{
+  background:#fff;
+  border-right:1px solid var(--line);
+  padding:25px 15px;
+}
+.side-brand{
+  padding:10px 13px 25px;
+  font-weight:900;
+}
+.side-nav{display:grid;gap:5px}
+.side-nav button{
+  border:0;
+  background:transparent;
+  text-align:left;
+  padding:13px 14px;
+  border-radius:12px;
+  color:#65736c;
+  font-weight:700;
+}
+.side-nav button:hover,.side-nav button.active{
+  background:#eaf7f0;
+  color:var(--green);
+}
+.dash-main{
+  padding:30px;
+  max-width:1500px;
+  width:100%;
+  margin:auto;
+}
+.dash-top{
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+  align-items:center;
+  margin-bottom:25px;
+}
+.dash-top h1{
+  margin:0;
+  font-size:32px;
+  letter-spacing:-.05em;
+}
+.date{
+  color:#74827b;
+  font-size:13px;
+  margin-top:5px;
+}
+.avatar{
+  width:45px;
+  height:45px;
+  border-radius:50%;
+  background:#dff1e8;
+  color:var(--green);
+  display:grid;
+  place-items:center;
+  font-weight:900;
+  overflow:hidden;
+}
+.avatar img{width:100%;height:100%;object-fit:cover}
 
-    .mobile-overlay {
-      background: rgba(0,0,0,.35);
-      backdrop-filter: blur(2px);
-    }
+.dash-grid{
+  display:grid;
+  grid-template-columns:1.5fr .8fr;
+  gap:18px;
+}
+.balance{
+  border-radius:26px;
+  padding:30px;
+  background:linear-gradient(135deg,#087443,#075c36);
+  color:#fff;
+  min-height:245px;
+  position:relative;
+  overflow:hidden;
+}
+.balance:after{
+  content:"";
+  position:absolute;
+  width:260px;
+  height:260px;
+  right:-80px;
+  top:-80px;
+  border:1px solid rgba(255,255,255,.16);
+  border-radius:50%;
+  box-shadow:0 0 0 35px rgba(255,255,255,.03),0 0 0 70px rgba(255,255,255,.02);
+}
+.balance small{color:#bfe1ce}
+.balance-amount{
+  font-size:48px;
+  font-weight:900;
+  letter-spacing:-.055em;
+  margin:12px 0 20px;
+}
+.account-line{
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+  color:#c7e5d5;
+  font-size:13px;
+}
+.security-status{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:26px;
+  padding:25px;
+}
+.security-status h3{margin:0 0 18px}
+.status-line{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:12px 0;
+  border-bottom:1px solid #edf3ef;
+  font-size:13px;
+}
+.status-dot{
+  width:9px;height:9px;border-radius:50%;background:#16a565;
+}
 
-    .dashboard-main {
-      min-width: 0;
-    }
+.quick{
+  margin-top:18px;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+}
+.quick button{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:17px;
+  padding:20px 12px;
+  font-weight:800;
+  color:#33463d;
+}
+.quick button:hover{
+  border-color:#99c9ae;
+  color:var(--green);
+  transform:translateY(-2px);
+}
 
-    .scroll-x {
-      overflow-x: auto;
-      scrollbar-width: thin;
-    }
+.dash-analysis{
+  margin-top:18px;
+  display:grid;
+  grid-template-columns:1.5fr .7fr;
+  gap:18px;
+}
+.panel{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:25px;
+  padding:25px;
+}
+.panel-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:18px;
+}
+.panel-head h3{margin:0}
+.panel-head span{font-size:12px;color:#76857d}
 
-    .scroll-x::-webkit-scrollbar {
-      height: 6px;
-    }
+.month-chart{
+  width:100%;
+  height:280px;
+}
+.month-chart svg{width:100%;height:100%}
 
-    .scroll-x::-webkit-scrollbar-thumb {
-      background: #cbdad2;
-      border-radius: 999px;
-    }
+.profile-card{
+  display:flex;
+  gap:18px;
+  align-items:center;
+}
+.profile-big{
+  width:72px;
+  height:72px;
+  border-radius:20px;
+  background:#e4f4eb;
+  display:grid;
+  place-items:center;
+  color:var(--green);
+  font-size:24px;
+  font-weight:900;
+  overflow:hidden;
+}
+.profile-big img{width:100%;height:100%;object-fit:cover}
 
-    .line-chart {
-      width: 100%;
-      height: 260px;
-    }
+.tx-panel{margin-top:18px}
+.tx-row{
+  display:grid;
+  grid-template-columns:1.5fr 1fr .8fr .8fr;
+  gap:10px;
+  align-items:center;
+  padding:16px 0;
+  border-bottom:1px solid #edf3ef;
+  font-size:13px;
+}
+.tx-row:last-child{border-bottom:0}
+.tx-name{font-weight:800}
+.tx-muted{color:#7a8981}
+.tx-status{
+  display:inline-flex;
+  width:max-content;
+  padding:5px 8px;
+  border-radius:999px;
+  font-size:11px;
+  font-weight:800;
+}
+.pending{background:#fff6dc;color:#896400}
+.completed{background:#e7f8ee;color:#147343}
+.declined{background:#ffecec;color:#a52020}
 
-    .map-dot {
-      animation: mapPulse 2.5s infinite;
-    }
+.page-section{display:none}
+.page-section.active{display:block}
 
-    @keyframes mapPulse {
-      0%,100% { r: 5; opacity: .85; }
-      50% { r: 8; opacity: .45; }
-    }
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:200;
+  background:rgba(3,20,12,.58);
+  backdrop-filter:blur(8px);
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+}
+.modal.show{display:flex}
+.modal-card{
+  background:#fff;
+  width:min(600px,100%);
+  max-height:90vh;
+  overflow:auto;
+  border-radius:25px;
+  padding:28px;
+}
+.modal-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:20px;
+}
+.close{
+  width:38px;
+  height:38px;
+  border:0;
+  border-radius:11px;
+  background:#edf7f2;
+  color:var(--green);
+}
 
-    @media (max-width: 900px) {
-      .desktop-nav {
-        display: none;
-      }
+.receipt{
+  background:#f7fbf8;
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:18px;
+}
+.receipt-row{
+  display:flex;
+  justify-content:space-between;
+  padding:9px 0;
+  border-bottom:1px solid #e4eee9;
+  font-size:13px;
+}
+.receipt-row:last-child{border:0}
 
-      .mobile-menu-btn {
-        display: flex;
-      }
-    }
+.mobile-side{
+  display:none;
+}
 
-    @media (min-width: 901px) {
-      .mobile-menu-btn {
-        display: none;
-      }
-    }
+@media(max-width:1050px){
+  .hero-grid{grid-template-columns:1fr}
+  .hero{min-height:auto}
+  .hero-visual{min-height:620px}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .analysis-preview,.dash-analysis{grid-template-columns:1fr}
+}
 
-    @media (max-width: 767px) {
-      .hero-title {
-        font-size: clamp(2.6rem, 13vw, 4.5rem);
-        line-height: .96;
-      }
+@media(max-width:850px){
+  .nav-links,.nav-actions{display:none}
+  .menu-btn{display:block}
+  .nav.open .nav-links{
+    display:flex;
+    position:absolute;
+    top:76px;
+    left:0;
+    right:0;
+    padding:20px;
+    background:#fff;
+    flex-direction:column;
+    gap:20px;
+    border-bottom:1px solid var(--line);
+  }
+  .dashboard-shell{grid-template-columns:1fr}
+  .side{display:none}
+  .mobile-side{display:block}
+  .service-grid,.review-grid,.security-grid{grid-template-columns:1fr}
+  .global-grid{grid-template-columns:1fr}
+}
 
-      .hero-stat-grid {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      .floating-card {
-        transform: scale(.82);
-      }
-
-      .dashboard-grid {
-        grid-template-columns: 1fr !important;
-      }
-    }
-
-    @media (max-width: 480px) {
-      .hero-stat-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .floating-card {
-        display: none;
-      }
-    }
-  </style>
+@media(max-width:600px){
+  .nav{height:68px}
+  .hero-grid{padding-top:55px}
+  .hero h1{font-size:50px}
+  .hero-copy{font-size:16px}
+  .hero-visual{min-height:520px}
+  .skyscraper{height:510px}
+  .float-card{transform:scale(.82)}
+  .float-card.one{left:-15px;top:45px}
+  .float-card.two{right:-15px;top:150px}
+  .float-card.three{left:-15px;bottom:45px}
+  .stats{grid-template-columns:1fr}
+  .section{padding:75px 18px}
+  .section-soft>.inner{padding:75px 18px}
+  .cta{padding:35px 25px;display:block}
+  .cta .btn{margin-top:20px}
+  .auth-card{padding:24px}
+  .form-row{grid-template-columns:1fr}
+  .dash-main{padding:18px}
+  .dash-top h1{font-size:25px}
+  .quick{grid-template-columns:repeat(2,1fr)}
+  .balance-amount{font-size:39px}
+  .tx-row{grid-template-columns:1fr 1fr}
+  .tx-row>*:nth-child(3),.tx-row>*:nth-child(4){margin-top:5px}
+  .city-grid{grid-template-columns:1fr}
+}
+</style>
 </head>
 
 <body>
 
-<!-- =========================================================
-     PUBLIC SITE
-========================================================= -->
-
-<div id="publicSite">
-
-  <!-- HEADER -->
-  <header class="fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-xl border-b border-gray-100">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-[76px] flex items-center justify-between gap-5">
-
-      <button onclick="scrollToSection('home')" class="flex items-center gap-3 shrink-0">
-        <div class="w-11 h-11 rounded-2xl green-bg flex items-center justify-center shadow-lg">
-          <svg viewBox="0 0 48 48" class="w-6 h-6 text-white" fill="none">
-            <path d="M8 20 24 9l16 11v18H8V20Z" stroke="currentColor" stroke-width="3" stroke-linejoin="round"/>
-            <path d="M16 38V24h16v14M19 24v14M29 24v14" stroke="currentColor" stroke-width="3"/>
-          </svg>
-        </div>
-        <div class="text-left">
-          <div class="font-extrabold text-lg leading-none tracking-tight">Cash Flow</div>
-          <div class="text-xs font-semibold text-gray-500 tracking-widest uppercase">Bank</div>
-        </div>
-      </button>
-
-      <nav class="desktop-nav flex items-center gap-7 text-sm font-semibold">
-        <button class="nav-link" onclick="scrollToSection('home')">Home</button>
-        <button class="nav-link" onclick="scrollToSection('services')">Services</button>
-        <button class="nav-link" onclick="scrollToSection('support')">Support</button>
-      </nav>
-
-      <div class="hidden sm:flex items-center gap-2">
-        <button onclick="showAuth('login')" class="secondary-btn rounded-xl px-4 py-2.5 text-sm font-bold">
-          Login
-        </button>
-        <button onclick="showAuth('register')" class="primary-btn rounded-xl px-4 py-2.5 text-sm font-bold">
-          Get Started
-        </button>
-      </div>
-
-      <button onclick="toggleMobileMenu()" class="mobile-menu-btn w-11 h-11 rounded-xl border border-gray-200 items-center justify-center">
-        <svg viewBox="0 0 24 24" class="w-6 h-6" fill="none">
-          <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-        </svg>
-      </button>
-    </div>
-
-    <div id="mobileMenu" class="hidden border-t bg-white px-5 py-5">
-      <div class="flex flex-col gap-3">
-        <button onclick="scrollToSection('home'); toggleMobileMenu()" class="text-left py-2 font-semibold">Home</button>
-        <button onclick="scrollToSection('services'); toggleMobileMenu()" class="text-left py-2 font-semibold">Services</button>
-        <button onclick="scrollToSection('support'); toggleMobileMenu()" class="text-left py-2 font-semibold">Support</button>
-        <div class="flex gap-2 pt-2">
-          <button onclick="showAuth('login'); toggleMobileMenu()" class="secondary-btn rounded-xl px-4 py-3 font-bold flex-1">Login</button>
-          <button onclick="showAuth('register'); toggleMobileMenu()" class="primary-btn rounded-xl px-4 py-3 font-bold flex-1">Get Started</button>
-        </div>
-      </div>
-    </div>
-  </header>
-
-  <!-- =====================================================
-       LONG HERO
-  ====================================================== -->
-  <main id="home" class="pt-[76px]">
-
-    <!-- HERO INTRO -->
-    <section class="relative overflow-hidden hero-grid min-h-[900px] bg-white">
-      <div class="absolute inset-0 bg-[radial-gradient(circle_at_75%_20%,rgba(8,116,67,.12),transparent_30%),radial-gradient(circle_at_10%_80%,rgba(8,116,67,.08),transparent_28%)]"></div>
-
-      <div class="relative max-w-7xl mx-auto px-5 sm:px-6 lg:px-8 py-20 lg:py-28">
-
-        <div class="grid lg:grid-cols-[1.05fr_.95fr] gap-14 lg:gap-20 items-center">
-
-          <div class="reveal">
-            <div class="inline-flex items-center gap-2 rounded-full bg-green-50 border border-green-100 px-4 py-2 text-xs font-bold uppercase tracking-widest green-text mb-7">
-              <span class="w-2 h-2 rounded-full green-bg pulse-dot"></span>
-              Secure • Modern • Connected
-            </div>
-
-            <h1 class="hero-title text-6xl sm:text-7xl lg:text-[86px] font-black tracking-[-.055em] text-gray-950 max-w-4xl">
-              Your Financial
-              <span class="green-text block">Future,</span>
-              Engineered to Last.
-            </h1>
-
-            <p class="mt-7 text-lg sm:text-xl text-gray-600 max-w-2xl leading-8">
-              Modern financial tools designed to make managing your money simpler,
-              clearer, and more connected.
-            </p>
-
-            <div class="flex flex-col sm:flex-row gap-3 mt-9">
-              <button onclick="showAuth('register')" class="primary-btn rounded-2xl px-7 py-4 font-extrabold">
-                Open an Account <span class="ml-2">→</span>
-              </button>
-              <button onclick="scrollToSection('services')" class="secondary-btn rounded-2xl px-7 py-4 font-extrabold">
-                Explore Services <span class="ml-2">›</span>
-              </button>
-            </div>
-
-            <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3 text-sm text-gray-500">
-              <span class="flex items-center gap-2">
-                <svg class="w-5 h-5 green-text" viewBox="0 0 24 24" fill="none">
-                  <path d="m5 12 4 4L19 6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                Secure account access
-              </span>
-              <span class="flex items-center gap-2">
-                <svg class="w-5 h-5 green-text" viewBox="0 0 24 24" fill="none">
-                  <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
-                  <path d="M12 7v5l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                </svg>
-                24/7 digital access
-              </span>
-            </div>
-          </div>
-
-          <!-- HERO VISUAL -->
-          <div class="relative min-h-[580px] reveal">
-
-            <div class="absolute inset-8 rounded-[50px] bg-gradient-to-br from-green-50 to-white border border-green-100"></div>
-
-            <!-- Main account card -->
-            <div class="absolute left-[5%] right-[5%] top-[13%] glass rounded-[30px] p-6 sm:p-8 premium-shadow">
-              <div class="flex justify-between items-start">
-                <div>
-                  <div class="text-xs font-bold uppercase tracking-widest text-gray-500">Cash Flow Account</div>
-                  <div class="text-3xl sm:text-4xl font-black mt-3">$24,850.00</div>
-                  <div class="text-sm text-gray-500 mt-1">Available balance</div>
-                </div>
-                <div class="w-12 h-12 rounded-2xl green-bg text-white flex items-center justify-center">
-                  <svg viewBox="0 0 24 24" class="w-6 h-6" fill="none">
-                    <path d="M4 10h16M6 6h12M6 14h12M8 18h8" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                  </svg>
-                </div>
-              </div>
-
-              <div class="mt-8 h-32">
-                <svg viewBox="0 0 500 150" class="w-full h-full" preserveAspectRatio="none">
-                  <defs>
-                    <linearGradient id="heroArea" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0" stop-color="#087443" stop-opacity=".22"/>
-                      <stop offset="1" stop-color="#087443" stop-opacity="0"/>
-                    </linearGradient>
-                  </defs>
-                  <path d="M0 112 C50 95 75 110 115 84 S180 80 215 68 S270 88 310 54 S380 60 420 35 S470 30 500 20 L500 150 L0 150Z" fill="url(#heroArea)"/>
-                  <path d="M0 112 C50 95 75 110 115 84 S180 80 215 68 S270 88 310 54 S380 60 420 35 S470 30 500 20" fill="none" stroke="#087443" stroke-width="4"/>
-                </svg>
-              </div>
-
-              <div class="flex justify-between text-xs text-gray-400">
-                <span>Growth</span>
-                <span class="green-text font-bold">+18.4%</span>
-              </div>
-            </div>
-
-            <!-- KYC -->
-            <div class="floating absolute right-[-1%] top-[5%] sm:right-[-4%] glass rounded-2xl p-4 w-[190px]">
-              <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl green-bg text-white flex items-center justify-center">
-                  <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none">
-                    <path d="M12 3 19 6v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3Z" stroke="currentColor" stroke-width="2"/>
-                    <path d="m8.5 12 2.2 2.2 4.8-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                  </svg>
-                </div>
-                <div>
-                  <div class="text-xs text-gray-500">Identity</div>
-                  <div class="font-extrabold text-sm green-text">KYC Verified ✓</div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Transfer -->
-            <div class="floating-delay absolute left-[-2%] bottom-[16%] glass rounded-2xl p-4 w-[210px]">
-              <div class="flex items-center justify-between">
-                <div class="text-xs font-bold uppercase tracking-widest text-gray-400">Transfer</div>
-                <div class="w-8 h-8 rounded-lg bg-green-50 green-text flex items-center justify-center">
-                  ↗
-                </div>
-              </div>
-              <div class="font-black text-xl mt-3">$4,250.00</div>
-              <div class="text-xs text-gray-500 mt-1">Processed securely</div>
-            </div>
-
-            <!-- Security -->
-            <div class="floating-delay-2 absolute right-[2%] bottom-[3%] glass rounded-2xl p-4 w-[205px]">
-              <div class="flex items-center gap-3">
-                <div class="w-9 h-9 rounded-full bg-green-50 green-text flex items-center justify-center">
-                  <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none">
-                    <path d="M12 3 19 6v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3Z" stroke="currentColor" stroke-width="2"/>
-                  </svg>
-                </div>
-                <div>
-                  <div class="text-sm font-extrabold">Protected</div>
-                  <div class="text-xs text-gray-500">Security monitoring</div>
-                </div>
-              </div>
-            </div>
-
-          </div>
-        </div>
-
-        <!-- Trust strip -->
-        <div class="mt-24 reveal">
-          <div class="rounded-3xl bg-white border border-gray-100 p-5 sm:p-7 shadow-sm">
-            <div class="flex flex-col lg:flex-row gap-5 lg:items-center lg:justify-between">
-              <div>
-                <div class="text-xs uppercase tracking-widest font-bold green-text">Secure • Compliant • Trusted</div>
-                <div class="text-2xl font-black mt-2">Your Financial Future, Built for What’s Next.</div>
-              </div>
-              <div class="flex flex-wrap gap-3">
-                <span class="px-4 py-2 rounded-full bg-green-50 text-sm font-bold green-text">Secure Access</span>
-                <span class="px-4 py-2 rounded-full bg-green-50 text-sm font-bold green-text">Identity Protection</span>
-                <span class="px-4 py-2 rounded-full bg-green-50 text-sm font-bold green-text">Digital First</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Animated Stats -->
-        <div class="mt-20 reveal">
-          <div class="grid hero-stat-grid grid-cols-2 lg:grid-cols-4 gap-4">
-            <div class="bg-white rounded-3xl border border-gray-100 p-6 shadow-sm">
-              <div class="text-4xl sm:text-5xl font-black green-text">
-                <span class="stat-number" data-target="6" data-prefix="" data-suffix="M+">0</span>
-              </div>
-              <div class="font-bold mt-3">Active Customers</div>
-              <div class="text-sm text-gray-500 mt-1">Illustrative platform statistic</div>
-            </div>
-
-            <div class="bg-white rounded-3xl border border-gray-100 p-6 shadow-sm">
-              <div class="text-4xl sm:text-5xl font-black green-text">
-                <span class="stat-number" data-target="48" data-prefix="$" data-suffix="B+">$0</span>
-              </div>
-              <div class="font-bold mt-3">Transactions Processed Annually</div>
-              <div class="text-sm text-gray-500 mt-1">Illustrative platform statistic</div>
-            </div>
-
-            <div class="bg-white rounded-3xl border border-gray-100 p-6 shadow-sm">
-              <div class="text-4xl sm:text-5xl font-black green-text">
-                <span class="stat-number" data-target="180" data-prefix="" data-suffix="+">0</span>
-              </div>
-              <div class="font-bold mt-3">Branch & Partner Locations</div>
-              <div class="text-sm text-gray-500 mt-1">Illustrative platform statistic</div>
-            </div>
-
-            <div class="bg-white rounded-3xl border border-gray-100 p-6 shadow-sm">
-              <div class="text-4xl sm:text-5xl font-black green-text">
-                <span class="stat-number" data-target="34" data-prefix="" data-suffix="">0</span>
-              </div>
-              <div class="font-bold mt-3">Industry Awards</div>
-              <div class="text-sm text-gray-500 mt-1">Illustrative platform statistic</div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- REVIEWS -->
-    <section class="bg-[#f4f9f6] py-24">
-      <div class="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
-
-        <div class="max-w-3xl reveal">
-          <div class="text-sm font-extrabold uppercase tracking-widest green-text">Customer Experience</div>
-          <h2 class="text-4xl sm:text-5xl font-black tracking-tight mt-3">
-            Built around a simpler financial experience.
-          </h2>
-          <p class="text-gray-600 mt-5 text-lg">
-            Example testimonials are shown below as interface content for this prototype.
-          </p>
-        </div>
-
-        <div class="grid md:grid-cols-3 gap-5 mt-12">
-
-          <div class="bg-white rounded-3xl p-7 border border-gray-100 reveal">
-            <div class="flex gap-1 green-text">★★★★★</div>
-            <p class="mt-5 text-gray-700 leading-7">
-              “The dashboard makes it easy to understand where my money is going and what needs attention.”
-            </p>
-            <div class="flex items-center gap-3 mt-7">
-              <div class="w-11 h-11 rounded-full green-bg text-white flex items-center justify-center font-bold">JM</div>
-              <div>
-                <div class="font-bold">Jordan M.</div>
-                <div class="text-xs text-gray-500">Example review</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="bg-white rounded-3xl p-7 border border-gray-100 reveal">
-            <div class="flex gap-1 green-text">★★★★★</div>
-            <p class="mt-5 text-gray-700 leading-7">
-              “Everything feels organized, from transfers to account information and activity history.”
-            </p>
-            <div class="flex items-center gap-3 mt-7">
-              <div class="w-11 h-11 rounded-full green-bg text-white flex items-center justify-center font-bold">AS</div>
-              <div>
-                <div class="font-bold">Alex S.</div>
-                <div class="text-xs text-gray-500">Example review</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="bg-white rounded-3xl p-7 border border-gray-100 reveal">
-            <div class="flex gap-1 green-text">★★★★★</div>
-            <p class="mt-5 text-gray-700 leading-7">
-              “The account overview gives me a clear picture without making the experience complicated.”
-            </p>
-            <div class="flex items-center gap-3 mt-7">
-              <div class="w-11 h-11 rounded-full green-bg text-white flex items-center justify-center font-bold">RK</div>
-              <div>
-                <div class="font-bold">Riley K.</div>
-                <div class="text-xs text-gray-500">Example review</div>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- ANALYSIS HERO SECTION -->
-    <section class="bg-white py-28">
-      <div class="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
-
-        <div class="grid lg:grid-cols-[.8fr_1.2fr] gap-12 items-center">
-
-          <div class="reveal">
-            <div class="text-sm font-extrabold uppercase tracking-widest green-text">Financial Intelligence</div>
-            <h2 class="text-4xl sm:text-6xl font-black tracking-tight mt-3">
-              See your cash flow clearly.
-            </h2>
-            <p class="text-gray-600 text-lg leading-8 mt-6">
-              A clean visual overview helps you understand income, spending patterns,
-              and changes across the year.
-            </p>
-
-            <div class="grid grid-cols-2 gap-3 mt-8">
-              <div class="rounded-2xl bg-green-50 p-5">
-                <div class="text-sm text-gray-500">Income</div>
-                <div class="text-2xl font-black green-text mt-2">$18,420</div>
-                <div class="text-xs text-green-700 mt-1">+12.8%</div>
-              </div>
-              <div class="rounded-2xl bg-gray-50 p-5">
-                <div class="text-sm text-gray-500">Expenses</div>
-                <div class="text-2xl font-black mt-2">$10,280</div>
-                <div class="text-xs text-gray-500 mt-1">-4.2%</div>
-              </div>
-            </div>
-          </div>
-
-          <div class="dashboard-card p-5 sm:p-7 reveal">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-              <div>
-                <div class="text-xs uppercase tracking-widest text-gray-400 font-bold">Cash Flow Analysis</div>
-                <h3 class="text-2xl font-black mt-1">January — September</h3>
-              </div>
-              <span class="rounded-full bg-green-50 green-text px-4 py-2 text-sm font-bold">
-                Jan–Sep
-              </span>
-            </div>
-
-            <div class="mt-8">
-              <svg viewBox="0 0 800 320" class="w-full h-[270px]" preserveAspectRatio="none">
-                <defs>
-                  <linearGradient id="analysisFill" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0" stop-color="#087443" stop-opacity=".22"/>
-                    <stop offset="1" stop-color="#087443" stop-opacity="0"/>
-                  </linearGradient>
-                </defs>
-
-                <g stroke="#e5ece8" stroke-width="1">
-                  <line x1="45" y1="50" x2="780" y2="50"/>
-                  <line x1="45" y1="110" x2="780" y2="110"/>
-                  <line x1="45" y1="170" x2="780" y2="170"/>
-                  <line x1="45" y1="230" x2="780" y2="230"/>
-                </g>
-
-                <path
-                  d="M45 220
-                     C120 200 125 195 145 188
-                     C190 175 210 182 235 164
-                     C285 130 300 155 330 140
-                     C375 116 395 125 430 108
-                     C475 88 500 112 530 92
-                     C575 65 595 82 630 66
-                     C680 48 705 65 735 42
-                     C755 30 770 35 780 28
-                     L780 260 L45 260Z"
-                  fill="url(#analysisFill)"
-                />
-
-                <path
-                  d="M45 220
-                     C120 200 125 195 145 188
-                     C190 175 210 182 235 164
-                     C285 130 300 155 330 140
-                     C375 116 395 125 430 108
-                     C475 88 500 112 530 92
-                     C575 65 595 82 630 66
-                     C680 48 705 65 735 42
-                     C755 30 770 35 780 28"
-                  fill="none"
-                  stroke="#087443"
-                  stroke-width="5"
-                  stroke-linecap="round"
-                />
-
-                <g fill="#087443">
-                  <circle cx="45" cy="220" r="5"/>
-                  <circle cx="145" cy="188" r="5"/>
-                  <circle cx="235" cy="164" r="5"/>
-                  <circle cx="330" cy="140" r="5"/>
-                  <circle cx="430" cy="108" r="5"/>
-                  <circle cx="530" cy="92" r="5"/>
-                  <circle cx="630" cy="66" r="5"/>
-                  <circle cx="735" cy="42" r="5"/>
-                  <circle cx="780" cy="28" r="5"/>
-                </g>
-
-                <g fill="#83928a" font-size="13" font-family="Arial">
-                  <text x="37" y="290">Jan</text>
-                  <text x="128" y="290">Feb</text>
-                  <text x="218" y="290">Mar</text>
-                  <text x="310" y="290">Apr</text>
-                  <text x="410" y="290">May</text>
-                  <text x="505" y="290">Jun</text>
-                  <text x="605" y="290">Jul</text>
-                  <text x="700" y="290">Aug</text>
-                  <text x="765" y="290">Sep</text>
-                </g>
-              </svg>
-            </div>
-
-            <div class="grid grid-cols-3 gap-3 mt-4">
-              <div>
-                <div class="text-xs text-gray-400">Trend</div>
-                <div class="font-black green-text">Positive</div>
-              </div>
-              <div>
-                <div class="text-xs text-gray-400">Peak</div>
-                <div class="font-black">September</div>
-              </div>
-              <div>
-                <div class="text-xs text-gray-400">Period</div>
-                <div class="font-black">9 months</div>
-              </div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-    </section>
-
-    <!-- GLOBAL PRESENCE -->
-    <section class="py-28 bg-[#f3f8f5]">
-      <div class="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
-
-        <div class="max-w-3xl reveal">
-          <div class="text-sm font-extrabold uppercase tracking-widest green-text">Global Presence</div>
-          <h2 class="text-4xl sm:text-6xl font-black tracking-tight mt-3">
-            Where You Are, We Are.
-          </h2>
-          <p class="text-gray-600 text-lg leading-8 mt-5">
-            A connected digital experience designed for people and businesses
-            managing finances across borders.
-          </p>
-        </div>
-
-        <div class="mt-12 bg-white rounded-[35px] border border-gray-100 p-4 sm:p-8 overflow-hidden reveal">
-          <div class="relative rounded-[28px] bg-green-50 min-h-[430px] overflow-hidden">
-
-            <svg viewBox="0 0 1000 500" class="absolute inset-0 w-full h-full opacity-80">
-              <path d="M120 170 C220 80 330 90 420 145 S610 90 690 160 S820 140 900 210"
-                    fill="none" stroke="#b9d9c8" stroke-width="2" stroke-dasharray="7 9"/>
-              <path d="M180 320 C300 250 390 340 490 290 S650 240 760 320"
-                    fill="none" stroke="#b9d9c8" stroke-width="2" stroke-dasharray="7 9"/>
-
-              <g fill="#087443">
-                <circle class="map-dot" cx="190" cy="180" r="6"/>
-                <circle class="map-dot" cx="400" cy="145" r="6"/>
-                <circle class="map-dot" cx="625" cy="200" r="6"/>
-                <circle class="map-dot" cx="760" cy="285" r="6"/>
-                <circle class="map-dot" cx="875" cy="225" r="6"/>
-              </g>
-            </svg>
-
-            <div class="relative grid sm:grid-cols-2 lg:grid-cols-5 gap-3 p-5 sm:p-8 pt-64 sm:pt-72 lg:pt-8">
-              <div class="bg-white/90 backdrop-blur rounded-2xl p-5 shadow-sm">
-                <div class="text-xs uppercase tracking-widest text-gray-400 font-bold">Hub</div>
-                <div class="font-black text-xl mt-2">New York</div>
-                <div class="text-sm text-gray-500 mt-1">United States</div>
-              </div>
-              <div class="bg-white/90 backdrop-blur rounded-2xl p-5 shadow-sm">
-                <div class="text-xs uppercase tracking-widest text-gray-400 font-bold">Hub</div>
-                <div class="font-black text-xl mt-2">London</div>
-                <div class="text-sm text-gray-500 mt-1">United Kingdom</div>
-              </div>
-              <div class="bg-white/90 backdrop-blur rounded-2xl p-5 shadow-sm">
-                <div class="text-xs uppercase tracking-widest text-gray-400 font-bold">Hub</div>
-                <div class="font-black text-xl mt-2">Dubai</div>
-                <div class="text-sm text-gray-500 mt-1">UAE</div>
-              </div>
-              <div class="bg-white/90 backdrop-blur rounded-2xl p-5 shadow-sm">
-                <div class="text-xs uppercase tracking-widest text-gray-400 font-bold">Hub</div>
-                <div class="font-black text-xl mt-2">Toronto</div>
-                <div class="text-sm text-gray-500 mt-1">Canada</div>
-              </div>
-              <div class="bg-white/90 backdrop-blur rounded-2xl p-5 shadow-sm">
-                <div class="text-xs uppercase tracking-widest text-gray-400 font-bold">Hub</div>
-                <div class="font-black text-xl mt-2">Istanbul</div>
-                <div class="text-sm text-gray-500 mt-1">Türkiye</div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-      </div>
-    </section>
-
-    <!-- SECURITY -->
-    <section class="py-28 bg-white">
-      <div class="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
-
-        <div class="grid lg:grid-cols-[.9fr_1.1fr] gap-14 items-center">
-
-          <div class="reveal">
-            <div class="inline-flex items-center gap-2 rounded-full bg-green-50 px-4 py-2 text-xs font-bold uppercase tracking-widest green-text">
-              <svg viewBox="0 0 24 24" class="w-4 h-4" fill="none">
-                <path d="M12 3 19 6v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3Z" stroke="currentColor" stroke-width="2"/>
-              </svg>
-              Security
-            </div>
-
-            <h2 class="text-4xl sm:text-6xl font-black tracking-tight mt-5">
-              Security Is Not a Feature.
-              <span class="green-text block">It’s a Foundation.</span>
-            </h2>
-
-            <p class="text-gray-600 text-lg leading-8 mt-6">
-              Account access and financial activity are designed around multiple
-              layers of protection rather than a single security control.
-            </p>
-
-            <div class="mt-8 rounded-3xl bg-green-50 p-6 border border-green-100">
-              <div class="flex gap-4">
-                <div class="w-12 h-12 rounded-2xl green-bg text-white flex items-center justify-center shrink-0">
-                  <svg viewBox="0 0 24 24" class="w-6 h-6" fill="none">
-                    <path d="M12 3 19 6v5c0 4.5-3 8-7 10-4-2-7-5.5-7-10V6l7-3Z" stroke="currentColor" stroke-width="2"/>
-                    <path d="m8.5 12 2.2 2.2 4.8-5" stroke="currentColor" stroke-width="2"/>
-                  </svg>
-                </div>
-                <div>
-                  <div class="font-black">Protection-first architecture</div>
-                  <div class="text-sm text-gray-600 mt-1">
-                    Security controls are represented here as product-design features.
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div class="grid sm:grid-cols-2 gap-4 reveal">
-
-            <div class="dashboard-card p-6">
-              <div class="w-12 h-12 rounded-2xl bg-green-50 green-text flex items-center justify-center">
-                <svg viewBox="0 0 24 24" class="w-6 h-6" fill="none">
-                  <rect x="5" y="10" width="14" height="10" rx="2" stroke="currentColor" stroke-width="2"/>
-                  <path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="2"/>
-                </svg>
-              </div>
-              <h3 class="font-black text-lg mt-5">256-bit SSL/TLS Encryption</h3>
-              <p class="text-sm text-gray-500 mt-2">Encrypted connection architecture for protected data transport.</p>
-            </div>
-
-            <div class="dashboard-card p-6">
-              <div class="w-12 h-12 rounded-2xl bg-green-50 green-text flex items-center justify-center">
-                <svg viewBox="0 0 24 24" class="w-6 h-6" fill="none">
-                  <path d="M8 8c1-2 7-2 8 0M7 12c2-3 8-3 10 0M8 16c1-2 7-2 8 0" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                </svg>
-              </div>
-              <h3 class="font-black text-lg mt-5">Biometric Authentication</h3>
-              <p class="text-sm text-gray-500 mt-2">Designed to support modern identity and authentication experiences.</p>
-            </div>
-
-            <div class="dashboard-card p-6">
-              <div class="w-12 h-12 rounded-2xl bg-green-50 green-text flex items-center justify-center">
-                <svg viewBox="0 0 24 24" class="w-6 h-6" fill="none">
-                  <path d="M12 3v18M3 12h18" stroke="currentColor" stroke-width="2"/>
-                  <circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="2"/>
-                </svg>
-              </div>
-              <h3 class="font-black text-lg mt-5">Real-Time Fraud Alerts</h3>
-              <p class="text-sm text-gray-500 mt-2">Activity monitoring concepts designed to surface unusual activity.</p>
-            </div>
-
-            <div class="dashboard-card p-6">
-              <div class="w-12 h-12 rounded-2xl bg-green-50 green-text flex items-center justify-center">
-                <svg viewBox="0 0 24 24" class="w-6 h-6" fill="none">
-                  <circle cx="12" cy="8" r="3" stroke="currentColor" stroke-width="2"/>
-                  <path d="M5 20c1-4 4-6 7-6s6 2 7 6" stroke="currentColor" stroke-width="2"/>
-                </svg>
-              </div>
-              <h3 class="font-black text-lg mt-5">Identity Verification</h3>
-              <p class="text-sm text-gray-500 mt-2">Identity verification workflows can be connected to trusted services.</p>
-            </div>
-
-            <div class="dashboard-card p-6">
-              <div class="w-12 h-12 rounded-2xl bg-green-50 green-text flex items-center justify-center">
-                <svg viewBox="0 0 24 24" class="w-6 h-6" fill="none">
-                  <rect x="4" y="5" width="6" height="14" rx="1" stroke="currentColor" stroke-width="2"/>
-                  <rect x="14" y="5" width="6" height="14" rx="1" stroke="currentColor" stroke-width="2"/>
-                </svg>
-              </div>
-              <h3 class="font-black text-lg mt-5">Redundant Data Infrastructure</h3>
-              <p class="text-sm text-gray-500 mt-2">Designed around resilient data-storage architecture.</p>
-            </div>
-
-            <div class="dashboard-card p-6">
-              <div class="w-12 h-12 rounded-2xl bg-green-50 green-text flex items-center justify-center">
-                <svg viewBox="0 0 24 24" class="w-6 h-6" fill="none">
-                  <circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="2"/>
-                  <path d="M12 7v5l3 2" stroke="currentColor" stroke-width="2"/>
-                </svg>
-              </div>
-              <h3 class="font-black text-lg mt-5">24/7 Security Monitoring</h3>
-              <p class="text-sm text-gray-500 mt-2">Monitoring concepts for continuous account and platform protection.</p>
-            </div>
-
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SERVICES -->
-    <section id="services" class="py-28 bg-[#f4f9f6]">
-      <div class="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
-
-        <div class="text-center max-w-3xl mx-auto reveal">
-          <div class="text-sm font-extrabold uppercase tracking-widest green-text">Services</div>
-          <h2 class="text-4xl sm:text-6xl font-black mt-3">Everything in one place.</h2>
-          <p class="text-gray-600 text-lg mt-5">
-            A unified interface for account management, transfers, analysis, and support.
-          </p>
-        </div>
-
-        <div class="grid md:grid-cols-3 gap-5 mt-14">
-          <div class="bg-white rounded-3xl p-7 border border-gray-100 reveal">
-            <div class="w-14 h-14 rounded-2xl green-bg text-white flex items-center justify-center">
-              <svg viewBox="0 0 24 24" class="w-7 h-7" fill="none">
-                <path d="M4 7h16M4 12h16M4 17h10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-            </div>
-            <h3 class="font-black text-xl mt-6">Account Management</h3>
-            <p class="text-gray-500 mt-2 leading-7">View account information, profile details, and verification status.</p>
-          </div>
-
-          <div class="bg-white rounded-3xl p-7 border border-gray-100 reveal">
-            <div class="w-14 h-14 rounded-2xl green-bg text-white flex items-center justify-center">
-              <svg viewBox="0 0 24 24" class="w-7 h-7" fill="none">
-                <path d="m5 12 14-7-5 14-3-6-6-1Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-              </svg>
-            </div>
-            <h3 class="font-black text-xl mt-6">Instant Transfer</h3>
-            <p class="text-gray-500 mt-2 leading-7">Submit transfer requests with recipient, bank, amount, note, and PIN.</p>
-          </div>
-
-          <div class="bg-white rounded-3xl p-7 border border-gray-100 reveal">
-            <div class="w-14 h-14 rounded-2xl green-bg text-white flex items-center justify-center">
-              <svg viewBox="0 0 24 24" class="w-7 h-7" fill="none">
-                <path d="M4 19V5M4 19h16M8 15l3-4 3 2 5-7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </div>
-            <h3 class="font-black text-xl mt-6">Cash Flow Analysis</h3>
-            <p class="text-gray-500 mt-2 leading-7">Review trends and account activity with a Jan–Sep visual analysis.</p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- SUPPORT -->
-    <section id="support" class="py-28 bg-white">
-      <div class="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
-
-        <div class="grid lg:grid-cols-2 gap-8 items-center">
-          <div class="reveal">
-            <div class="text-sm font-extrabold uppercase tracking-widest green-text">Support</div>
-            <h2 class="text-4xl sm:text-6xl font-black mt-3">We're here when you need us.</h2>
-            <p class="text-gray-600 text-lg leading-8 mt-5">
-              Use the live support chat for questions about the platform.
-            </p>
-          </div>
-
-          <div class="bg-green-50 rounded-[30px] p-8 border border-green-100 reveal">
-            <div class="flex items-center gap-4">
-              <div class="w-14 h-14 rounded-2xl green-bg text-white flex items-center justify-center">
-                <svg viewBox="0 0 24 24" class="w-7 h-7" fill="none">
-                  <path d="M5 6h14v10H9l-4 3V6Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-                </svg>
-              </div>
-              <div>
-                <div class="font-black text-xl">Live Support</div>
-                <div class="text-sm text-gray-500">Chat with support through the widget.</div>
-              </div>
-            </div>
-            <div class="mt-7 text-sm text-gray-500">
-              The chat widget will appear in the corner of the website.
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- FINAL CTA -->
-    <section class="py-28 green-dark-bg text-white">
-      <div class="max-w-5xl mx-auto px-5 text-center">
-        <div class="text-sm uppercase tracking-[.25em] text-green-100 font-bold">Cash Flow Bank</div>
-        <h2 class="text-4xl sm:text-6xl font-black tracking-tight mt-5">
-          Build a clearer financial future.
-        </h2>
-        <p class="text-green-50 text-lg mt-5 max-w-2xl mx-auto">
-          Explore the platform and create your account to experience the dashboard.
-        </p>
-        <div class="flex flex-col sm:flex-row justify-center gap-3 mt-9">
-          <button onclick="showAuth('register')" class="bg-white text-green-800 rounded-2xl px-7 py-4 font-black hover:bg-green-50">
-            Open an Account →
-          </button>
-          <button onclick="scrollToSection('services')" class="border border-green-200 text-white rounded-2xl px-7 py-4 font-black hover:bg-white/10">
-            Explore Services ›
-          </button>
-        </div>
-      </div>
-    </section>
-
-  </main>
-
-  <footer class="bg-[#03351f] text-green-100 py-8">
-    <div class="max-w-7xl mx-auto px-5 flex flex-col md:flex-row gap-4 justify-between items-center text-sm">
-      <div>© <span id="footerYear"></span> Cash Flow Bank</div>
-      <div class="text-center md:text-right">
-        Financial platform prototype — not a real bank or real-money ledger.
-      </div>
-    </div>
-  </footer>
-
+<div class="prototype">
+  CASH FLOW BANK IS A FINANCIAL PLATFORM PROTOTYPE — NOT A REAL BANK OR REAL-MONEY LEDGER.
 </div>
 
+<header class="header">
+  <nav class="nav" id="nav">
+    <a href="#" class="logo" onclick="showHome();return false;">
+      <span class="logo-mark">
+        <svg width="23" height="23" viewBox="0 0 24 24" fill="none">
+          <path d="M4 17V7l8-4 8 4v10l-8 4-8-4Z" stroke="currentColor" stroke-width="1.8"/>
+          <path d="M8 9.5 12 7l4 2.5v5L12 17l-4-2.5v-5Z" stroke="currentColor" stroke-width="1.8"/>
+        </svg>
+      </span>
+      Cash Flow Bank
+    </a>
+
+    <div class="nav-links">
+      <a href="#home" onclick="showHome()">Home</a>
+      <a href="#services" onclick="showHome()">Services</a>
+      <a href="#support" onclick="showHome()">Support</a>
+    </div>
+
+    <div class="nav-actions">
+      <button class="btn btn-outline" onclick="showLogin()">Log In</button>
+      <button class="btn btn-green" onclick="showRegister()">Open Account</button>
+    </div>
+
+    <button class="menu-btn" onclick="toggleMenu()" aria-label="Menu">
+      <svg width="21" height="21" viewBox="0 0 24 24" fill="none">
+        <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+  </nav>
+</header>
+
+<main>
 
 <!-- =========================================================
-     AUTH
+     LANDING PAGE
 ========================================================= -->
+<section id="homeView" class="view active">
 
-<div id="authSite" class="hidden min-h-screen bg-[#f4f9f6]">
+<section class="hero" id="home">
+  <div class="hero-grid">
 
-  <div class="min-h-screen flex items-center justify-center p-5">
+    <div>
+      <div class="eyebrow">
+        <i></i>
+        Modern financial platform
+      </div>
 
-    <!-- LOGIN -->
-    <div id="loginPanel" class="w-full max-w-md">
-      <div class="bg-white rounded-[30px] border border-gray-100 shadow-xl p-7 sm:p-9">
+      <h1>
+        Your financial future.
+        <span>Engineered to last.</span>
+      </h1>
 
-        <button onclick="showPublicSite()" class="flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-green-700 mb-8">
-          ← Back to Cash Flow
+      <p class="hero-copy">
+        A modern financial platform prototype designed around clarity,
+        secure account experiences, intelligent cash-flow visibility and
+        simple digital banking interactions.
+      </p>
+
+      <div class="hero-actions">
+        <button class="btn btn-green" onclick="showRegister()">
+          Open an Account
+          <svg style="vertical-align:middle;margin-left:5px" width="16" height="16" viewBox="0 0 24 24" fill="none">
+            <path d="M5 12h13M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
         </button>
 
-        <div class="flex items-center gap-3">
-          <div class="w-12 h-12 rounded-2xl green-bg text-white flex items-center justify-center">
-            <svg viewBox="0 0 48 48" class="w-7 h-7" fill="none">
-              <path d="M8 20 24 9l16 11v18H8V20Z" stroke="currentColor" stroke-width="3"/>
-              <path d="M16 38V24h16v14" stroke="currentColor" stroke-width="3"/>
-            </svg>
-          </div>
-          <div>
-            <div class="font-black text-xl">Cash Flow Bank</div>
-            <div class="text-xs text-gray-500">Secure account access</div>
-          </div>
-        </div>
+        <button class="btn btn-outline" onclick="document.getElementById('services').scrollIntoView()">
+          Explore Services
+        </button>
+      </div>
 
-        <h1 class="text-3xl font-black mt-9">Welcome back</h1>
-        <p class="text-gray-500 mt-2">Sign in using your account number and password.</p>
-
-        <div id="loginError" class="hidden mt-5 rounded-xl bg-red-50 border border-red-100 text-red-700 text-sm p-4"></div>
-
-        <div class="space-y-4 mt-7">
-          <div>
-            <label class="text-sm font-bold">Account Number</label>
-            <input id="loginAcc" class="input mt-2" maxlength="10" inputmode="numeric" placeholder="10-digit account number">
-          </div>
-
-          <div>
-            <label class="text-sm font-bold">Password</label>
-            <input id="loginPass" type="password" class="input mt-2" placeholder="Your password">
-          </div>
-
-          <button id="loginBtn" onclick="doLogin()" class="primary-btn w-full rounded-xl py-3.5 font-black">
-            Login
-          </button>
-        </div>
-
-        <div class="text-center text-sm text-gray-500 mt-7">
-          Don't have an account?
-          <button onclick="showAuth('register')" class="green-text font-black">Create one</button>
-        </div>
+      <div class="hero-trust">
+        <div class="trust-pill">256-bit SSL/TLS</div>
+        <div class="trust-pill">Identity Verification</div>
+        <div class="trust-pill">Real-time Alerts</div>
+        <div class="trust-pill">24/7 Monitoring</div>
       </div>
     </div>
 
+    <div class="hero-visual">
 
-    <!-- REGISTER -->
-    <div id="registerPanel" class="hidden w-full max-w-2xl">
-      <div class="bg-white rounded-[30px] border border-gray-100 shadow-xl p-7 sm:p-9">
+      <!-- FLOATING SVG CARD -->
+      <div class="float-card one">
+        <div class="mini-title">Cash Flow</div>
+        <div class="mini-value green-text">+18.4%</div>
+        <svg width="145" height="45" viewBox="0 0 145 45" fill="none">
+          <path d="M2 37C18 35 18 25 32 29C47 33 51 8 65 15C78 22 82 7 95 12C108 17 117 6 143 2"
+                stroke="#087443" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+      </div>
 
-        <button onclick="showAuth('login')" class="flex items-center gap-2 text-sm font-bold text-gray-500 hover:text-green-700 mb-8">
-          ← Back to login
+      <div class="float-card two">
+        <div class="mini-title">Account security</div>
+        <div style="display:flex;align-items:center;gap:8px;margin-top:8px">
+          <span class="status-dot"></span>
+          <strong>Protected</strong>
+        </div>
+      </div>
+
+      <div class="float-card three">
+        <div class="mini-title">Analysis period</div>
+        <div class="mini-value">Jan — Sep</div>
+      </div>
+
+      <!-- TRANSPARENT SVG SKYSCRAPER -->
+      <svg class="skyscraper" viewBox="0 0 470 650" fill="none"
+           xmlns="http://www.w3.org/2000/svg">
+
+        <defs>
+          <linearGradient id="glass" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#DDF7EA" stop-opacity=".72"/>
+            <stop offset=".5" stop-color="#8AD4AF" stop-opacity=".27"/>
+            <stop offset="1" stop-color="#087443" stop-opacity=".13"/>
+          </linearGradient>
+
+          <linearGradient id="glass2" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#fff" stop-opacity=".85"/>
+            <stop offset="1" stop-color="#087443" stop-opacity=".08"/>
+          </linearGradient>
+
+          <filter id="glow">
+            <feGaussianBlur stdDeviation="5" result="blur"/>
+            <feMerge>
+              <feMergeNode in="blur"/>
+              <feMergeNode in="SourceGraphic"/>
+            </feMerge>
+          </filter>
+
+          <pattern id="windows" width="28" height="30" patternUnits="userSpaceOnUse">
+            <rect x="5" y="5" width="13" height="16" rx="2"
+                  fill="#087443" opacity=".16"/>
+          </pattern>
+        </defs>
+
+        <!-- ground -->
+        <ellipse cx="235" cy="615" rx="180" ry="22"
+                 fill="#087443" opacity=".08"/>
+
+        <!-- rear tower -->
+        <path d="M330 590V145L385 105V590"
+              fill="url(#glass2)"
+              stroke="#087443"
+              stroke-opacity=".16"/>
+
+        <path d="M330 590V145L385 105V590"
+              fill="url(#windows)" opacity=".7"/>
+
+        <!-- main tower -->
+        <path d="M115 590V105L185 45L278 105V590H115Z"
+              fill="url(#glass)"
+              stroke="#087443"
+              stroke-opacity=".35"
+              stroke-width="2"/>
+
+        <!-- transparent glass panels -->
+        <path d="M185 45V590M231 77V590M278 105V590"
+              stroke="#087443"
+              stroke-opacity=".20"/>
+
+        <!-- horizontal floors -->
+        <g stroke="#087443" stroke-opacity=".13">
+          <path d="M115 140H278"/>
+          <path d="M115 180H278"/>
+          <path d="M115 220H278"/>
+          <path d="M115 260H278"/>
+          <path d="M115 300H278"/>
+          <path d="M115 340H278"/>
+          <path d="M115 380H278"/>
+          <path d="M115 420H278"/>
+          <path d="M115 460H278"/>
+          <path d="M115 500H278"/>
+          <path d="M115 540H278"/>
+        </g>
+
+        <!-- windows -->
+        <path d="M115 105H278V590H115Z" fill="url(#windows)"/>
+
+        <!-- center data spine -->
+        <path d="M231 82V570"
+              stroke="#087443"
+              stroke-opacity=".35"
+              stroke-width="2"/>
+
+        <!-- glowing data line -->
+        <path d="M125 455
+                 C145 430 155 450 170 418
+                 C184 389 198 410 211 365
+                 C224 320 239 338 250 290
+                 C261 245 269 265 278 225"
+              stroke="#0AA45E"
+              stroke-width="4"
+              stroke-linecap="round"
+              filter="url(#glow)"/>
+
+        <!-- rooftop -->
+        <path d="M185 45L210 20L235 45"
+              stroke="#087443"
+              stroke-width="2"
+              stroke-opacity=".35"/>
+
+        <!-- top antenna -->
+        <path d="M210 20V3" stroke="#087443" stroke-width="2"/>
+        <circle cx="210" cy="3" r="4" fill="#087443"/>
+
+        <!-- floating rings -->
+        <ellipse cx="235" cy="305" rx="205" ry="78"
+                 stroke="#087443"
+                 stroke-opacity=".10"
+                 stroke-width="1.5"/>
+        <ellipse cx="235" cy="305" rx="180" ry="61"
+                 stroke="#087443"
+                 stroke-opacity=".08"/>
+
+        <!-- small financial nodes -->
+        <circle cx="78" cy="255" r="7" fill="#087443" opacity=".7"/>
+        <circle cx="394" cy="340" r="7" fill="#087443" opacity=".55"/>
+        <circle cx="75" cy="450" r="5" fill="#0AA45E" opacity=".7"/>
+        <circle cx="400" cy="190" r="5" fill="#0AA45E" opacity=".6"/>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="section">
+  <div class="stats">
+    <div class="stat">
+      <strong data-counter="6000000">0</strong>
+      <span>Illustrative active customers</span>
+    </div>
+    <div class="stat">
+      <strong data-counter="48">$0B+</strong>
+      <span>Illustrative annual transaction volume</span>
+    </div>
+    <div class="stat">
+      <strong data-counter="180">0</strong>
+      <span>Illustrative locations & partners</span>
+    </div>
+    <div class="stat">
+      <strong data-counter="34">0</strong>
+      <span>Illustrative industry awards</span>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="section section-soft" id="services">
+  <div class="inner">
+    <div class="section-head">
+      <div class="section-kicker">Services</div>
+      <h2>Everything important, in one place.</h2>
+      <p>
+        A clean digital experience for everyday account management,
+        transfers, transaction history and financial visibility.
+      </p>
+    </div>
+
+    <div class="service-grid">
+      <article class="service">
+        <div class="service-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M4 7h16v12H4zM7 7V5h10v2M8 12h8" stroke="currentColor" stroke-width="1.8"/>
+          </svg>
+        </div>
+        <h3>Digital Accounts</h3>
+        <p>View account information, status, account number and balance from one dashboard.</p>
+      </article>
+
+      <article class="service">
+        <div class="service-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M4 12h15M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/>
+          </svg>
+        </div>
+        <h3>Instant Transfers</h3>
+        <p>Submit transfer requests with recipient details, amount, note and security PIN.</p>
+      </article>
+
+      <article class="service">
+        <div class="service-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M4 18V6M4 18h16M8 15l3-4 3 2 5-7" stroke="currentColor" stroke-width="1.8"/>
+          </svg>
+        </div>
+        <h3>Cash Flow Analysis</h3>
+        <p>Track monthly activity and retain previous months as the calendar moves forward.</p>
+      </article>
+
+      <article class="service">
+        <div class="service-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="8" r="3"/>
+            <path d="M5 20c.8-4 3-6 7-6s6.2 2 7 6" stroke="currentColor" stroke-width="1.8"/>
+          </svg>
+        </div>
+        <h3>Profile Management</h3>
+        <p>Update your profile information and upload a profile picture from the dashboard.</p>
+      </article>
+
+      <article class="service">
+        <div class="service-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M12 3 5 6v5c0 5 3 8 7 10 4-2 7-5 7-10V6l-7-3Z" stroke="currentColor" stroke-width="1.8"/>
+            <path d="m9 12 2 2 4-4" stroke="currentColor" stroke-width="1.8"/>
+          </svg>
+        </div>
+        <h3>Security</h3>
+        <p>Account-level security indicators, authentication and transaction controls.</p>
+      </article>
+
+      <article class="service">
+        <div class="service-icon">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path d="M5 5h14v14H5zM8 9h8M8 13h5" stroke="currentColor" stroke-width="1.8"/>
+          </svg>
+        </div>
+        <h3>Support</h3>
+        <p>Use the integrated support experience when you need help navigating the platform.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ANALYSIS -->
+<section class="section">
+  <div class="section-head">
+    <div class="section-kicker">Explore</div>
+    <h2>A clearer view of your financial activity.</h2>
+    <p>
+      The analysis system is designed to preserve each calendar month instead
+      of replacing September when October begins.
+    </p>
+  </div>
+
+  <div class="analysis-preview">
+    <div class="chart-card">
+      <div class="panel-head">
+        <h3>Cash Flow Analysis</h3>
+        <span>January — September</span>
+      </div>
+      <div class="chart-wrap">
+        <svg class="chart-svg" viewBox="0 0 800 300">
+          <g stroke="#dcebe3" stroke-width="1">
+            <path d="M30 40H770"/>
+            <path d="M30 100H770"/>
+            <path d="M30 160H770"/>
+            <path d="M30 220H770"/>
+          </g>
+          <path d="M30 215
+                   C80 190 95 205 130 175
+                   C165 145 190 170 225 145
+                   C265 115 285 145 325 118
+                   C365 90 390 125 425 95
+                   C465 65 495 105 530 80
+                   C570 55 600 80 635 58
+                   C675 35 710 65 770 35"
+                stroke="#087443"
+                stroke-width="5"
+                fill="none"
+                stroke-linecap="round"/>
+          <path d="M30 215
+                   C80 190 95 205 130 175
+                   C165 145 190 170 225 145
+                   C265 115 285 145 325 118
+                   C365 90 390 125 425 95
+                   C465 65 495 105 530 80
+                   C570 55 600 80 635 58
+                   C675 35 710 65 770 35
+                   L770 270L30 270Z"
+                fill="#087443" opacity=".07"/>
+          <g fill="#5e6d65" font-size="11">
+            <text x="30" y="292">Jan</text>
+            <text x="120" y="292">Feb</text>
+            <text x="210" y="292">Mar</text>
+            <text x="300" y="292">Apr</text>
+            <text x="390" y="292">May</text>
+            <text x="480" y="292">Jun</text>
+            <text x="570" y="292">Jul</text>
+            <text x="660" y="292">Aug</text>
+            <text x="745" y="292">Sep</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+
+    <div class="security-card">
+      <div class="section-kicker">Security</div>
+      <h3 style="font-size:25px;margin:12px 0">Security is a foundation.</h3>
+      <p style="color:var(--muted);line-height:1.7;font-size:14px">
+        Security-oriented product design is built into the account experience
+        rather than being treated as a decorative feature.
+      </p>
+
+      <div class="status-line">
+        <span class="status-dot"></span>
+        Identity verification
+      </div>
+      <div class="status-line">
+        <span class="status-dot"></span>
+        Transaction monitoring
+      </div>
+      <div class="status-line">
+        <span class="status-dot"></span>
+        Secure authentication
+      </div>
+      <div class="status-line">
+        <span class="status-dot"></span>
+        Account activity controls
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- REVIEWS -->
+<section class="section section-soft">
+  <div class="inner">
+    <div class="section-head">
+      <div class="section-kicker">Customer experience</div>
+      <h2>Designed around clarity.</h2>
+      <p>Illustrative testimonials for the prototype interface.</p>
+    </div>
+
+    <div class="review-grid">
+      <article class="review">
+        <div class="stars">★★★★★</div>
+        <p>
+          “The layout makes it easy to see the account status and recent
+          activity without searching through several screens.”
+        </p>
+        <div class="reviewer">Jordan M.</div>
+      </article>
+
+      <article class="review">
+        <div class="stars">★★★★★</div>
+        <p>
+          “The monthly analysis gives the dashboard a much clearer picture
+          of how activity changes over time.”
+        </p>
+        <div class="reviewer">Taylor R.</div>
+      </article>
+
+      <article class="review">
+        <div class="stars">★★★★★</div>
+        <p>
+          “The experience feels clean, simple and focused on the information
+          that matters.”
+        </p>
+        <div class="reviewer">Alex K.</div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- GLOBAL -->
+<section class="global">
+  <div class="section">
+    <div class="global-grid">
+      <div>
+        <div class="section-kicker">Global presence</div>
+        <h2>Where you are, we are.</h2>
+        <p>
+          Illustrative locations used for the Cash Flow Bank prototype.
+          These locations are presentation content and do not represent
+          verified physical branches.
+        </p>
+      </div>
+
+      <div class="city-grid">
+        <div class="city">
+          <strong>New York</strong>
+          <span>Illustrative headquarters</span>
+        </div>
+        <div class="city">
+          <strong>London</strong>
+          <span>Illustrative primary hub</span>
+        </div>
+        <div class="city">
+          <strong>Toronto</strong>
+          <span>Illustrative primary hub</span>
+        </div>
+        <div class="city">
+          <strong>Istanbul</strong>
+          <span>Illustrative primary hub</span>
+        </div>
+        <div class="city">
+          <strong>Dubai</strong>
+          <span>Illustrative primary hub</span>
+        </div>
+        <div class="city">
+          <strong>Global</strong>
+          <span>Digital platform experience</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECURITY -->
+<section class="section">
+  <div class="section-head">
+    <div class="section-kicker">Protection</div>
+    <h2>Security is not a feature. It is a foundation.</h2>
+    <p>
+      The following are interface concepts for this prototype and should not
+      be interpreted as verified infrastructure or regulatory certifications.
+    </p>
+  </div>
+
+  <div class="security-grid">
+    <div class="security-item">
+      <svg width="25" height="25" viewBox="0 0 24 24" fill="none">
+        <path d="M12 3 5 6v5c0 5 3 8 7 10 4-2 7-5 7-10V6l-7-3Z" stroke="currentColor" stroke-width="1.8"/>
+      </svg>
+      <strong>256-bit SSL/TLS</strong>
+      <span>Illustrative security feature for the interface.</span>
+    </div>
+
+    <div class="security-item">
+      <svg width="25" height="25" viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="8" r="3"/>
+        <path d="M5 20c.8-4 3-6 7-6s6.2 2 7 6" stroke="currentColor" stroke-width="1.8"/>
+      </svg>
+      <strong>Biometric Authentication</strong>
+      <span>Illustrative account-security concept.</span>
+    </div>
+
+    <div class="security-item">
+      <svg width="25" height="25" viewBox="0 0 24 24" fill="none">
+        <path d="M18 8a6 6 0 0 0-12 0v3a6 6 0 0 0 12 0V8Z" stroke="currentColor" stroke-width="1.8"/>
+        <path d="M12 8v4" stroke="currentColor" stroke-width="1.8"/>
+      </svg>
+      <strong>Fraud Alerts</strong>
+      <span>Activity notifications can be integrated into the platform.</span>
+    </div>
+
+    <div class="security-item">
+      <svg width="25" height="25" viewBox="0 0 24 24" fill="none">
+        <path d="M5 5h14v14H5z" stroke="currentColor" stroke-width="1.8"/>
+        <path d="m8 12 2 2 5-5" stroke="currentColor" stroke-width="1.8"/>
+      </svg>
+      <strong>Identity Verification</strong>
+      <span>Account verification status can be displayed here.</span>
+    </div>
+
+    <div class="security-item">
+      <svg width="25" height="25" viewBox="0 0 24 24" fill="none">
+        <path d="M4 19V8l8-4 8 4v11" stroke="currentColor" stroke-width="1.8"/>
+        <path d="M8 19v-5h8v5" stroke="currentColor" stroke-width="1.8"/>
+      </svg>
+      <strong>Redundant Systems</strong>
+      <span>Infrastructure concept for the prototype design.</span>
+    </div>
+
+    <div class="security-item">
+      <svg width="25" height="25" viewBox="0 0 24 24" fill="none">
+        <circle cx="12" cy="12" r="8" stroke="currentColor" stroke-width="1.8"/>
+        <path d="M12 8v4l3 2" stroke="currentColor" stroke-width="1.8"/>
+      </svg>
+      <strong>24/7 Monitoring</strong>
+      <span>Illustrative monitoring concept.</span>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="support">
+  <div class="cta">
+    <div>
+      <div class="section-kicker" style="color:#a9e7c5">Support</div>
+      <h2 style="margin:10px 0;font-size:42px">Need help?</h2>
+      <p>
+        Use the live support widget or sign in to access your account
+        support area.
+      </p>
+    </div>
+    <button class="btn" onclick="showLogin()">Go to Account</button>
+  </div>
+</section>
+
+</section>
+
+<!-- =========================================================
+     LOGIN
+========================================================= -->
+<section id="loginView" class="view">
+  <div class="auth-page">
+    <div class="auth-card">
+      <div class="eyebrow"><i></i> Secure sign in</div>
+      <h2 style="margin-top:18px">Welcome back.</h2>
+      <p>Sign in using your 10-digit account number and password.</p>
+
+      <div id="loginMessage" class="form-message"></div>
+
+      <form class="form-grid" onsubmit="doLogin(event)">
+        <div class="field">
+          <label>Account Number</label>
+          <input id="loginAcc" inputmode="numeric" maxlength="10"
+                 placeholder="10-digit account number" required>
+        </div>
+
+        <div class="field">
+          <label>Password</label>
+          <input id="loginPass" type="password" required>
+        </div>
+
+        <button id="loginBtn" class="btn btn-green" type="submit">
+          Sign In
         </button>
+      </form>
 
-        <h1 class="text-3xl font-black">Create your account</h1>
-        <p class="text-gray-500 mt-2">Enter your information to generate your account number.</p>
+      <p style="text-align:center;margin-top:22px;font-size:13px">
+        New here?
+        <button onclick="showRegister()" style="border:0;background:none;color:var(--green);font-weight:800">
+          Open an account
+        </button>
+      </p>
+    </div>
+  </div>
+</section>
 
-        <div id="registerError" class="hidden mt-5 rounded-xl bg-red-50 border border-red-100 text-red-700 text-sm p-4"></div>
+<!-- =========================================================
+     REGISTER
+========================================================= -->
+<section id="registerView" class="view">
+  <div class="auth-page">
+    <div class="auth-card">
+      <div class="eyebrow"><i></i> Create account</div>
+      <h2 style="margin-top:18px">Start your account.</h2>
+      <p>
+        Your 10-digit account number is generated automatically after
+        registration.
+      </p>
 
-        <div class="grid md:grid-cols-2 gap-4 mt-7">
+      <div id="registerMessage" class="form-message"></div>
 
-          <div>
-            <label class="text-sm font-bold">Full Name</label>
-            <input id="regName" class="input mt-2" placeholder="Full name">
+      <form class="form-grid" onsubmit="doRegister(event)">
+
+        <div class="field">
+          <label>Full Name</label>
+          <input id="regName" required autocomplete="name">
+        </div>
+
+        <div class="field">
+          <label>Email</label>
+          <input id="regEmail" type="email" required autocomplete="email">
+        </div>
+
+        <div class="form-row">
+          <div class="field">
+            <label>Password</label>
+            <input id="regPass" type="password" minlength="6" required>
           </div>
 
-          <div>
-            <label class="text-sm font-bold">Email</label>
-            <input id="regEmail" type="email" class="input mt-2" placeholder="you@example.com">
+          <div class="field">
+            <label>Confirm Password</label>
+            <input id="regConfirm" type="password" minlength="6" required>
           </div>
+        </div>
 
-          <div>
-            <label class="text-sm font-bold">Password</label>
-            <input id="regPass" type="password" class="input mt-2" placeholder="Create a password">
-          </div>
-
-          <div>
-            <label class="text-sm font-bold">Confirm Password</label>
-            <input id="regConfirm" type="password" class="input mt-2" placeholder="Confirm password">
-          </div>
-
-          <div>
-            <label class="text-sm font-bold">Account Type</label>
-            <select id="regType" class="input mt-2">
-              <option value="Savings">Savings</option>
-              <option value="Current">Current</option>
-              <option value="Business">Business</option>
-              <option value="Student">Student</option>
+        <div class="form-row">
+          <div class="field">
+            <label>Account Type</label>
+            <select id="regType" required>
+              <option value="">Choose account type</option>
+              <option>Savings</option>
+              <option>Current</option>
+              <option>Business</option>
+              <option>Student</option>
             </select>
           </div>
 
-          <div>
-            <label class="text-sm font-bold">Country</label>
-            <select id="regCountry" class="input mt-2">
-              <option value="">Select country</option>
+          <div class="field">
+            <label>Country</label>
+            <select id="regCountry" required>
+              <option value="">Choose country</option>
+              <option>United States</option>
+              <option>United Kingdom</option>
+              <option>Canada</option>
               <option>Nigeria</option>
               <option>Ghana</option>
               <option>Kenya</option>
               <option>South Africa</option>
-              <option>United States</option>
-              <option>United Kingdom</option>
-              <option>Canada</option>
               <option>India</option>
               <option>Other</option>
             </select>
           </div>
-
-          <div>
-            <label class="text-sm font-bold">Security PIN</label>
-            <input id="regPin" type="password" class="input mt-2" maxlength="6" inputmode="numeric" placeholder="4–6 digit PIN">
-          </div>
-
-          <div>
-            <label class="text-sm font-bold">Profile Picture</label>
-            <input id="regPhoto" type="file" accept="image/*" class="input mt-2">
-          </div>
-
         </div>
 
-        <button id="regBtn" onclick="doRegister()" class="primary-btn w-full rounded-xl py-4 font-black mt-6">
+        <div class="field">
+          <label>Security PIN</label>
+          <input id="regPin" type="password" inputmode="numeric"
+                 maxlength="6" minlength="4" required>
+        </div>
+
+        <div class="file-box">
+          <div class="field">
+            <label>Profile Picture</label>
+            <input id="regPhoto" type="file" accept="image/*">
+          </div>
+        </div>
+
+        <button id="regBtn" class="btn btn-green" type="submit">
           Create Account
         </button>
+      </form>
 
-        <div id="registrationSuccess" class="hidden mt-6 rounded-2xl bg-green-50 border border-green-100 p-6">
-          <div class="text-sm uppercase tracking-widest font-bold green-text">Account Created</div>
-          <div class="text-gray-600 mt-2">Your generated account number is:</div>
-          <div id="generatedAccount" class="text-3xl font-black green-text mt-2 tracking-widest"></div>
-          <div class="text-sm text-gray-600 mt-4">
-            Your account must be approved before login is enabled.
-          </div>
-          <button onclick="showAuth('login')" class="primary-btn rounded-xl px-5 py-3 font-bold mt-5">
-            Go to Login
-          </button>
+      <div id="accountCreated" style="display:none;margin-top:20px">
+        <div class="success form-message show">
+          Account created successfully. Your account must be approved by
+          the administrator before you can sign in.
         </div>
 
+        <div style="background:#f2faf6;border-radius:17px;padding:20px;margin-top:15px;text-align:center">
+          <div style="font-size:11px;text-transform:uppercase;color:#6d7c74;font-weight:900">
+            Your account number
+          </div>
+          <div id="generatedAccount"
+               style="font-size:31px;font-weight:900;color:var(--green);margin:6px 0">
+          </div>
+        </div>
+
+        <button class="btn btn-green" style="width:100%;margin-top:15px"
+                onclick="showLogin()">
+          Continue to Login
+        </button>
       </div>
+
+      <p style="text-align:center;margin-top:22px;font-size:13px">
+        Already registered?
+        <button onclick="showLogin()" style="border:0;background:none;color:var(--green);font-weight:800">
+          Sign in
+        </button>
+      </p>
     </div>
-
   </div>
-</div>
-
+</section>
 
 <!-- =========================================================
      DASHBOARD
 ========================================================= -->
+<section id="dashboardView" class="view">
 
-<div id="dashboardSite" class="hidden min-h-screen bg-[#f5f8f6]">
+<div class="dashboard-shell">
 
-  <div id="mobileOverlay" onclick="toggleSidebar()" class="hidden fixed inset-0 z-40 mobile-overlay"></div>
-
-  <!-- SIDEBAR -->
-  <aside id="sidebar" class="sidebar fixed z-50 left-0 top-0 bottom-0 w-[270px] bg-[#063c24] text-white -translate-x-full lg:translate-x-0">
-
-    <div class="h-full flex flex-col">
-
-      <div class="p-6 border-b border-white/10">
-        <div class="flex items-center gap-3">
-          <div class="w-11 h-11 rounded-2xl bg-white text-green-800 flex items-center justify-center">
-            <svg viewBox="0 0 48 48" class="w-6 h-6" fill="none">
-              <path d="M8 20 24 9l16 11v18H8V20Z" stroke="currentColor" stroke-width="3"/>
-              <path d="M16 38V24h16v14" stroke="currentColor" stroke-width="3"/>
-            </svg>
-          </div>
-          <div>
-            <div class="font-black">Cash Flow</div>
-            <div class="text-xs text-green-200">Bank Dashboard</div>
-          </div>
-        </div>
+  <aside class="side">
+    <div class="side-brand">
+      <div class="logo">
+        <span class="logo-mark">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <path d="M4 17V7l8-4 8 4v10l-8 4-8-4Z" stroke="currentColor" stroke-width="1.8"/>
+          </svg>
+        </span>
+        Cash Flow
       </div>
+    </div>
 
-      <nav class="p-4 space-y-2 flex-1">
-        <button onclick="showDash('home')" class="dashNav w-full flex items-center gap-3 rounded-xl px-4 py-3 bg-white/10 font-bold text-left">
-          <span>⌂</span> Dashboard
-        </button>
-
-        <button onclick="showDash('accounts')" class="dashNav w-full flex items-center gap-3 rounded-xl px-4 py-3 hover:bg-white/10 font-bold text-left">
-          <span>▣</span> Accounts
-        </button>
-
-        <button onclick="showDash('transfer')" class="dashNav w-full flex items-center gap-3 rounded-xl px-4 py-3 hover:bg-white/10 font-bold text-left">
-          <span>↗</span> Instant Transfer
-        </button>
-
-        <button onclick="showDash('history')" class="dashNav w-full flex items-center gap-3 rounded-xl px-4 py-3 hover:bg-white/10 font-bold text-left">
-          <span>≡</span> History
-        </button>
-
-        <button onclick="showDash('support')" class="dashNav w-full flex items-center gap-3 rounded-xl px-4 py-3 hover:bg-white/10 font-bold text-left">
-          <span>?</span> Support
-        </button>
-      </nav>
-
-      <div class="p-4 border-t border-white/10">
-        <button onclick="logout()" class="w-full flex items-center gap-3 rounded-xl px-4 py-3 hover:bg-white/10 font-bold text-left">
-          <span>↪</span> Logout
-        </button>
-      </div>
-
+    <div class="side-nav">
+      <button class="active" onclick="dashPage('overview',this)">Dashboard</button>
+      <button onclick="dashPage('accounts',this)">Accounts</button>
+      <button onclick="openTransfer()">Transfers</button>
+      <button onclick="dashPage('analytics',this)">Analytics</button>
+      <button onclick="dashPage('history',this)">History</button>
+      <button onclick="dashPage('support',this)">Support</button>
+      <button onclick="dashPage('profile',this)">Profile</button>
+      <button onclick="logout()">Log Out</button>
     </div>
   </aside>
 
+  <main class="dash-main">
 
-  <!-- MAIN -->
-  <div class="lg:ml-[270px] min-h-screen dashboard-main">
+    <div class="mobile-side" style="margin-bottom:15px">
+      <select onchange="dashPage(this.value)">
+        <option value="overview">Dashboard</option>
+        <option value="accounts">Accounts</option>
+        <option value="analytics">Analytics</option>
+        <option value="history">History</option>
+        <option value="support">Support</option>
+        <option value="profile">Profile</option>
+      </select>
+    </div>
 
-    <!-- Dashboard header -->
-    <header class="sticky top-0 z-30 bg-white/90 backdrop-blur-xl border-b border-gray-100">
-      <div class="px-4 sm:px-6 lg:px-8 h-[76px] flex items-center justify-between gap-4">
-
-        <div class="flex items-center gap-3">
-          <button onclick="toggleSidebar()" class="lg:hidden w-11 h-11 rounded-xl border border-gray-200 flex items-center justify-center">
-            ☰
-          </button>
-
-          <div>
-            <div id="dashboardGreeting" class="font-black text-lg">Dashboard</div>
-            <div id="dashboardDate" class="text-xs text-gray-500"></div>
-          </div>
-        </div>
-
-        <div class="flex items-center gap-3">
-          <div class="hidden sm:block text-right">
-            <div id="headerUserName" class="font-bold text-sm">Customer</div>
-            <div class="text-xs text-gray-500">KYC Verified ✓</div>
-          </div>
-
-          <div id="headerAvatar" class="w-11 h-11 rounded-full green-bg text-white flex items-center justify-center font-black overflow-hidden">
-            C
-          </div>
-        </div>
-
+    <div class="dash-top">
+      <div>
+        <h1 id="dashGreeting">Good morning.</h1>
+        <div class="date" id="dashDate"></div>
       </div>
-    </header>
 
+      <div style="display:flex;align-items:center;gap:12px">
+        <button class="btn btn-light" onclick="openTransfer()">Send Money</button>
+        <div class="avatar" id="dashAvatar">CF</div>
+      </div>
+    </div>
 
-    <main class="p-4 sm:p-6 lg:p-8 max-w-[1600px] mx-auto">
+    <!-- OVERVIEW -->
+    <div id="dash-overview" class="page-section active">
 
-      <!-- DASH HOME -->
-      <section id="dash-home">
+      <div class="dash-grid">
 
-        <!-- Large welcome -->
-        <div class="rounded-[30px] green-dark-bg text-white p-6 sm:p-9 lg:p-11 relative overflow-hidden">
+        <div class="balance">
+          <small>AVAILABLE BALANCE</small>
+          <div class="balance-amount" id="balanceDisplay">$0.00</div>
 
-          <div class="absolute -right-20 -top-20 w-72 h-72 rounded-full border border-white/10"></div>
-          <div class="absolute -right-10 -bottom-32 w-96 h-96 rounded-full border border-white/10"></div>
+          <div class="account-line">
+            <span id="dashAccountNumber">•••• ••••</span>
+            <span id="dashAccountType">Account</span>
+          </div>
+        </div>
 
-          <div class="relative grid lg:grid-cols-[1fr_auto] gap-8 items-end">
+        <div class="security-status">
+          <h3>Account Security</h3>
 
+          <div class="status-line">
+            <span class="status-dot"></span>
+            <span>KYC status: <strong>Verified</strong></span>
+          </div>
+
+          <div class="status-line">
+            <span class="status-dot"></span>
+            <span>Account: <strong id="dashStatus">Active</strong></span>
+          </div>
+
+          <div class="status-line">
+            <span class="status-dot"></span>
+            <span>Authentication: <strong>Protected</strong></span>
+          </div>
+        </div>
+      </div>
+
+      <div class="quick">
+        <button onclick="openTransfer()">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/>
+          </svg>
+          <br>Send Money
+        </button>
+
+        <button onclick="dashPage('history')">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <path d="M6 4h12v16H6zM9 8h6M9 12h6M9 16h4" stroke="currentColor" stroke-width="1.7"/>
+          </svg>
+          <br>History
+        </button>
+
+        <button onclick="dashPage('analytics')">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <path d="M4 19V5M4 19h16M8 15l3-4 3 2 5-7" stroke="currentColor" stroke-width="1.7"/>
+          </svg>
+          <br>Analysis
+        </button>
+
+        <button onclick="dashPage('profile')">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="8" r="3"/>
+            <path d="M5 20c.8-4 3-6 7-6s6.2 2 7 6" stroke="currentColor" stroke-width="1.7"/>
+          </svg>
+          <br>Profile
+        </button>
+      </div>
+
+      <div class="dash-analysis">
+
+        <div class="panel">
+          <div class="panel-head">
+            <h3>Cash Flow Analysis</h3>
+            <span id="analysisRange">January — September</span>
+          </div>
+
+          <div class="month-chart" id="dashboardChart"></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-head">
+            <h3>Profile</h3>
+            <span>KYC Verified</span>
+          </div>
+
+          <div class="profile-card">
+            <div class="profile-big" id="profileAvatar">CF</div>
             <div>
-              <div class="text-green-200 text-xs uppercase tracking-widest font-bold">
-                Cash Flow Account
-              </div>
-
-              <h1 id="welcomeName" class="text-3xl sm:text-5xl font-black mt-3">
-                Welcome back
-              </h1>
-
-              <p class="text-green-100 mt-3 max-w-2xl">
-                Your account overview, profile, verification status, and cash-flow
-                activity are all in one place.
-              </p>
-
-              <div class="flex flex-wrap gap-3 mt-7">
-                <span class="rounded-full bg-white/10 border border-white/10 px-4 py-2 text-sm font-bold">
-                  Active Account
-                </span>
-                <span class="rounded-full bg-white/10 border border-white/10 px-4 py-2 text-sm font-bold">
-                  KYC Verified ✓
-                </span>
-              </div>
-            </div>
-
-            <div class="text-left lg:text-right">
-              <div class="text-xs text-green-200 uppercase tracking-widest font-bold">Available Balance</div>
-              <div id="balDisplay" class="text-4xl sm:text-5xl font-black mt-2">$0.00</div>
-              <div class="text-sm text-green-200 mt-2">Balance is managed by the account system.</div>
-            </div>
-
-          </div>
-        </div>
-
-
-        <!-- PROFILE ON MAIN DASHBOARD -->
-        <div class="grid dashboard-grid lg:grid-cols-[1.3fr_.7fr] gap-5 mt-6">
-
-          <div class="dashboard-card p-6 sm:p-7">
-            <div class="flex flex-col sm:flex-row gap-6 items-start sm:items-center">
-
-              <div id="mainProfileAvatar" class="w-24 h-24 rounded-3xl green-bg text-white flex items-center justify-center font-black text-3xl overflow-hidden shrink-0">
-                C
-              </div>
-
-              <div class="flex-1">
-                <div class="text-xs uppercase tracking-widest font-bold text-gray-400">Profile</div>
-                <div id="profileName" class="text-2xl font-black mt-1">Customer</div>
-                <div id="profileEmail" class="text-gray-500 mt-1">—</div>
-
-                <div class="flex flex-wrap gap-2 mt-4">
-                  <span class="px-3 py-1.5 rounded-full bg-green-50 green-text text-xs font-bold">
-                    KYC Verified ✓
-                  </span>
-                  <span id="profileAccountType" class="px-3 py-1.5 rounded-full bg-gray-100 text-gray-600 text-xs font-bold">
-                    Savings
-                  </span>
-                  <span id="profileCountry" class="px-3 py-1.5 rounded-full bg-gray-100 text-gray-600 text-xs font-bold">
-                    Country
-                  </span>
-                </div>
-              </div>
-
-              <div class="w-full sm:w-auto">
-                <label class="secondary-btn rounded-xl px-4 py-3 font-bold text-sm flex items-center justify-center cursor-pointer">
-                  Change Photo
-                  <input id="profilePhotoInput" type="file" accept="image/*" class="hidden" onchange="updateProfilePhoto(this)">
-                </label>
-              </div>
-
-            </div>
-
-            <div class="grid sm:grid-cols-3 gap-3 mt-7">
-              <div class="rounded-2xl bg-gray-50 p-4">
-                <div class="text-xs text-gray-400">Account Number</div>
-                <div id="profileAccountNumber" class="font-black mt-1">—</div>
-              </div>
-
-              <div class="rounded-2xl bg-gray-50 p-4">
-                <div class="text-xs text-gray-400">Status</div>
-                <div class="font-black green-text mt-1">Active</div>
-              </div>
-
-              <div class="rounded-2xl bg-gray-50 p-4">
-                <div class="text-xs text-gray-400">KYC</div>
-                <div class="font-black green-text mt-1">Verified ✓</div>
-              </div>
+              <strong id="profileName">Customer</strong>
+              <div id="profileCountry" class="tx-muted">Country</div>
+              <div id="profileEmail" class="tx-muted">Email</div>
             </div>
           </div>
 
-
-          <!-- DATE / KYC CARD -->
-          <div class="dashboard-card p-6 sm:p-7">
-            <div class="flex justify-between items-start">
-              <div>
-                <div class="text-xs uppercase tracking-widest font-bold text-gray-400">Account Overview</div>
-                <h3 class="text-xl font-black mt-2">Today</h3>
-              </div>
-              <div class="w-12 h-12 rounded-2xl bg-green-50 green-text flex items-center justify-center">
-                ✓
-              </div>
-            </div>
-
-            <div id="overviewDate" class="text-2xl font-black mt-7">—</div>
-
-            <div class="mt-5 rounded-2xl bg-green-50 p-4">
-              <div class="text-xs text-gray-500">Verification</div>
-              <div class="font-black green-text mt-1">KYC Verified</div>
-              <div class="text-xs text-gray-500 mt-1">Identity status shown by the prototype.</div>
-            </div>
-          </div>
-
-        </div>
-
-
-        <!-- QUICK ACTIONS -->
-        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mt-6">
-
-          <button onclick="showDash('transfer')" class="dashboard-card p-6 text-left hover:-translate-y-1 transition">
-            <div class="w-12 h-12 rounded-2xl green-bg text-white flex items-center justify-center text-xl">↗</div>
-            <div class="font-black mt-5">Send Money</div>
-            <div class="text-sm text-gray-500 mt-1">Submit a transfer request</div>
+          <button class="btn btn-light" style="width:100%;margin-top:22px"
+                  onclick="dashPage('profile')">
+            View Profile
           </button>
+        </div>
+      </div>
 
-          <button onclick="showDash('history')" class="dashboard-card p-6 text-left hover:-translate-y-1 transition">
-            <div class="w-12 h-12 rounded-2xl bg-green-50 green-text flex items-center justify-center text-xl">≡</div>
-            <div class="font-black mt-5">Transaction History</div>
-            <div class="text-sm text-gray-500 mt-1">Review account activity</div>
-          </button>
-
-          <button onclick="showDash('accounts')" class="dashboard-card p-6 text-left hover:-translate-y-1 transition">
-            <div class="w-12 h-12 rounded-2xl bg-green-50 green-text flex items-center justify-center text-xl">▣</div>
-            <div class="font-black mt-5">Account Details</div>
-            <div class="text-sm text-gray-500 mt-1">View account information</div>
-          </button>
-
-          <button onclick="showDash('support')" class="dashboard-card p-6 text-left hover:-translate-y-1 transition">
-            <div class="w-12 h-12 rounded-2xl bg-green-50 green-text flex items-center justify-center text-xl">?</div>
-            <div class="font-black mt-5">Support</div>
-            <div class="text-sm text-gray-500 mt-1">Get help through live chat</div>
-          </button>
-
+      <div class="panel tx-panel">
+        <div class="panel-head">
+          <h3>Recent Transactions</h3>
+          <button class="btn btn-light" onclick="dashPage('history')">View All</button>
         </div>
 
-
-        <!-- DASHBOARD ANALYSIS -->
-        <div class="dashboard-card p-5 sm:p-7 mt-6">
-
-          <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
-            <div>
-              <div class="text-xs uppercase tracking-widest text-gray-400 font-bold">Dashboard Analysis</div>
-              <h2 class="text-2xl sm:text-3xl font-black mt-2">January — September</h2>
-              <p class="text-gray-500 text-sm mt-1">Cash-flow trend overview.</p>
-            </div>
-
-            <div class="flex gap-2">
-              <span class="px-3 py-2 rounded-xl bg-green-50 green-text text-sm font-bold">Income</span>
-              <span class="px-3 py-2 rounded-xl bg-gray-100 text-gray-500 text-sm font-bold">Expenses</span>
-            </div>
+        <div id="recentTransactions">
+          <div style="padding:30px;text-align:center;color:#7b8982">
+            No transactions yet.
           </div>
+        </div>
+      </div>
 
-          <div class="mt-8 overflow-x-auto">
-            <svg viewBox="0 0 1000 390" class="min-w-[720px] w-full h-[300px]" preserveAspectRatio="none">
+    </div>
 
-              <g stroke="#e5ece8" stroke-width="1">
-                <line x1="55" y1="55" x2="970" y2="55"/>
-                <line x1="55" y1="125" x2="970" y2="125"/>
-                <line x1="55" y1="195" x2="970" y2="195"/>
-                <line x1="55" y1="265" x2="970" y2="265"/>
-              </g>
-
-              <path
-                d="M60 255
-                   C130 240 145 230 170 215
-                   C225 190 250 205 280 178
-                   C335 135 370 160 405 145
-                   C465 115 485 130 530 110
-                   C580 88 610 105 655 85
-                   C710 65 740 80 790 66
-                   C850 50 890 60 965 35
-                   L965 285 L60 285Z"
-                fill="#087443"
-                fill-opacity=".10"
-              />
-
-              <path
-                d="M60 255
-                   C130 240 145 230 170 215
-                   C225 190 250 205 280 178
-                   C335 135 370 160 405 145
-                   C465 115 485 130 530 110
-                   C580 88 610 105 655 85
-                   C710 65 740 80 790 66
-                   C850 50 890 60 965 35"
-                fill="none"
-                stroke="#087443"
-                stroke-width="6"
-                stroke-linecap="round"
-              />
-
-              <g fill="#087443">
-                <circle cx="60" cy="255" r="6"/>
-                <circle cx="170" cy="215" r="6"/>
-                <circle cx="280" cy="178" r="6"/>
-                <circle cx="405" cy="145" r="6"/>
-                <circle cx="530" cy="110" r="6"/>
-                <circle cx="655" cy="85" r="6"/>
-                <circle cx="790" cy="66" r="6"/>
-                <circle cx="890" cy="60" r="6"/>
-                <circle cx="965" cy="35" r="6"/>
-              </g>
-
-              <g fill="#7d8b83" font-family="Arial" font-size="14">
-                <text x="48" y="330">Jan</text>
-                <text x="157" y="330">Feb</text>
-                <text x="267" y="330">Mar</text>
-                <text x="393" y="330">Apr</text>
-                <text x="518" y="330">May</text>
-                <text x="643" y="330">Jun</text>
-                <text x="778" y="330">Jul</text>
-                <text x="875" y="330">Aug</text>
-                <text x="950" y="330">Sep</text>
-              </g>
-            </svg>
-          </div>
-
+    <!-- ACCOUNTS -->
+    <div id="dash-accounts" class="page-section">
+      <div class="panel">
+        <div class="panel-head">
+          <h3>Account Overview</h3>
+          <span>Current account</span>
         </div>
 
-
-        <!-- RECENT TRANSACTIONS -->
-        <div class="dashboard-card p-5 sm:p-7 mt-6">
-
-          <div class="flex items-center justify-between gap-4">
-            <div>
-              <div class="text-xs uppercase tracking-widest text-gray-400 font-bold">Activity</div>
-              <h2 class="text-2xl font-black mt-2">Recent Transactions</h2>
-            </div>
-
-            <button onclick="showDash('history')" class="green-text font-bold text-sm">
-              View all →
-            </button>
+        <div class="stats">
+          <div class="stat">
+            <strong id="accountBalanceCard">$0.00</strong>
+            <span>Available balance</span>
           </div>
-
-          <div id="recentTx" class="mt-6">
-            <div class="rounded-2xl bg-gray-50 p-6 text-center text-gray-500">
-              No transactions yet.
-            </div>
+          <div class="stat">
+            <strong id="accountNumberCard">—</strong>
+            <span>Account number</span>
           </div>
+          <div class="stat">
+            <strong id="accountTypeCard">—</strong>
+            <span>Account type</span>
+          </div>
+          <div class="stat">
+            <strong>Verified</strong>
+            <span>KYC status</span>
+          </div>
+        </div>
+      </div>
+    </div>
 
+    <!-- ANALYTICS -->
+    <div id="dash-analytics" class="page-section">
+      <div class="panel">
+        <div class="panel-head">
+          <h3>Cash Flow Analysis</h3>
+          <span id="fullAnalysisRange">January — September</span>
+        </div>
+        <div class="month-chart" id="fullDashboardChart"></div>
+      </div>
+    </div>
+
+    <!-- HISTORY -->
+    <div id="dash-history" class="page-section">
+      <div class="panel">
+        <div class="panel-head">
+          <h3>Transaction History</h3>
+          <span>All activity</span>
+        </div>
+        <div id="allTransactions">
+          <div style="padding:30px;text-align:center;color:#7b8982">
+            No transactions yet.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SUPPORT -->
+    <div id="dash-support" class="page-section">
+      <div class="panel">
+        <div class="section-kicker">Support</div>
+        <h2 style="font-size:35px">We're here to help.</h2>
+        <p style="color:var(--muted);line-height:1.7">
+          Use the live chat widget to connect with support.
+        </p>
+        <button class="btn btn-green"
+                onclick="window.Tawk_API && window.Tawk_API.maximize && window.Tawk_API.maximize()">
+          Open Live Chat
+        </button>
+      </div>
+    </div>
+
+    <!-- PROFILE -->
+    <div id="dash-profile" class="page-section">
+      <div class="panel">
+        <div class="panel-head">
+          <h3>Profile</h3>
+          <span>Account information</span>
         </div>
 
-      </section>
-
-
-      <!-- ACCOUNTS -->
-      <section id="dash-accounts" class="hidden">
-
-        <div class="mb-7">
-          <div class="text-xs uppercase tracking-widest text-gray-400 font-bold">Accounts</div>
-          <h1 class="text-3xl sm:text-4xl font-black mt-2">Account Details</h1>
-        </div>
-
-        <div class="grid md:grid-cols-2 gap-5">
-
-          <div class="dashboard-card p-7">
-            <div class="text-xs text-gray-400 uppercase tracking-widest font-bold">Account Number</div>
-            <div id="accountDetailsNumber" class="text-3xl font-black mt-3">—</div>
-            <div class="text-sm text-gray-500 mt-2">Generated automatically during registration.</div>
-          </div>
-
-          <div class="dashboard-card p-7">
-            <div class="text-xs text-gray-400 uppercase tracking-widest font-bold">Account Type</div>
-            <div id="accountDetailsType" class="text-3xl font-black mt-3">—</div>
-          </div>
-
-          <div class="dashboard-card p-7">
-            <div class="text-xs text-gray-400 uppercase tracking-widest font-bold">Country</div>
-            <div id="accountDetailsCountry" class="text-3xl font-black mt-3">—</div>
-          </div>
-
-          <div class="dashboard-card p-7">
-            <div class="text-xs text-gray-400 uppercase tracking-widest font-bold">KYC Status</div>
-            <div class="text-3xl font-black green-text mt-3">Verified ✓</div>
-            <div class="text-sm text-gray-500 mt-2">Prototype verification display.</div>
-          </div>
-
-        </div>
-      </section>
-
-
-      <!-- TRANSFER -->
-      <section id="dash-transfer" class="hidden">
-
-        <div class="mb-7">
-          <div class="text-xs uppercase tracking-widest text-gray-400 font-bold">Transfers</div>
-          <h1 class="text-3xl sm:text-4xl font-black mt-2">Instant Transfer</h1>
-          <p class="text-gray-500 mt-2">Submit a transfer request for administrator/backend processing.</p>
-        </div>
-
-        <div class="max-w-3xl dashboard-card p-6 sm:p-8">
-
-          <div id="transferMessage" class="hidden mb-5 rounded-xl p-4 text-sm"></div>
-
-          <div class="grid md:grid-cols-2 gap-4">
-
-            <div>
-              <label class="text-sm font-bold">Recipient Name</label>
-              <input id="transferName" class="input mt-2" placeholder="Recipient full name">
-            </div>
-
-            <div>
-              <label class="text-sm font-bold">Bank Name</label>
-              <input id="transferBank" class="input mt-2" placeholder="Bank name">
-            </div>
-
-            <div>
-              <label class="text-sm font-bold">Account Number</label>
-              <input id="transferAccount" class="input mt-2" placeholder="Recipient account number">
-            </div>
-
-            <div>
-              <label class="text-sm font-bold">Amount</label>
-              <input id="transferAmount" type="number" min="0" step="0.01" class="input mt-2" placeholder="0.00">
-            </div>
-
-            <div class="md:col-span-2">
-              <label class="text-sm font-bold">Note</label>
-              <textarea id="transferNote" class="input mt-2 min-h-[100px]" placeholder="Optional note"></textarea>
-            </div>
-
-            <div>
-              <label class="text-sm font-bold">Security PIN</label>
-              <input id="transferPin" type="password" maxlength="6" inputmode="numeric" class="input mt-2" placeholder="PIN">
-            </div>
-
-          </div>
-
-          <button onclick="submitTransfer()" class="primary-btn w-full rounded-xl py-4 font-black mt-6">
-            Submit Transfer Request
-          </button>
-
-          <div class="text-xs text-gray-400 mt-4">
-            Customer submissions create a pending transaction. The customer-side interface does not directly modify the account balance.
-          </div>
-
-        </div>
-      </section>
-
-
-      <!-- HISTORY -->
-      <section id="dash-history" class="hidden">
-
-        <div class="mb-7">
-          <div class="text-xs uppercase tracking-widest text-gray-400 font-bold">Activity</div>
-          <h1 class="text-3xl sm:text-4xl font-black mt-2">Transaction History</h1>
-        </div>
-
-        <div class="dashboard-card p-5 sm:p-7">
-          <div id="historyList">
-            <div class="rounded-2xl bg-gray-50 p-7 text-center text-gray-500">
-              No transactions yet.
-            </div>
+        <div class="profile-card" style="margin-bottom:25px">
+          <div class="profile-big" id="profilePageAvatar">CF</div>
+          <div>
+            <strong id="profilePageName">Customer</strong>
+            <div class="tx-muted">KYC Verified</div>
           </div>
         </div>
 
-      </section>
+        <form class="form-grid" onsubmit="updateProfile(event)">
+          <div class="form-row">
+            <div class="field">
+              <label>Full Name</label>
+              <input id="profileNameInput">
+            </div>
 
-
-      <!-- SUPPORT -->
-      <section id="dash-support" class="hidden">
-
-        <div class="mb-7">
-          <div class="text-xs uppercase tracking-widest text-gray-400 font-bold">Support</div>
-          <h1 class="text-3xl sm:text-4xl font-black mt-2">Customer Support</h1>
-        </div>
-
-        <div class="dashboard-card p-7 max-w-2xl">
-          <div class="w-14 h-14 rounded-2xl green-bg text-white flex items-center justify-center text-2xl">
-            ?
+            <div class="field">
+              <label>Country</label>
+              <select id="profileCountryInput">
+                <option>United States</option>
+                <option>United Kingdom</option>
+                <option>Canada</option>
+                <option>Nigeria</option>
+                <option>Ghana</option>
+                <option>Kenya</option>
+                <option>South Africa</option>
+                <option>India</option>
+                <option>Other</option>
+              </select>
+            </div>
           </div>
-          <h2 class="text-2xl font-black mt-6">Need help?</h2>
-          <p class="text-gray-500 mt-2">
-            Use the live chat widget to contact support.
-          </p>
-          <div class="mt-6 rounded-2xl bg-green-50 p-5 text-sm text-gray-600">
-            The Tawk.to chat widget is loaded below.
+
+          <div class="file-box">
+            <div class="field">
+              <label>Change Profile Picture</label>
+              <input id="profilePhoto" type="file" accept="image/*">
+            </div>
           </div>
-        </div>
 
-      </section>
+          <button class="btn btn-green" type="submit">Save Profile</button>
+        </form>
 
-    </main>
+        <div id="profileMessage" class="form-message" style="margin-top:15px"></div>
+      </div>
+    </div>
 
+  </main>
+</div>
+
+</section>
+
+</main>
+
+<!-- TRANSFER MODAL -->
+<div class="modal" id="transferModal">
+  <div class="modal-card">
+    <div class="modal-head">
+      <div>
+        <div class="section-kicker">Transfer</div>
+        <h2 style="margin:5px 0 0">Send Money</h2>
+      </div>
+      <button class="close" onclick="closeTransfer()">×</button>
+    </div>
+
+    <div id="transferMessage" class="form-message"></div>
+
+    <form class="form-grid" onsubmit="submitTransfer(event)">
+
+      <div class="field">
+        <label>Recipient Name</label>
+        <input id="recipientName" required>
+      </div>
+
+      <div class="field">
+        <label>Bank Name</label>
+        <input id="recipientBank" required>
+      </div>
+
+      <div class="field">
+        <label>Account Number</label>
+        <input id="recipientAccount" required>
+      </div>
+
+      <div class="field">
+        <label>Amount</label>
+        <input id="transferAmount" type="number" min="0.01" step="0.01" required>
+      </div>
+
+      <div class="field">
+        <label>Note</label>
+        <textarea id="transferNote" rows="3"
+                  placeholder="Optional note"></textarea>
+      </div>
+
+      <div class="field">
+        <label>Security PIN</label>
+        <input id="transferPin" type="password" inputmode="numeric"
+               maxlength="6" required>
+      </div>
+
+      <button id="transferBtn" class="btn btn-green" type="submit">
+        Submit Transfer
+      </button>
+    </form>
   </div>
 </div>
 
-
-<!-- RECEIPT MODAL -->
-<div id="receiptModal" class="hidden fixed inset-0 z-[100] bg-black/50 p-5 flex items-center justify-center">
-  <div class="bg-white rounded-3xl max-w-lg w-full p-7">
-    <div class="flex justify-between items-center">
-      <h2 class="text-2xl font-black">Transaction Receipt</h2>
-      <button onclick="closeReceipt()" class="w-10 h-10 rounded-full bg-gray-100">×</button>
+<!-- RECEIPT -->
+<div class="modal" id="receiptModal">
+  <div class="modal-card">
+    <div class="modal-head">
+      <h2>Transfer Receipt</h2>
+      <button class="close" onclick="closeReceipt()">×</button>
     </div>
-
-    <div id="receiptContent" class="mt-6"></div>
-
-    <button onclick="printReceipt()" class="primary-btn w-full rounded-xl py-3.5 font-bold mt-6">
+    <div id="receiptContent"></div>
+    <button class="btn btn-green" style="width:100%;margin-top:18px"
+            onclick="printReceipt()">
       Print Receipt
     </button>
   </div>
 </div>
 
+<footer class="footer">
+  <div class="footer-inner">
+    <div>
+      <strong>Cash Flow Bank</strong>
+      <div style="margin-top:8px;font-size:12px">
+        Financial platform prototype.
+      </div>
+    </div>
+    <div style="font-size:12px">
+      Not a real bank, deposit-taking institution, or real-money ledger.
+    </div>
+  </div>
+</footer>
 
 <script>
 /* =========================================================
@@ -1744,1049 +1988,1044 @@ const db = firebase.firestore();
 const storage = firebase.storage();
 
 let currentUserData = null;
-let currentUser = null;
-let transactionsUnsubscribe = null;
+let currentTransactions = [];
+let monthlyData = {};
+let unsubscribeUser = null;
+let unsubscribeTransactions = null;
 
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+function hideViews(){
+  document.querySelectorAll(".view").forEach(v=>v.classList.remove("active"));
+}
+
+function showHome(){
+  hideViews();
+  document.getElementById("homeView").classList.add("active");
+  window.scrollTo({top:0,behavior:"smooth"});
+  document.getElementById("nav").classList.remove("open");
+}
+
+function showLogin(){
+  hideViews();
+  document.getElementById("loginView").classList.add("active");
+  window.scrollTo({top:0,behavior:"smooth"});
+  document.getElementById("nav").classList.remove("open");
+}
+
+function showRegister(){
+  hideViews();
+  document.getElementById("registerView").classList.add("active");
+  window.scrollTo({top:0,behavior:"smooth"});
+  document.getElementById("nav").classList.remove("open");
+}
+
+function showDashboard(){
+  hideViews();
+  document.getElementById("dashboardView").classList.add("active");
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+function toggleMenu(){
+  document.getElementById("nav").classList.toggle("open");
+}
 
 /* =========================================================
    HELPERS
 ========================================================= */
 
-function $(id) {
-  return document.getElementById(id);
+function showMessage(id,text,type="error"){
+  const el=document.getElementById(id);
+  if(!el)return;
+  el.className="form-message show "+type;
+  el.textContent=text;
 }
 
-function show(id) {
-  $(id)?.classList.remove("hidden");
-}
-
-function hide(id) {
-  $(id)?.classList.add("hidden");
-}
-
-function setText(id, value) {
-  const el = $(id);
-  if (el) el.textContent = value ?? "";
-}
-
-function escapeHtml(value) {
-  return String(value ?? "")
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-}
-
-function money(value) {
-  const n = Number(value || 0);
-  return new Intl.NumberFormat("en-US", {
-    style: "currency",
-    currency: "USD"
-  }).format(n);
-}
-
-function formatDate(value) {
-  if (!value) return "—";
-
-  let date;
-
-  if (value.toDate) {
-    date = value.toDate();
-  } else {
-    date = new Date(value);
+function clearMessage(id){
+  const el=document.getElementById(id);
+  if(el){
+    el.className="form-message";
+    el.textContent="";
   }
+}
 
-  if (Number.isNaN(date.getTime())) return "—";
-
-  return date.toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    year: "numeric"
+function formatMoney(value){
+  const n=Number(value)||0;
+  return n.toLocaleString("en-US",{
+    style:"currency",
+    currency:"USD",
+    minimumFractionDigits:2
   });
 }
 
-function formatLongDate(date = new Date()) {
-  return date.toLocaleDateString("en-US", {
-    weekday: "long",
-    month: "long",
-    day: "numeric",
-    year: "numeric"
-  });
+function escapeHtml(value){
+  return String(value??"")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
 }
 
-function syntheticEmail(accountNumber) {
-  return `acct-${accountNumber}@cashflowbank.local`;
+function initials(name){
+  const parts=String(name||"Customer").trim().split(/\s+/);
+  return (parts[0]?.[0]||"C")+(parts[1]?.[0]||"F");
 }
 
-function showError(id, message) {
-  const el = $(id);
-  if (!el) return;
-  el.textContent = message;
-  el.classList.remove("hidden");
+function syntheticEmail(account){
+  return "acct-"+String(account).replace(/\D/g,"")+"@cashflowbank.local";
 }
 
-function clearError(id) {
-  const el = $(id);
-  if (!el) return;
-  el.textContent = "";
-  el.classList.add("hidden");
-}
-
-async function sha256(text) {
-  const data = new TextEncoder().encode(text);
-  const hash = await crypto.subtle.digest("SHA-256", data);
-  return Array.from(new Uint8Array(hash))
-    .map(b => b.toString(16).padStart(2, "0"))
+async function hashText(text){
+  const data=new TextEncoder().encode(text);
+  const hash=await crypto.subtle.digest("SHA-256",data);
+  return [...new Uint8Array(hash)]
+    .map(x=>x.toString(16).padStart(2,"0"))
     .join("");
 }
 
-
-/* =========================================================
-   PUBLIC NAVIGATION
-========================================================= */
-
-function scrollToSection(id) {
-  const el = $(id);
-  if (el) el.scrollIntoView({ behavior: "smooth", block: "start" });
-}
-
-function toggleMobileMenu() {
-  $("mobileMenu").classList.toggle("hidden");
-}
-
-function showPublicSite() {
-  show("publicSite");
-  hide("authSite");
-  hide("dashboardSite");
-  window.scrollTo(0, 0);
-}
-
-function showAuth(mode) {
-  hide("publicSite");
-  show("authSite");
-  hide("dashboardSite");
-
-  clearError("loginError");
-  clearError("registerError");
-
-  if (mode === "register") {
-    show("registerPanel");
-    hide("loginPanel");
-  } else {
-    show("loginPanel");
-    hide("registerPanel");
-  }
-
-  window.scrollTo(0, 0);
-}
-
-
-/* =========================================================
-   MOBILE SIDEBAR
-========================================================= */
-
-function toggleSidebar() {
-  const sidebar = $("sidebar");
-  const overlay = $("mobileOverlay");
-
-  if (!sidebar) return;
-
-  const open = sidebar.classList.contains("translate-x-0");
-
-  if (open) {
-    sidebar.classList.remove("translate-x-0");
-    sidebar.classList.add("-translate-x-full");
-    overlay.classList.add("hidden");
-  } else {
-    sidebar.classList.remove("-translate-x-full");
-    sidebar.classList.add("translate-x-0");
-    overlay.classList.remove("hidden");
-  }
-}
-
-
-/* =========================================================
-   DASHBOARD VIEWS
-========================================================= */
-
-function showDash(page) {
-  const pages = [
-    "dash-home",
-    "dash-accounts",
-    "dash-transfer",
-    "dash-history",
-    "dash-support"
-  ];
-
-  pages.forEach(id => hide(id));
-
-  const target = {
-    home: "dash-home",
-    accounts: "dash-accounts",
-    transfer: "dash-transfer",
-    history: "dash-history",
-    support: "dash-support"
-  }[page] || "dash-home";
-
-  show(target);
-
-  document.querySelectorAll(".dashNav").forEach(btn => {
-    btn.classList.remove("bg-white/10");
-  });
-
-  const index = {
-    home: 0,
-    accounts: 1,
-    transfer: 2,
-    history: 3,
-    support: 4
-  }[page];
-
-  const nav = document.querySelectorAll(".dashNav")[index];
-  if (nav) nav.classList.add("bg-white/10");
-
-  if (window.innerWidth < 1024) {
-    const sidebar = $("sidebar");
-    sidebar.classList.remove("translate-x-0");
-    sidebar.classList.add("-translate-x-full");
-    $("mobileOverlay").classList.add("hidden");
-  }
-
-  window.scrollTo({ top: 0, behavior: "smooth" });
-}
-
-
-/* =========================================================
-   ACCOUNT NUMBER
-========================================================= */
-
-async function generateUniqueAccountNumber() {
-  for (let i = 0; i < 10; i++) {
-    const number = String(
-      Math.floor(1000000000 + Math.random() * 9000000000)
-    );
-
-    const snap = await db
-      .collection("users")
-      .where("accountNumber", "==", number)
+async function generateAccountNumber(){
+  for(let i=0;i<30;i++){
+    const number=String(Math.floor(1000000000+Math.random()*9000000000));
+    const snap=await db.collection("users")
+      .where("accountNumber","==",number)
       .limit(1)
       .get();
 
-    if (snap.empty) return number;
+    if(snap.empty)return number;
   }
 
   throw new Error("Could not generate a unique account number.");
 }
 
+function currentYear(){
+  return new Date().getFullYear();
+}
+
+function currentMonthNumber(){
+  return new Date().getMonth()+1;
+}
+
+const monthNames=[
+  "January","February","March","April","May","June",
+  "July","August","September","October","November","December"
+];
+
+function monthKey(year,month){
+  return year+"-"+String(month).padStart(2,"0");
+}
 
 /* =========================================================
    REGISTRATION
 ========================================================= */
 
-async function doRegister() {
+async function doRegister(event){
+  event.preventDefault();
 
-  clearError("registerError");
+  clearMessage("registerMessage");
 
-  const name = $("regName").value.trim();
-  const email = $("regEmail").value.trim();
-  const password = $("regPass").value;
-  const confirm = $("regConfirm").value;
-  const accountType = $("regType").value;
-  const country = $("regCountry").value;
-  const pin = $("regPin").value.trim();
-  const photoFile = $("regPhoto").files[0];
+  const btn=document.getElementById("regBtn");
+  btn.disabled=true;
+  btn.textContent="Creating account...";
 
-  if (!name || !email || !password || !confirm || !accountType || !country || !pin) {
-    showError("registerError", "Please complete all required fields.");
-    return;
-  }
+  try{
+    const name=document.getElementById("regName").value.trim();
+    const email=document.getElementById("regEmail").value.trim().toLowerCase();
+    const pass=document.getElementById("regPass").value;
+    const confirm=document.getElementById("regConfirm").value;
+    const accountType=document.getElementById("regType").value;
+    const country=document.getElementById("regCountry").value;
+    const pin=document.getElementById("regPin").value;
+    const photo=document.getElementById("regPhoto").files[0];
 
-  if (password !== confirm) {
-    showError("registerError", "Passwords do not match.");
-    return;
-  }
-
-  if (password.length < 6) {
-    showError("registerError", "Password must contain at least 6 characters.");
-    return;
-  }
-
-  if (!/^\d{4,6}$/.test(pin)) {
-    showError("registerError", "Security PIN must contain 4–6 digits.");
-    return;
-  }
-
-  if (photoFile && !photoFile.type.startsWith("image/")) {
-    showError("registerError", "Profile picture must be an image.");
-    return;
-  }
-
-  const btn = $("regBtn");
-  btn.disabled = true;
-  btn.textContent = "Creating Account...";
-
-  try {
-
-    const accountNumber = await generateUniqueAccountNumber();
-    const internalEmail = syntheticEmail(accountNumber);
-    const securityPinHash = await sha256(pin);
-
-    const credential = await auth.createUserWithEmailAndPassword(
-      internalEmail,
-      password
-    );
-
-    const user = credential.user;
-
-    let photoURL = "";
-
-    if (photoFile) {
-      const ref = storage.ref(`profilePhotos/${user.uid}/profile.jpg`);
-      await ref.put(photoFile);
-      photoURL = await ref.getDownloadURL();
+    if(!name||!email||!pass||!confirm||!accountType||!country||!pin){
+      throw new Error("Please complete all required fields.");
     }
 
-    await user.updateProfile({
-      displayName: name,
-      photoURL: photoURL || null
+    if(pass!==confirm){
+      throw new Error("Passwords do not match.");
+    }
+
+    if(!/^\d{4,6}$/.test(pin)){
+      throw new Error("Security PIN must contain 4 to 6 digits.");
+    }
+
+    const accountNumber=await generateAccountNumber();
+    const internalEmail=syntheticEmail(accountNumber);
+    const pinHash=await hashText(pin);
+
+    const credential=await auth.createUserWithEmailAndPassword(
+      internalEmail,
+      pass
+    );
+
+    const uid=credential.user.uid;
+
+    let photoURL="";
+
+    if(photo){
+      if(photo.size>5*1024*1024){
+        throw new Error("Profile picture must be smaller than 5MB.");
+      }
+
+      if(!photo.type.startsWith("image/")){
+        throw new Error("Please select an image file.");
+      }
+
+      const ref=storage.ref(
+        "profilePhotos/"+uid+"/"+Date.now()+"_"+photo.name
+      );
+
+      await ref.put(photo);
+      photoURL=await ref.getDownloadURL();
+    }
+
+    await credential.user.updateProfile({
+      displayName:name,
+      photoURL:photoURL||null
     });
 
-    await db.collection("users").doc(user.uid).set({
-      uid: user.uid,
-      accountNumber,
+    await db.collection("users").doc(uid).set({
+      uid,
       name,
       email,
+      accountNumber,
       accountType,
       country,
       photoURL,
-      securityPinHash,
-      status: "pending",
-      kycStatus: "verified",
-      balance: 0,
-      accountLimit: 0,
-      creditScore: 0,
-      createdAt: firebase.firestore.FieldValue.serverTimestamp(),
-      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
+      status:"pending",
+      balance:0,
+      accountLimit:0,
+      creditScore:0,
+      kycStatus:"verified_demo",
+      securityPinHash:pinHash,
+      createdAt:firebase.firestore.FieldValue.serverTimestamp(),
+      updatedAt:firebase.firestore.FieldValue.serverTimestamp()
     });
-
-    setText("generatedAccount", accountNumber);
-
-    hide("regBtn");
-    show("registrationSuccess");
 
     await auth.signOut();
 
-  } catch (error) {
+    document.getElementById("generatedAccount").textContent=accountNumber;
+    document.querySelector("#registerView form").style.display="none";
+    document.getElementById("accountCreated").style.display="block";
 
+  }catch(error){
     console.error(error);
-
-    let message = error.message || "Could not create account.";
-
-    if (error.code === "auth/email-already-in-use") {
-      message = "This account number already exists. Please try again.";
-    }
-
-    showError("registerError", message);
-
-  } finally {
-    btn.disabled = false;
-    btn.textContent = "Create Account";
+    showMessage(
+      "registerMessage",
+      error.message||"Unable to create account."
+    );
+  }finally{
+    btn.disabled=false;
+    btn.textContent="Create Account";
   }
 }
-
 
 /* =========================================================
    LOGIN
 ========================================================= */
 
-async function doLogin() {
+async function doLogin(event){
+  event.preventDefault();
 
-  clearError("loginError");
+  clearMessage("loginMessage");
 
-  const accountNumber = $("loginAcc").value.trim();
-  const password = $("loginPass").value;
+  const btn=document.getElementById("loginBtn");
+  btn.disabled=true;
+  btn.textContent="Signing in...";
 
-  if (!/^\d{10}$/.test(accountNumber)) {
-    showError("loginError", "Enter a valid 10-digit account number.");
-    return;
-  }
+  try{
+    const account=document.getElementById("loginAcc").value.trim();
+    const password=document.getElementById("loginPass").value;
 
-  if (!password) {
-    showError("loginError", "Enter your password.");
-    return;
-  }
+    if(!/^\d{10}$/.test(account)){
+      throw new Error("Enter a valid 10-digit account number.");
+    }
 
-  const btn = $("loginBtn");
-  btn.disabled = true;
-  btn.textContent = "Signing In...";
-
-  try {
-
-    const credential = await auth.signInWithEmailAndPassword(
-      syntheticEmail(accountNumber),
+    const credential=await auth.signInWithEmailAndPassword(
+      syntheticEmail(account),
       password
     );
 
-    const user = credential.user;
+    const snap=await db.collection("users")
+      .doc(credential.user.uid)
+      .get();
 
-    const snap = await db.collection("users").doc(user.uid).get();
-
-    if (!snap.exists) {
+    if(!snap.exists){
       await auth.signOut();
       throw new Error("Account profile could not be found.");
     }
 
-    const data = snap.data();
+    const data=snap.data();
 
-    if (data.status !== "active") {
+    if(data.status!=="active"){
       await auth.signOut();
 
-      if (data.status === "pending") {
-        throw new Error("Your account is still awaiting approval.");
+      if(data.status==="pending"){
+        throw new Error("Your account is awaiting administrator approval.");
       }
 
-      if (data.status === "rejected") {
-        throw new Error("This account has not been approved.");
-      }
-
-      throw new Error("Your account is not currently active.");
+      throw new Error("This account is not currently active.");
     }
 
-    currentUser = user;
-    currentUserData = data;
+    currentUserData=data;
+    showDashboard();
+    startUserListeners();
 
-    openDashboard();
-
-  } catch (error) {
-
+  }catch(error){
     console.error(error);
-    showError("loginError", error.message || "Login failed.");
-
-  } finally {
-    btn.disabled = false;
-    btn.textContent = "Login";
-  }
-}
-
-
-/* =========================================================
-   DASHBOARD
-========================================================= */
-
-function openDashboard() {
-
-  hide("publicSite");
-  hide("authSite");
-  show("dashboardSite");
-
-  populateDashboard();
-  showDash("home");
-
-  window.scrollTo(0, 0);
-
-  listenToTransactions();
-}
-
-function populateDashboard() {
-
-  if (!currentUserData) return;
-
-  const data = currentUserData;
-
-  const name = data.name || currentUser?.displayName || "Customer";
-  const email = data.email || "";
-  const accountNumber = data.accountNumber || "—";
-  const type = data.accountType || "—";
-  const country = data.country || "—";
-  const balance = Number(data.balance || 0);
-  const photoURL = data.photoURL || currentUser?.photoURL || "";
-
-  setText("welcomeName", `Welcome back, ${name.split(" ")[0]}`);
-  setText("dashboardGreeting", `Hello, ${name.split(" ")[0]}`);
-  setText("headerUserName", name);
-  setText("profileName", name);
-  setText("profileEmail", email);
-  setText("profileAccountNumber", accountNumber);
-  setText("profileAccountType", type);
-  setText("profileCountry", country);
-
-  setText("accountDetailsNumber", accountNumber);
-  setText("accountDetailsType", type);
-  setText("accountDetailsCountry", country);
-
-  setText("balDisplay", money(balance));
-
-  const now = new Date();
-
-  setText("dashboardDate", formatLongDate(now));
-  setText("overviewDate", formatLongDate(now));
-  setText("footerYear", now.getFullYear());
-
-  updateAvatar("headerAvatar", name, photoURL);
-  updateAvatar("mainProfileAvatar", name, photoURL);
-}
-
-function updateAvatar(id, name, photoURL) {
-
-  const el = $(id);
-  if (!el) return;
-
-  if (photoURL) {
-    el.innerHTML = `<img src="${escapeHtml(photoURL)}" alt="Profile" class="w-full h-full object-cover">`;
-  } else {
-    const initials = name
-      .split(/\s+/)
-      .filter(Boolean)
-      .slice(0, 2)
-      .map(x => x[0])
-      .join("")
-      .toUpperCase();
-
-    el.textContent = initials || "C";
-  }
-}
-
-
-/* =========================================================
-   PROFILE PHOTO
-========================================================= */
-
-async function updateProfilePhoto(input) {
-
-  const file = input.files[0];
-
-  if (!file || !currentUser) return;
-
-  if (!file.type.startsWith("image/")) {
-    alert("Please select an image.");
-    return;
-  }
-
-  if (file.size > 5 * 1024 * 1024) {
-    alert("Profile picture must be under 5MB.");
-    return;
-  }
-
-  try {
-
-    const ref = storage.ref(`profilePhotos/${currentUser.uid}/profile.jpg`);
-
-    await ref.put(file);
-
-    const photoURL = await ref.getDownloadURL();
-
-    await currentUser.updateProfile({ photoURL });
-
-    await db.collection("users").doc(currentUser.uid).update({
-      photoURL,
-      updatedAt: firebase.firestore.FieldValue.serverTimestamp()
-    });
-
-    currentUserData.photoURL = photoURL;
-
-    populateDashboard();
-
-    alert("Profile picture updated.");
-
-  } catch (error) {
-
-    console.error(error);
-    alert(error.message || "Could not update profile picture.");
-
-  } finally {
-    input.value = "";
-  }
-}
-
-
-/* =========================================================
-   TRANSFERS
-========================================================= */
-
-async function submitTransfer() {
-
-  const message = $("transferMessage");
-
-  function transferMessage(text, good = false) {
-    message.textContent = text;
-    message.className =
-      "mb-5 rounded-xl p-4 text-sm " +
-      (good
-        ? "bg-green-50 text-green-700 border border-green-100"
-        : "bg-red-50 text-red-700 border border-red-100");
-  }
-
-  if (!currentUser) {
-    transferMessage("Please log in first.");
-    return;
-  }
-
-  const recipientName = $("transferName").value.trim();
-  const bankName = $("transferBank").value.trim();
-  const recipientAccount = $("transferAccount").value.trim();
-  const amount = Number($("transferAmount").value);
-  const note = $("transferNote").value.trim();
-  const pin = $("transferPin").value.trim();
-
-  if (!recipientName || !bankName || !recipientAccount || !amount || amount <= 0 || !pin) {
-    transferMessage("Please complete all required transfer fields.");
-    return;
-  }
-
-  if (!/^\d{4,6}$/.test(pin)) {
-    transferMessage("Enter your valid security PIN.");
-    return;
-  }
-
-  try {
-
-    const pinHash = await sha256(pin);
-
-    if (!currentUserData.securityPinHash) {
-      transferMessage("Security PIN verification is not available for this account.");
-      return;
-    }
-
-    if (pinHash !== currentUserData.securityPinHash) {
-      transferMessage("Incorrect security PIN.");
-      return;
-    }
-
-    await db.collection("transactions").add({
-      userId: currentUser.uid,
-      recipientName,
-      bankName,
-      recipientAccount,
-      amount,
-      note,
-      type: "transfer",
-      status: "pending",
-      createdAt: firebase.firestore.FieldValue.serverTimestamp()
-    });
-
-    transferMessage(
-      "Transfer request submitted successfully. It is pending processing.",
-      true
+    showMessage(
+      "loginMessage",
+      error.message||"Unable to sign in."
     );
-
-    $("transferName").value = "";
-    $("transferBank").value = "";
-    $("transferAccount").value = "";
-    $("transferAmount").value = "";
-    $("transferNote").value = "";
-    $("transferPin").value = "";
-
-  } catch (error) {
-
-    console.error(error);
-    transferMessage(error.message || "Could not submit transfer.");
-
+  }finally{
+    btn.disabled=false;
+    btn.textContent="Sign In";
   }
 }
-
-
-/* =========================================================
-   TRANSACTIONS
-========================================================= */
-
-function listenToTransactions() {
-
-  if (!currentUser) return;
-
-  if (transactionsUnsubscribe) {
-    transactionsUnsubscribe();
-  }
-
-  transactionsUnsubscribe = db
-    .collection("transactions")
-    .where("userId", "==", currentUser.uid)
-    .onSnapshot(snapshot => {
-
-      const transactions = [];
-
-      snapshot.forEach(doc => {
-        transactions.push({
-          id: doc.id,
-          ...doc.data()
-        });
-      });
-
-      transactions.sort((a, b) => {
-        const ad = a.createdAt?.toMillis?.() || 0;
-        const bd = b.createdAt?.toMillis?.() || 0;
-        return bd - ad;
-      });
-
-      renderRecentTransactions(transactions.slice(0, 5));
-      renderHistory(transactions);
-
-    }, error => {
-
-      console.error("Transaction listener:", error);
-
-      setText("recentTx", "Unable to load transactions.");
-
-    });
-}
-
-function transactionIcon(type) {
-  if (type === "transfer") return "↗";
-  if (type === "deposit") return "↓";
-  if (type === "refund") return "↩";
-  return "•";
-}
-
-function statusClass(status) {
-
-  if (status === "completed") {
-    return "bg-green-50 text-green-700";
-  }
-
-  if (status === "declined") {
-    return "bg-red-50 text-red-700";
-  }
-
-  return "bg-yellow-50 text-yellow-700";
-}
-
-function renderRecentTransactions(list) {
-
-  const container = $("recentTx");
-
-  if (!container) return;
-
-  if (!list.length) {
-    container.innerHTML = `
-      <div class="rounded-2xl bg-gray-50 p-6 text-center text-gray-500">
-        No transactions yet.
-      </div>
-    `;
-    return;
-  }
-
-  container.innerHTML = list.map(tx => `
-    <div class="flex items-center gap-4 py-4 border-b last:border-b-0 border-gray-100">
-      <div class="w-11 h-11 rounded-xl bg-green-50 green-text flex items-center justify-center font-black">
-        ${transactionIcon(tx.type)}
-      </div>
-
-      <div class="min-w-0 flex-1">
-        <div class="font-bold truncate">${escapeHtml(tx.recipientName || tx.type || "Transaction")}</div>
-        <div class="text-xs text-gray-500 mt-1">
-          ${formatDate(tx.createdAt)}
-        </div>
-      </div>
-
-      <div class="text-right">
-        <div class="font-black">${money(tx.amount)}</div>
-        <div class="inline-block mt-1 px-2 py-1 rounded-full text-[11px] font-bold ${statusClass(tx.status)}">
-          ${escapeHtml(tx.status || "pending")}
-        </div>
-      </div>
-    </div>
-  `).join("");
-}
-
-function renderHistory(list) {
-
-  const container = $("historyList");
-
-  if (!container) return;
-
-  if (!list.length) {
-    container.innerHTML = `
-      <div class="rounded-2xl bg-gray-50 p-7 text-center text-gray-500">
-        No transactions yet.
-      </div>
-    `;
-    return;
-  }
-
-  container.innerHTML = `
-    <div class="space-y-2">
-      ${list.map(tx => `
-        <button
-          onclick='openReceipt(${JSON.stringify(JSON.stringify(tx))})'
-          class="w-full text-left flex flex-col sm:flex-row sm:items-center gap-4 p-4 rounded-2xl hover:bg-gray-50 transition"
-        >
-          <div class="w-11 h-11 rounded-xl bg-green-50 green-text flex items-center justify-center font-black shrink-0">
-            ${transactionIcon(tx.type)}
-          </div>
-
-          <div class="flex-1 min-w-0">
-            <div class="font-bold">${escapeHtml(tx.recipientName || "Transaction")}</div>
-            <div class="text-sm text-gray-500 mt-1">
-              ${escapeHtml(tx.bankName || "")}
-              ${tx.note ? " • " + escapeHtml(tx.note) : ""}
-            </div>
-          </div>
-
-          <div class="sm:text-right">
-            <div class="font-black">${money(tx.amount)}</div>
-            <div class="text-xs text-gray-500 mt-1">${formatDate(tx.createdAt)}</div>
-          </div>
-
-          <div class="px-3 py-1.5 rounded-full text-xs font-bold ${statusClass(tx.status)}">
-            ${escapeHtml(tx.status || "pending")}
-          </div>
-        </button>
-      `).join("")}
-    </div>
-  `;
-}
-
-
-/* =========================================================
-   RECEIPT
-========================================================= */
-
-function openReceipt(jsonString) {
-
-  const tx = JSON.parse(jsonString);
-
-  $("receiptContent").innerHTML = `
-    <div class="rounded-2xl bg-gray-50 p-5 space-y-4">
-      <div class="flex justify-between gap-4">
-        <span class="text-gray-500">Recipient</span>
-        <strong>${escapeHtml(tx.recipientName)}</strong>
-      </div>
-
-      <div class="flex justify-between gap-4">
-        <span class="text-gray-500">Bank</span>
-        <strong>${escapeHtml(tx.bankName)}</strong>
-      </div>
-
-      <div class="flex justify-between gap-4">
-        <span class="text-gray-500">Account</span>
-        <strong>${escapeHtml(tx.recipientAccount)}</strong>
-      </div>
-
-      <div class="flex justify-between gap-4">
-        <span class="text-gray-500">Amount</span>
-        <strong>${money(tx.amount)}</strong>
-      </div>
-
-      <div class="flex justify-between gap-4">
-        <span class="text-gray-500">Status</span>
-        <strong class="green-text">${escapeHtml(tx.status || "pending")}</strong>
-      </div>
-
-      <div class="flex justify-between gap-4">
-        <span class="text-gray-500">Date</span>
-        <strong>${formatDate(tx.createdAt)}</strong>
-      </div>
-    </div>
-  `;
-
-  show("receiptModal");
-}
-
-function closeReceipt() {
-  hide("receiptModal");
-}
-
-function printReceipt() {
-
-  const content = $("receiptContent").innerHTML;
-
-  const win = window.open("", "_blank", "width=700,height=700");
-
-  if (!win) return;
-
-  win.document.write(`
-    <!DOCTYPE html>
-    <html>
-    <head>
-      <title>Cash Flow Bank Receipt</title>
-      <style>
-        body {
-          font-family: Arial, sans-serif;
-          padding: 40px;
-          color: #10251b;
-        }
-        h1 {
-          color: #087443;
-        }
-      </style>
-    </head>
-    <body>
-      <h1>Cash Flow Bank</h1>
-      ${content}
-    </body>
-    </html>
-  `);
-
-  win.document.close();
-  win.focus();
-  win.print();
-}
-
-
-/* =========================================================
-   LOGOUT
-========================================================= */
-
-async function logout() {
-
-  if (transactionsUnsubscribe) {
-    transactionsUnsubscribe();
-    transactionsUnsubscribe = null;
-  }
-
-  await auth.signOut();
-
-  currentUser = null;
-  currentUserData = null;
-
-  hide("dashboardSite");
-  showPublicSite();
-}
-
 
 /* =========================================================
    AUTH STATE
 ========================================================= */
 
-auth.onAuthStateChanged(async user => {
+auth.onAuthStateChanged(async user=>{
+  if(!user)return;
 
-  if (!user) {
-    return;
-  }
+  try{
+    const snap=await db.collection("users").doc(user.uid).get();
 
-  try {
-
-    const snap = await db.collection("users").doc(user.uid).get();
-
-    if (!snap.exists) {
+    if(!snap.exists){
+      await auth.signOut();
       return;
     }
 
-    const data = snap.data();
+    const data=snap.data();
 
-    if (data.status === "active") {
+    if(data.status==="active"){
+      currentUserData=data;
+      showDashboard();
+      startUserListeners();
+    }
+  }catch(error){
+    console.error(error);
+  }
+});
 
-      currentUser = user;
-      currentUserData = data;
+/* =========================================================
+   USER LISTENERS
+========================================================= */
 
-      openDashboard();
+function stopUserListeners(){
+  if(unsubscribeUser){
+    unsubscribeUser();
+    unsubscribeUser=null;
+  }
 
+  if(unsubscribeTransactions){
+    unsubscribeTransactions();
+    unsubscribeTransactions=null;
+  }
+}
+
+function startUserListeners(){
+  stopUserListeners();
+
+  const uid=auth.currentUser?.uid;
+  if(!uid)return;
+
+  unsubscribeUser=db.collection("users").doc(uid).onSnapshot(snap=>{
+    if(!snap.exists)return;
+
+    currentUserData=snap.data();
+    renderDashboard();
+  });
+
+  unsubscribeTransactions=db.collection("transactions")
+    .where("userId","==",uid)
+    .onSnapshot(async snap=>{
+      currentTransactions=snap.docs
+        .map(doc=>({id:doc.id,...doc.data()}))
+        .sort((a,b)=>{
+          const aa=a.createdAt?.toMillis?.()||0;
+          const bb=b.createdAt?.toMillis?.()||0;
+          return bb-aa;
+        });
+
+      await updateMonthlyAnalysis();
+      renderTransactions();
+    },error=>{
+      console.error("Transaction listener:",error);
+    });
+}
+
+/* =========================================================
+   DASHBOARD RENDERING
+========================================================= */
+
+function renderDashboard(){
+  if(!currentUserData)return;
+
+  const data=currentUserData;
+
+  const greeting=document.getElementById("dashGreeting");
+  const hour=new Date().getHours();
+
+  let text="Good morning";
+  if(hour>=12&&hour<18)text="Good afternoon";
+  if(hour>=18)text="Good evening";
+
+  greeting.textContent=text+", "+(data.name||"Customer")+".";
+
+  document.getElementById("dashDate").textContent=
+    new Date().toLocaleDateString("en-US",{
+      weekday:"long",
+      year:"numeric",
+      month:"long",
+      day:"numeric"
+    });
+
+  document.getElementById("balanceDisplay").textContent=
+    formatMoney(data.balance);
+
+  document.getElementById("dashAccountNumber").textContent=
+    data.accountNumber||"—";
+
+  document.getElementById("dashAccountType").textContent=
+    data.accountType||"Account";
+
+  document.getElementById("dashStatus").textContent=
+    data.status||"Active";
+
+  document.getElementById("profileName").textContent=
+    data.name||"Customer";
+
+  document.getElementById("profileCountry").textContent=
+    data.country||"Country";
+
+  document.getElementById("profileEmail").textContent=
+    data.email||"Email";
+
+  document.getElementById("profilePageName").textContent=
+    data.name||"Customer";
+
+  document.getElementById("profileNameInput").value=
+    data.name||"";
+
+  document.getElementById("profileCountryInput").value=
+    data.country||"United States";
+
+  document.getElementById("accountBalanceCard").textContent=
+    formatMoney(data.balance);
+
+  document.getElementById("accountNumberCard").textContent=
+    data.accountNumber||"—";
+
+  document.getElementById("accountTypeCard").textContent=
+    data.accountType||"—";
+
+  setAvatar("dashAvatar",data);
+  setAvatar("profileAvatar",data);
+  setAvatar("profilePageAvatar",data);
+
+  renderMonthlyChart("dashboardChart");
+  renderMonthlyChart("fullDashboardChart");
+}
+
+function setAvatar(id,data){
+  const el=document.getElementById(id);
+  if(!el)return;
+
+  if(data.photoURL){
+    el.innerHTML="<img src=\""+escapeHtml(data.photoURL)+"\" alt=\"Profile\">";
+  }else{
+    el.textContent=initials(data.name);
+  }
+}
+
+/* =========================================================
+   DASHBOARD PAGES
+========================================================= */
+
+function dashPage(page,button){
+  document.querySelectorAll(".page-section")
+    .forEach(x=>x.classList.remove("active"));
+
+  const target=document.getElementById("dash-"+page);
+  if(target)target.classList.add("active");
+
+  if(button){
+    document.querySelectorAll(".side-nav button")
+      .forEach(x=>x.classList.remove("active"));
+    button.classList.add("active");
+  }
+
+  if(page==="analytics"){
+    renderMonthlyChart("fullDashboardChart");
+  }
+}
+
+function renderTransactions(){
+  const recent=document.getElementById("recentTransactions");
+  const all=document.getElementById("allTransactions");
+
+  if(!currentTransactions.length){
+    const empty='<div style="padding:30px;text-align:center;color:#7b8982">No transactions yet.</div>';
+    recent.innerHTML=empty;
+    all.innerHTML=empty;
+    return;
+  }
+
+  const recentItems=currentTransactions.slice(0,5);
+
+  recent.innerHTML=recentItems.map(transactionRow).join("");
+  all.innerHTML=currentTransactions.map(transactionRow).join("");
+}
+
+function transactionRow(tx){
+  const date=tx.createdAt?.toDate
+    ?tx.createdAt.toDate().toLocaleDateString()
+    :"—";
+
+  const amount=formatMoney(tx.amount);
+
+  const status=tx.status||"pending";
+
+  const label=status.charAt(0).toUpperCase()+status.slice(1);
+
+  return `
+    <div class="tx-row">
+      <div>
+        <div class="tx-name">${escapeHtml(tx.recipientName||"Transfer")}</div>
+        <div class="tx-muted">${escapeHtml(tx.bankName||"")}</div>
+      </div>
+      <div class="tx-muted">${date}</div>
+      <div class="tx-name">${amount}</div>
+      <div>
+        <span class="tx-status ${escapeHtml(status)}">${escapeHtml(label)}</span>
+      </div>
+    </div>
+  `;
+}
+
+/* =========================================================
+   MONTHLY ANALYSIS
+========================================================= */
+
+async function updateMonthlyAnalysis(){
+  if(!auth.currentUser)return;
+
+  const year=currentYear();
+  const currentMonth=currentMonthNumber();
+
+  monthlyData={};
+
+  for(let month=1;month<=currentMonth;month++){
+    monthlyData[monthKey(year,month)]={
+      incoming:0,
+      outgoing:0,
+      total:0
+    };
+  }
+
+  currentTransactions.forEach(tx=>{
+    if(!tx.createdAt?.toDate)return;
+
+    const date=tx.createdAt.toDate();
+
+    if(date.getFullYear()!==year)return;
+
+    const month=date.getMonth()+1;
+    const key=monthKey(year,month);
+
+    if(!monthlyData[key]){
+      monthlyData[key]={
+        incoming:0,
+        outgoing:0,
+        total:0
+      };
     }
 
-  } catch (error) {
+    const amount=Number(tx.amount)||0;
+
+    if(tx.status==="completed"){
+      monthlyData[key].outgoing+=amount;
+      monthlyData[key].total+=amount;
+    }
+  });
+
+  /*
+    The monthly documents are intentionally keyed by YEAR-MONTH.
+    Therefore September 2026 remains:
+       2026-09
+
+    When October begins, October becomes:
+       2026-10
+
+    October does NOT replace September.
+  */
+
+  const batch=db.batch();
+
+  Object.entries(monthlyData).forEach(([key,value])=>{
+    const ref=db.collection("users")
+      .doc(auth.currentUser.uid)
+      .collection("monthlyAnalysis")
+      .doc(key);
+
+    batch.set(ref,{
+      year,
+      month:key.slice(5,7),
+      incoming:value.incoming,
+      outgoing:value.outgoing,
+      total:value.total,
+      updatedAt:firebase.firestore.FieldValue.serverTimestamp()
+    },{merge:true});
+  });
+
+  try{
+    await batch.commit();
+  }catch(error){
+    console.warn("Monthly analysis could not be saved:",error);
+  }
+
+  renderMonthlyChart("dashboardChart");
+  renderMonthlyChart("fullDashboardChart");
+}
+
+function renderMonthlyChart(id){
+  const container=document.getElementById(id);
+  if(!container)return;
+
+  const year=currentYear();
+  const currentMonth=currentMonthNumber();
+
+  const values=[];
+
+  for(let i=1;i<=currentMonth;i++){
+    const key=monthKey(year,i);
+    values.push(monthlyData[key]?.total||0);
+  }
+
+  const max=Math.max(...values,1);
+
+  const width=900;
+  const height=300;
+  const padX=45;
+  const padY=30;
+
+  const usableW=width-padX*2;
+  const usableH=height-padY*2;
+
+  const points=values.map((value,index)=>{
+    const x=padX+(values.length===1?usableW/2:
+      index/(values.length-1)*usableW);
+
+    const y=height-padY-(value/max)*usableH;
+
+    return {x,y,value};
+  });
+
+  const line=points.map((p,i)=>
+    (i?"L":"M")+p.x.toFixed(1)+" "+p.y.toFixed(1)
+  ).join(" ");
+
+  const area=line+
+    " L "+points[points.length-1].x+" "+(height-padY)+
+    " L "+points[0].x+" "+(height-padY)+" Z";
+
+  const labels=points.map((p,i)=>{
+    return `
+      <text x="${p.x}" y="${height-5}"
+            text-anchor="middle"
+            font-size="11"
+            fill="#708078">
+        ${monthNames[i].slice(0,3)}
+      </text>
+    `;
+  }).join("");
+
+  const dots=points.map(p=>`
+    <circle cx="${p.x}" cy="${p.y}" r="5"
+            fill="#087443"
+            stroke="#fff"
+            stroke-width="3"/>
+  `).join("");
+
+  const grid=[.25,.5,.75,1].map(v=>{
+    const y=height-padY-v*usableH;
+    return `<line x1="${padX}" x2="${width-padX}" y1="${y}" y2="${y}"
+            stroke="#e2eee8" stroke-width="1"/>`;
+  }).join("");
+
+  const endMonth=monthNames[currentMonth-1];
+
+  container.innerHTML=`
+    <svg viewBox="0 0 ${width} ${height}"
+         preserveAspectRatio="none"
+         style="width:100%;height:100%">
+      ${grid}
+      <path d="${area}" fill="#087443" opacity=".07"/>
+      <path d="${line}" fill="none" stroke="#087443"
+            stroke-width="4" stroke-linecap="round"
+            stroke-linejoin="round"/>
+      ${dots}
+      ${labels}
+    </svg>
+  `;
+
+  const labelId=id==="dashboardChart"
+    ?"analysisRange"
+    :"fullAnalysisRange";
+
+  const label=document.getElementById(labelId);
+
+  if(label){
+    label.textContent="January — "+endMonth;
+  }
+}
+
+/* =========================================================
+   TRANSFER
+========================================================= */
+
+function openTransfer(){
+  if(!auth.currentUser){
+    showLogin();
+    return;
+  }
+
+  clearMessage("transferMessage");
+  document.getElementById("transferModal").classList.add("show");
+}
+
+function closeTransfer(){
+  document.getElementById("transferModal").classList.remove("show");
+}
+
+async function submitTransfer(event){
+  event.preventDefault();
+
+  clearMessage("transferMessage");
+
+  const btn=document.getElementById("transferBtn");
+  btn.disabled=true;
+  btn.textContent="Submitting...";
+
+  try{
+    if(!auth.currentUser||!currentUserData){
+      throw new Error("Please sign in again.");
+    }
+
+    const recipientName=
+      document.getElementById("recipientName").value.trim();
+
+    const bankName=
+      document.getElementById("recipientBank").value.trim();
+
+    const accountNumber=
+      document.getElementById("recipientAccount").value.trim();
+
+    const amount=
+      Number(document.getElementById("transferAmount").value);
+
+    const note=
+      document.getElementById("transferNote").value.trim();
+
+    const pin=
+      document.getElementById("transferPin").value;
+
+    if(!recipientName||!bankName||!accountNumber||!amount||!pin){
+      throw new Error("Complete all required transfer fields.");
+    }
+
+    if(amount<=0){
+      throw new Error("Enter a valid transfer amount.");
+    }
+
+    const pinHash=await hashText(pin);
+
+    if(pinHash!==currentUserData.securityPinHash){
+      throw new Error("Incorrect security PIN.");
+    }
+
+    /*
+      IMPORTANT:
+      This only creates a pending transfer.
+      The customer does NOT modify the balance.
+      An authorized admin/backend process must approve
+      and complete the transaction.
+    */
+
+    const ref=await db.collection("transactions").add({
+      userId:auth.currentUser.uid,
+      recipientName,
+      bankName,
+      recipientAccountNumber:accountNumber,
+      amount,
+      note,
+      status:"pending",
+      createdAt:firebase.firestore.FieldValue.serverTimestamp()
+    });
+
+    closeTransfer();
+
+    document.getElementById("receiptContent").innerHTML=`
+      <div class="receipt">
+        <div class="receipt-row">
+          <span>Reference</span>
+          <strong>${escapeHtml(ref.id.slice(0,12).toUpperCase())}</strong>
+        </div>
+        <div class="receipt-row">
+          <span>Recipient</span>
+          <strong>${escapeHtml(recipientName)}</strong>
+        </div>
+        <div class="receipt-row">
+          <span>Bank</span>
+          <strong>${escapeHtml(bankName)}</strong>
+        </div>
+        <div class="receipt-row">
+          <span>Account</span>
+          <strong>${escapeHtml(accountNumber)}</strong>
+        </div>
+        <div class="receipt-row">
+          <span>Amount</span>
+          <strong>${formatMoney(amount)}</strong>
+        </div>
+        <div class="receipt-row">
+          <span>Status</span>
+          <strong>Pending</strong>
+        </div>
+      </div>
+    `;
+
+    document.getElementById("receiptModal").classList.add("show");
+
+    document.getElementById("recipientName").value="";
+    document.getElementById("recipientBank").value="";
+    document.getElementById("recipientAccount").value="";
+    document.getElementById("transferAmount").value="";
+    document.getElementById("transferNote").value="";
+    document.getElementById("transferPin").value="";
+
+  }catch(error){
+    console.error(error);
+    showMessage(
+      "transferMessage",
+      error.message||"Transfer could not be submitted."
+    );
+  }finally{
+    btn.disabled=false;
+    btn.textContent="Submit Transfer";
+  }
+}
+
+function closeReceipt(){
+  document.getElementById("receiptModal").classList.remove("show");
+}
+
+function printReceipt(){
+  const content=document.getElementById("receiptContent").innerHTML;
+  const win=window.open("","_blank","width=700,height=700");
+
+  if(!win)return;
+
+  win.document.write(`
+    <html>
+      <head>
+        <title>Cash Flow Bank Transfer Receipt</title>
+        <style>
+          body{font-family:Arial;padding:40px}
+          .receipt{border:1px solid #ddd;padding:20px}
+          .receipt-row{display:flex;justify-content:space-between;
+          padding:12px 0;border-bottom:1px solid #eee}
+        </style>
+      </head>
+      <body>
+        <h1>Cash Flow Bank</h1>
+        ${content}
+      </body>
+    </html>
+  `);
+
+  win.document.close();
+  win.print();
+}
+
+/* =========================================================
+   PROFILE
+========================================================= */
+
+async function updateProfile(event){
+  event.preventDefault();
+
+  if(!auth.currentUser)return;
+
+  clearMessage("profileMessage");
+
+  try{
+    const name=document.getElementById("profileNameInput").value.trim();
+    const country=document.getElementById("profileCountryInput").value;
+    const photo=document.getElementById("profilePhoto").files[0];
+
+    if(!name){
+      throw new Error("Name is required.");
+    }
+
+    const updates={
+      name,
+      country,
+      updatedAt:firebase.firestore.FieldValue.serverTimestamp()
+    };
+
+    if(photo){
+      if(photo.size>5*1024*1024){
+        throw new Error("Profile picture must be smaller than 5MB.");
+      }
+
+      if(!photo.type.startsWith("image/")){
+        throw new Error("Please select an image.");
+      }
+
+      const ref=storage.ref(
+        "profilePhotos/"+auth.currentUser.uid+
+        "/profile_"+Date.now()+"_"+photo.name
+      );
+
+      await ref.put(photo);
+      updates.photoURL=await ref.getDownloadURL();
+    }
+
+    await db.collection("users")
+      .doc(auth.currentUser.uid)
+      .update(updates);
+
+    await auth.currentUser.updateProfile({
+      displayName:name,
+      photoURL:updates.photoURL||auth.currentUser.photoURL||null
+    });
+
+    showMessage(
+      "profileMessage",
+      "Profile updated successfully.",
+      "success"
+    );
+
+  }catch(error){
+    console.error(error);
+    showMessage(
+      "profileMessage",
+      error.message||"Profile update failed."
+    );
+  }
+}
+
+/* =========================================================
+   LOGOUT
+========================================================= */
+
+async function logout(){
+  stopUserListeners();
+  currentUserData=null;
+  currentTransactions=[];
+  monthlyData={};
+
+  try{
+    await auth.signOut();
+  }catch(error){
     console.error(error);
   }
 
-});
-
+  showHome();
+}
 
 /* =========================================================
    HERO COUNTERS
 ========================================================= */
 
-function animateCounter(el) {
+function animateCounters(){
+  document.querySelectorAll("[data-counter]").forEach(el=>{
+    const target=Number(el.dataset.counter);
 
-  const target = Number(el.dataset.target || 0);
-  const prefix = el.dataset.prefix || "";
-  const suffix = el.dataset.suffix || "";
+    if(!target)return;
 
-  const duration = 1800;
-  const start = performance.now();
+    let start=0;
+    const duration=1300;
+    const begin=performance.now();
 
-  function update(now) {
+    function frame(now){
+      const progress=Math.min((now-begin)/duration,1);
+      const eased=1-Math.pow(1-progress,3);
+      const value=Math.floor(target*eased);
 
-    const progress = Math.min((now - start) / duration, 1);
+      if(target>=1000000){
+        el.textContent=(value/1000000).toFixed(value<10000000?1:0)+"M+";
+      }else if(target>=1000){
+        el.textContent=Math.floor(value/1000)+"K+";
+      }else{
+        el.textContent=value+"+";
+      }
 
-    const eased = 1 - Math.pow(1 - progress, 3);
-    const value = Math.floor(target * eased);
-
-    el.textContent = prefix + value.toLocaleString() + suffix;
-
-    if (progress < 1) {
-      requestAnimationFrame(update);
+      if(progress<1)requestAnimationFrame(frame);
     }
+
+    requestAnimationFrame(frame);
+  });
+}
+
+setTimeout(animateCounters,400);
+
+/* =========================================================
+   CLOSE MODALS
+========================================================= */
+
+document.addEventListener("click",event=>{
+  if(event.target.id==="transferModal"){
+    closeTransfer();
   }
 
-  requestAnimationFrame(update);
-}
-
-const counterObserver = new IntersectionObserver(entries => {
-
-  entries.forEach(entry => {
-
-    if (entry.isIntersecting) {
-
-      document.querySelectorAll(".stat-number").forEach(el => {
-
-        if (el.dataset.animated === "true") return;
-
-        el.dataset.animated = "true";
-        animateCounter(el);
-
-      });
-
-      counterObserver.disconnect();
-    }
-
-  });
-
-}, { threshold: .35 });
-
-const statsContainer = document.querySelector(".hero-stat-grid");
-
-if (statsContainer) {
-  counterObserver.observe(statsContainer);
-}
-
-
-/* =========================================================
-   REVEAL ANIMATIONS
-========================================================= */
-
-const revealObserver = new IntersectionObserver(entries => {
-
-  entries.forEach(entry => {
-
-    if (entry.isIntersecting) {
-      entry.target.classList.add("show");
-    }
-
-  });
-
-}, {
-  threshold: .08
+  if(event.target.id==="receiptModal"){
+    closeReceipt();
+  }
 });
-
-document.querySelectorAll(".reveal").forEach(el => {
-  revealObserver.observe(el);
-});
-
-
-/* =========================================================
-   FOOTER
-========================================================= */
-
-setText("footerYear", new Date().getFullYear());
-
 
 /* =========================================================
    TAWK.TO LIVE CHAT
 ========================================================= */
 
-var Tawk_API = Tawk_API || {};
-var Tawk_LoadStart = new Date();
+var Tawk_API=Tawk_API||{},Tawk_LoadStart=new Date();
 
 (function(){
-  var s1 = document.createElement("script");
-  var s0 = document.getElementsByTagName("script")[0];
+  var s1=document.createElement("script"),
+      s0=document.getElementsByTagName("script")[0];
 
-  s1.async = true;
-  s1.src = "https://embed.tawk.to/6aad7099ecbade3448f2e8f6/default";
-  s1.charset = "UTF-8";
-  s1.setAttribute("crossorigin", "*");
+  s1.async=true;
+  s1.src="https://embed.tawk.to/6aad7099ecbade3448f2e8f6/default";
+  s1.charset="UTF-8";
+  s1.setAttribute("crossorigin","*");
 
-  s0.parentNode.insertBefore(s1, s0);
+  s0.parentNode.insertBefore(s1,s0);
 })();
+
+/* =========================================================
+   INITIAL UI
+========================================================= */
+
+document.getElementById("dashDate").textContent=
+  new Date().toLocaleDateString("en-US",{
+    weekday:"long",
+    year:"numeric",
+    month:"long",
+    day:"numeric"
+  });
+
+window.addEventListener("hashchange",()=>{
+  if(location.hash==="#login")showLogin();
+  if(location.hash==="#register")showRegister();
+  if(location.hash==="#home")showHome();
+});
+
 </script>
 
 </body>
