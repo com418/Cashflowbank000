@@ -2,41 +2,51 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#006b3c">
-<meta name="description" content="Cash Flow Bank financial platform prototype">
-
 <title>Cash Flow Bank</title>
 
-<script src="https://cdn.tailwindcss.com"></script>
-
+<!-- Firebase -->
 <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-auth-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore-compat.js"></script>
 
 <style>
 :root{
-  --green-950:#002b1d;
-  --green-900:#003822;
-  --green-800:#004d2d;
+  --green-950:#002116;
+  --green-900:#00301f;
+  --green-850:#003b27;
+  --green-800:#004a30;
   --green-700:#006b3c;
-  --green-600:#008746;
-  --green-500:#00a651;
-  --green-400:#20bd69;
-  --green-300:#7be3a9;
+  --green-650:#007842;
+  --green-600:#008a4d;
+  --green-500:#00a957;
+  --green-400:#19c96b;
+  --green-300:#69e69e;
 
-  --bg:#f5f8f6;
-  --card:#ffffff;
-  --card2:#f9fcfa;
-  --text:#10251b;
-  --muted:#718079;
-  --border:#dfe9e3;
+  --bg:#f4f8f5;
+  --surface:#ffffff;
+  --surface-2:#f8fbf9;
+  --text:#10231b;
+  --muted:#6c7d74;
+  --border:#e1eae5;
+  --shadow:0 20px 60px rgba(0,67,40,.08);
 
-  --danger:#c83c3c;
-  --warning:#b47a14;
+  --danger:#c62828;
+  --warning:#b77900;
+  --success:#087a43;
 
-  --shadow:0 18px 50px rgba(0,62,37,.08);
   --radius:24px;
+}
+
+body.dark{
+  --bg:#09120e;
+  --surface:#101c16;
+  --surface-2:#14231b;
+  --text:#edf8f1;
+  --muted:#9caf a5;
+  --border:#26382f;
+  --shadow:0 20px 60px rgba(0,0,0,.28);
 }
 
 *{
@@ -49,20 +59,17 @@ html{
 
 body{
   margin:0;
+  font-family:
+    Inter,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    Roboto,
+    Arial,
+    sans-serif;
   background:var(--bg);
   color:var(--text);
-  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
   transition:.25s ease;
-}
-
-body.dark{
-  --bg:#09130e;
-  --card:#101d16;
-  --card2:#0d1812;
-  --text:#edf7f1;
-  --muted:#9bad a4;
-  --border:#24362c;
-  --shadow:0 18px 50px rgba(0,0,0,.25);
 }
 
 button,
@@ -76,6 +83,11 @@ button{
   cursor:pointer;
 }
 
+a{
+  color:inherit;
+  text-decoration:none;
+}
+
 .hidden{
   display:none!important;
 }
@@ -85,108 +97,134 @@ button{
 ========================================================= */
 
 .prototype-notice{
-  background:#003822;
-  color:#eafff2;
-  padding:9px 18px;
+  width:100%;
+  padding:9px 16px;
   text-align:center;
+  background:#003b27;
+  color:#eafff2;
   font-size:12px;
+  font-weight:600;
   letter-spacing:.2px;
 }
 
 /* =========================================================
-   LANDING HEADER
+   LANDING PAGE
 ========================================================= */
 
-.site-header{
-  position:absolute;
-  top:38px;
-  left:0;
-  width:100%;
-  z-index:20;
-  padding:0 28px;
+#landingPage{
+  min-height:100vh;
 }
 
-.header-inner{
-  max-width:1220px;
-  margin:auto;
-  height:76px;
-  padding:0 18px;
-  border:1px solid rgba(255,255,255,.18);
-  background:rgba(0,44,29,.65);
+.site-header{
+  position:sticky;
+  top:0;
+  z-index:100;
+  background:rgba(255,255,255,.92);
   backdrop-filter:blur(18px);
-  border-radius:22px;
+  border-bottom:1px solid rgba(0,80,45,.08);
+}
 
+body.dark .site-header{
+  background:rgba(9,18,14,.92);
+  border-color:var(--border);
+}
+
+.nav{
+  max-width:1240px;
+  margin:auto;
+  height:78px;
+  padding:0 24px;
   display:flex;
   align-items:center;
   justify-content:space-between;
   gap:25px;
 }
 
-.brand{
+.logo{
   display:flex;
   align-items:center;
-  gap:12px;
-  color:white;
-  font-weight:800;
-  text-decoration:none;
+  gap:11px;
+  font-weight:850;
+  font-size:20px;
+  color:var(--green-800);
   white-space:nowrap;
 }
 
-.brand-mark{
-  width:43px;
-  height:43px;
-  border-radius:13px;
-  background:#fff;
-  color:var(--green-700);
-  display:grid;
-  place-items:center;
-  box-shadow:0 8px 20px rgba(0,0,0,.12);
-}
-
-.brand-name{
-  font-size:18px;
-}
-
-.main-nav{
-  display:flex;
-  align-items:center;
-  gap:26px;
-}
-
-.main-nav a{
-  color:rgba(255,255,255,.85);
-  text-decoration:none;
-  font-size:14px;
-  font-weight:600;
-  transition:.2s;
-}
-
-.main-nav a:hover{
+body.dark .logo{
   color:#fff;
 }
 
-.header-actions{
+.logo-mark{
+  width:39px;
+  height:39px;
+  border-radius:13px;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(145deg,var(--green-500),var(--green-800));
+  color:white;
+  box-shadow:0 10px 25px rgba(0,139,77,.2);
+}
+
+.logo-mark svg{
+  width:22px;
+  height:22px;
+}
+
+.nav-links{
+  display:flex;
+  align-items:center;
+  gap:30px;
+  font-size:14px;
+  font-weight:700;
+  color:var(--muted);
+}
+
+.nav-links a:hover{
+  color:var(--green-600);
+}
+
+.nav-actions{
   display:flex;
   align-items:center;
   gap:10px;
 }
 
-.header-login{
-  color:#fff;
-  background:transparent;
-  border:1px solid rgba(255,255,255,.3);
-  padding:11px 17px;
+.btn{
+  border:0;
   border-radius:13px;
-  font-weight:700;
+  padding:12px 17px;
+  font-weight:750;
+  transition:.2s ease;
 }
 
-.header-start{
+.btn:hover{
+  transform:translateY(-1px);
+}
+
+.btn-outline{
+  background:transparent;
+  border:1px solid var(--border);
+  color:var(--text);
+}
+
+.btn-green{
+  background:var(--green-700);
+  color:white;
+  box-shadow:0 10px 25px rgba(0,107,60,.15);
+}
+
+.btn-green:hover{
+  background:var(--green-800);
+}
+
+.btn-light{
+  background:#edf8f1;
   color:var(--green-800);
-  background:#fff;
-  border:0;
-  padding:12px 18px;
-  border-radius:13px;
-  font-weight:800;
+}
+
+body.dark .btn-light{
+  background:#173426;
+  color:#b8f2cd;
 }
 
 /* =========================================================
@@ -195,210 +233,235 @@ button{
 
 .hero{
   position:relative;
-  min-height:1050px;
   overflow:hidden;
   background:
-    radial-gradient(circle at 85% 18%,rgba(57,213,133,.18),transparent 30%),
-    radial-gradient(circle at 10% 60%,rgba(0,166,81,.2),transparent 30%),
-    linear-gradient(135deg,#001f14 0%,#003822 45%,#006b3c 100%);
-  color:#fff;
-}
-
-.hero-grid{
-  position:absolute;
-  inset:0;
-  opacity:.12;
-  background-image:
-    linear-gradient(rgba(255,255,255,.5) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(255,255,255,.5) 1px,transparent 1px);
-  background-size:70px 70px;
-}
-
-.hero-glow{
-  position:absolute;
-  width:520px;
-  height:520px;
-  border-radius:50%;
-  background:rgba(38,220,129,.12);
-  filter:blur(20px);
-  right:-160px;
-  top:250px;
+    radial-gradient(circle at 80% 20%,rgba(25,201,107,.18),transparent 32%),
+    linear-gradient(135deg,#003a27 0%,#005f38 48%,#007a43 100%);
+  color:white;
 }
 
 .hero-inner{
-  position:relative;
-  z-index:3;
-  max-width:1220px;
+  max-width:1240px;
   margin:auto;
-  padding:180px 28px 90px;
+  min-height:790px;
+  padding:90px 24px 90px;
+  display:grid;
+  grid-template-columns:1.05fr .95fr;
+  align-items:center;
+  gap:60px;
+  position:relative;
+  z-index:2;
 }
 
 .hero-copy{
-  max-width:780px;
+  max-width:720px;
 }
 
-.hero-badge{
+.hero-eyebrow{
   display:inline-flex;
   align-items:center;
-  gap:8px;
+  gap:9px;
   padding:9px 13px;
-  border-radius:999px;
-  background:rgba(255,255,255,.1);
   border:1px solid rgba(255,255,255,.18);
+  border-radius:999px;
+  background:rgba(255,255,255,.08);
   font-size:12px;
   font-weight:800;
-  margin-bottom:25px;
+  letter-spacing:.4px;
 }
 
-.hero-title{
-  font-size:clamp(48px,7vw,86px);
+.dot{
+  width:8px;
+  height:8px;
+  border-radius:50%;
+  background:#6ff3a3;
+  box-shadow:0 0 0 6px rgba(111,243,163,.1);
+}
+
+.hero h1{
+  margin:22px 0 22px;
+  font-size:clamp(48px,6vw,82px);
   line-height:.98;
-  letter-spacing:-4px;
-  margin:0;
-  font-weight:900;
+  letter-spacing:-3px;
 }
 
-.hero-title span{
-  color:#7be3a9;
+.hero h1 span{
+  color:#9affbf;
 }
 
 .hero-description{
-  margin-top:28px;
-  max-width:670px;
+  max-width:620px;
   color:rgba(255,255,255,.78);
   font-size:18px;
-  line-height:1.8;
+  line-height:1.75;
 }
 
 .hero-actions{
   display:flex;
   flex-wrap:wrap;
   gap:12px;
-  margin-top:32px;
+  margin-top:30px;
 }
 
-.hero-primary{
-  background:#fff;
+.hero .btn-outline{
+  color:white;
+  border-color:rgba(255,255,255,.28);
+}
+
+.hero .btn-light{
+  background:white;
   color:var(--green-800);
-  border:0;
-  padding:15px 23px;
-  border-radius:14px;
+}
+
+.hero-stats{
+  margin-top:55px;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:12px;
+}
+
+.hero-stat{
+  padding:17px;
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:17px;
+  background:rgba(255,255,255,.07);
+}
+
+.hero-stat strong{
+  display:block;
+  font-size:21px;
+}
+
+.hero-stat span{
+  display:block;
+  margin-top:5px;
+  color:rgba(255,255,255,.62);
+  font-size:11px;
+  line-height:1.35;
+}
+
+.hero-visual{
+  position:relative;
+  min-height:550px;
+}
+
+.hero-building{
+  position:absolute;
+  right:30px;
+  bottom:0;
+  width:min(430px,80%);
+  height:520px;
+  border-radius:28px 28px 0 0;
+  background:linear-gradient(
+    90deg,
+    rgba(255,255,255,.08),
+    rgba(255,255,255,.16),
+    rgba(255,255,255,.06)
+  );
+  border:1px solid rgba(255,255,255,.18);
+  backdrop-filter:blur(6px);
+  overflow:hidden;
+}
+
+.hero-building:before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:
+    repeating-linear-gradient(
+      to right,
+      transparent 0 39px,
+      rgba(255,255,255,.13) 40px 41px
+    ),
+    repeating-linear-gradient(
+      to bottom,
+      transparent 0 39px,
+      rgba(255,255,255,.11) 40px 41px
+    );
+}
+
+.hero-building-top{
+  position:absolute;
+  top:-80px;
+  left:35%;
+  width:30%;
+  height:110px;
+  border-radius:30px 30px 0 0;
+  background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.18);
+}
+
+.floating-card{
+  position:absolute;
+  padding:17px 19px;
+  border-radius:20px;
+  background:white;
+  color:var(--text);
+  box-shadow:0 25px 60px rgba(0,0,0,.18);
+}
+
+.floating-card.one{
+  top:70px;
+  left:0;
+}
+
+.floating-card.two{
+  right:-15px;
+  bottom:100px;
+}
+
+.floating-label{
+  font-size:11px;
+  color:#75867d;
+  font-weight:700;
+}
+
+.floating-value{
+  margin-top:5px;
+  font-size:21px;
   font-weight:850;
 }
 
-.hero-secondary{
-  background:rgba(255,255,255,.08);
-  color:#fff;
-  border:1px solid rgba(255,255,255,.25);
-  padding:15px 23px;
-  border-radius:14px;
-  font-weight:750;
-}
-
-/* SVG CITY / BUILDINGS */
-
-.city-scene{
-  position:absolute;
-  right:0;
-  bottom:0;
-  width:62%;
-  max-width:780px;
-  opacity:.9;
-  pointer-events:none;
-}
-
-.floating-svg{
-  position:absolute;
-  z-index:4;
-  border:1px solid rgba(255,255,255,.15);
-  background:rgba(255,255,255,.08);
-  backdrop-filter:blur(15px);
-  border-radius:18px;
-  padding:14px 17px;
-  color:#fff;
-  box-shadow:0 20px 50px rgba(0,0,0,.15);
-}
-
-.float-one{
-  right:10%;
-  top:330px;
-}
-
-.float-two{
-  right:33%;
-  top:510px;
-}
-
-.float-three{
-  left:5%;
-  top:690px;
-}
-
-.hero-metrics{
-  position:relative;
-  z-index:5;
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:14px;
-  margin-top:100px;
-}
-
-.metric{
-  border:1px solid rgba(255,255,255,.14);
-  background:rgba(255,255,255,.07);
-  backdrop-filter:blur(15px);
-  border-radius:20px;
-  padding:23px;
-}
-
-.metric-number{
-  font-size:27px;
-  font-weight:900;
-}
-
-.metric-label{
-  margin-top:6px;
-  color:rgba(255,255,255,.65);
-  font-size:12px;
+.floating-positive{
+  color:var(--green-600);
+  font-size:11px;
+  margin-top:4px;
+  font-weight:800;
 }
 
 /* =========================================================
    LANDING SECTIONS
 ========================================================= */
 
-.landing-section{
-  padding:110px 28px;
-  background:var(--bg);
-}
-
-.landing-container{
-  max-width:1220px;
+.section{
+  max-width:1240px;
   margin:auto;
+  padding:100px 24px;
 }
 
-.section-heading{
-  max-width:700px;
-  margin-bottom:45px;
+.section-head{
+  max-width:720px;
+  margin-bottom:40px;
 }
 
 .section-kicker{
   color:var(--green-600);
-  text-transform:uppercase;
   font-size:12px;
-  font-weight:900;
-  letter-spacing:1.8px;
+  font-weight:850;
+  letter-spacing:1px;
+  text-transform:uppercase;
 }
 
-.section-heading h2{
-  font-size:clamp(35px,5vw,58px);
-  line-height:1.04;
-  letter-spacing:-2px;
-  margin:12px 0;
+.section-title{
+  margin:10px 0 14px;
+  font-size:clamp(32px,4vw,52px);
+  line-height:1.05;
+  letter-spacing:-1.7px;
 }
 
-.section-heading p{
+.section-description{
   color:var(--muted);
-  line-height:1.8;
+  line-height:1.75;
 }
 
 .service-grid{
@@ -408,72 +471,81 @@ button{
 }
 
 .service-card{
-  background:var(--card);
+  padding:28px;
   border:1px solid var(--border);
-  border-radius:var(--radius);
-  padding:30px;
+  border-radius:24px;
+  background:var(--surface);
   box-shadow:var(--shadow);
 }
 
-.service-icon{
-  width:50px;
-  height:50px;
+.icon-box{
+  width:48px;
+  height:48px;
   border-radius:15px;
-  background:#e6f7ed;
-  color:var(--green-700);
   display:grid;
   place-items:center;
-  margin-bottom:25px;
+  background:#eaf8f0;
+  color:var(--green-700);
+}
+
+body.dark .icon-box{
+  background:#173426;
+}
+
+.icon-box svg{
+  width:23px;
+  height:23px;
 }
 
 .service-card h3{
-  margin:0 0 10px;
-  font-size:19px;
+  margin:20px 0 8px;
 }
 
 .service-card p{
-  margin:0;
   color:var(--muted);
-  line-height:1.7;
+  line-height:1.65;
   font-size:14px;
 }
 
-/* SECURITY */
-
 .security-section{
-  background:#002b1d;
-  color:#fff;
+  background:var(--green-950);
+  color:white;
+  max-width:none;
 }
 
-.security-section .section-heading p{
-  color:rgba(255,255,255,.65);
+.security-inner{
+  max-width:1240px;
+  margin:auto;
+  padding:100px 24px;
 }
 
 .security-grid{
   display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:15px;
+  grid-template-columns:1fr 1fr;
+  gap:50px;
+  align-items:center;
 }
 
-.security-card{
+.security-copy p{
+  color:rgba(255,255,255,.68);
+  line-height:1.75;
+}
+
+.security-list{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:13px;
+  margin-top:28px;
+}
+
+.security-item{
+  padding:17px;
   border:1px solid rgba(255,255,255,.1);
-  background:rgba(255,255,255,.055);
-  border-radius:20px;
-  padding:25px;
-}
-
-.security-card strong{
-  display:block;
-  margin-bottom:8px;
-}
-
-.security-card span{
-  color:rgba(255,255,255,.62);
+  background:rgba(255,255,255,.05);
+  border-radius:16px;
+  color:#dcf9e8;
   font-size:13px;
-  line-height:1.6;
 }
-
-/* REVIEWS */
 
 .review-grid{
   display:grid;
@@ -481,28 +553,45 @@ button{
   gap:18px;
 }
 
-.review-card{
-  background:var(--card);
+.review{
+  padding:26px;
   border:1px solid var(--border);
   border-radius:22px;
-  padding:28px;
+  background:var(--surface);
 }
 
-.stars{
-  color:#1aa85c;
-  letter-spacing:2px;
-  margin-bottom:18px;
-}
-
-.review-card p{
+.review p{
   color:var(--muted);
   line-height:1.7;
   font-size:14px;
 }
 
-.review-author{
-  margin-top:22px;
-  font-weight:800;
+.review strong{
+  display:block;
+  margin-top:20px;
+}
+
+.review small{
+  color:var(--muted);
+}
+
+.footer{
+  padding:50px 24px;
+  background:#001c12;
+  color:rgba(255,255,255,.65);
+}
+
+.footer-inner{
+  max-width:1240px;
+  margin:auto;
+  display:flex;
+  justify-content:space-between;
+  gap:20px;
+  flex-wrap:wrap;
+}
+
+.footer strong{
+  color:white;
 }
 
 /* =========================================================
@@ -512,163 +601,213 @@ button{
 .auth-overlay{
   position:fixed;
   inset:0;
-  background:rgba(0,20,12,.72);
-  backdrop-filter:blur(10px);
-  z-index:100;
-  display:flex;
-  justify-content:center;
+  z-index:1000;
+  background:rgba(0,20,12,.62);
+  backdrop-filter:blur(12px);
+  display:none;
   align-items:center;
+  justify-content:center;
   padding:20px;
 }
 
+.auth-overlay.show{
+  display:flex;
+}
+
 .auth-box{
-  width:min(510px,100%);
+  width:min(500px,100%);
   max-height:92vh;
   overflow:auto;
-  background:var(--card);
+  background:var(--surface);
   border:1px solid var(--border);
   border-radius:28px;
-  box-shadow:0 35px 100px rgba(0,0,0,.28);
+  box-shadow:0 30px 100px rgba(0,0,0,.25);
   padding:30px;
 }
 
 .auth-top{
   display:flex;
   justify-content:space-between;
-  gap:15px;
   align-items:flex-start;
-  margin-bottom:25px;
+  gap:20px;
 }
 
 .auth-top h2{
   margin:0;
-  font-size:27px;
-}
-
-.auth-top p{
-  color:var(--muted);
-  margin:6px 0 0;
-  font-size:13px;
+  font-size:28px;
 }
 
 .close-btn{
-  width:38px;
-  height:38px;
-  border:1px solid var(--border);
+  width:40px;
+  height:40px;
+  border:0;
   border-radius:12px;
-  background:var(--card2);
+  background:var(--surface-2);
   color:var(--text);
+  font-size:23px;
+}
+
+.auth-subtitle{
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.6;
+  margin:8px 0 22px;
 }
 
 .auth-tabs{
   display:grid;
   grid-template-columns:1fr 1fr;
-  background:var(--card2);
-  border:1px solid var(--border);
   padding:4px;
-  border-radius:13px;
-  margin-bottom:22px;
+  background:var(--surface-2);
+  border-radius:14px;
+  margin-bottom:20px;
 }
 
 .auth-tab{
-  padding:11px;
   border:0;
+  padding:11px;
+  border-radius:11px;
   background:transparent;
   color:var(--muted);
-  border-radius:10px;
   font-weight:800;
 }
 
 .auth-tab.active{
-  background:var(--green-700);
-  color:white;
-}
-
-.form-group{
-  margin-bottom:15px;
-}
-
-.form-label{
-  display:block;
-  margin-bottom:7px;
-  font-size:12px;
-  font-weight:800;
-}
-
-.form-input{
-  width:100%;
-  border:1px solid var(--border);
-  background:var(--card2);
-  color:var(--text);
-  border-radius:13px;
-  padding:13px 14px;
-  outline:none;
-}
-
-.form-input:focus{
-  border-color:var(--green-500);
-  box-shadow:0 0 0 3px rgba(0,166,81,.1);
+  background:var(--surface);
+  color:var(--green-700);
+  box-shadow:0 5px 15px rgba(0,0,0,.06);
 }
 
 .form-grid{
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:12px;
+  gap:13px;
 }
 
-.primary-btn{
-  width:100%;
-  background:var(--green-700);
-  color:#fff;
-  border:0;
-  border-radius:13px;
-  padding:14px;
-  font-weight:850;
-  margin-top:7px;
+.form-group{
+  margin-bottom:13px;
 }
 
-.secondary-btn{
-  width:100%;
-  background:var(--card2);
-  color:var(--text);
-  border:1px solid var(--border);
-  border-radius:13px;
-  padding:13px;
+.form-group.full{
+  grid-column:1/-1;
+}
+
+.form-group label{
+  display:block;
+  margin-bottom:7px;
+  font-size:12px;
   font-weight:800;
+  color:var(--text);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea{
+  width:100%;
+  border:1px solid var(--border);
+  background:var(--surface-2);
+  color:var(--text);
+  padding:13px 14px;
+  border-radius:13px;
+  outline:none;
+}
+
+.form-group textarea{
+  min-height:90px;
+  resize:vertical;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus{
+  border-color:var(--green-500);
+  box-shadow:0 0 0 4px rgba(0,169,87,.08);
+}
+
+.file-box{
+  padding:14px;
+  border:1px dashed var(--border);
+  border-radius:15px;
+  background:var(--surface-2);
+}
+
+.photo-preview{
+  width:70px;
+  height:70px;
+  border-radius:18px;
+  object-fit:cover;
+  margin-top:10px;
+  display:none;
 }
 
 .form-note{
-  color:var(--muted);
   font-size:11px;
-  line-height:1.6;
-  margin-top:10px;
+  color:var(--muted);
+  line-height:1.5;
+  margin-top:6px;
+}
+
+.form-error{
+  background:#fff0f0;
+  color:#a82020;
+  border:1px solid #f3caca;
+  border-radius:12px;
+  padding:11px;
+  font-size:12px;
+  margin-bottom:13px;
+  display:none;
+}
+
+body.dark .form-error{
+  background:#351919;
+  border-color:#5d2929;
+}
+
+.full-btn{
+  width:100%;
+  padding:14px;
 }
 
 /* =========================================================
-   APP
+   DASHBOARD
 ========================================================= */
 
-.app{
+#dashboardPage{
   min-height:100vh;
+  display:none;
   background:var(--bg);
 }
 
-.app-sidebar{
+.dashboard-shell{
+  min-height:100vh;
+  display:flex;
+}
+
+.sidebar{
   position:fixed;
   left:0;
   top:0;
   bottom:0;
   width:245px;
-  background:#003822;
-  color:#fff;
+  background:var(--green-950);
+  color:white;
   padding:22px 15px;
-  z-index:50;
   display:flex;
   flex-direction:column;
+  z-index:300;
 }
 
-.sidebar-brand{
-  padding:5px 9px 25px;
+.sidebar-logo{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-weight:850;
+  padding:7px 10px 27px;
+}
+
+.sidebar-logo .logo-mark{
+  width:36px;
+  height:36px;
 }
 
 .sidebar-nav{
@@ -677,41 +816,51 @@ button{
   gap:5px;
 }
 
-.side-btn{
+.side-link{
   width:100%;
   border:0;
   background:transparent;
-  color:rgba(255,255,255,.65);
+  color:rgba(255,255,255,.66);
   padding:12px 13px;
-  border-radius:12px;
+  border-radius:13px;
   text-align:left;
-  font-weight:700;
   display:flex;
   align-items:center;
-  gap:10px;
+  gap:11px;
+  font-size:13px;
+  font-weight:750;
 }
 
-.side-btn:hover,
-.side-btn.active{
-  background:rgba(255,255,255,.1);
-  color:#fff;
+.side-link:hover,
+.side-link.active{
+  color:white;
+  background:rgba(255,255,255,.09);
+}
+
+.side-link svg{
+  width:18px;
+  height:18px;
 }
 
 .sidebar-bottom{
   margin-top:auto;
+  display:flex;
+  flex-direction:column;
+  gap:6px;
 }
 
-.app-main{
+.dashboard-content{
   margin-left:245px;
-  min-height:100vh;
+  width:calc(100% - 245px);
+  min-width:0;
 }
 
-.app-topbar{
-  height:76px;
+.dashboard-topbar{
   position:sticky;
   top:0;
-  z-index:30;
-  background:rgba(245,248,246,.9);
+  z-index:200;
+  height:76px;
+  background:rgba(244,248,245,.92);
   backdrop-filter:blur(18px);
   border-bottom:1px solid var(--border);
   display:flex;
@@ -720,49 +869,68 @@ button{
   padding:0 30px;
 }
 
-body.dark .app-topbar{
-  background:rgba(9,19,14,.92);
+body.dark .dashboard-topbar{
+  background:rgba(9,18,14,.92);
+}
+
+.topbar-left{
+  display:flex;
+  align-items:center;
+  gap:15px;
 }
 
 .mobile-menu{
   display:none;
+  border:0;
+  background:var(--surface);
+  color:var(--text);
+  width:40px;
+  height:40px;
+  border-radius:12px;
 }
 
-.topbar-title{
-  font-weight:850;
-  font-size:18px;
+.page-heading h1{
+  font-size:22px;
+  margin:0;
+}
+
+.page-heading p{
+  margin:3px 0 0;
+  color:var(--muted);
+  font-size:12px;
 }
 
 .topbar-right{
   display:flex;
   align-items:center;
-  gap:12px;
+  gap:10px;
 }
 
-.theme-btn{
-  width:39px;
-  height:39px;
+.icon-button{
+  width:40px;
+  height:40px;
   border:1px solid var(--border);
-  background:var(--card);
-  color:var(--text);
   border-radius:12px;
+  background:var(--surface);
+  color:var(--text);
+  display:grid;
+  place-items:center;
 }
 
-.user-chip{
-  display:flex;
-  align-items:center;
-  gap:9px;
+.icon-button svg{
+  width:18px;
+  height:18px;
 }
 
 .avatar{
-  width:38px;
-  height:38px;
+  width:40px;
+  height:40px;
   border-radius:50%;
   background:#dff5e8;
   color:var(--green-800);
   display:grid;
   place-items:center;
-  font-weight:900;
+  font-weight:850;
   overflow:hidden;
 }
 
@@ -772,184 +940,173 @@ body.dark .app-topbar{
   object-fit:cover;
 }
 
-.user-chip small{
-  color:var(--muted);
-}
-
-/* =========================================================
-   DASHBOARD
-========================================================= */
-
-.page{
-  max-width:1250px;
+.dashboard-main{
+  max-width:1320px;
   margin:auto;
-  padding:35px 30px 70px;
+  padding:30px;
 }
 
-.page-heading{
-  margin-bottom:24px;
-}
-
-.page-heading h1{
-  margin:0;
-  font-size:32px;
-  letter-spacing:-1px;
-}
-
-.page-heading p{
-  color:var(--muted);
-  margin:7px 0 0;
-}
+/* clean balance area */
 
 .balance-card{
   position:relative;
   overflow:hidden;
+  padding:30px;
+  min-height:205px;
+  border-radius:25px;
+  color:white;
   background:
-    radial-gradient(circle at 85% 20%,rgba(122,227,169,.18),transparent 25%),
-    linear-gradient(135deg,#003822,#006b3c);
-  color:#fff;
-  border-radius:27px;
-  padding:31px;
-  min-height:220px;
-  box-shadow:0 25px 60px rgba(0,70,40,.2);
+    radial-gradient(circle at 85% 15%,rgba(111,243,163,.2),transparent 30%),
+    linear-gradient(135deg,#00462e,#007a43);
+  box-shadow:0 20px 55px rgba(0,91,50,.18);
 }
 
 .balance-card:after{
   content:"";
   position:absolute;
-  width:230px;
-  height:230px;
-  border:1px solid rgba(255,255,255,.1);
+  width:260px;
+  height:260px;
+  border:1px solid rgba(255,255,255,.08);
   border-radius:50%;
-  right:-80px;
-  bottom:-110px;
+  right:-90px;
+  bottom:-150px;
 }
 
 .balance-label{
   color:rgba(255,255,255,.68);
-  font-size:13px;
+  font-size:12px;
+  font-weight:750;
 }
 
 .balance-amount{
-  font-size:48px;
-  font-weight:900;
-  letter-spacing:-2px;
-  margin:9px 0 25px;
+  margin:8px 0 20px;
+  font-size:42px;
+  font-weight:850;
+  letter-spacing:-1.7px;
 }
 
-.balance-meta{
+.account-meta{
   display:flex;
   flex-wrap:wrap;
-  gap:10px;
+  gap:9px;
 }
 
-.balance-meta span{
+.meta-pill{
   padding:8px 11px;
-  border-radius:10px;
+  border-radius:999px;
   background:rgba(255,255,255,.1);
+  color:rgba(255,255,255,.83);
   font-size:11px;
-  color:rgba(255,255,255,.8);
 }
 
-.dashboard-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:20px;
-  margin-top:20px;
-}
-
-.card{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:23px;
-  box-shadow:var(--shadow);
-}
-
-.card-header{
-  padding:23px 24px 0;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:10px;
-}
-
-.card-header h3{
-  margin:0;
-  font-size:17px;
-}
-
-.card-header span{
-  color:var(--muted);
-  font-size:12px;
-}
-
-.card-body{
-  padding:20px 24px 24px;
+.quick-title{
+  margin:30px 0 14px;
+  font-size:15px;
+  font-weight:850;
 }
 
 .quick-grid{
   display:grid;
   grid-template-columns:repeat(4,1fr);
-  gap:12px;
-  margin-top:20px;
+  gap:13px;
 }
 
 .quick-action{
-  min-height:105px;
   border:1px solid var(--border);
-  background:var(--card);
-  color:var(--text);
-  border-radius:18px;
-  padding:17px;
+  background:var(--surface);
+  border-radius:19px;
+  padding:19px;
   text-align:left;
-  transition:.2s;
+  color:var(--text);
+  transition:.2s ease;
 }
 
 .quick-action:hover{
   transform:translateY(-2px);
-  border-color:#8bd9ad;
+  border-color:#b9ddc8;
   box-shadow:var(--shadow);
 }
 
 .quick-icon{
-  width:35px;
-  height:35px;
-  border-radius:10px;
-  background:#e5f7ec;
-  color:var(--green-700);
+  width:42px;
+  height:42px;
+  border-radius:13px;
   display:grid;
   place-items:center;
-  margin-bottom:12px;
+  background:#eaf8f0;
+  color:var(--green-700);
+}
+
+body.dark .quick-icon{
+  background:#173426;
+}
+
+.quick-icon svg{
+  width:19px;
+  height:19px;
 }
 
 .quick-action strong{
   display:block;
+  margin-top:14px;
   font-size:13px;
 }
 
 .quick-action span{
   display:block;
+  margin-top:4px;
   color:var(--muted);
   font-size:11px;
-  margin-top:3px;
 }
 
-/* TRANSACTIONS */
+/* dashboard lower */
 
-.transaction-list{
+.dashboard-grid{
+  display:grid;
+  grid-template-columns:1.25fr .75fr;
+  gap:18px;
+  margin-top:18px;
+}
+
+.dash-card{
+  border:1px solid var(--border);
+  background:var(--surface);
+  border-radius:22px;
+  padding:23px;
+}
+
+.card-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  margin-bottom:18px;
+}
+
+.card-head h2{
+  margin:0;
+  font-size:16px;
+}
+
+.card-head span{
+  color:var(--muted);
+  font-size:11px;
+}
+
+.transactions-list{
   display:flex;
   flex-direction:column;
 }
 
-.transaction{
+.transaction-row{
   display:flex;
   align-items:center;
   gap:12px;
-  padding:14px 0;
+  padding:13px 0;
   border-bottom:1px solid var(--border);
 }
 
-.transaction:last-child{
+.transaction-row:last-child{
   border-bottom:0;
 }
 
@@ -959,9 +1116,9 @@ body.dark .app-topbar{
   border-radius:12px;
   display:grid;
   place-items:center;
-  background:#e9f8ef;
+  background:var(--surface-2);
   color:var(--green-700);
-  flex-shrink:0;
+  flex:0 0 auto;
 }
 
 .transaction-info{
@@ -971,13 +1128,13 @@ body.dark .app-topbar{
 
 .transaction-info strong{
   display:block;
-  font-size:13px;
-  white-space:nowrap;
+  font-size:12px;
   overflow:hidden;
   text-overflow:ellipsis;
+  white-space:nowrap;
 }
 
-.transaction-info small{
+.transaction-info span{
   display:block;
   color:var(--muted);
   font-size:10px;
@@ -985,134 +1142,144 @@ body.dark .app-topbar{
 }
 
 .transaction-amount{
-  text-align:right;
+  font-weight:850;
+  font-size:12px;
+  white-space:nowrap;
 }
 
-.transaction-amount strong{
-  display:block;
+.empty-state{
+  text-align:center;
+  padding:32px 10px;
+  color:var(--muted);
   font-size:13px;
 }
 
-.status{
-  display:inline-block;
-  font-size:9px;
-  padding:4px 7px;
-  border-radius:999px;
-  margin-top:3px;
-  font-weight:800;
-}
+/* simple analysis */
 
-.status.pending{
-  background:#fff3d6;
-  color:#95650c;
-}
-
-.status.completed{
-  background:#e2f7eb;
-  color:#08713e;
-}
-
-.status.declined{
-  background:#fde6e6;
-  color:#a52e2e;
-}
-
-/* ANALYSIS */
-
-.analysis-wrap{
-  padding:24px;
-}
-
-.chart{
-  height:190px;
+.analysis-chart{
+  height:210px;
   display:flex;
   align-items:flex-end;
-  gap:8px;
+  gap:9px;
   padding-top:15px;
 }
 
-.bar{
+.bar-wrap{
   flex:1;
-  min-width:10px;
-  background:linear-gradient(to top,#006b3c,#39c77b);
-  border-radius:8px 8px 3px 3px;
-  position:relative;
+  height:100%;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  align-items:center;
+  gap:7px;
 }
 
-.bar span{
-  position:absolute;
-  bottom:-21px;
-  left:50%;
-  transform:translateX(-50%);
-  color:var(--muted);
+.bar{
+  width:100%;
+  max-width:30px;
+  min-height:4px;
+  border-radius:7px 7px 3px 3px;
+  background:linear-gradient(to top,var(--green-800),var(--green-400));
+}
+
+.bar-label{
   font-size:9px;
-}
-
-.analysis-total{
-  font-size:26px;
-  font-weight:900;
-}
-
-.analysis-sub{
   color:var(--muted);
-  font-size:11px;
 }
 
-/* PROFILE */
+.analysis-note{
+  margin-top:12px;
+  color:var(--muted);
+  font-size:10px;
+}
 
-.profile-card{
-  margin-top:20px;
+/* profile setup */
+
+.profile-section{
+  margin-top:18px;
 }
 
 .profile-layout{
   display:grid;
-  grid-template-columns:170px 1fr;
+  grid-template-columns:180px 1fr;
   gap:25px;
-  padding:25px;
+  align-items:start;
 }
 
-.profile-photo-box{
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:10px;
+.profile-photo-area{
+  text-align:center;
 }
 
-.profile-photo{
-  width:110px;
-  height:110px;
+.profile-large{
+  width:105px;
+  height:105px;
   border-radius:28px;
-  background:#e3f6eb;
+  background:#e7f6ed;
   color:var(--green-700);
   display:grid;
   place-items:center;
-  font-size:30px;
-  font-weight:900;
+  margin:0 auto 12px;
+  font-size:28px;
+  font-weight:850;
   overflow:hidden;
 }
 
-.profile-photo img{
+.profile-large img{
   width:100%;
   height:100%;
   object-fit:cover;
 }
 
-.photo-btn{
+.profile-photo-area label{
+  display:inline-block;
+  padding:9px 12px;
   border:1px solid var(--border);
-  background:var(--card2);
-  color:var(--text);
   border-radius:10px;
-  padding:8px 11px;
   font-size:11px;
-  font-weight:800;
+  font-weight:750;
+  cursor:pointer;
+}
+
+.profile-photo-area input{
+  display:none;
+}
+
+.profile-fields{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:13px;
 }
 
 /* =========================================================
-   TRANSFER PAGE
+   TRANSFER
 ========================================================= */
 
-.transfer-box{
+.page-section{
+  display:none;
+}
+
+.page-section.active{
+  display:block;
+}
+
+.transfer-card{
   max-width:850px;
+  margin:auto;
+  border:1px solid var(--border);
+  border-radius:24px;
+  background:var(--surface);
+  padding:28px;
+}
+
+.transfer-card h2{
+  margin:0;
+  font-size:24px;
+}
+
+.transfer-card > p{
+  color:var(--muted);
+  margin:7px 0 25px;
+  font-size:13px;
 }
 
 .transfer-types{
@@ -1124,103 +1291,180 @@ body.dark .app-topbar{
 
 .transfer-type{
   border:1px solid var(--border);
-  background:var(--card);
   border-radius:17px;
-  padding:20px;
-  color:var(--text);
+  background:var(--surface-2);
+  padding:18px;
   text-align:left;
+  color:var(--text);
 }
 
 .transfer-type.selected{
   border:2px solid var(--green-500);
-  background:#f0fbf5;
+  background:#effaf4;
 }
 
 body.dark .transfer-type.selected{
-  background:#10291d;
+  background:#143223;
 }
 
 .transfer-type strong{
   display:block;
-  font-size:16px;
+  font-size:14px;
 }
 
 .transfer-type span{
   display:block;
-  color:var(--muted);
   margin-top:5px;
-  font-size:12px;
+  color:var(--muted);
+  font-size:11px;
 }
 
 .transfer-form{
-  background:var(--card);
-  border:1px solid var(--border);
-  border-radius:23px;
-  padding:25px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:13px;
 }
 
-.transfer-actions{
-  display:flex;
-  gap:10px;
-  margin-top:18px;
-}
-
-.transfer-actions button{
-  flex:1;
+.transfer-form .full{
+  grid-column:1/-1;
 }
 
 /* =========================================================
-   PROFILE PAGE
+   HISTORY / ACCOUNT
 ========================================================= */
 
-.profile-detail-grid{
-  display:grid;
-  grid-template-columns:repeat(2,1fr);
-  gap:15px;
-}
-
-.detail{
-  padding:17px;
-  background:var(--card2);
+.simple-list{
   border:1px solid var(--border);
-  border-radius:15px;
+  border-radius:22px;
+  overflow:hidden;
+  background:var(--surface);
 }
 
-.detail small{
+.history-row{
+  padding:18px;
+  display:flex;
+  align-items:center;
+  gap:15px;
+  border-bottom:1px solid var(--border);
+}
+
+.history-row:last-child{
+  border-bottom:0;
+}
+
+.history-main{
+  flex:1;
+  min-width:0;
+}
+
+.history-main strong{
   display:block;
-  color:var(--muted);
-  font-size:10px;
-  margin-bottom:5px;
-}
-
-.detail strong{
   font-size:13px;
 }
 
+.history-main span{
+  display:block;
+  color:var(--muted);
+  margin-top:4px;
+  font-size:11px;
+}
+
+.status{
+  display:inline-flex;
+  padding:5px 8px;
+  border-radius:999px;
+  font-size:9px;
+  font-weight:850;
+  text-transform:uppercase;
+}
+
+.status.pending{
+  background:#fff4d8;
+  color:#9a6800;
+}
+
+.status.completed{
+  background:#e4f8ed;
+  color:#087a43;
+}
+
+.status.declined{
+  background:#ffe9e9;
+  color:#b32323;
+}
+
+.status.refunded{
+  background:#eee9ff;
+  color:#6845a8;
+}
+
+body.dark .status.pending{
+  background:#3b3017;
+}
+
+body.dark .status.completed{
+  background:#153625;
+}
+
+body.dark .status.declined{
+  background:#3a1b1b;
+}
+
+/* account summary */
+
+.account-summary-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:14px;
+}
+
+.summary-item{
+  padding:20px;
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:19px;
+}
+
+.summary-item span{
+  color:var(--muted);
+  display:block;
+  font-size:11px;
+}
+
+.summary-item strong{
+  display:block;
+  margin-top:7px;
+  font-size:16px;
+}
+
 /* =========================================================
-   MODAL / TOAST
+   MODALS
 ========================================================= */
 
 .modal-overlay{
   position:fixed;
   inset:0;
-  z-index:200;
-  background:rgba(0,20,12,.7);
+  z-index:1500;
+  background:rgba(0,20,12,.65);
   backdrop-filter:blur(8px);
-  display:flex;
+  display:none;
   align-items:center;
   justify-content:center;
   padding:20px;
 }
 
+.modal-overlay.show{
+  display:flex;
+}
+
 .modal{
   width:min(470px,100%);
-  background:var(--card);
+  background:var(--surface);
   color:var(--text);
+  border-radius:24px;
   border:1px solid var(--border);
-  border-radius:23px;
-  padding:27px;
-  box-shadow:0 30px 90px rgba(0,0,0,.3);
+  padding:25px;
+  box-shadow:0 30px 90px rgba(0,0,0,.25);
 }
 
 .modal h3{
@@ -1233,124 +1477,227 @@ body.dark .transfer-type.selected{
   font-size:13px;
 }
 
+.modal-actions{
+  display:flex;
+  justify-content:flex-end;
+  gap:9px;
+  margin-top:20px;
+}
+
+/* =========================================================
+   TOAST
+========================================================= */
+
 .toast{
   position:fixed;
   right:20px;
   bottom:20px;
-  z-index:500;
-  max-width:340px;
-  padding:14px 17px;
+  z-index:3000;
+  min-width:260px;
+  max-width:390px;
+  padding:14px 16px;
   border-radius:14px;
-  background:#003822;
-  color:#fff;
-  box-shadow:0 15px 40px rgba(0,0,0,.2);
-  font-size:13px;
+  background:var(--green-950);
+  color:white;
+  box-shadow:0 20px 50px rgba(0,0,0,.25);
+  transform:translateY(120px);
+  opacity:0;
+  transition:.25s ease;
+  font-size:12px;
+  font-weight:700;
+}
+
+.toast.show{
+  transform:translateY(0);
+  opacity:1;
+}
+
+.toast.error{
+  background:#8c2020;
 }
 
 /* =========================================================
-   MOBILE
+   DARK MODE OVERRIDES
 ========================================================= */
 
-@media(max-width:900px){
+body.dark .service-card,
+body.dark .review,
+body.dark .dash-card,
+body.dark .quick-action,
+body.dark .transfer-card,
+body.dark .summary-item,
+body.dark .simple-list,
+body.dark .auth-box{
+  box-shadow:none;
+}
 
-  .main-nav{
+body.dark .transfer-type{
+  background:#14231b;
+}
+
+body.dark .form-group input,
+body.dark .form-group select,
+body.dark .form-group textarea{
+  background:#0d1712;
+}
+
+body.dark .site-header{
+  color:var(--text);
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
+@media(max-width:1000px){
+  .hero-inner{
+    grid-template-columns:1fr;
+    padding-top:65px;
+  }
+
+  .hero-visual{
+    min-height:480px;
+  }
+
+  .hero-stats{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .service-grid,
+  .review-grid{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .security-grid{
+    grid-template-columns:1fr;
+  }
+
+  .quick-grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .dashboard-grid{
+    grid-template-columns:1fr;
+  }
+}
+
+@media(max-width:760px){
+  .nav{
+    height:68px;
+    padding:0 15px;
+  }
+
+  .nav-links{
     display:none;
   }
 
-  .header-actions .header-login{
+  .nav-actions .btn-outline{
     display:none;
-  }
-
-  .hero{
-    min-height:980px;
   }
 
   .hero-inner{
-    padding-top:155px;
+    padding:60px 18px 70px;
   }
 
-  .hero-title{
-    font-size:52px;
-    letter-spacing:-2.5px;
+  .hero h1{
+    font-size:49px;
+    letter-spacing:-2px;
   }
 
   .hero-description{
     font-size:15px;
   }
 
-  .hero-metrics{
-    grid-template-columns:1fr 1fr;
-    margin-top:60px;
+  .hero-stats{
+    gap:8px;
   }
 
-  .city-scene{
-    width:100%;
-    opacity:.5;
+  .hero-stat{
+    padding:13px;
   }
 
-  .float-one{
-    right:5%;
-    top:520px;
+  .hero-visual{
+    min-height:410px;
   }
 
-  .float-two{
-    left:5%;
-    right:auto;
-    top:610px;
+  .hero-building{
+    width:72%;
+    height:380px;
   }
 
-  .float-three{
-    top:750px;
+  .floating-card{
+    padding:13px;
+  }
+
+  .floating-card.one{
+    left:0;
+    top:35px;
+  }
+
+  .floating-card.two{
+    right:0;
+    bottom:50px;
+  }
+
+  .section,
+  .security-inner{
+    padding:70px 18px;
   }
 
   .service-grid,
-  .security-grid,
   .review-grid{
     grid-template-columns:1fr;
   }
 
-  .app-sidebar{
-    transform:translateX(-100%);
-    transition:.25s;
+  .security-list{
+    grid-template-columns:1fr;
   }
 
-  .app-sidebar.open{
+  .sidebar{
+    transform:translateX(-100%);
+    transition:.25s ease;
+  }
+
+  .sidebar.open{
     transform:translateX(0);
   }
 
-  .app-main{
+  .dashboard-content{
     margin-left:0;
+    width:100%;
+  }
+
+  .dashboard-topbar{
+    padding:0 15px;
   }
 
   .mobile-menu{
     display:grid;
     place-items:center;
-    width:38px;
-    height:38px;
-    border:1px solid var(--border);
-    background:var(--card);
-    color:var(--text);
-    border-radius:11px;
   }
 
-  .app-topbar{
-    padding:0 17px;
+  .dashboard-main{
+    padding:18px 15px 40px;
   }
 
-  .topbar-title{
-    font-size:15px;
+  .page-heading h1{
+    font-size:18px;
   }
 
-  .user-chip small{
+  .page-heading p{
     display:none;
   }
 
-  .page{
-    padding:25px 16px 60px;
+  .topbar-right .icon-button{
+    display:none;
   }
 
-  .dashboard-grid{
-    grid-template-columns:1fr;
+  .balance-card{
+    padding:24px;
+  }
+
+  .balance-amount{
+    font-size:36px;
   }
 
   .quick-grid{
@@ -1360,82 +1707,63 @@ body.dark .transfer-type.selected{
   .profile-layout{
     grid-template-columns:1fr;
   }
-}
 
-@media(max-width:560px){
-
-  .site-header{
-    padding:0 13px;
-  }
-
-  .header-inner{
-    height:66px;
-    padding:0 11px;
-  }
-
-  .brand-name{
-    font-size:15px;
-  }
-
-  .header-start{
-    padding:10px 12px;
-    font-size:12px;
-  }
-
-  .hero{
-    min-height:920px;
-  }
-
-  .hero-inner{
-    padding:140px 18px 50px;
-  }
-
-  .hero-title{
-    font-size:45px;
-  }
-
-  .hero-metrics{
-    gap:8px;
-  }
-
-  .metric{
-    padding:16px;
-  }
-
-  .metric-number{
-    font-size:20px;
-  }
-
-  .landing-section{
-    padding:75px 18px;
-  }
-
-  .balance-card{
-    padding:23px;
-  }
-
-  .balance-amount{
-    font-size:38px;
-  }
-
-  .quick-grid{
-    grid-template-columns:1fr 1fr;
-  }
-
-  .quick-action{
-    min-height:95px;
+  .profile-fields{
+    grid-template-columns:1fr;
   }
 
   .transfer-types{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .transfer-form{
     grid-template-columns:1fr;
+  }
+
+  .transfer-form .full{
+    grid-column:auto;
+  }
+
+  .account-summary-grid{
+    grid-template-columns:1fr;
+  }
+
+  .history-row{
+    align-items:flex-start;
+  }
+
+  .history-row .transaction-amount{
+    font-size:11px;
   }
 
   .form-grid{
     grid-template-columns:1fr;
   }
 
-  .profile-detail-grid{
+  .form-group.full{
+    grid-column:auto;
+  }
+}
+
+@media(max-width:420px){
+  .hero h1{
+    font-size:43px;
+  }
+
+  .hero-stats{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .quick-grid{
     grid-template-columns:1fr;
+  }
+
+  .transfer-types{
+    grid-template-columns:1fr;
+  }
+
+  .auth-box{
+    padding:22px;
   }
 }
 </style>
@@ -1448,7 +1776,7 @@ body.dark .transfer-type.selected{
 ========================================================= -->
 
 <div class="prototype-notice">
-  Cash Flow Bank is a financial platform prototype — not a real bank or real-money ledger.
+  Cash Flow Bank is a financial platform prototype. It is not a real bank or real-money ledger.
 </div>
 
 <!-- =========================================================
@@ -1457,333 +1785,352 @@ body.dark .transfer-type.selected{
 
 <div id="landingPage">
 
-  <header class="site-header">
-    <div class="header-inner">
+<header class="site-header">
+  <nav class="nav">
 
-      <a href="#" class="brand">
-        <div class="brand-mark">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
-            <path d="M5 18V8l7-4 7 4v10" stroke="currentColor" stroke-width="2"/>
-            <path d="M8 18v-6h3v6M13 18v-6h3v6" stroke="currentColor" stroke-width="2"/>
-          </svg>
-        </div>
-        <span class="brand-name">Cash Flow Bank</span>
-      </a>
+    <a href="#" class="logo" onclick="goHome();return false;">
+      <span class="logo-mark">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M4 18V8l8-4 8 4v10"/>
+          <path d="M7 18v-6h3v6"/>
+          <path d="M14 18v-6h3v6"/>
+        </svg>
+      </span>
+      Cash Flow Bank
+    </a>
 
-      <nav class="main-nav">
-        <a href="#home">Home</a>
-        <a href="#services">Services</a>
-        <a href="#security">Security</a>
-        <a href="#support">Support</a>
-      </nav>
-
-      <div class="header-actions">
-        <button class="header-login" onclick="openAuth('login')">Login</button>
-        <button class="header-start" onclick="openAuth('register')">Get Started</button>
-      </div>
-
+    <div class="nav-links">
+      <a href="#home">Home</a>
+      <a href="#services">Services</a>
+      <a href="#security">Security</a>
+      <a href="#support">Support</a>
     </div>
-  </header>
 
-  <section class="hero" id="home">
+    <div class="nav-actions">
+      <button class="btn btn-outline" onclick="openAuth('login')">
+        Sign in
+      </button>
 
-    <div class="hero-grid"></div>
-    <div class="hero-glow"></div>
-
-    <div class="hero-inner">
-
-      <div class="hero-copy">
-
-        <div class="hero-badge">
-          <span>●</span>
-          Digital financial platform
-        </div>
-
-        <h1 class="hero-title">
-          Your goals.<br>
-          <span>Our priority.</span>
-        </h1>
-
-        <p class="hero-description">
-          A modern financial platform prototype designed around simple
-          account management, clear transfers, intelligent cash-flow
-          visibility and a cleaner digital experience.
-        </p>
-
-        <div class="hero-actions">
-          <button class="hero-primary" onclick="openAuth('register')">
-            Open an Account
-          </button>
-
-          <button class="hero-secondary" onclick="document.getElementById('services').scrollIntoView()">
-            Explore Services →
-          </button>
-        </div>
-
-      </div>
-
-      <!-- FLOATING SVG CARD 1 -->
-      <div class="floating-svg float-one">
-        <div style="font-size:11px;opacity:.65;">ACCOUNT SECURITY</div>
-        <strong style="display:block;margin-top:5px;">Protected</strong>
-      </div>
-
-      <!-- FLOATING SVG CARD 2 -->
-      <div class="floating-svg float-two">
-        <div style="font-size:11px;opacity:.65;">TRANSFER STATUS</div>
-        <strong style="display:block;margin-top:5px;">Processing</strong>
-      </div>
-
-      <!-- FLOATING SVG CARD 3 -->
-      <div class="floating-svg float-three">
-        <div style="font-size:11px;opacity:.65;">CASH FLOW</div>
-        <strong style="display:block;margin-top:5px;">Tracked</strong>
-      </div>
-
-      <!-- SVG CITY -->
-      <svg class="city-scene" viewBox="0 0 800 620" fill="none">
-
-        <rect x="60" y="240" width="110" height="380" fill="#ffffff" fill-opacity=".08"/>
-        <rect x="190" y="130" width="130" height="490" fill="#ffffff" fill-opacity=".10"/>
-        <rect x="340" y="210" width="120" height="410" fill="#ffffff" fill-opacity=".07"/>
-        <rect x="480" y="70" width="145" height="550" fill="#ffffff" fill-opacity=".10"/>
-        <rect x="645" y="175" width="100" height="445" fill="#ffffff" fill-opacity=".08"/>
-
-        <path d="M255 130V70L290 45L325 70V130" fill="#ffffff" fill-opacity=".12"/>
-        <path d="M530 70V20L562 0L595 20V70" fill="#ffffff" fill-opacity=".12"/>
-
-        <g stroke="#ffffff" stroke-opacity=".28">
-          <path d="M85 275h60M85 315h60M85 355h60M85 395h60M85 435h60M85 475h60"/>
-          <path d="M215 170h80M215 215h80M215 260h80M215 305h80M215 350h80M215 395h80M215 440h80"/>
-          <path d="M365 245h70M365 290h70M365 335h70M365 380h70M365 425h70M365 470h70"/>
-          <path d="M510 110h85M510 155h85M510 200h85M510 245h85M510 290h85M510 335h85M510 380h85M510 425h85M510 470h85"/>
-          <path d="M670 210h50M670 250h50M670 290h50M670 330h50M670 370h50M670 410h50"/>
-        </g>
-
-        <path d="M0 620C140 560 220 585 330 590C470 598 570 555 800 585V620H0Z"
-              fill="#001d14"
-              fill-opacity=".75"/>
-
-        <path d="M0 560C130 525 235 548 355 555C510 565 610 520 800 550"
-              stroke="#7be3a9"
-              stroke-opacity=".3"
-              stroke-width="2"/>
-
-      </svg>
-
-      <div class="hero-metrics">
-
-        <div class="metric">
-          <div class="metric-number">6M+</div>
-          <div class="metric-label">Illustrative active customers</div>
-        </div>
-
-        <div class="metric">
-          <div class="metric-number">$48B+</div>
-          <div class="metric-label">Illustrative annual volume</div>
-        </div>
-
-        <div class="metric">
-          <div class="metric-number">180+</div>
-          <div class="metric-label">Illustrative locations</div>
-        </div>
-
-        <div class="metric">
-          <div class="metric-number">34</div>
-          <div class="metric-label">Illustrative awards</div>
-        </div>
-
-      </div>
-
+      <button class="btn btn-green" onclick="openAuth('register')">
+        Get started
+      </button>
     </div>
-  </section>
 
-  <!-- SERVICES -->
+  </nav>
+</header>
 
-  <section class="landing-section" id="services">
+<!-- HERO -->
 
-    <div class="landing-container">
+<section class="hero" id="home">
 
-      <div class="section-heading">
-        <div class="section-kicker">Services</div>
-        <h2>Designed around the way you manage money.</h2>
-        <p>
-          A clean digital experience for account management,
-          transfers, transaction visibility and personal profile controls.
-        </p>
+  <div class="hero-inner">
+
+    <div class="hero-copy">
+
+      <div class="hero-eyebrow">
+        <span class="dot"></span>
+        Modern financial platform prototype
       </div>
 
-      <div class="service-grid">
+      <h1>
+        Your goals.
+        <span>Our priority.</span>
+      </h1>
 
-        <div class="service-card">
-          <div class="service-icon">
-            <svg width="23" height="23" viewBox="0 0 24 24" fill="none">
-              <path d="M4 7h16M4 12h16M4 17h16" stroke="currentColor" stroke-width="2"/>
-            </svg>
-          </div>
-          <h3>Simple Account Management</h3>
-          <p>
-            Keep your account information, status and profile details
-            organized in one place.
-          </p>
-        </div>
+      <p class="hero-description">
+        A clean digital banking experience designed around simple account
+        management, secure transfers, transparent activity and modern
+        financial tools.
+      </p>
 
-        <div class="service-card">
-          <div class="service-icon">
-            <svg width="23" height="23" viewBox="0 0 24 24" fill="none">
-              <path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2"/>
-            </svg>
-          </div>
-          <h3>Flexible Transfers</h3>
-          <p>
-            Choose between an instant transfer flow or a wire-transfer
-            flow designed around a longer processing period.
-          </p>
-        </div>
+      <div class="hero-actions">
+        <button class="btn btn-light" onclick="openAuth('register')">
+          Open an account
+        </button>
 
-        <div class="service-card">
-          <div class="service-icon">
-            <svg width="23" height="23" viewBox="0 0 24 24" fill="none">
-              <path d="M4 18V6M4 18h16M8 15l3-4 3 2 5-7"
-                    stroke="currentColor"
-                    stroke-width="2"/>
-            </svg>
-          </div>
-          <h3>Cash Flow Analysis</h3>
-          <p>
-            Review monthly activity and keep your financial activity
-            easier to understand.
-          </p>
-        </div>
-
-      </div>
-
-    </div>
-  </section>
-
-  <!-- SECURITY -->
-
-  <section class="landing-section security-section" id="security">
-
-    <div class="landing-container">
-
-      <div class="section-heading">
-        <div class="section-kicker">Security</div>
-        <h2>Security is a foundation.</h2>
-        <p>
-          The prototype experience is designed around layered account
-          controls and clear transaction states.
-        </p>
-      </div>
-
-      <div class="security-grid">
-
-        <div class="security-card">
-          <strong>256-bit SSL/TLS</strong>
-          <span>Illustrative secure transport concept.</span>
-        </div>
-
-        <div class="security-card">
-          <strong>Biometric Authentication</strong>
-          <span>Designed for modern authentication experiences.</span>
-        </div>
-
-        <div class="security-card">
-          <strong>Real-time Fraud Alerts</strong>
-          <span>Illustrative monitoring interface.</span>
-        </div>
-
-        <div class="security-card">
-          <strong>Identity Verification</strong>
-          <span>Account verification workflow concept.</span>
-        </div>
-
-        <div class="security-card">
-          <strong>Redundant Data Centers</strong>
-          <span>Illustrative infrastructure concept.</span>
-        </div>
-
-        <div class="security-card">
-          <strong>24/7 Security Monitoring</strong>
-          <span>Illustrative operational monitoring concept.</span>
-        </div>
-
-      </div>
-
-    </div>
-  </section>
-
-  <!-- REVIEWS -->
-
-  <section class="landing-section">
-
-    <div class="landing-container">
-
-      <div class="section-heading">
-        <div class="section-kicker">Experience</div>
-        <h2>A cleaner financial experience.</h2>
-      </div>
-
-      <div class="review-grid">
-
-        <div class="review-card">
-          <div class="stars">★★★★★</div>
-          <p>
-            “The interface makes it much easier to understand where
-            everything is without unnecessary screens.”
-          </p>
-          <div class="review-author">Prototype User</div>
-        </div>
-
-        <div class="review-card">
-          <div class="stars">★★★★★</div>
-          <p>
-            “The transfer flow is straightforward and separates
-            instant and wire processing.”
-          </p>
-          <div class="review-author">Prototype User</div>
-        </div>
-
-        <div class="review-card">
-          <div class="stars">★★★★★</div>
-          <p>
-            “The dashboard keeps the important information visible
-            without filling the screen with unnecessary cards.”
-          </p>
-          <div class="review-author">Prototype User</div>
-        </div>
-
-      </div>
-
-    </div>
-  </section>
-
-  <!-- SUPPORT -->
-
-  <section class="landing-section" id="support">
-
-    <div class="landing-container">
-
-      <div class="card" style="padding:45px;text-align:center;">
-        <div class="section-kicker">Support</div>
-        <h2 style="font-size:38px;margin:10px 0;">
-          Need help?
-        </h2>
-
-        <p style="color:var(--muted);max-width:560px;margin:0 auto 24px;line-height:1.7;">
-          Use the support chat or sign in to access the customer support
-          area of the prototype.
-        </p>
-
-        <button class="primary-btn"
-                style="max-width:240px;"
-                onclick="openSupport()">
-          Contact Support
+        <button class="btn btn-outline" onclick="document.getElementById('services').scrollIntoView()">
+          Explore services
         </button>
       </div>
 
+      <div class="hero-stats">
+
+        <div class="hero-stat">
+          <strong>6M+</strong>
+          <span>Illustrative active customers</span>
+        </div>
+
+        <div class="hero-stat">
+          <strong>$48B+</strong>
+          <span>Illustrative annual transactions</span>
+        </div>
+
+        <div class="hero-stat">
+          <strong>180+</strong>
+          <span>Illustrative locations</span>
+        </div>
+
+        <div class="hero-stat">
+          <strong>34</strong>
+          <span>Illustrative awards</span>
+        </div>
+
+      </div>
+
     </div>
-  </section>
+
+    <div class="hero-visual">
+
+      <div class="floating-card one">
+        <div class="floating-label">Account activity</div>
+        <div class="floating-value">Secure & organized</div>
+        <div class="floating-positive">Designed for clarity</div>
+      </div>
+
+      <div class="hero-building">
+        <div class="hero-building-top"></div>
+      </div>
+
+      <div class="floating-card two">
+        <div class="floating-label">Transfer status</div>
+        <div class="floating-value">Protected</div>
+        <div class="floating-positive">Verification enabled</div>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- SERVICES -->
+
+<section class="section" id="services">
+
+  <div class="section-head">
+    <div class="section-kicker">Services</div>
+
+    <h2 class="section-title">
+      Everything important, without the clutter.
+    </h2>
+
+    <p class="section-description">
+      The customer experience focuses on the things you actually need:
+      account information, transfers, transaction history and profile
+      management.
+    </p>
+  </div>
+
+  <div class="service-grid">
+
+    <div class="service-card">
+      <div class="icon-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 10h18"/>
+          <path d="M5 10v8"/>
+          <path d="M9 10v8"/>
+          <path d="M15 10v8"/>
+          <path d="M19 10v8"/>
+          <path d="M3 18h18"/>
+          <path d="M12 3l9 5H3l9-5z"/>
+        </svg>
+      </div>
+
+      <h3>Account management</h3>
+
+      <p>
+        View account information and balance in one simple dashboard.
+      </p>
+    </div>
+
+    <div class="service-card">
+      <div class="icon-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M4 12h16"/>
+          <path d="M14 6l6 6-6 6"/>
+        </svg>
+      </div>
+
+      <h3>Transfers</h3>
+
+      <p>
+        Choose between an instant transfer workflow and a wire transfer
+        workflow.
+      </p>
+    </div>
+
+    <div class="service-card">
+      <div class="icon-box">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M4 4h16v16H4z"/>
+          <path d="M8 9h8"/>
+          <path d="M8 13h5"/>
+        </svg>
+      </div>
+
+      <h3>Transaction history</h3>
+
+      <p>
+        Keep customer activity organized with clear transaction records.
+      </p>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- SECURITY -->
+
+<section class="security-section" id="security">
+
+  <div class="security-inner">
+
+    <div class="security-grid">
+
+      <div class="security-copy">
+
+        <div class="section-kicker" style="color:#69e69e">
+          Security
+        </div>
+
+        <h2 class="section-title">
+          Security is not a feature.
+          It's a foundation.
+        </h2>
+
+        <p>
+          The prototype experience is designed around account protection,
+          verification and clear transaction workflows.
+        </p>
+
+      </div>
+
+      <div class="security-list">
+
+        <div class="security-item">
+          256-bit SSL/TLS Encryption
+        </div>
+
+        <div class="security-item">
+          Biometric Authentication
+        </div>
+
+        <div class="security-item">
+          Real-time Fraud Alerts
+        </div>
+
+        <div class="security-item">
+          Identity Verification
+        </div>
+
+        <div class="security-item">
+          Redundant Data Centers
+        </div>
+
+        <div class="security-item">
+          24/7 Security Monitoring
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+<!-- REVIEWS -->
+
+<section class="section">
+
+  <div class="section-head">
+    <div class="section-kicker">Experience</div>
+
+    <h2 class="section-title">
+      Designed to feel simple.
+    </h2>
+  </div>
+
+  <div class="review-grid">
+
+    <div class="review">
+      <p>
+        “The dashboard keeps the important information in one place without
+        making the screen feel crowded.”
+      </p>
+
+      <strong>Prototype review</strong>
+      <small>Customer experience</small>
+    </div>
+
+    <div class="review">
+      <p>
+        “The transfer workflow makes the processing option clear before
+        continuing.”
+      </p>
+
+      <strong>Prototype review</strong>
+      <small>Transfer experience</small>
+    </div>
+
+    <div class="review">
+      <p>
+        “The green and white interface keeps the experience clean and easy
+        to understand.”
+      </p>
+
+      <strong>Prototype review</strong>
+      <small>Interface experience</small>
+    </div>
+
+  </div>
+
+</section>
+
+<!-- SUPPORT -->
+
+<section class="section" id="support">
+
+  <div class="section-head">
+
+    <div class="section-kicker">
+      Support
+    </div>
+
+    <h2 class="section-title">
+      Need help?
+    </h2>
+
+    <p class="section-description">
+      Sign in to your dashboard and use the support option for assistance.
+    </p>
+
+    <button class="btn btn-green" onclick="openAuth('login')">
+      Sign in
+    </button>
+
+  </div>
+
+</section>
+
+<footer class="footer">
+
+  <div class="footer-inner">
+
+    <div>
+      <strong>Cash Flow Bank</strong>
+      <div style="margin-top:6px;font-size:12px">
+        Financial platform prototype
+      </div>
+    </div>
+
+    <div style="font-size:12px">
+      Green & white digital banking interface
+    </div>
+
+  </div>
+
+</footer>
 
 </div>
 
@@ -1791,112 +2138,134 @@ body.dark .transfer-type.selected{
      AUTH MODAL
 ========================================================= -->
 
-<div id="authOverlay" class="auth-overlay hidden">
+<div class="auth-overlay" id="authOverlay">
 
   <div class="auth-box">
 
     <div class="auth-top">
+
       <div>
         <h2 id="authTitle">Welcome back</h2>
-        <p id="authSubtitle">Sign in to your account.</p>
+
+        <div class="auth-subtitle" id="authSubtitle">
+          Sign in using your account number and password.
+        </div>
       </div>
 
       <button class="close-btn" onclick="closeAuth()">×</button>
+
     </div>
 
     <div class="auth-tabs">
 
-      <button id="loginTab"
-              class="auth-tab active"
-              onclick="switchAuth('login')">
-        Login
+      <button
+        class="auth-tab active"
+        id="loginTab"
+        onclick="switchAuth('login')">
+        Sign in
       </button>
 
-      <button id="registerTab"
-              class="auth-tab"
-              onclick="switchAuth('register')">
-        Create Account
+      <button
+        class="auth-tab"
+        id="registerTab"
+        onclick="switchAuth('register')">
+        Create account
       </button>
 
     </div>
 
+    <div class="form-error" id="authError"></div>
+
     <!-- LOGIN -->
 
-    <form id="loginForm">
+    <form id="loginForm" onsubmit="loginUser(event)">
 
       <div class="form-group">
-        <label class="form-label">Account Number</label>
+
+        <label>Account Number</label>
+
         <input
           id="loginAccount"
-          class="form-input"
-          type="text"
           inputmode="numeric"
-          maxlength="10"
-          placeholder="Enter your account number"
+          autocomplete="username"
+          placeholder="Enter account number"
           required>
+
       </div>
 
       <div class="form-group">
-        <label class="form-label">Password</label>
+
+        <label>Password</label>
+
         <input
           id="loginPassword"
-          class="form-input"
           type="password"
-          placeholder="Enter your password"
+          autocomplete="current-password"
+          placeholder="Enter password"
           required>
+
       </div>
 
-      <button class="primary-btn" type="submit">
-        Sign In
+      <button class="btn btn-green full-btn" type="submit">
+        Sign in
       </button>
-
-      <p class="form-note">
-        Login uses your generated account number and password.
-      </p>
 
     </form>
 
     <!-- REGISTER -->
 
-    <form id="registerForm" class="hidden">
-
-      <div class="form-group">
-        <label class="form-label">Full Name</label>
-        <input
-          id="regName"
-          class="form-input"
-          type="text"
-          placeholder="Your full name"
-          required>
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">Email</label>
-        <input
-          id="regEmail"
-          class="form-input"
-          type="email"
-          placeholder="you@example.com"
-          required>
-      </div>
+    <form
+      id="registerForm"
+      class="hidden"
+      onsubmit="registerUser(event)">
 
       <div class="form-grid">
 
-        <div class="form-group">
-          <label class="form-label">Account Type</label>
-          <select id="regType" class="form-input" required>
-            <option value="">Select</option>
-            <option>Savings</option>
-            <option>Current</option>
-            <option>Business</option>
-            <option>Student</option>
-          </select>
+        <div class="form-group full">
+
+          <label>Full Name</label>
+
+          <input
+            id="regName"
+            autocomplete="name"
+            placeholder="Full name"
+            required>
+
+        </div>
+
+        <div class="form-group full">
+
+          <label>Email</label>
+
+          <input
+            id="regEmail"
+            type="email"
+            autocomplete="email"
+            placeholder="Email address"
+            required>
+
         </div>
 
         <div class="form-group">
-          <label class="form-label">Country</label>
-          <select id="regCountry" class="form-input" required>
-            <option value="">Select</option>
+
+          <label>Account Type</label>
+
+          <select id="regAccountType" required>
+            <option value="">Select type</option>
+            <option value="Savings">Savings</option>
+            <option value="Current">Current</option>
+            <option value="Business">Business</option>
+            <option value="Student">Student</option>
+          </select>
+
+        </div>
+
+        <div class="form-group">
+
+          <label>Country</label>
+
+          <select id="regCountry" required>
+            <option value="">Select country</option>
             <option>Nigeria</option>
             <option>Ghana</option>
             <option>Kenya</option>
@@ -1907,749 +2276,857 @@ body.dark .transfer-type.selected{
             <option>India</option>
             <option>Other</option>
           </select>
+
+        </div>
+
+        <div class="form-group">
+
+          <label>Password</label>
+
+          <input
+            id="regPassword"
+            type="password"
+            autocomplete="new-password"
+            placeholder="Create password"
+            required>
+
+        </div>
+
+        <div class="form-group">
+
+          <label>Security PIN</label>
+
+          <input
+            id="regPin"
+            type="password"
+            inputmode="numeric"
+            maxlength="6"
+            placeholder="4–6 digit PIN"
+            required>
+
+        </div>
+
+        <div class="form-group full">
+
+          <label>Profile Picture</label>
+
+          <div class="file-box">
+
+            <input
+              id="regPhoto"
+              type="file"
+              accept="image/*">
+
+            <div class="form-note">
+              Optional. The picture is stored only in this browser and does
+              not use Firebase Storage.
+            </div>
+
+            <img
+              id="regPhotoPreview"
+              class="photo-preview"
+              alt="Profile preview">
+
+          </div>
+
         </div>
 
       </div>
 
-      <div class="form-group">
-        <label class="form-label">Password</label>
-        <input
-          id="regPassword"
-          class="form-input"
-          type="password"
-          minlength="6"
-          placeholder="Create a password"
-          required>
-      </div>
-
-      <div class="form-group">
-        <label class="form-label">Security PIN</label>
-        <input
-          id="regPin"
-          class="form-input"
-          type="password"
-          inputmode="numeric"
-          maxlength="6"
-          placeholder="4–6 digit PIN"
-          required>
-      </div>
-
-      <div class="form-group">
-
-        <label class="form-label">
-          Profile Picture
-        </label>
-
-        <input
-          id="regPhoto"
-          class="form-input"
-          type="file"
-          accept="image/*">
-
-        <p class="form-note">
-          Stored locally on this browser. Firebase Storage is not required.
-        </p>
-
-      </div>
-
-      <button class="primary-btn" type="submit">
-        Create Account
+      <button class="btn btn-green full-btn" type="submit">
+        Create account
       </button>
 
-      <p class="form-note">
-        Your account number will be generated automatically after registration.
-        New accounts remain pending until approved through the admin system.
-      </p>
+      <div class="form-note">
+        Your account number is generated automatically after registration.
+        Account access can be restricted until an administrator activates
+        the account.
+      </div>
 
     </form>
 
   </div>
+
 </div>
 
 <!-- =========================================================
-     APPLICATION
+     DASHBOARD
 ========================================================= -->
 
-<div id="app" class="app hidden">
+<div id="dashboardPage">
 
-  <!-- SIDEBAR -->
+  <div class="dashboard-shell">
 
-  <aside id="sidebar" class="app-sidebar">
+    <!-- SIDEBAR -->
 
-    <div class="sidebar-brand">
+    <aside class="sidebar" id="sidebar">
 
-      <div class="brand">
-        <div class="brand-mark">
-          <svg width="23" height="23" viewBox="0 0 24 24" fill="none">
-            <path d="M5 18V8l7-4 7 4v10"
-                  stroke="currentColor"
-                  stroke-width="2"/>
-            <path d="M8 18v-6h3v6M13 18v-6h3v6"
-                  stroke="currentColor"
-                  stroke-width="2"/>
+      <div class="sidebar-logo">
+
+        <span class="logo-mark">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 18V8l8-4 8 4v10"/>
+            <path d="M7 18v-6h3v6"/>
+            <path d="M14 18v-6h3v6"/>
           </svg>
-        </div>
+        </span>
 
-        <span class="brand-name">Cash Flow Bank</span>
+        Cash Flow Bank
+
       </div>
 
-    </div>
+      <nav class="sidebar-nav">
 
-    <nav class="sidebar-nav">
+        <button
+          class="side-link active"
+          data-page="dashboard"
+          onclick="showPage('dashboard')">
 
-      <button class="side-btn active"
-              data-page="dashboard"
-              onclick="showPage('dashboard')">
-        <span>⌂</span>
-        Dashboard
-      </button>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7"/>
+            <rect x="14" y="3" width="7" height="7"/>
+            <rect x="3" y="14" width="7" height="7"/>
+            <rect x="14" y="14" width="7" height="7"/>
+          </svg>
 
-      <button class="side-btn"
-              data-page="account"
-              onclick="showPage('account')">
-        <span>▣</span>
-        Account Summary
-      </button>
-
-      <button class="side-btn"
-              data-page="transfer"
-              onclick="showPage('transfer')">
-        <span>↗</span>
-        Transfer
-      </button>
-
-      <button class="side-btn"
-              data-page="history"
-              onclick="showPage('history')">
-        <span>◷</span>
-        History
-      </button>
-
-      <button class="side-btn"
-              data-page="support"
-              onclick="openSupport()">
-        <span>?</span>
-        Support
-      </button>
-
-    </nav>
-
-    <div class="sidebar-bottom">
-
-      <button class="side-btn"
-              onclick="toggleTheme()">
-        <span>◐</span>
-        <span id="themeLabel">Dark Mode</span>
-      </button>
-
-      <button class="side-btn"
-              onclick="logout()">
-        <span>↪</span>
-        Log Out
-      </button>
-
-    </div>
-
-  </aside>
-
-  <!-- MAIN -->
-
-  <main class="app-main">
-
-    <header class="app-topbar">
-
-      <div style="display:flex;align-items:center;gap:12px;">
-
-        <button class="mobile-menu" onclick="toggleSidebar()">
-          ☰
-        </button>
-
-        <div class="topbar-title">
           Dashboard
-        </div>
-
-      </div>
-
-      <div class="topbar-right">
-
-        <button class="theme-btn"
-                onclick="toggleTheme()"
-                title="Change theme">
-          ◐
-        </button>
-
-        <div class="user-chip">
-
-          <div id="topAvatar" class="avatar">
-            ?
-          </div>
-
-          <div>
-            <strong id="topName">Customer</strong><br>
-            <small>Profile</small>
-          </div>
-
-        </div>
-
-      </div>
-
-    </header>
-
-    <!-- DASHBOARD PAGE -->
-
-    <section id="page-dashboard" class="page">
-
-      <div class="page-heading">
-
-        <h1>Welcome back</h1>
-
-        <p>
-          Your account at a glance.
-        </p>
-
-      </div>
-
-      <!-- BALANCE -->
-
-      <div class="balance-card">
-
-        <div class="balance-label">
-          Available Balance
-        </div>
-
-        <div id="dashBalance" class="balance-amount">
-          $0.00
-        </div>
-
-        <div class="balance-meta">
-
-          <span>
-            Account:
-            <strong id="dashAccount">—</strong>
-          </span>
-
-          <span>
-            Type:
-            <strong id="dashType">—</strong>
-          </span>
-
-          <span>
-            Status:
-            <strong id="dashStatus">Pending</strong>
-          </span>
-
-        </div>
-
-      </div>
-
-      <!-- QUICK ACTIONS -->
-
-      <div class="quick-grid">
-
-        <button class="quick-action"
-                onclick="showPage('transfer')">
-
-          <div class="quick-icon">
-            ↗
-          </div>
-
-          <strong>Transfer</strong>
-          <span>Send money</span>
 
         </button>
 
-        <button class="quick-action"
-                onclick="showPage('history')">
+        <button
+          class="side-link"
+          data-page="account"
+          onclick="showPage('account')">
 
-          <div class="quick-icon">
-            ◷
-          </div>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 5h16v14H4z"/>
+            <path d="M8 9h8"/>
+            <path d="M8 13h5"/>
+          </svg>
 
-          <strong>History</strong>
-          <span>View activity</span>
-
-        </button>
-
-        <button class="quick-action"
-                onclick="document.getElementById('profileSection').scrollIntoView({behavior:'smooth'})">
-
-          <div class="quick-icon">
-            ◉
-          </div>
-
-          <strong>Profile Setup</strong>
-          <span>Update profile</span>
+          Account Summary
 
         </button>
 
-        <button class="quick-action"
-                onclick="openSupport()">
+        <button
+          class="side-link"
+          data-page="transfer"
+          onclick="showPage('transfer')">
 
-          <div class="quick-icon">
-            ?
-          </div>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 12h16"/>
+            <path d="M14 6l6 6-6 6"/>
+          </svg>
 
-          <strong>Support</strong>
-          <span>Get assistance</span>
+          Transfer
+
+        </button>
+
+        <button
+          class="side-link"
+          data-page="history"
+          onclick="showPage('history')">
+
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="9"/>
+            <path d="M12 7v5l3 2"/>
+          </svg>
+
+          History
+
+        </button>
+
+        <button
+          class="side-link"
+          data-page="support"
+          onclick="showPage('support')">
+
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 5h16v11H8l-4 4V5z"/>
+          </svg>
+
+          Support
+
+        </button>
+
+      </nav>
+
+      <div class="sidebar-bottom">
+
+        <button
+          class="side-link"
+          onclick="toggleTheme()">
+
+          <svg id="themeIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="4"/>
+            <path d="M12 2v2"/>
+            <path d="M12 20v2"/>
+            <path d="M4.93 4.93l1.41 1.41"/>
+            <path d="M17.66 17.66l1.41 1.41"/>
+            <path d="M2 12h2"/>
+            <path d="M20 12h2"/>
+          </svg>
+
+          <span id="themeText">Dark mode</span>
+
+        </button>
+
+        <button
+          class="side-link"
+          onclick="logoutUser()">
+
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M10 17l5-5-5-5"/>
+            <path d="M15 12H3"/>
+            <path d="M21 3v18"/>
+          </svg>
+
+          Log out
 
         </button>
 
       </div>
 
-      <!-- LOWER DASHBOARD -->
+    </aside>
 
-      <div class="dashboard-grid">
+    <!-- CONTENT -->
 
-        <!-- RECENT -->
+    <main class="dashboard-content">
 
-        <div class="card">
+      <header class="dashboard-topbar">
 
-          <div class="card-header">
-            <h3>Recent Transactions</h3>
+        <div class="topbar-left">
+
+          <button
+            class="mobile-menu"
+            onclick="toggleSidebar()">
+
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 6h16"/>
+              <path d="M4 12h16"/>
+              <path d="M4 18h16"/>
+            </svg>
+
+          </button>
+
+          <div class="page-heading">
+
+            <h1 id="pageTitle">
+              Dashboard
+            </h1>
+
+            <p id="pageSubtitle">
+              Your account at a glance
+            </p>
+
+          </div>
+
+        </div>
+
+        <div class="topbar-right">
+
+          <button
+            class="icon-button"
+            onclick="openSupport()"
+            aria-label="Support">
+
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M4 5h16v11H8l-4 4V5z"/>
+            </svg>
+
+          </button>
+
+          <div class="avatar" id="topAvatar">
+            <span id="topAvatarLetter">U</span>
+          </div>
+
+        </div>
+
+      </header>
+
+      <div class="dashboard-main">
+
+        <!-- DASHBOARD HOME -->
+
+        <section
+          class="page-section active"
+          id="page-dashboard">
+
+          <!-- BALANCE -->
+
+          <div class="balance-card">
+
+            <div class="balance-label">
+              Available Balance
+            </div>
+
+            <div
+              class="balance-amount"
+              id="dashboardBalance">
+              $0.00
+            </div>
+
+            <div class="account-meta">
+
+              <span class="meta-pill">
+                Account <span id="dashboardAccount">—</span>
+              </span>
+
+              <span class="meta-pill">
+                <span id="dashboardAccountType">—</span>
+              </span>
+
+              <span class="meta-pill">
+                <span id="dashboardStatus">—</span>
+              </span>
+
+            </div>
+
+          </div>
+
+          <!-- QUICK ACTIONS -->
+
+          <div class="quick-title">
+            Quick actions
+          </div>
+
+          <div class="quick-grid">
 
             <button
-              style="border:0;background:transparent;color:var(--green-600);font-size:11px;font-weight:800;"
+              class="quick-action"
+              onclick="showPage('transfer')">
+
+              <div class="quick-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 12h16"/>
+                  <path d="M14 6l6 6-6 6"/>
+                </svg>
+              </div>
+
+              <strong>Transfer</strong>
+              <span>Send a transfer request</span>
+
+            </button>
+
+            <button
+              class="quick-action"
               onclick="showPage('history')">
-              View all
+
+              <div class="quick-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="9"/>
+                  <path d="M12 7v5l3 2"/>
+                </svg>
+              </div>
+
+              <strong>History</strong>
+              <span>View transactions</span>
+
             </button>
-          </div>
 
-          <div class="card-body">
+            <button
+              class="quick-action"
+              onclick="document.getElementById('profileSetup').scrollIntoView({behavior:'smooth'})">
 
-            <div id="recentTransactions"
-                 class="transaction-list">
-            </div>
+              <div class="quick-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="8" r="4"/>
+                  <path d="M4 21c1.5-4 4-6 8-6s6.5 2 8 6"/>
+                </svg>
+              </div>
 
-          </div>
+              <strong>Profile Setup</strong>
+              <span>Update your profile</span>
 
-        </div>
+            </button>
 
-        <!-- ANALYSIS -->
+            <button
+              class="quick-action"
+              onclick="openSupport()">
 
-        <div class="card">
+              <div class="quick-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 5h16v11H8l-4 4V5z"/>
+                </svg>
+              </div>
 
-          <div class="card-header">
+              <strong>Support</strong>
+              <span>Get assistance</span>
 
-            <h3>Cash Flow Analysis</h3>
-
-            <span>Jan – Sep</span>
-
-          </div>
-
-          <div class="analysis-wrap">
-
-            <div class="analysis-total">
-              <span id="analysisTotal">$0.00</span>
-            </div>
-
-            <div class="analysis-sub">
-              Activity overview
-            </div>
-
-            <div id="analysisChart"
-                 class="chart">
-            </div>
-
-          </div>
-
-        </div>
-
-      </div>
-
-      <!-- PROFILE SETUP IN MAIN CONTENT -->
-
-      <div id="profileSection" class="card profile-card">
-
-        <div class="card-header">
-
-          <h3>Profile Setup</h3>
-
-          <span>Your account details</span>
-
-        </div>
-
-        <div class="profile-layout">
-
-          <div class="profile-photo-box">
-
-            <div id="profilePhotoPreview"
-                 class="profile-photo">
-              ?
-            </div>
-
-            <label class="photo-btn">
-              Change Photo
-              <input
-                id="profilePhotoInput"
-                type="file"
-                accept="image/*"
-                style="display:none;">
-            </label>
-
-            <button class="photo-btn"
-                    onclick="removeProfilePhoto()">
-              Remove
             </button>
 
           </div>
 
-          <div>
+          <!-- LOWER DASHBOARD -->
 
-            <div class="form-grid">
+          <div class="dashboard-grid">
 
-              <div class="form-group">
+            <!-- RECENT TRANSACTIONS -->
 
-                <label class="form-label">
-                  Full Name
-                </label>
+            <div class="dash-card">
 
-                <input
-                  id="profileName"
-                  class="form-input"
-                  type="text">
+              <div class="card-head">
+
+                <h2>Recent transactions</h2>
+
+                <button
+                  class="btn btn-light"
+                  style="padding:8px 11px;font-size:10px"
+                  onclick="showPage('history')">
+                  View all
+                </button>
 
               </div>
 
-              <div class="form-group">
-
-                <label class="form-label">
-                  Country
-                </label>
-
-                <input
-                  id="profileCountry"
-                  class="form-input"
-                  type="text">
-
+              <div
+                class="transactions-list"
+                id="recentTransactions">
               </div>
 
             </div>
 
-            <div class="form-group">
+            <!-- ANALYSIS -->
 
-              <label class="form-label">
-                Email
-              </label>
+            <div class="dash-card">
 
-              <input
-                id="profileEmail"
-                class="form-input"
-                type="email"
-                readonly>
+              <div class="card-head">
+
+                <h2>Cash Flow Analysis</h2>
+
+                <span>Jan – Sep</span>
+
+              </div>
+
+              <div
+                class="analysis-chart"
+                id="analysisChart">
+              </div>
+
+              <div class="analysis-note">
+                Monthly activity is based on available transaction records.
+              </div>
 
             </div>
 
-            <button class="primary-btn"
+          </div>
+
+          <!-- PROFILE SETUP -->
+
+          <div
+            class="profile-section"
+            id="profileSetup">
+
+            <div class="dash-card">
+
+              <div class="card-head">
+
+                <h2>Profile Setup</h2>
+
+                <span>Personal information</span>
+
+              </div>
+
+              <div class="profile-layout">
+
+                <div class="profile-photo-area">
+
+                  <div
+                    class="profile-large"
+                    id="profileLarge">
+                    U
+                  </div>
+
+                  <label>
+                    Change photo
+                    <input
+                      id="profilePhoto"
+                      type="file"
+                      accept="image/*"
+                      onchange="handleProfilePhoto(event)">
+                  </label>
+
+                  <div
+                    class="form-note"
+                    style="margin-top:9px">
+                    Stored locally on this device.
+                  </div>
+
+                </div>
+
+                <div>
+
+                  <div class="profile-fields">
+
+                    <div class="form-group">
+
+                      <label>Full Name</label>
+
+                      <input
+                        id="profileName"
+                        placeholder="Full name">
+
+                    </div>
+
+                    <div class="form-group">
+
+                      <label>Email</label>
+
+                      <input
+                        id="profileEmail"
+                        type="email"
+                        placeholder="Email"
+                        disabled>
+
+                    </div>
+
+                    <div class="form-group">
+
+                      <label>Country</label>
+
+                      <select id="profileCountry">
+
+                        <option>Nigeria</option>
+                        <option>Ghana</option>
+                        <option>Kenya</option>
+                        <option>South Africa</option>
+                        <option>United States</option>
+                        <option>United Kingdom</option>
+                        <option>Canada</option>
+                        <option>India</option>
+                        <option>Other</option>
+
+                      </select>
+
+                    </div>
+
+                    <div class="form-group">
+
+                      <label>Account Type</label>
+
+                      <input
+                        id="profileAccountType"
+                        disabled>
+
+                    </div>
+
+                  </div>
+
+                  <button
+                    class="btn btn-green"
                     onclick="saveProfile()">
-              Save Profile
-            </button>
+                    Save profile
+                  </button>
 
-          </div>
+                </div>
 
-        </div>
-
-      </div>
-
-    </section>
-
-    <!-- ACCOUNT PAGE -->
-
-    <section id="page-account" class="page hidden">
-
-      <div class="page-heading">
-
-        <h1>Account Summary</h1>
-
-        <p>
-          Your account information.
-        </p>
-
-      </div>
-
-      <div class="card">
-
-        <div class="card-body">
-
-          <div class="profile-detail-grid">
-
-            <div class="detail">
-              <small>Full Name</small>
-              <strong id="accountName">—</strong>
-            </div>
-
-            <div class="detail">
-              <small>Email</small>
-              <strong id="accountEmail">—</strong>
-            </div>
-
-            <div class="detail">
-              <small>Account Number</small>
-              <strong id="accountNumberDetail">—</strong>
-            </div>
-
-            <div class="detail">
-              <small>Account Type</small>
-              <strong id="accountTypeDetail">—</strong>
-            </div>
-
-            <div class="detail">
-              <small>Country</small>
-              <strong id="accountCountryDetail">—</strong>
-            </div>
-
-            <div class="detail">
-              <small>Account Status</small>
-              <strong id="accountStatusDetail">—</strong>
-            </div>
-
-            <div class="detail">
-              <small>KYC Status</small>
-              <strong>KYC status — prototype</strong>
-            </div>
-
-            <div class="detail">
-              <small>Available Balance</small>
-              <strong id="accountBalanceDetail">$0.00</strong>
-            </div>
-
-          </div>
-
-        </div>
-
-      </div>
-
-    </section>
-
-    <!-- TRANSFER PAGE -->
-
-    <section id="page-transfer" class="page hidden">
-
-      <div class="page-heading">
-
-        <h1>Transfer</h1>
-
-        <p>
-          Choose how your transfer should be processed.
-        </p>
-
-      </div>
-
-      <div class="transfer-box">
-
-        <div class="transfer-types">
-
-          <button
-            id="instantType"
-            class="transfer-type selected"
-            onclick="selectTransferType('instant')">
-
-            <strong>Instant Transfer</strong>
-
-            <span>
-              Immediate processing flow
-            </span>
-
-          </button>
-
-          <button
-            id="wireType"
-            class="transfer-type"
-            onclick="selectTransferType('wire')">
-
-            <strong>Wire Transfer</strong>
-
-            <span>
-              2–3 business days
-            </span>
-
-          </button>
-
-        </div>
-
-        <form id="transferForm"
-              class="transfer-form">
-
-          <div class="form-grid">
-
-            <div class="form-group">
-
-              <label class="form-label">
-                Recipient Name
-              </label>
-
-              <input
-                id="transferRecipient"
-                class="form-input"
-                type="text"
-                required>
-
-            </div>
-
-            <div class="form-group">
-
-              <label class="form-label">
-                Bank Name
-              </label>
-
-              <input
-                id="transferBank"
-                class="form-input"
-                type="text"
-                required>
+              </div>
 
             </div>
 
           </div>
 
-          <div class="form-group">
+        </section>
 
-            <label class="form-label">
-              Account Number
-            </label>
+        <!-- ACCOUNT SUMMARY -->
 
-            <input
-              id="transferAccount"
-              class="form-input"
-              type="text"
-              required>
+        <section
+          class="page-section"
+          id="page-account">
+
+          <div class="section-head" style="margin-bottom:22px">
+
+            <div class="section-kicker">
+              Account
+            </div>
+
+            <h2 class="section-title" style="font-size:35px">
+              Account Summary
+            </h2>
+
+            <p class="section-description">
+              Your account information in one place.
+            </p>
 
           </div>
 
-          <div class="form-grid">
+          <div class="account-summary-grid">
 
-            <div class="form-group">
+            <div class="summary-item">
+              <span>Account Number</span>
+              <strong id="summaryAccount">—</strong>
+            </div>
 
-              <label class="form-label">
-                Amount
-              </label>
+            <div class="summary-item">
+              <span>Account Type</span>
+              <strong id="summaryType">—</strong>
+            </div>
 
-              <input
-                id="transferAmount"
-                class="form-input"
-                type="number"
-                min="0.01"
-                step="0.01"
-                placeholder="0.00"
-                required>
+            <div class="summary-item">
+              <span>Country</span>
+              <strong id="summaryCountry">—</strong>
+            </div>
+
+            <div class="summary-item">
+              <span>Account Status</span>
+              <strong id="summaryStatus">—</strong>
+            </div>
+
+            <div class="summary-item">
+              <span>Available Balance</span>
+              <strong id="summaryBalance">$0.00</strong>
+            </div>
+
+            <div class="summary-item">
+              <span>KYC Status</span>
+              <strong>Verified (prototype)</strong>
+            </div>
+
+          </div>
+
+        </section>
+
+        <!-- TRANSFER -->
+
+        <section
+          class="page-section"
+          id="page-transfer">
+
+          <div class="transfer-card">
+
+            <h2>Transfer</h2>
+
+            <p>
+              Choose how your transfer should be processed.
+            </p>
+
+            <div class="transfer-types">
+
+              <button
+                type="button"
+                class="transfer-type selected"
+                id="instantTransfer"
+                onclick="selectTransferType('instant')">
+
+                <strong>Instant</strong>
+
+                <span>
+                  Immediate processing
+                </span>
+
+              </button>
+
+              <button
+                type="button"
+                class="transfer-type"
+                id="wireTransfer"
+                onclick="selectTransferType('wire')">
+
+                <strong>Wire</strong>
+
+                <span>
+                  2–3 business days
+                </span>
+
+              </button>
 
             </div>
 
-            <div class="form-group">
+            <div class="form-error" id="transferError"></div>
 
-              <label class="form-label">
-                Security PIN
-              </label>
+            <form
+              class="transfer-form"
+              onsubmit="submitTransfer(event)">
 
-              <input
-                id="transferPin"
-                class="form-input"
-                type="password"
-                inputmode="numeric"
-                maxlength="6"
-                required>
+              <div class="form-group full">
 
+                <label>Recipient Name</label>
+
+                <input
+                  id="recipientName"
+                  placeholder="Recipient name"
+                  required>
+
+              </div>
+
+              <div class="form-group full">
+
+                <label>Bank Name</label>
+
+                <input
+                  id="bankName"
+                  placeholder="Bank name"
+                  required>
+
+              </div>
+
+              <div class="form-group">
+
+                <label>Account Number</label>
+
+                <input
+                  id="recipientAccount"
+                  inputmode="numeric"
+                  placeholder="Recipient account number"
+                  required>
+
+              </div>
+
+              <div class="form-group">
+
+                <label>Amount</label>
+
+                <input
+                  id="transferAmount"
+                  type="number"
+                  min="0.01"
+                  step="0.01"
+                  placeholder="0.00"
+                  required>
+
+              </div>
+
+              <div class="form-group full">
+
+                <label>Note</label>
+
+                <textarea
+                  id="transferNote"
+                  placeholder="Optional note"></textarea>
+
+              </div>
+
+              <div class="form-group full">
+
+                <label>Security PIN</label>
+
+                <input
+                  id="transferPin"
+                  type="password"
+                  inputmode="numeric"
+                  maxlength="6"
+                  placeholder="Enter your security PIN"
+                  required>
+
+              </div>
+
+              <div class="form-group full">
+
+                <button
+                  class="btn btn-green full-btn"
+                  type="submit">
+                  Continue
+                </button>
+
+              </div>
+
+            </form>
+
+          </div>
+
+        </section>
+
+        <!-- HISTORY -->
+
+        <section
+          class="page-section"
+          id="page-history">
+
+          <div class="section-head" style="margin-bottom:22px">
+
+            <div class="section-kicker">
+              Activity
             </div>
 
-          </div>
+            <h2 class="section-title" style="font-size:35px">
+              Transaction History
+            </h2>
 
-          <div class="form-group">
-
-            <label class="form-label">
-              Note
-            </label>
-
-            <textarea
-              id="transferNote"
-              class="form-input"
-              rows="3"
-              placeholder="Optional note"></textarea>
+            <p class="section-description">
+              Review your transfer activity.
+            </p>
 
           </div>
 
-          <div class="transfer-actions">
+          <div
+            class="simple-list"
+            id="historyList">
+          </div>
+
+        </section>
+
+        <!-- SUPPORT -->
+
+        <section
+          class="page-section"
+          id="page-support">
+
+          <div class="dash-card">
+
+            <div class="section-kicker">
+              Support
+            </div>
+
+            <h2 class="section-title" style="font-size:35px">
+              How can we help?
+            </h2>
+
+            <p class="section-description">
+              Use the support chat for assistance with this prototype.
+            </p>
 
             <button
-              type="button"
-              class="secondary-btn"
-              onclick="showPage('dashboard')">
-              Cancel
-            </button>
-
-            <button
-              type="submit"
-              class="primary-btn">
-              Continue
+              class="btn btn-green"
+              onclick="openSupport()">
+              Open support
             </button>
 
           </div>
 
-          <p class="form-note">
-            Transfers are submitted as pending requests. The customer
-            interface does not directly change the account balance.
-          </p>
-
-        </form>
+        </section>
 
       </div>
 
-    </section>
-
-    <!-- HISTORY -->
-
-    <section id="page-history" class="page hidden">
-
-      <div class="page-heading">
-
-        <h1>Transaction History</h1>
-
-        <p>
-          Review your account activity.
-        </p>
-
-      </div>
-
-      <div class="card">
-
-        <div class="card-body">
-
-          <div id="fullTransactions"
-               class="transaction-list">
-          </div>
-
-        </div>
-
-      </div>
-
-    </section>
-
-  </main>
-</div>
-
-<!-- =========================================================
-     MODAL
-========================================================= -->
-
-<div id="modalOverlay" class="modal-overlay hidden">
-
-  <div class="modal">
-
-    <h3 id="modalTitle">Information</h3>
-
-    <p id="modalText">
-      Information.
-    </p>
-
-    <button
-      class="primary-btn"
-      onclick="closeModal()">
-      Close
-    </button>
+    </main>
 
   </div>
 
 </div>
 
-<div id="toast" class="toast hidden"></div>
+<!-- =========================================================
+     GENERAL MODAL
+========================================================= -->
+
+<div class="modal-overlay" id="modalOverlay">
+
+  <div class="modal">
+
+    <h3 id="modalTitle">
+      Information
+    </h3>
+
+    <p id="modalMessage">
+      —
+    </p>
+
+    <div class="modal-actions">
+
+      <button
+        class="btn btn-outline"
+        onclick="closeModal()">
+        Close
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- =========================================================
+     TOAST
+========================================================= -->
+
+<div class="toast" id="toast"></div>
 
 <!-- =========================================================
      TAWK.TO
@@ -2659,22 +3136,21 @@ body.dark .transfer-type.selected{
 var Tawk_API=Tawk_API||{},Tawk_LoadStart=new Date();
 
 (function(){
-var s1=document.createElement("script"),
-    s0=document.getElementsByTagName("script")[0];
+  var s1=document.createElement("script"),
+      s0=document.getElementsByTagName("script")[0];
 
-s1.async=true;
-s1.src='https://embed.tawk.to/6aad7099ecbade3448f2e8f6/default';
-s1.charset='UTF-8';
-s1.setAttribute('crossorigin','*');
+  s1.async=true;
+  s1.src='https://embed.tawk.to/6aad7099ecbade3448f2e8f6/default';
+  s1.charset='UTF-8';
+  s1.setAttribute('crossorigin','*');
 
-s0.parentNode.insertBefore(s1,s0);
+  s0.parentNode.insertBefore(s1,s0);
 })();
 </script>
 
 <script>
-
 /* =========================================================
-   FIREBASE
+   FIREBASE CONFIGURATION
 ========================================================= */
 
 const firebaseConfig = {
@@ -2692,108 +3168,192 @@ firebase.initializeApp(firebaseConfig);
 const auth = firebase.auth();
 const db = firebase.firestore();
 
-/*
-  IMPORTANT:
-  Firebase Storage is intentionally NOT initialized.
-  Profile pictures are stored locally in the browser.
-*/
-
 /* =========================================================
-   STATE
+   APPLICATION STATE
 ========================================================= */
 
 let currentUserData = null;
 let currentTransferType = "instant";
-let unsubscribeTransactions = null;
+let localPhoto = localStorage.getItem("cashflowbank_profile_photo") || "";
+let currentTransactions = [];
 
 /* =========================================================
-   DOM HELPERS
+   HELPERS
 ========================================================= */
 
-const $ = id => document.getElementById(id);
-
-function show(id){
-  $(id).classList.remove("hidden");
+function $(id){
+  return document.getElementById(id);
 }
 
-function hide(id){
-  $(id).classList.add("hidden");
+function escapeHTML(value){
+  return String(value ?? "")
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
 }
 
-/* =========================================================
-   TOAST
-========================================================= */
+function money(value){
+  const number = Number(value || 0);
 
-function toast(message){
+  return new Intl.NumberFormat("en-US",{
+    style:"currency",
+    currency:"USD"
+  }).format(number);
+}
 
-  const el = $("toast");
+function showToast(message,error=false){
 
-  el.textContent = message;
-  el.classList.remove("hidden");
+  const toast = $("toast");
 
-  clearTimeout(window.toastTimer);
+  toast.textContent = message;
 
-  window.toastTimer = setTimeout(()=>{
-    el.classList.add("hidden");
+  toast.classList.toggle("error",error);
+  toast.classList.add("show");
+
+  clearTimeout(window.__toastTimer);
+
+  window.__toastTimer = setTimeout(()=>{
+    toast.classList.remove("show");
   },3500);
 }
 
-/* =========================================================
-   MODAL
-========================================================= */
-
-function openModal(title,text){
+function showModal(title,message){
 
   $("modalTitle").textContent = title;
-  $("modalText").textContent = text;
+  $("modalMessage").textContent = message;
 
-  show("modalOverlay");
+  $("modalOverlay").classList.add("show");
 }
 
 function closeModal(){
-  hide("modalOverlay");
-}
-
-function openSupport(){
-
-  openModal(
-    "Support",
-    "Support chat is available through the customer support widget. This prototype does not process real financial support requests."
-  );
+  $("modalOverlay").classList.remove("show");
 }
 
 /* =========================================================
-   AUTH MODAL
+   THEME
 ========================================================= */
+
+function applyTheme(){
+
+  const theme =
+    localStorage.getItem("cashflowbank_theme") || "light";
+
+  document.body.classList.toggle(
+    "dark",
+    theme === "dark"
+  );
+
+  $("themeText").textContent =
+    theme === "dark"
+      ? "Light mode"
+      : "Dark mode";
+}
+
+function toggleTheme(){
+
+  const isDark =
+    document.body.classList.contains("dark");
+
+  localStorage.setItem(
+    "cashflowbank_theme",
+    isDark ? "light" : "dark"
+  );
+
+  applyTheme();
+}
+
+/* =========================================================
+   LANDING / AUTH
+========================================================= */
+
+function goHome(){
+
+  $("landingPage").style.display = "block";
+  $("dashboardPage").style.display = "none";
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+}
 
 function openAuth(type="login"){
 
-  show("authOverlay");
+  $("authOverlay").classList.add("show");
 
   switchAuth(type);
 }
 
 function closeAuth(){
-  hide("authOverlay");
+
+  $("authOverlay").classList.remove("show");
+
+  $("authError").style.display = "none";
+  $("authError").textContent = "";
 }
 
 function switchAuth(type){
 
-  const login = type === "login";
+  const login =
+    type === "login";
 
-  $("loginForm").classList.toggle("hidden",!login);
-  $("registerForm").classList.toggle("hidden",login);
+  $("loginForm").classList.toggle(
+    "hidden",
+    !login
+  );
 
-  $("loginTab").classList.toggle("active",login);
-  $("registerTab").classList.toggle("active",!login);
+  $("registerForm").classList.toggle(
+    "hidden",
+    login
+  );
+
+  $("loginTab").classList.toggle(
+    "active",
+    login
+  );
+
+  $("registerTab").classList.toggle(
+    "active",
+    !login
+  );
 
   $("authTitle").textContent =
-    login ? "Welcome back" : "Create your account";
+    login
+      ? "Welcome back"
+      : "Create your account";
 
   $("authSubtitle").textContent =
     login
       ? "Sign in using your account number and password."
-      : "Create your Cash Flow Bank prototype account.";
+      : "Create an account and receive your account number automatically.";
+
+  $("authError").style.display = "none";
+}
+
+/* =========================================================
+   SIMPLE DEMO HASH
+   NOTE:
+   This is NOT a production cryptographic password/PIN system.
+========================================================= */
+
+function hashValue(value){
+
+  let hash = 0;
+
+  const text = String(value);
+
+  for(let i=0;i<text.length;i++){
+
+    hash =
+      ((hash << 5) - hash) +
+      text.charCodeAt(i);
+
+    hash |= 0;
+  }
+
+  return String(hash);
 }
 
 /* =========================================================
@@ -2802,53 +3362,37 @@ function switchAuth(type){
 
 function generateAccountNumber(){
 
-  return String(
-    Math.floor(1000000000 + Math.random() * 9000000000)
-  );
+  const first =
+    Math.floor(1000000000 + Math.random()*9000000000);
+
+  return String(first);
 }
 
 async function generateUniqueAccountNumber(){
 
-  for(let i=0;i<10;i++){
+  for(let i=0;i<15;i++){
 
-    const accountNumber = generateAccountNumber();
+    const account =
+      generateAccountNumber();
 
-    const snap = await db
-      .collection("users")
-      .where("accountNumber","==",accountNumber)
-      .limit(1)
-      .get();
+    const query =
+      await db.collection("users")
+        .where("accountNumber","==",account)
+        .limit(1)
+        .get();
 
-    if(snap.empty){
-      return accountNumber;
+    if(query.empty){
+      return account;
     }
   }
 
-  throw new Error("Unable to generate a unique account number.");
-}
-
-/* =========================================================
-   HASH PIN
-========================================================= */
-
-async function hashPin(value){
-
-  const encoder = new TextEncoder();
-
-  const data = encoder.encode(value);
-
-  const hash = await crypto.subtle.digest(
-    "SHA-256",
-    data
+  throw new Error(
+    "Unable to generate a unique account number."
   );
-
-  return Array.from(new Uint8Array(hash))
-    .map(b=>b.toString(16).padStart(2,"0"))
-    .join("");
 }
 
 /* =========================================================
-   LOCAL PHOTO
+   IMAGE PROCESSING
 ========================================================= */
 
 function readImage(file){
@@ -2860,60 +3404,109 @@ function readImage(file){
       return;
     }
 
-    if(file.size > 2 * 1024 * 1024){
-      reject(new Error("Profile picture must be 2MB or smaller."));
+    if(!file.type.startsWith("image/")){
+      reject(new Error("Please select an image file."));
       return;
     }
 
-    const reader = new FileReader();
+    const reader =
+      new FileReader();
 
-    reader.onload = ()=>{
+    reader.onload = () =>
       resolve(reader.result);
-    };
 
-    reader.onerror = ()=>{
-      reject(new Error("Unable to read profile picture."));
-    };
+    reader.onerror = () =>
+      reject(new Error("Unable to read image."));
 
     reader.readAsDataURL(file);
   });
 }
 
-function localPhotoKey(uid){
-  return "cashflowbank_photo_" + uid;
+$("regPhoto").addEventListener("change",async function(){
+
+  const file =
+    this.files[0];
+
+  if(!file){
+    return;
+  }
+
+  try{
+
+    const image =
+      await readImage(file);
+
+    $("regPhotoPreview").src = image;
+    $("regPhotoPreview").style.display = "block";
+
+  }catch(error){
+
+    showAuthError(error.message);
+  }
+});
+
+/* =========================================================
+   AUTH ERROR
+========================================================= */
+
+function showAuthError(message){
+
+  const error =
+    $("authError");
+
+  error.textContent =
+    message;
+
+  error.style.display =
+    "block";
 }
 
 /* =========================================================
    REGISTER
 ========================================================= */
 
-$("registerForm").addEventListener("submit",async e=>{
+async function registerUser(event){
 
-  e.preventDefault();
+  event.preventDefault();
 
-  const name = $("regName").value.trim();
-  const email = $("regEmail").value.trim();
-  const type = $("regType").value;
-  const country = $("regCountry").value;
-  const password = $("regPassword").value;
-  const pin = $("regPin").value.trim();
-  const photoFile = $("regPhoto").files[0];
+  $("authError").style.display = "none";
 
-  if(!name || !email || !type || !country || !password || !pin){
+  const name =
+    $("regName").value.trim();
 
-    toast("Please complete all required fields.");
+  const email =
+    $("regEmail").value.trim();
+
+  const accountType =
+    $("regAccountType").value;
+
+  const country =
+    $("regCountry").value;
+
+  const password =
+    $("regPassword").value;
+
+  const pin =
+    $("regPin").value.trim();
+
+  const photoFile =
+    $("regPhoto").files[0];
+
+  if(password.length < 6){
+
+    showAuthError(
+      "Password must contain at least 6 characters."
+    );
+
     return;
   }
 
   if(!/^\d{4,6}$/.test(pin)){
 
-    toast("Security PIN must contain 4–6 digits.");
-    return;
-  }
+    showAuthError(
+      "Security PIN must contain 4–6 digits."
+    );
 
-  if(password.length < 6){
-
-    toast("Password must contain at least 6 characters.");
     return;
   }
 
@@ -2922,38 +3515,44 @@ $("registerForm").addEventListener("submit",async e=>{
     const accountNumber =
       await generateUniqueAccountNumber();
 
-    const pinHash =
-      await hashPin(pin);
-
     let photoURL = "";
 
     if(photoFile){
-      photoURL = await readImage(photoFile);
+
+      photoURL =
+        await readImage(photoFile);
+
+      /*
+        Profile photo intentionally stays local.
+        It is NOT uploaded to Firebase Storage.
+      */
+
+      localStorage.setItem(
+        "cashflowbank_profile_photo_" + accountNumber,
+        photoURL
+      );
     }
 
     /*
-      Firebase Auth uses an internal email derived from
-      the account number.
-
-      The customer still logs in using:
-      Account Number + Password
+      Firebase Auth normally requires an email address.
+      The customer still logs in with their account number.
     */
 
-    const internalEmail =
+    const syntheticEmail =
       "acct-" +
       accountNumber +
       "@cashflowbank.local";
 
     const credential =
       await auth.createUserWithEmailAndPassword(
-        internalEmail,
+        syntheticEmail,
         password
       );
 
-    const uid = credential.user.uid;
+    const uid =
+      credential.user.uid;
 
-    await db
-      .collection("users")
+    await db.collection("users")
       .doc(uid)
       .set({
 
@@ -2965,7 +3564,7 @@ $("registerForm").addEventListener("submit",async e=>{
 
         accountNumber:accountNumber,
 
-        accountType:type,
+        accountType:accountType,
 
         country:country,
 
@@ -2973,11 +3572,11 @@ $("registerForm").addEventListener("submit",async e=>{
 
         balance:0,
 
-        securityPinHash:pinHash,
+        securityPinHash:hashValue(pin),
+
+        photoURL:photoURL,
 
         profileCompleted:false,
-
-        photoURL:"",
 
         createdAt:firebase.firestore.FieldValue.serverTimestamp(),
 
@@ -2985,42 +3584,28 @@ $("registerForm").addEventListener("submit",async e=>{
 
       });
 
-    /*
-      Profile picture is NOT sent to Firebase Storage.
-      It stays on this device/browser.
-    */
-
-    if(photoURL){
-
-      try{
-
-        localStorage.setItem(
-          localPhotoKey(uid),
-          photoURL
-        );
-
-      }catch(photoError){
-
-        console.warn(
-          "Local photo could not be saved.",
-          photoError
-        );
-
-      }
-    }
+    await credential.user.updateProfile({
+      displayName:name
+    });
 
     await auth.signOut();
 
-    closeAuth();
-
     $("registerForm").reset();
 
-    openModal(
-      "Account Created",
+    $("regPhotoPreview").style.display =
+      "none";
+
+    showModal(
+      "Account created",
       "Your account number is " +
       accountNumber +
-      ". Your account is currently pending admin approval. Please keep your account number safe."
+      ". Your account is awaiting administrator approval before dashboard access is enabled."
     );
+
+    switchAuth("login");
+
+    $("loginAccount").value =
+      accountNumber;
 
   }catch(error){
 
@@ -3028,25 +3613,32 @@ $("registerForm").addEventListener("submit",async e=>{
 
     let message =
       error.message ||
-      "Unable to create your account.";
+      "Unable to create account.";
 
-    if(error.code === "auth/email-already-in-use"){
+    if(
+      error.code ===
+      "auth/email-already-in-use"
+    ){
+
       message =
-        "This generated account number already exists. Please try again.";
+        "This account could not be created because the generated account number already exists. Please try again.";
+
     }
 
-    toast(message);
+    showAuthError(message);
   }
-
-});
+}
 
 /* =========================================================
    LOGIN
 ========================================================= */
 
-$("loginForm").addEventListener("submit",async e=>{
+async function loginUser(event){
 
-  e.preventDefault();
+  event.preventDefault();
+
+  $("authError").style.display =
+    "none";
 
   const accountNumber =
     $("loginAccount").value.trim();
@@ -3056,34 +3648,31 @@ $("loginForm").addEventListener("submit",async e=>{
 
   if(!/^\d{10}$/.test(accountNumber)){
 
-    toast("Enter your 10-digit account number.");
-    return;
-  }
+    showAuthError(
+      "Enter your 10-digit account number."
+    );
 
-  if(!password){
-
-    toast("Enter your password.");
     return;
   }
 
   try{
 
-    const internalEmail =
+    const syntheticEmail =
       "acct-" +
       accountNumber +
       "@cashflowbank.local";
 
     const credential =
       await auth.signInWithEmailAndPassword(
-        internalEmail,
+        syntheticEmail,
         password
       );
 
-    const uid = credential.user.uid;
+    const uid =
+      credential.user.uid;
 
     const doc =
-      await db
-        .collection("users")
+      await db.collection("users")
         .doc(uid)
         .get();
 
@@ -3091,11 +3680,15 @@ $("loginForm").addEventListener("submit",async e=>{
 
       await auth.signOut();
 
-      toast("Account profile could not be found.");
+      showAuthError(
+        "Your account profile could not be found."
+      );
+
       return;
     }
 
-    const data = doc.data();
+    const data =
+      doc.data();
 
     if(data.status !== "active"){
 
@@ -3103,386 +3696,238 @@ $("loginForm").addEventListener("submit",async e=>{
 
       if(data.status === "pending"){
 
-        toast(
-          "Your account is pending admin approval."
+        showAuthError(
+          "Your account is still awaiting administrator approval."
         );
 
       }else if(data.status === "rejected"){
 
-        toast(
-          "Your account has not been approved."
+        showAuthError(
+          "Your account is not currently approved for access."
         );
 
       }else{
 
-        toast(
-          "Your account is not currently active."
+        showAuthError(
+          "Your account is not currently available."
         );
       }
 
       return;
     }
 
-    currentUserData = data;
+    currentUserData = {
+      ...data,
+      uid:uid
+    };
+
+    currentTransactions = [];
 
     closeAuth();
 
-    showApplication();
+    showDashboard();
+
+    await loadTransactions();
 
   }catch(error){
 
     console.error(error);
 
-    toast(
-      "Account number or password is incorrect."
-    );
-  }
+    let message =
+      "Unable to sign in.";
 
-});
+    if(
+      error.code ===
+      "auth/invalid-credential" ||
+      error.code ===
+      "auth/wrong-password" ||
+      error.code ===
+      "auth/user-not-found"
+    ){
+
+      message =
+        "Incorrect account number or password.";
+    }
+
+    showAuthError(message);
+  }
+}
 
 /* =========================================================
-   AUTH STATE
+   DASHBOARD
 ========================================================= */
 
-auth.onAuthStateChanged(async user=>{
+function showDashboard(){
 
-  if(!user){
-    return;
-  }
+  $("landingPage").style.display =
+    "none";
 
-  /*
-    Don't automatically show dashboard while registering.
-    Login handler handles active-user entry.
-  */
+  $("dashboardPage").style.display =
+    "block";
 
-});
-
-/* =========================================================
-   SHOW APPLICATION
-========================================================= */
-
-function showApplication(){
-
-  hide("landingPage");
-  show("app");
-
-  applyTheme();
-
-  updateUserUI();
-
-  loadTransactions();
-
-  renderAnalysis();
+  updateDashboard();
 
   showPage("dashboard");
 
   window.scrollTo(0,0);
 }
 
-/* =========================================================
-   UPDATE USER UI
-========================================================= */
-
-function updateUserUI(){
+function updateDashboard(){
 
   if(!currentUserData){
     return;
   }
 
-  const data = currentUserData;
+  const user =
+    currentUserData;
 
-  $("topName").textContent =
-    data.name || "Customer";
+  const balance =
+    Number(user.balance || 0);
 
-  $("dashAccount").textContent =
-    data.accountNumber || "—";
+  $("dashboardBalance").textContent =
+    money(balance);
 
-  $("dashType").textContent =
-    data.accountType || "—";
+  $("dashboardAccount").textContent =
+    user.accountNumber || "—";
 
-  $("dashStatus").textContent =
-    data.status || "pending";
+  $("dashboardAccountType").textContent =
+    user.accountType || "—";
 
-  $("dashBalance").textContent =
-    formatMoney(data.balance || 0);
+  $("dashboardStatus").textContent =
+    user.status || "—";
 
-  $("accountName").textContent =
-    data.name || "—";
+  $("summaryAccount").textContent =
+    user.accountNumber || "—";
 
-  $("accountEmail").textContent =
-    data.email || "—";
+  $("summaryType").textContent =
+    user.accountType || "—";
 
-  $("accountNumberDetail").textContent =
-    data.accountNumber || "—";
+  $("summaryCountry").textContent =
+    user.country || "—";
 
-  $("accountTypeDetail").textContent =
-    data.accountType || "—";
+  $("summaryStatus").textContent =
+    user.status || "—";
 
-  $("accountCountryDetail").textContent =
-    data.country || "—";
-
-  $("accountStatusDetail").textContent =
-    data.status || "—";
-
-  $("accountBalanceDetail").textContent =
-    formatMoney(data.balance || 0);
+  $("summaryBalance").textContent =
+    money(balance);
 
   $("profileName").value =
-    data.name || "";
-
-  $("profileCountry").value =
-    data.country || "";
+    user.name || "";
 
   $("profileEmail").value =
-    data.email || "";
+    user.email || "";
 
-  renderAvatar();
+  $("profileCountry").value =
+    user.country || "Other";
+
+  $("profileAccountType").value =
+    user.accountType || "";
+
+  renderAvatars();
+
   renderProfilePhoto();
-}
-
-/* =========================================================
-   PROFILE PHOTO
-========================================================= */
-
-function getLocalPhoto(){
-
-  if(!auth.currentUser){
-    return "";
-  }
-
-  return localStorage.getItem(
-    localPhotoKey(auth.currentUser.uid)
-  ) || "";
-}
-
-function renderAvatar(){
-
-  const avatar = $("topAvatar");
-
-  const photo = getLocalPhoto();
-
-  if(photo){
-
-    avatar.innerHTML =
-      '<img src="' +
-      photo +
-      '" alt="Profile">';
-
-  }else{
-
-    const first =
-      (currentUserData?.name || "C")
-      .charAt(0)
-      .toUpperCase();
-
-    avatar.textContent = first;
-  }
-}
-
-function renderProfilePhoto(){
-
-  const box =
-    $("profilePhotoPreview");
-
-  const photo =
-    getLocalPhoto();
-
-  if(photo){
-
-    box.innerHTML =
-      '<img src="' +
-      photo +
-      '" alt="Profile picture">';
-
-  }else{
-
-    const first =
-      (currentUserData?.name || "C")
-      .charAt(0)
-      .toUpperCase();
-
-    box.textContent = first;
-  }
-}
-
-$("profilePhotoInput").addEventListener(
-  "change",
-  async function(){
-
-    const file = this.files[0];
-
-    if(!file){
-      return;
-    }
-
-    try{
-
-      const photo =
-        await readImage(file);
-
-      localStorage.setItem(
-        localPhotoKey(auth.currentUser.uid),
-        photo
-      );
-
-      renderAvatar();
-      renderProfilePhoto();
-
-      toast("Profile picture updated on this device.");
-
-    }catch(error){
-
-      toast(error.message);
-    }
-  }
-);
-
-function removeProfilePhoto(){
-
-  if(!auth.currentUser){
-    return;
-  }
-
-  localStorage.removeItem(
-    localPhotoKey(auth.currentUser.uid)
-  );
-
-  renderAvatar();
-  renderProfilePhoto();
-
-  toast("Profile picture removed.");
-}
-
-/* =========================================================
-   SAVE PROFILE
-========================================================= */
-
-async function saveProfile(){
-
-  if(!auth.currentUser || !currentUserData){
-    return;
-  }
-
-  const name =
-    $("profileName").value.trim();
-
-  const country =
-    $("profileCountry").value.trim();
-
-  if(!name || !country){
-
-    toast("Name and country are required.");
-    return;
-  }
-
-  try{
-
-    await db
-      .collection("users")
-      .doc(auth.currentUser.uid)
-      .update({
-
-        name:name,
-
-        country:country,
-
-        profileCompleted:true,
-
-        updatedAt:
-          firebase.firestore.FieldValue.serverTimestamp()
-
-      });
-
-    currentUserData.name = name;
-    currentUserData.country = country;
-
-    updateUserUI();
-
-    toast("Profile saved.");
-
-  }catch(error){
-
-    console.error(error);
-
-    toast(
-      "Unable to save your profile."
-    );
-  }
 }
 
 /* =========================================================
    PAGE NAVIGATION
 ========================================================= */
 
+const pageTitles = {
+
+  dashboard:[
+    "Dashboard",
+    "Your account at a glance"
+  ],
+
+  account:[
+    "Account Summary",
+    "Your account information"
+  ],
+
+  transfer:[
+    "Transfer",
+    "Create a transfer request"
+  ],
+
+  history:[
+    "Transaction History",
+    "Your recent account activity"
+  ],
+
+  support:[
+    "Support",
+    "Get assistance"
+  ]
+
+};
+
 function showPage(page){
 
-  const pages = [
-    "dashboard",
-    "account",
-    "transfer",
-    "history"
-  ];
-
-  pages.forEach(name=>{
-
-    const el =
-      $("page-" + name);
-
-    if(el){
-      el.classList.toggle(
-        "hidden",
-        name !== page
-      );
-    }
-  });
-
   document
-    .querySelectorAll(".side-btn[data-page]")
-    .forEach(btn=>{
-
-      btn.classList.toggle(
-        "active",
-        btn.dataset.page === page
-      );
-
+    .querySelectorAll(".page-section")
+    .forEach(section=>{
+      section.classList.remove("active");
     });
 
-  if(page === "dashboard"){
+  const section =
+    $("page-" + page);
 
-    updateUserUI();
-    renderAnalysis();
+  if(section){
+    section.classList.add("active");
   }
 
-  if(page === "history"){
+  document
+    .querySelectorAll(".side-link[data-page]")
+    .forEach(button=>{
+      button.classList.toggle(
+        "active",
+        button.dataset.page === page
+      );
+    });
 
-    loadTransactions();
+  const title =
+    pageTitles[page];
+
+  if(title){
+
+    $("pageTitle").textContent =
+      title[0];
+
+    $("pageSubtitle").textContent =
+      title[1];
   }
 
-  if(page === "account"){
-
-    updateUserUI();
-  }
-
-  if(page === "transfer"){
-
-    resetTransferForm();
-  }
-
-  $("sidebar").classList.remove("open");
+  closeSidebar();
 
   window.scrollTo({
     top:0,
     behavior:"smooth"
   });
+
+  if(page === "history"){
+    renderHistory();
+  }
+
+  if(page === "dashboard"){
+    renderRecentTransactions();
+    renderAnalysis();
+  }
 }
 
 /* =========================================================
-   SIDEBAR
+   SIDEBAR MOBILE
 ========================================================= */
 
 function toggleSidebar(){
 
-  $("sidebar").classList.toggle("open");
+  $("sidebar")
+    .classList.toggle("open");
+}
+
+function closeSidebar(){
+
+  $("sidebar")
+    .classList.remove("open");
 }
 
 /* =========================================================
@@ -3491,15 +3936,16 @@ function toggleSidebar(){
 
 function selectTransferType(type){
 
-  currentTransferType = type;
+  currentTransferType =
+    type;
 
-  $("instantType")
+  $("instantTransfer")
     .classList.toggle(
       "selected",
       type === "instant"
     );
 
-  $("wireType")
+  $("wireTransfer")
     .classList.toggle(
       "selected",
       type === "wire"
@@ -3510,311 +3956,375 @@ function selectTransferType(type){
    TRANSFER
 ========================================================= */
 
-$("transferForm").addEventListener(
-  "submit",
-  async e=>{
+async function submitTransfer(event){
 
-    e.preventDefault();
+  event.preventDefault();
 
-    if(!auth.currentUser || !currentUserData){
+  const error =
+    $("transferError");
 
-      toast("Please sign in again.");
-      return;
-    }
+  error.style.display =
+    "none";
 
-    const recipient =
-      $("transferRecipient").value.trim();
-
-    const bank =
-      $("transferBank").value.trim();
-
-    const account =
-      $("transferAccount").value.trim();
-
-    const amount =
-      Number($("transferAmount").value);
-
-    const note =
-      $("transferNote").value.trim();
-
-    const pin =
-      $("transferPin").value.trim();
-
-    if(!recipient || !bank || !account){
-
-      toast("Complete the recipient information.");
-      return;
-    }
-
-    if(!amount || amount <= 0){
-
-      toast("Enter a valid transfer amount.");
-      return;
-    }
-
-    if(!/^\d{4,6}$/.test(pin)){
-
-      toast("Enter your 4–6 digit security PIN.");
-      return;
-    }
-
-    if(currentUserData.balance < amount){
-
-      toast(
-        "The requested amount exceeds the available balance."
-      );
-
-      return;
-    }
-
-    try{
-
-      const pinHash =
-        await hashPin(pin);
-
-      if(
-        pinHash !==
-        currentUserData.securityPinHash
-      ){
-
-        toast("Incorrect security PIN.");
-        return;
-      }
-
-      /*
-        IMPORTANT:
-        The customer does NOT change their balance here.
-
-        The transaction is only submitted as pending.
-        Admin/backend processing should handle any actual
-        balance changes.
-      */
-
-      await db
-        .collection("transactions")
-        .add({
-
-          userId:auth.currentUser.uid,
-
-          type:"transfer",
-
-          transferType:currentTransferType,
-
-          recipientName:recipient,
-
-          bankName:bank,
-
-          accountNumber:account,
-
-          amount:amount,
-
-          note:note,
-
-          status:"pending",
-
-          createdAt:
-            firebase.firestore.FieldValue.serverTimestamp()
-
-        });
-
-      $("transferForm").reset();
-
-      selectTransferType("instant");
-
-      toast(
-        "Transfer request submitted for processing."
-      );
-
-      showPage("history");
-
-    }catch(error){
-
-      console.error(error);
-
-      toast(
-        "Unable to submit transfer request."
-      );
-    }
-
-  }
-);
-
-/* =========================================================
-   RESET TRANSFER
-========================================================= */
-
-function resetTransferForm(){
-
-  $("transferForm").reset();
-
-  selectTransferType("instant");
-}
-
-/* =========================================================
-   TRANSACTIONS
-========================================================= */
-
-function loadTransactions(){
-
-  if(!auth.currentUser){
+  if(!currentUserData){
     return;
   }
 
-  if(unsubscribeTransactions){
-    unsubscribeTransactions();
+  const recipientName =
+    $("recipientName").value.trim();
+
+  const bankName =
+    $("bankName").value.trim();
+
+  const recipientAccount =
+    $("recipientAccount").value.trim();
+
+  const amount =
+    Number($("transferAmount").value);
+
+  const note =
+    $("transferNote").value.trim();
+
+  const pin =
+    $("transferPin").value.trim();
+
+  if(!recipientName ||
+     !bankName ||
+     !recipientAccount ||
+     !amount ||
+     amount <= 0 ||
+     !pin){
+
+    error.textContent =
+      "Please complete all required transfer fields.";
+
+    error.style.display =
+      "block";
+
+    return;
   }
 
-  unsubscribeTransactions =
-    db
-      .collection("transactions")
-      .where(
-        "userId",
-        "==",
-        auth.currentUser.uid
-      )
-      .onSnapshot(
-        snapshot=>{
+  if(!/^\d{4,6}$/.test(pin)){
 
-          const transactions =
-            snapshot.docs
-              .map(doc=>({
-                id:doc.id,
-                ...doc.data()
-              }))
-              .sort((a,b)=>{
+    error.textContent =
+      "Enter a valid 4–6 digit security PIN.";
 
-                const aTime =
-                  a.createdAt?.seconds || 0;
+    error.style.display =
+      "block";
 
-                const bTime =
-                  b.createdAt?.seconds || 0;
+    return;
+  }
 
-                return bTime - aTime;
-              });
+  if(
+    hashValue(pin) !==
+    currentUserData.securityPinHash
+  ){
 
-          renderTransactions(
-            transactions
-          );
+    error.textContent =
+      "Incorrect security PIN.";
 
-        },
-        error=>{
+    error.style.display =
+      "block";
 
-          console.error(error);
+    return;
+  }
 
-          toast(
-            "Unable to load transactions."
-          );
-        }
-      );
+  try{
+
+    /*
+      Important:
+      The customer does NOT directly change their balance.
+
+      This creates a pending request only.
+      An administrator/backend can process it later.
+    */
+
+    await db.collection("transactions")
+      .add({
+
+        userId:currentUserData.uid,
+
+        accountNumber:
+          currentUserData.accountNumber,
+
+        type:"transfer",
+
+        transferType:
+          currentTransferType,
+
+        recipientName:
+          recipientName,
+
+        bankName:
+          bankName,
+
+        accountNumberRecipient:
+          recipientAccount,
+
+        amount:amount,
+
+        note:note,
+
+        status:"pending",
+
+        createdAt:
+          firebase.firestore.FieldValue.serverTimestamp()
+
+      });
+
+    $("recipientName").value = "";
+    $("bankName").value = "";
+    $("recipientAccount").value = "";
+    $("transferAmount").value = "";
+    $("transferNote").value = "";
+    $("transferPin").value = "";
+
+    showModal(
+      "Transfer request submitted",
+      currentTransferType === "instant"
+        ? "Your instant transfer request has been submitted for processing."
+        : "Your wire transfer request has been submitted. Wire transfers are shown as taking 2–3 business days in this prototype."
+    );
+
+    await loadTransactions();
+
+    showPage("history");
+
+  }catch(error){
+
+    console.error(error);
+
+    error.textContent =
+      "Unable to submit the transfer. Check your Firestore security rules and try again.";
+
+    error.style.display =
+      "block";
+  }
 }
 
 /* =========================================================
-   RENDER TRANSACTIONS
+   LOAD TRANSACTIONS
 ========================================================= */
 
-function renderTransactions(list){
+async function loadTransactions(){
 
-  const recent =
+  if(!currentUserData){
+    return;
+  }
+
+  try{
+
+    const snapshot =
+      await db.collection("transactions")
+        .where(
+          "userId",
+          "==",
+          currentUserData.uid
+        )
+        .get();
+
+    currentTransactions =
+      snapshot.docs.map(doc=>({
+
+        id:doc.id,
+        ...doc.data()
+
+      }));
+
+    currentTransactions.sort((a,b)=>{
+
+      const aTime =
+        a.createdAt?.toMillis
+          ? a.createdAt.toMillis()
+          : 0;
+
+      const bTime =
+        b.createdAt?.toMillis
+          ? b.createdAt.toMillis()
+          : 0;
+
+      return bTime-aTime;
+    });
+
+    renderRecentTransactions();
+    renderHistory();
+    renderAnalysis();
+
+  }catch(error){
+
+    console.error(error);
+
+    showToast(
+      "Unable to load transactions.",
+      true
+    );
+  }
+}
+
+/* =========================================================
+   RECENT TRANSACTIONS
+========================================================= */
+
+function renderRecentTransactions(){
+
+  const container =
     $("recentTransactions");
 
-  const full =
-    $("fullTransactions");
+  if(!container){
+    return;
+  }
+
+  const list =
+    currentTransactions.slice(0,5);
 
   if(!list.length){
 
-    const empty = `
-      <div style="
-        text-align:center;
-        padding:35px 10px;
-        color:var(--muted);
-        font-size:13px;
-      ">
+    container.innerHTML = `
+      <div class="empty-state">
         No transactions yet.
       </div>
     `;
 
-    recent.innerHTML = empty;
-    full.innerHTML = empty;
+    return;
+  }
+
+  container.innerHTML =
+    list.map(transaction=>{
+
+      const amount =
+        Number(transaction.amount || 0);
+
+      const status =
+        transaction.status || "pending";
+
+      return `
+
+        <div class="transaction-row">
+
+          <div class="transaction-icon">
+
+            <svg viewBox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2">
+
+              <path d="M4 12h16"/>
+              <path d="M14 6l6 6-6 6"/>
+
+            </svg>
+
+          </div>
+
+          <div class="transaction-info">
+
+            <strong>
+              ${escapeHTML(transaction.recipientName || "Transfer")}
+            </strong>
+
+            <span>
+              ${escapeHTML(
+                transaction.transferType === "wire"
+                  ? "Wire transfer"
+                  : "Instant transfer"
+              )}
+            </span>
+
+          </div>
+
+          <div class="transaction-amount">
+            ${money(amount)}
+          </div>
+
+        </div>
+      `;
+    })
+    .join("");
+}
+
+/* =========================================================
+   HISTORY
+========================================================= */
+
+function renderHistory(){
+
+  const container =
+    $("historyList");
+
+  if(!container){
+    return;
+  }
+
+  if(!currentTransactions.length){
+
+    container.innerHTML = `
+      <div class="empty-state">
+        No transaction history available.
+      </div>
+    `;
 
     return;
   }
 
-  recent.innerHTML =
-    list
-      .slice(0,5)
-      .map(transactionHTML)
-      .join("");
+  container.innerHTML =
+    currentTransactions.map(transaction=>{
 
-  full.innerHTML =
-    list
-      .map(transactionHTML)
-      .join("");
-}
+      const status =
+        transaction.status || "pending";
 
-function transactionHTML(tx){
+      return `
 
-  const amount =
-    Number(tx.amount || 0);
+        <div class="history-row">
 
-  const status =
-    tx.status || "pending";
+          <div class="transaction-icon">
 
-  const recipient =
-    tx.recipientName || "Transfer";
+            <svg viewBox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="2">
 
-  const type =
-    tx.transferType === "wire"
-      ? "Wire Transfer"
-      : "Instant Transfer";
+              <path d="M4 12h16"/>
+              <path d="M14 6l6 6-6 6"/>
 
-  let dateText = "";
+            </svg>
 
-  if(tx.createdAt?.toDate){
+          </div>
 
-    dateText =
-      tx.createdAt
-        .toDate()
-        .toLocaleDateString(
-          undefined,
-          {
-            month:"short",
-            day:"numeric"
-          }
-        );
-  }
+          <div class="history-main">
 
-  return `
-    <div class="transaction">
+            <strong>
+              ${escapeHTML(
+                transaction.recipientName ||
+                "Transfer"
+              )}
+            </strong>
 
-      <div class="transaction-icon">
-        ↗
-      </div>
+            <span>
+              ${escapeHTML(
+                transaction.bankName ||
+                "Bank"
+              )}
+            </span>
 
-      <div class="transaction-info">
+          </div>
 
-        <strong>${escapeHTML(recipient)}</strong>
+          <div>
 
-        <small>
-          ${escapeHTML(type)}
-          ${dateText ? " • " + dateText : ""}
-        </small>
+            <div
+              class="transaction-amount"
+              style="margin-bottom:6px">
+              ${money(transaction.amount)}
+            </div>
 
-      </div>
+            <span class="status ${escapeHTML(status)}">
+              ${escapeHTML(status)}
+            </span>
 
-      <div class="transaction-amount">
+          </div>
 
-        <strong>
-          -${formatMoney(amount)}
-        </strong>
+        </div>
 
-        <span class="status ${escapeHTML(status)}">
-          ${escapeHTML(status)}
-        </span>
-
-      </div>
-
-    </div>
-  `;
+      `;
+    }).join("");
 }
 
 /* =========================================================
@@ -3830,170 +4340,375 @@ function renderAnalysis(){
     return;
   }
 
-  /*
-    Jan–Sep is intentionally kept as the dashboard
-    analysis range.
-
-    This is a visual prototype chart. Actual monthly
-    figures can later be calculated from approved
-    transactions/admin data.
-  */
-
-  const values = [
-    28,
-    42,
-    35,
-    55,
-    48,
-    68,
-    58,
-    75,
-    64
-  ];
-
   const months = [
-    "Jan",
-    "Feb",
-    "Mar",
-    "Apr",
-    "May",
-    "Jun",
-    "Jul",
-    "Aug",
-    "Sep"
+    "Jan","Feb","Mar","Apr","May",
+    "Jun","Jul","Aug","Sep"
   ];
+
+  const values =
+    months.map((month,index)=>{
+
+      let total = 0;
+
+      currentTransactions.forEach(transaction=>{
+
+        if(!transaction.createdAt){
+          return;
+        }
+
+        const date =
+          transaction.createdAt.toDate
+            ? transaction.createdAt.toDate()
+            : null;
+
+        if(!date){
+          return;
+        }
+
+        const transactionMonth =
+          date.getMonth();
+
+        if(transactionMonth === index){
+          total += Number(
+            transaction.amount || 0
+          );
+        }
+
+      });
+
+      return total;
+    });
+
+  const max =
+    Math.max(...values,1);
 
   chart.innerHTML =
-    values.map((value,index)=>`
+    values.map((value,index)=>{
 
-      <div
-        class="bar"
-        style="height:${value}%">
+      const height =
+        value === 0
+          ? 4
+          : Math.max(
+              7,
+              (value/max)*100
+            );
 
-        <span>
-          ${months[index]}
-        </span>
+      return `
 
-      </div>
+        <div class="bar-wrap">
 
-    `).join("");
+          <div
+            class="bar"
+            style="height:${height}%"
+            title="${money(value)}">
+          </div>
 
-  $("analysisTotal").textContent =
-    formatMoney(
-      currentUserData?.balance || 0
-    );
+          <div class="bar-label">
+            ${months[index]}
+          </div>
+
+        </div>
+
+      `;
+    }).join("");
 }
 
 /* =========================================================
-   THEME
+   PROFILE
 ========================================================= */
 
-function applyTheme(){
+function renderAvatars(){
 
-  const theme =
+  if(!currentUserData){
+    return;
+  }
+
+  const name =
+    currentUserData.name ||
+    "User";
+
+  const letter =
+    name.charAt(0).toUpperCase();
+
+  const avatar =
+    $("topAvatar");
+
+  const savedPhoto =
     localStorage.getItem(
-      "cashflow_theme"
-    ) || "light";
+      "cashflowbank_profile_photo_" +
+      currentUserData.accountNumber
+    );
 
-  document.body.classList.toggle(
-    "dark",
-    theme === "dark"
-  );
+  if(savedPhoto){
 
-  $("themeLabel").textContent =
-    theme === "dark"
-      ? "Light Mode"
-      : "Dark Mode";
+    avatar.innerHTML =
+      `<img src="${savedPhoto}" alt="Profile">`;
+
+  }else{
+
+    avatar.innerHTML =
+      `<span>${escapeHTML(letter)}</span>`;
+  }
 }
 
-function toggleTheme(){
+function renderProfilePhoto(){
 
-  const isDark =
-    document.body.classList.contains("dark");
+  if(!currentUserData){
+    return;
+  }
 
-  localStorage.setItem(
-    "cashflow_theme",
-    isDark ? "light" : "dark"
+  const photo =
+    localStorage.getItem(
+      "cashflowbank_profile_photo_" +
+      currentUserData.accountNumber
+    );
+
+  const container =
+    $("profileLarge");
+
+  if(photo){
+
+    container.innerHTML =
+      `<img src="${photo}" alt="Profile">`;
+
+  }else{
+
+    const letter =
+      (currentUserData.name || "U")
+        .charAt(0)
+        .toUpperCase();
+
+    container.textContent =
+      letter;
+  }
+}
+
+async function handleProfilePhoto(event){
+
+  const file =
+    event.target.files[0];
+
+  if(!file || !currentUserData){
+    return;
+  }
+
+  try{
+
+    const image =
+      await readImage(file);
+
+    localStorage.setItem(
+      "cashflowbank_profile_photo_" +
+      currentUserData.accountNumber,
+      image
+    );
+
+    renderProfilePhoto();
+    renderAvatars();
+
+    showToast(
+      "Profile photo updated."
+    );
+
+  }catch(error){
+
+    showToast(
+      error.message,
+      true
+    );
+  }
+}
+
+async function saveProfile(){
+
+  if(!currentUserData){
+    return;
+  }
+
+  const name =
+    $("profileName").value.trim();
+
+  const country =
+    $("profileCountry").value;
+
+  if(!name){
+
+    showToast(
+      "Please enter your name.",
+      true
+    );
+
+    return;
+  }
+
+  try{
+
+    await db.collection("users")
+      .doc(currentUserData.uid)
+      .update({
+
+        name:name,
+
+        country:country,
+
+        profileCompleted:true,
+
+        updatedAt:
+          firebase.firestore.FieldValue.serverTimestamp()
+
+      });
+
+    currentUserData.name =
+      name;
+
+    currentUserData.country =
+      country;
+
+    updateDashboard();
+
+    showToast(
+      "Profile saved."
+    );
+
+  }catch(error){
+
+    console.error(error);
+
+    showToast(
+      "Unable to save profile.",
+      true
+    );
+  }
+}
+
+/* =========================================================
+   SUPPORT
+========================================================= */
+
+function openSupport(){
+
+  showModal(
+    "Support",
+    "Use the live support chat on this page for assistance with the prototype."
   );
-
-  applyTheme();
 }
 
 /* =========================================================
    LOGOUT
 ========================================================= */
 
-async function logout(){
-
-  if(unsubscribeTransactions){
-    unsubscribeTransactions();
-    unsubscribeTransactions = null;
-  }
+async function logoutUser(){
 
   try{
+
     await auth.signOut();
+
   }catch(error){
+
     console.error(error);
+
   }
 
   currentUserData = null;
+  currentTransactions = [];
 
-  hide("app");
-  show("landingPage");
+  $("dashboardPage").style.display =
+    "none";
 
-  closeAuth();
+  $("landingPage").style.display =
+    "block";
 
-  window.scrollTo({
-    top:0,
-    behavior:"smooth"
-  });
+  showToast(
+    "You have been signed out."
+  );
 
-  toast("You have been signed out.");
+  window.scrollTo(0,0);
 }
 
 /* =========================================================
-   MONEY
+   AUTH STATE
 ========================================================= */
 
-function formatMoney(value){
+auth.onAuthStateChanged(async user=>{
 
-  const number =
-    Number(value || 0);
+  if(!user){
+    return;
+  }
 
-  return new Intl.NumberFormat(
-    "en-US",
-    {
-      style:"currency",
-      currency:"USD",
-      minimumFractionDigits:2
+  /*
+    If the page reloads while already authenticated,
+    retrieve the user's Firestore profile.
+  */
+
+  try{
+
+    const doc =
+      await db.collection("users")
+        .doc(user.uid)
+        .get();
+
+    if(!doc.exists){
+      return;
     }
-  ).format(number);
-}
+
+    const data =
+      doc.data();
+
+    if(data.status !== "active"){
+      await auth.signOut();
+      return;
+    }
+
+    currentUserData = {
+      ...data,
+      uid:user.uid
+    };
+
+    showDashboard();
+
+    await loadTransactions();
+
+  }catch(error){
+
+    console.error(
+      "Auth state error:",
+      error
+    );
+  }
+
+});
 
 /* =========================================================
-   HTML ESCAPE
+   CLOSE MODAL WHEN BACKDROP CLICKED
 ========================================================= */
 
-function escapeHTML(value){
+$("modalOverlay").addEventListener(
+  "click",
+  function(event){
 
-  return String(value ?? "")
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
-}
+    if(event.target === this){
+      closeModal();
+    }
 
-/* =========================================================
-   INITIAL THEME
-========================================================= */
-
-document.addEventListener(
-  "DOMContentLoaded",
-  ()=>{
-    applyTheme();
   }
 );
+
+$("authOverlay").addEventListener(
+  "click",
+  function(event){
+
+    if(event.target === this){
+      closeAuth();
+    }
+
+  }
+);
+
+/* =========================================================
+   INITIALIZATION
+========================================================= */
+
+applyTheme();
 
 </script>
 
