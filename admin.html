@@ -3,10 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Cash Flow Bank — Admin Panel</title>
-
 <meta name="theme-color" content="#062b1f">
+<title>Cash Flow Bank — Admin</title>
 
 <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-auth-compat.js"></script>
@@ -20,27 +18,24 @@
 }
 
 :root{
-  --green:#062b1f;
-  --green2:#0b4d38;
-  --green3:#0d6145;
-  --green4:#16815c;
-  --light:#f4f7f9;
-  --white:#ffffff;
-  --text:#10221b;
-  --muted:#718078;
-  --border:#e4ebe7;
-  --danger:#c93636;
-  --danger-bg:#fff0f0;
-  --warning:#b7791f;
-  --warning-bg:#fff7e8;
-  --success:#087f52;
-  --success-bg:#eaf8f1;
-  --shadow:0 15px 45px rgba(4,31,23,.08);
+  --green:#063b2b;
+  --green2:#0a5a40;
+  --green3:#0d7553;
+  --dark:#031d15;
+  --bg:#f4f7f6;
+  --white:#fff;
+  --text:#14251f;
+  --muted:#71817b;
+  --border:#e2e9e6;
+  --red:#c93b3b;
+  --orange:#d88419;
+  --blue:#2868c7;
+  --shadow:0 15px 45px rgba(3,29,21,.08);
 }
 
 body{
   font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-  background:var(--light);
+  background:var(--bg);
   color:var(--text);
   min-height:100vh;
 }
@@ -60,149 +55,113 @@ button{
   display:none!important;
 }
 
-/* ==============================
-   PROTOTYPE BANNER
-============================== */
+/* LOGIN */
 
-.prototype-banner{
-  position:fixed;
-  top:0;
-  left:0;
-  right:0;
-  height:30px;
-  background:#101916;
-  color:#fff;
-  z-index:9999;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:11px;
-  letter-spacing:.3px;
-  text-align:center;
-  padding:0 12px;
-}
-
-/* ==============================
-   LOGIN
-============================== */
-
-#loginPage{
+.login-screen{
   min-height:100vh;
   display:flex;
   align-items:center;
   justify-content:center;
-  padding:70px 20px 40px;
+  padding:25px;
   background:
-    radial-gradient(circle at 10% 10%,rgba(26,129,92,.18),transparent 30%),
-    radial-gradient(circle at 90% 90%,rgba(6,43,31,.18),transparent 35%),
-    #f2f6f4;
+    radial-gradient(circle at 10% 10%,rgba(30,130,90,.22),transparent 30%),
+    radial-gradient(circle at 90% 90%,rgba(17,102,73,.18),transparent 30%),
+    linear-gradient(135deg,#031d15,#062b1f 55%,#084b36);
 }
 
 .login-card{
   width:100%;
-  max-width:440px;
-  background:#fff;
-  border:1px solid var(--border);
+  max-width:450px;
+  background:rgba(255,255,255,.98);
   border-radius:28px;
-  box-shadow:0 30px 80px rgba(0,0,0,.12);
-  padding:38px;
+  padding:42px;
+  box-shadow:0 30px 90px rgba(0,0,0,.25);
 }
 
-.brand{
-  display:flex;
-  align-items:center;
-  gap:13px;
-  margin-bottom:30px;
-}
-
-.brand-icon{
-  width:52px;
-  height:52px;
-  border-radius:16px;
-  background:linear-gradient(145deg,#0d6145,#062b1f);
+.logo{
+  width:62px;
+  height:62px;
+  border-radius:18px;
+  background:linear-gradient(145deg,#0c6a4b,#063b2b);
   display:flex;
   align-items:center;
   justify-content:center;
-  color:#fff;
-  box-shadow:0 10px 25px rgba(6,43,31,.2);
-}
-
-.brand-icon svg{
-  width:27px;
-  height:27px;
-}
-
-.brand-name{
-  font-size:21px;
-  font-weight:800;
-  color:var(--green);
-}
-
-.brand-sub{
-  color:var(--muted);
-  font-size:12px;
-  margin-top:2px;
+  color:white;
+  font-size:27px;
+  font-weight:900;
+  margin-bottom:24px;
 }
 
 .login-card h1{
-  font-size:29px;
+  font-size:30px;
   margin-bottom:8px;
-  color:#10221b;
 }
 
-.login-card .subtitle{
+.login-card p{
   color:var(--muted);
-  font-size:14px;
   line-height:1.6;
-  margin-bottom:25px;
+  margin-bottom:30px;
 }
 
-.form-group{
+.field{
   margin-bottom:17px;
 }
 
-.form-group label{
+.field label{
   display:block;
-  font-size:12px;
-  font-weight:700;
-  margin-bottom:7px;
-  color:#41534c;
+  font-size:13px;
+  font-weight:800;
+  margin-bottom:8px;
 }
 
-.input,
-.select,
-.textarea{
+.field input,
+.field select,
+.field textarea{
   width:100%;
-  border:1px solid #dce6e1;
+  border:1px solid var(--border);
   background:#fbfdfc;
-  border-radius:12px;
   padding:13px 14px;
-  color:#162820;
+  border-radius:12px;
   outline:none;
   transition:.2s;
 }
 
-.input:focus,
-.select:focus,
-.textarea:focus{
-  border-color:#16815c;
-  box-shadow:0 0 0 4px rgba(22,129,92,.09);
+.field input:focus,
+.field select:focus,
+.field textarea:focus{
+  border-color:var(--green3);
+  box-shadow:0 0 0 4px rgba(13,117,83,.09);
 }
 
-.textarea{
-  min-height:100px;
-  resize:vertical;
+.password-wrap{
+  position:relative;
+}
+
+.password-wrap input{
+  padding-right:80px;
+}
+
+.password-toggle{
+  position:absolute;
+  right:10px;
+  top:50%;
+  transform:translateY(-50%);
+  border:0;
+  background:transparent;
+  color:var(--green2);
+  font-size:12px;
+  font-weight:800;
 }
 
 .primary-btn{
   width:100%;
   border:0;
   border-radius:13px;
-  padding:14px;
-  background:linear-gradient(135deg,#0d6145,#062b1f);
-  color:#fff;
+  padding:14px 18px;
+  background:linear-gradient(135deg,#0b6749,#063b2b);
+  color:white;
   font-weight:800;
-  box-shadow:0 10px 25px rgba(6,43,31,.18);
+  box-shadow:0 12px 25px rgba(6,59,43,.2);
 }
 
 .primary-btn:hover{
@@ -210,455 +169,284 @@ button{
 }
 
 .login-error{
-  background:var(--danger-bg);
-  color:#a62929;
-  border:1px solid #ffd3d3;
+  background:#fff0f0;
+  border:1px solid #ffd2d2;
+  color:#a82d2d;
+  padding:12px;
   border-radius:11px;
-  padding:11px 13px;
+  margin-bottom:15px;
   font-size:13px;
-  margin-bottom:16px;
+  display:none;
 }
 
-/* ==============================
-   APP LAYOUT
-============================== */
+/* APP */
 
-#adminApp{
+.app{
   min-height:100vh;
-  padding-top:30px;
 }
 
 .sidebar{
   position:fixed;
-  top:30px;
   left:0;
+  top:0;
   bottom:0;
-  width:255px;
-  background:linear-gradient(180deg,#062b1f,#041f17);
-  color:#fff;
-  padding:24px 15px;
-  z-index:1000;
+  width:260px;
+  background:linear-gradient(180deg,#052a1e,#031d15);
+  color:white;
+  padding:22px 15px;
+  z-index:100;
   overflow-y:auto;
 }
 
-.sidebar-brand{
-  padding:4px 12px 28px;
+.brand{
   display:flex;
-  gap:11px;
   align-items:center;
+  gap:12px;
+  padding:8px 10px 25px;
 }
 
-.sidebar-brand .brand-icon{
-  width:42px;
-  height:42px;
+.brand-icon{
+  width:44px;
+  height:44px;
   border-radius:13px;
-  background:rgba(255,255,255,.1);
-  box-shadow:none;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(145deg,#11805c,#063b2b);
+  font-weight:900;
 }
 
-.sidebar-brand .brand-icon svg{
-  width:22px;
-}
-
-.sidebar-brand-title{
+.brand strong{
+  display:block;
   font-size:16px;
-  font-weight:800;
 }
 
-.sidebar-brand-sub{
-  font-size:10px;
-  color:rgba(255,255,255,.55);
-  margin-top:3px;
+.brand small{
+  color:#91aaa1;
+  font-size:11px;
 }
 
-.nav-label{
-  color:rgba(255,255,255,.38);
+.nav-title{
+  color:#66877b;
   font-size:10px;
-  font-weight:800;
-  letter-spacing:1.2px;
-  padding:12px 13px 8px;
+  font-weight:900;
+  letter-spacing:1.3px;
+  padding:20px 12px 8px;
   text-transform:uppercase;
 }
 
 .nav-btn{
   width:100%;
-  border:0;
-  background:transparent;
-  color:rgba(255,255,255,.68);
-  padding:12px 13px;
-  border-radius:11px;
   display:flex;
   align-items:center;
   gap:12px;
-  text-align:left;
-  margin-bottom:4px;
-  transition:.2s;
-}
-
-.nav-btn svg{
-  width:18px;
-  height:18px;
-  flex:none;
-}
-
-.nav-btn:hover{
-  color:#fff;
-  background:rgba(255,255,255,.07);
-}
-
-.nav-btn.active{
-  color:#fff;
-  background:rgba(255,255,255,.12);
-}
-
-.nav-count{
-  margin-left:auto;
-  min-width:21px;
-  height:21px;
-  border-radius:999px;
-  background:#dba93d;
-  color:#172019;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:10px;
-  font-weight:900;
-}
-
-.sidebar-footer{
-  position:absolute;
-  left:15px;
-  right:15px;
-  bottom:18px;
-}
-
-.admin-mini{
-  background:rgba(255,255,255,.06);
-  border:1px solid rgba(255,255,255,.07);
-  border-radius:14px;
+  border:0;
+  background:transparent;
+  color:#a8bbb4;
   padding:12px;
-  display:flex;
-  align-items:center;
-  gap:10px;
+  border-radius:11px;
+  margin-bottom:3px;
+  text-align:left;
+  font-weight:700;
 }
 
-.admin-avatar{
-  width:35px;
-  height:35px;
-  border-radius:50%;
-  background:#16815c;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:12px;
-  font-weight:900;
+.nav-btn:hover,
+.nav-btn.active{
+  color:white;
+  background:rgba(255,255,255,.09);
 }
 
-.admin-mini strong{
-  display:block;
-  font-size:12px;
+.nav-icon{
+  width:24px;
+  text-align:center;
 }
 
-.admin-mini span{
-  display:block;
-  color:rgba(255,255,255,.48);
-  font-size:10px;
-  margin-top:2px;
+.sidebar-bottom{
+  margin-top:25px;
+  border-top:1px solid rgba(255,255,255,.08);
+  padding-top:15px;
 }
 
 .logout-btn{
-  margin-top:9px;
-  width:100%;
-  border:1px solid rgba(255,255,255,.1);
-  background:transparent;
-  color:rgba(255,255,255,.7);
-  border-radius:10px;
-  padding:9px;
-  font-size:12px;
+  color:#ffaaa8;
 }
 
-.logout-btn:hover{
-  background:rgba(255,255,255,.06);
-  color:#fff;
-}
+/* MAIN */
 
 .main{
-  margin-left:255px;
-  min-height:calc(100vh - 30px);
-  padding:25px;
+  margin-left:260px;
+  min-height:100vh;
 }
 
 .topbar{
+  height:76px;
+  background:white;
+  border-bottom:1px solid var(--border);
   display:flex;
   align-items:center;
   justify-content:space-between;
-  margin-bottom:22px;
-  gap:15px;
+  padding:0 30px;
+  position:sticky;
+  top:0;
+  z-index:50;
 }
 
-.topbar-left h1{
-  font-size:25px;
-  color:#0d221a;
-}
-
-.topbar-left p{
-  color:var(--muted);
-  font-size:13px;
-  margin-top:4px;
-}
-
-.mobile-menu{
+.menu-btn{
   display:none;
-  border:1px solid var(--border);
-  background:#fff;
-  width:43px;
-  height:43px;
-  border-radius:12px;
+  border:0;
+  background:#eef4f1;
+  width:42px;
+  height:42px;
+  border-radius:11px;
 }
 
-/* ==============================
-   HERO
-============================== */
-
-.hero{
-  border-radius:24px;
-  background:
-    radial-gradient(circle at 85% 20%,rgba(57,186,137,.18),transparent 28%),
-    linear-gradient(130deg,#062b1f,#0a4b36 58%,#0d6145);
-  min-height:205px;
-  color:#fff;
-  padding:30px;
-  position:relative;
-  overflow:hidden;
-  margin-bottom:23px;
-}
-
-.hero:after{
-  content:"";
-  position:absolute;
-  width:310px;
-  height:310px;
-  right:-120px;
-  bottom:-170px;
-  border:1px solid rgba(255,255,255,.08);
-  border-radius:50%;
-}
-
-.hero-content{
-  position:relative;
-  z-index:2;
-  max-width:650px;
-}
-
-.hero .eyebrow{
-  font-size:10px;
-  text-transform:uppercase;
-  letter-spacing:1.4px;
-  color:#9bd8bd;
-  font-weight:900;
-  margin-bottom:10px;
-}
-
-.hero h2{
-  font-size:31px;
-  line-height:1.15;
-  margin-bottom:9px;
-}
-
-.hero p{
-  color:rgba(255,255,255,.68);
-  font-size:13px;
-  line-height:1.7;
-  max-width:620px;
-}
-
-.hero-chip{
-  display:inline-flex;
+.admin-user{
+  display:flex;
   align-items:center;
-  gap:7px;
-  margin-top:17px;
-  background:rgba(255,255,255,.08);
-  border:1px solid rgba(255,255,255,.1);
-  border-radius:999px;
-  padding:8px 11px;
-  font-size:10px;
-  color:rgba(255,255,255,.75);
+  gap:11px;
 }
 
-/* ==============================
-   SECTIONS
-============================== */
+.admin-avatar{
+  width:39px;
+  height:39px;
+  border-radius:50%;
+  background:#dcece6;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color:var(--green);
+  font-weight:900;
+}
 
-.section{
+.content{
+  padding:30px;
+  max-width:1600px;
+  margin:auto;
+}
+
+.page{
   display:none;
 }
 
-.section.active{
+.page.active{
   display:block;
 }
 
-.page-title{
-  margin-bottom:17px;
+.page-heading{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:20px;
+  margin-bottom:25px;
 }
 
-.page-title h2{
-  font-size:20px;
+.page-heading h2{
+  font-size:29px;
+  letter-spacing:-.5px;
 }
 
-.page-title p{
+.page-heading p{
   color:var(--muted);
-  font-size:12px;
-  margin-top:3px;
+  margin-top:5px;
 }
 
-/* ==============================
-   STAT CARDS
-============================== */
+/* CARDS */
 
 .stats{
   display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:14px;
-  margin-bottom:22px;
+  grid-template-columns:repeat(4,1fr);
+  gap:17px;
+  margin-bottom:28px;
 }
 
-.stat{
-  background:#fff;
+.stat-card{
+  background:white;
   border:1px solid var(--border);
-  border-radius:17px;
-  padding:18px;
-  box-shadow:0 8px 30px rgba(4,31,23,.04);
+  border-radius:18px;
+  padding:21px;
+  box-shadow:0 5px 25px rgba(3,29,21,.035);
 }
 
 .stat-top{
   display:flex;
-  align-items:center;
   justify-content:space-between;
-}
-
-.stat-icon{
-  width:36px;
-  height:36px;
-  border-radius:11px;
-  background:#eef7f3;
-  color:#0d6145;
-  display:flex;
   align-items:center;
-  justify-content:center;
-}
-
-.stat-icon svg{
-  width:18px;
 }
 
 .stat-label{
-  font-size:11px;
+  font-size:13px;
   color:var(--muted);
-  margin-top:13px;
+  font-weight:700;
+}
+
+.stat-icon{
+  width:39px;
+  height:39px;
+  border-radius:11px;
+  background:#e7f2ed;
+  color:var(--green);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-weight:900;
 }
 
 .stat-value{
-  font-size:24px;
-  font-weight:850;
-  margin-top:4px;
-  letter-spacing:-.5px;
+  font-size:28px;
+  font-weight:900;
+  margin-top:14px;
 }
-
-/* ==============================
-   CARDS / TABLES
-============================== */
 
 .card{
-  background:#fff;
+  background:white;
   border:1px solid var(--border);
   border-radius:18px;
-  box-shadow:0 8px 30px rgba(4,31,23,.035);
-  overflow:hidden;
+  box-shadow:0 5px 25px rgba(3,29,21,.035);
 }
 
-.card-header{
-  padding:18px 20px;
+.card-head{
   display:flex;
-  align-items:center;
   justify-content:space-between;
-  gap:15px;
+  align-items:center;
+  padding:19px 21px;
   border-bottom:1px solid var(--border);
 }
 
-.card-header h3{
-  font-size:15px;
-}
-
-.card-header p{
-  font-size:11px;
-  color:var(--muted);
-  margin-top:3px;
+.card-head h3{
+  font-size:16px;
 }
 
 .card-body{
-  padding:20px;
+  padding:21px;
 }
 
-.grid-two{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:18px;
-}
-
-.toolbar{
-  display:flex;
-  align-items:center;
-  gap:10px;
-  flex-wrap:wrap;
-}
-
-.search{
-  width:270px;
-  max-width:100%;
-  border:1px solid var(--border);
-  border-radius:10px;
-  padding:10px 12px;
-  outline:none;
-  background:#fbfdfc;
-  font-size:12px;
-}
-
-.small-select{
-  border:1px solid var(--border);
-  border-radius:10px;
-  padding:10px 12px;
-  outline:none;
-  background:#fbfdfc;
-  font-size:12px;
-}
+/* TABLE */
 
 .table-wrap{
-  width:100%;
   overflow-x:auto;
 }
 
 table{
   width:100%;
   border-collapse:collapse;
-  min-width:780px;
+  min-width:800px;
 }
 
 th{
   text-align:left;
-  padding:12px 18px;
-  background:#fafcfb;
-  color:#7b8983;
-  font-size:9px;
-  letter-spacing:.6px;
+  font-size:11px;
   text-transform:uppercase;
+  letter-spacing:.5px;
+  color:#81918b;
+  padding:13px 15px;
+  background:#fafcfb;
   border-bottom:1px solid var(--border);
-  white-space:nowrap;
 }
 
 td{
-  padding:13px 18px;
+  padding:14px 15px;
   border-bottom:1px solid #edf1ef;
-  font-size:12px;
+  font-size:13px;
   vertical-align:middle;
 }
 
@@ -666,24 +454,23 @@ tr:last-child td{
   border-bottom:0;
 }
 
-.user-cell{
+.customer-mini{
   display:flex;
   align-items:center;
   gap:10px;
-  min-width:180px;
 }
 
 .avatar{
   width:38px;
   height:38px;
   border-radius:50%;
-  background:#e6f3ee;
-  color:#0d6145;
+  background:#e4f0eb;
+  object-fit:cover;
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:11px;
   font-weight:900;
+  color:var(--green);
   overflow:hidden;
   flex:none;
 }
@@ -694,156 +481,154 @@ tr:last-child td{
   object-fit:cover;
 }
 
-.user-name{
-  font-weight:800;
-  color:#182c23;
+.customer-mini strong{
+  display:block;
+  font-size:13px;
 }
 
-.user-email{
-  color:#8a9691;
-  font-size:10px;
-  margin-top:2px;
-}
-
-.mono{
-  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+.customer-mini span{
+  display:block;
   font-size:11px;
-}
-
-.muted{
   color:var(--muted);
-}
-
-.amount{
-  font-weight:800;
+  margin-top:2px;
 }
 
 .badge{
   display:inline-flex;
   align-items:center;
-  gap:5px;
+  padding:5px 9px;
   border-radius:999px;
-  padding:5px 8px;
-  font-size:9px;
+  font-size:10px;
   font-weight:900;
-  white-space:nowrap;
-}
-
-.badge:before{
-  content:"";
-  width:5px;
-  height:5px;
-  border-radius:50%;
-  background:currentColor;
-}
-
-.badge.pending{
-  color:#a66b13;
-  background:#fff6e4;
+  text-transform:uppercase;
 }
 
 .badge.active,
-.badge.approved,
-.badge.completed{
-  color:#087f52;
-  background:#eaf8f1;
+.badge.completed,
+.badge.approved{
+  background:#e4f5ed;
+  color:#14734e;
+}
+
+.badge.pending{
+  background:#fff3dd;
+  color:#a96308;
 }
 
 .badge.rejected,
-.badge.declined,
-.badge.failed{
-  color:#b52e2e;
-  background:#fff0f0;
+.badge.declined{
+  background:#ffe9e9;
+  color:#b52f2f;
 }
 
 .badge.refunded{
-  color:#5d43a5;
-  background:#f2edff;
+  background:#e9eefc;
+  color:#405ba9;
 }
 
-.action-row{
+.actions{
   display:flex;
   gap:6px;
   flex-wrap:wrap;
 }
 
-.btn{
+.small-btn{
   border:1px solid var(--border);
-  background:#fff;
-  color:#2d4138;
+  background:white;
+  padding:7px 10px;
   border-radius:8px;
-  padding:7px 9px;
-  font-size:10px;
-  font-weight:750;
+  font-size:11px;
+  font-weight:800;
 }
 
-.btn:hover{
-  background:#f5f8f6;
+.small-btn.green{
+  background:#e8f5ef;
+  border-color:#c9e8da;
+  color:#126b49;
 }
 
-.btn.green{
-  border-color:#cde9dd;
-  background:#edf9f3;
-  color:#087f52;
+.small-btn.red{
+  background:#fff0f0;
+  border-color:#ffd4d4;
+  color:#ad3030;
 }
 
-.btn.red{
-  border-color:#f4d1d1;
-  background:#fff1f1;
-  color:#b52e2e;
+.small-btn.blue{
+  background:#edf3ff;
+  border-color:#d7e3ff;
+  color:#2e5daa;
 }
 
-.btn.purple{
-  border-color:#ddd2fb;
-  background:#f5f0ff;
-  color:#6145aa;
+/* SEARCH */
+
+.toolbar{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex-wrap:wrap;
 }
 
-.btn.dark{
-  background:#062b1f;
-  border-color:#062b1f;
-  color:#fff;
+.search{
+  width:260px;
+  max-width:100%;
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:10px 12px;
+  outline:none;
+  background:white;
 }
 
-.btn:disabled{
-  opacity:.45;
-  cursor:not-allowed;
+.filter{
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:10px 12px;
+  background:white;
+  outline:none;
 }
 
-/* ==============================
-   PENDING APPROVAL BOX
-============================== */
+/* DASHBOARD GRID */
 
-.pending-grid{
+.dashboard-grid{
   display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:18px;
-  margin-bottom:22px;
+  grid-template-columns:1.4fr 1fr;
+  gap:20px;
 }
 
-.empty{
-  padding:35px 20px;
-  text-align:center;
-  color:#8a9691;
+.quick-card{
+  padding:22px;
+}
+
+.quick-list{
+  display:grid;
+  gap:10px;
+}
+
+.quick-item{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:13px;
+  background:#f8faf9;
+  border-radius:11px;
+}
+
+.quick-item strong{
+  font-size:13px;
+}
+
+.quick-item span{
+  color:var(--muted);
   font-size:12px;
 }
 
-.empty strong{
-  display:block;
-  color:#34473f;
-  margin-bottom:4px;
-}
-
-/* ==============================
-   MODAL
-============================== */
+/* MODAL */
 
 .modal-overlay{
   position:fixed;
   inset:0;
-  background:rgba(3,20,14,.62);
-  backdrop-filter:blur(6px);
-  z-index:5000;
+  background:rgba(1,19,13,.62);
+  backdrop-filter:blur(5px);
+  z-index:500;
   display:none;
   align-items:center;
   justify-content:center;
@@ -856,69 +641,56 @@ tr:last-child td{
 
 .modal{
   width:100%;
-  max-width:720px;
+  max-width:760px;
   max-height:92vh;
-  overflow-y:auto;
-  background:#fff;
+  overflow:auto;
+  background:white;
   border-radius:22px;
-  box-shadow:0 30px 100px rgba(0,0,0,.28);
+  box-shadow:0 30px 100px rgba(0,0,0,.3);
 }
 
 .modal.large{
   max-width:900px;
 }
 
-.modal-header{
-  padding:20px 22px;
+.modal-head{
   display:flex;
   align-items:center;
   justify-content:space-between;
+  padding:20px 23px;
   border-bottom:1px solid var(--border);
   position:sticky;
   top:0;
-  background:#fff;
-  z-index:3;
+  background:white;
+  z-index:2;
 }
 
-.modal-header h3{
-  font-size:17px;
-}
-
-.modal-header p{
-  font-size:11px;
-  color:var(--muted);
-  margin-top:3px;
+.modal-head h3{
+  font-size:18px;
 }
 
 .close-btn{
-  width:35px;
-  height:35px;
-  border:1px solid var(--border);
-  background:#fff;
+  border:0;
+  background:#eef3f0;
+  width:36px;
+  height:36px;
   border-radius:10px;
   font-size:20px;
-  color:#65736d;
 }
 
 .modal-body{
-  padding:22px;
+  padding:23px;
 }
 
 .modal-footer{
-  padding:16px 22px;
-  border-top:1px solid var(--border);
   display:flex;
   justify-content:flex-end;
-  gap:8px;
+  gap:9px;
+  padding:18px 23px;
+  border-top:1px solid var(--border);
   position:sticky;
   bottom:0;
-  background:#fff;
-  z-index:3;
-}
-
-.modal-footer .btn{
-  min-width:95px;
-  padding:10px 13px;
+  background:white;
 }
 
 .form-grid{
@@ -927,204 +699,147 @@ tr:last-child td{
   gap:15px;
 }
 
-.form-grid.three{
-  grid-template-columns:repeat(3,1fr);
-}
-
-.full{
+.form-grid .full{
   grid-column:1/-1;
 }
 
-.section-divider{
-  margin:20px 0 15px;
-  padding-bottom:8px;
-  border-bottom:1px solid var(--border);
-  font-size:11px;
-  font-weight:900;
-  color:#3c5148;
-  text-transform:uppercase;
-  letter-spacing:.7px;
-}
-
-/* ==============================
-   DATE/TIME SPECIAL BOX
-============================== */
-
-.datetime-box{
-  background:#f5faf7;
-  border:1px solid #dcece4;
-  border-radius:14px;
-  padding:14px;
-}
-
-.datetime-box .datetime-label{
-  font-size:11px;
-  font-weight:850;
-  color:#214136;
-  margin-bottom:11px;
-}
-
-.datetime-grid{
-  display:grid;
-  grid-template-columns:1.25fr .75fr;
-  gap:10px;
-}
-
-.datetime-help{
-  margin-top:9px;
-  color:#718078;
-  font-size:10px;
-  line-height:1.5;
-}
-
-.datetime-preview{
-  margin-top:10px;
-  border-radius:10px;
-  background:#fff;
-  border:1px solid #e2ebe6;
-  padding:10px 11px;
-  font-size:11px;
-  color:#31483e;
-}
-
-/* ==============================
-   CUSTOMER PROFILE
-============================== */
-
-.profile-preview{
+.photo-preview{
   display:flex;
   align-items:center;
   gap:15px;
-  background:#f7faf8;
-  border:1px solid var(--border);
-  padding:15px;
-  border-radius:15px;
-  margin-bottom:18px;
+  margin-bottom:22px;
 }
 
-.profile-preview .avatar{
-  width:65px;
-  height:65px;
+.big-avatar{
+  width:75px;
+  height:75px;
+  border-radius:50%;
+  background:#e3f0eb;
+  object-fit:cover;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  overflow:hidden;
+  color:var(--green);
+  font-size:24px;
+  font-weight:900;
 }
 
-.profile-preview strong{
-  font-size:15px;
+.big-avatar img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
 }
 
-.profile-preview span{
-  display:block;
-  color:var(--muted);
-  font-size:11px;
-  margin-top:3px;
-}
-
-/* ==============================
-   DETAIL BOX
-============================== */
-
-.detail-grid{
+.info-grid{
   display:grid;
   grid-template-columns:repeat(2,1fr);
-  gap:10px;
+  gap:12px;
 }
 
-.detail{
+.info-box{
+  padding:13px;
   background:#f8faf9;
-  border:1px solid #e8eeeb;
   border-radius:11px;
-  padding:11px;
 }
 
-.detail-label{
-  color:#83908b;
-  font-size:9px;
-  text-transform:uppercase;
-  letter-spacing:.5px;
-  font-weight:800;
+.info-box span{
+  color:var(--muted);
+  font-size:11px;
+  display:block;
+  margin-bottom:5px;
 }
 
-.detail-value{
-  color:#1b3027;
-  font-size:12px;
-  font-weight:700;
-  margin-top:4px;
+.info-box strong{
+  font-size:13px;
   word-break:break-word;
 }
 
-/* ==============================
-   TOAST
-============================== */
+.tx-highlight{
+  background:linear-gradient(135deg,#063b2b,#0a6347);
+  color:white;
+  border-radius:15px;
+  padding:20px;
+  margin-bottom:20px;
+}
+
+.tx-highlight small{
+  opacity:.72;
+}
+
+.tx-highlight .amount{
+  font-size:31px;
+  font-weight:900;
+  margin-top:5px;
+}
+
+.notice{
+  padding:12px 14px;
+  border-radius:11px;
+  background:#eef7f3;
+  color:#28624d;
+  font-size:12px;
+  margin-bottom:18px;
+}
+
+.warning{
+  background:#fff5e4;
+  color:#8a5a16;
+}
+
+.empty{
+  text-align:center;
+  padding:50px 20px;
+  color:var(--muted);
+}
+
+.loading{
+  padding:40px;
+  text-align:center;
+  color:var(--muted);
+}
+
+/* TOAST */
 
 .toast{
   position:fixed;
   right:20px;
   bottom:20px;
-  z-index:9000;
-  min-width:270px;
-  max-width:400px;
   background:#062b1f;
-  color:#fff;
-  border-radius:13px;
-  padding:13px 15px;
-  box-shadow:0 20px 50px rgba(0,0,0,.2);
-  display:none;
-  font-size:12px;
+  color:white;
+  padding:13px 17px;
+  border-radius:11px;
+  box-shadow:0 15px 40px rgba(0,0,0,.2);
+  z-index:1000;
+  transform:translateY(120px);
+  opacity:0;
+  transition:.3s;
+  font-size:13px;
+  max-width:360px;
 }
 
 .toast.show{
-  display:block;
-  animation:toastIn .25s ease;
+  transform:translateY(0);
+  opacity:1;
 }
 
 .toast.error{
-  background:#a62929;
+  background:#a92f2f;
 }
 
-@keyframes toastIn{
-  from{
-    opacity:0;
-    transform:translateY(10px);
-  }
-  to{
-    opacity:1;
-    transform:translateY(0);
-  }
-}
+/* MOBILE */
 
-/* ==============================
-   LOADING
-============================== */
-
-.loading{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-}
-
-.spinner{
-  width:14px;
-  height:14px;
-  border:2px solid rgba(255,255,255,.35);
-  border-top-color:#fff;
-  border-radius:50%;
-  animation:spin .7s linear infinite;
-}
-
-@keyframes spin{
-  to{transform:rotate(360deg)}
-}
-
-/* ==============================
-   RESPONSIVE
-============================== */
-
-@media(max-width:1200px){
+@media(max-width:1100px){
   .stats{
-    grid-template-columns:repeat(3,1fr);
+    grid-template-columns:repeat(2,1fr);
+  }
+
+  .dashboard-grid{
+    grid-template-columns:1fr;
   }
 }
 
-@media(max-width:950px){
+@media(max-width:800px){
   .sidebar{
     transform:translateX(-100%);
     transition:.25s;
@@ -1136,69 +851,55 @@ tr:last-child td{
 
   .main{
     margin-left:0;
-    padding:18px;
   }
 
-  .mobile-menu{
+  .menu-btn{
     display:block;
   }
 
   .topbar{
+    padding:0 16px;
+  }
+
+  .content{
+    padding:20px 15px;
+  }
+
+  .page-heading{
     align-items:flex-start;
+    flex-direction:column;
   }
 
-  .grid-two,
-  .pending-grid{
-    grid-template-columns:1fr;
-  }
-}
-
-@media(max-width:700px){
   .stats{
     grid-template-columns:1fr 1fr;
   }
-
-  .hero{
-    padding:23px;
-  }
-
-  .hero h2{
-    font-size:24px;
-  }
-
-  .form-grid,
-  .form-grid.three{
-    grid-template-columns:1fr;
-  }
-
-  .datetime-grid{
-    grid-template-columns:1fr;
-  }
-
-  .detail-grid{
-    grid-template-columns:1fr;
-  }
-
-  .login-card{
-    padding:27px;
-  }
 }
 
-@media(max-width:460px){
+@media(max-width:560px){
+  .login-card{
+    padding:28px 22px;
+    border-radius:22px;
+  }
+
   .stats{
     grid-template-columns:1fr;
   }
 
-  .main{
-    padding:12px;
+  .form-grid,
+  .info-grid{
+    grid-template-columns:1fr;
   }
 
-  .hero{
-    border-radius:17px;
+  .admin-user span{
+    display:none;
   }
 
-  .card{
-    border-radius:15px;
+  .toolbar{
+    width:100%;
+  }
+
+  .search{
+    width:100%;
   }
 }
 </style>
@@ -1206,172 +907,93 @@ tr:last-child td{
 
 <body>
 
-<!-- ==============================
-     LOGIN PAGE
-============================== -->
-
-<div id="loginPage">
-
+<!-- LOGIN -->
+<section class="login-screen" id="loginScreen">
   <div class="login-card">
 
-    <div class="brand">
+    <div class="logo">CF</div>
 
-      <div class="brand-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-          <path d="M3 10h18"/>
-          <path d="M5 10v9"/>
-          <path d="M9 10v9"/>
-          <path d="M15 10v9"/>
-          <path d="M19 10v9"/>
-          <path d="M2 19h20"/>
-          <path d="M4 10l8-6 8 6"/>
-        </svg>
+    <h1>Admin Portal</h1>
+    <p>Enter the administrator password to continue.</p>
+
+    <div class="login-error" id="loginError"></div>
+
+    <div class="field">
+      <label for="adminPassword">Admin Password</label>
+
+      <div class="password-wrap">
+        <input
+          type="password"
+          id="adminPassword"
+          placeholder="Enter admin password"
+          autocomplete="current-password"
+        >
+        <button
+          type="button"
+          class="password-toggle"
+          onclick="togglePassword()"
+          id="passwordToggle"
+        >
+          Show
+        </button>
       </div>
-
-      <div>
-        <div class="brand-name">Cash Flow Bank</div>
-        <div class="brand-sub">Administration Console</div>
-      </div>
-
     </div>
 
-    <h1>Admin sign in</h1>
-
-    <p class="subtitle">
-      Sign in with an authorized administrator account to manage this prototype.
-    </p>
-
-    <div id="loginError" class="login-error hidden"></div>
-
-    <form id="adminLoginForm">
-
-      <div class="form-group">
-        <label>Password</label>
-        <input
-          id="adminPassword"
-          class="input"
-          type="password"
-          autocomplete="current-password"
-          placeholder="Enter password"
-          required
-        >
-      </div>
-
-      <button class="primary-btn" id="loginBtn" type="submit">
-        Sign in to Admin
-      </button>
-
-    </form>
+    <button class="primary-btn" id="loginBtn" onclick="adminLogin()">
+      Sign In
+    </button>
 
   </div>
+</section>
 
-</div>
 
-
-<!-- ==============================
-     ADMIN APP
-============================== -->
-
-<div id="adminApp" class="hidden">
-
-  <!-- SIDEBAR -->
+<!-- ADMIN APP -->
+<div class="app hidden" id="adminApp">
 
   <aside class="sidebar" id="sidebar">
 
-    <div class="sidebar-brand">
-
-      <div class="brand-icon">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-          <path d="M3 10h18"/>
-          <path d="M5 10v9"/>
-          <path d="M9 10v9"/>
-          <path d="M15 10v9"/>
-          <path d="M19 10v9"/>
-          <path d="M2 19h20"/>
-          <path d="M4 10l8-6 8 6"/>
-        </svg>
-      </div>
-
+    <div class="brand">
+      <div class="brand-icon">CF</div>
       <div>
-        <div class="sidebar-brand-title">Cash Flow Bank</div>
-        <div class="sidebar-brand-sub">ADMIN CONSOLE</div>
+        <strong>Cash Flow Bank</strong>
+        <small>Administration</small>
       </div>
-
     </div>
 
+    <div class="nav-title">Overview</div>
 
-    <div class="nav-label">Overview</div>
-
-    <button class="nav-btn active" data-section="dashboard">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-        <rect x="3" y="3" width="7" height="7"/>
-        <rect x="14" y="3" width="7" height="7"/>
-        <rect x="3" y="14" width="7" height="7"/>
-        <rect x="14" y="14" width="7" height="7"/>
-      </svg>
+    <button class="nav-btn active" data-page="dashboard" onclick="showPage('dashboard')">
+      <span class="nav-icon">⌂</span>
       Dashboard
     </button>
 
+    <div class="nav-title">Management</div>
 
-    <div class="nav-label">Management</div>
-
-    <button class="nav-btn" data-section="customers">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-        <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
-        <circle cx="9" cy="7" r="4"/>
-        <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
-        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-      </svg>
+    <button class="nav-btn" data-page="customers" onclick="showPage('customers')">
+      <span class="nav-icon">◉</span>
       Customers
-      <span class="nav-count hidden" id="pendingCustomerCount">0</span>
     </button>
 
-    <button class="nav-btn" data-section="transactions">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-        <path d="M3 7h18"/>
-        <path d="M3 12h18"/>
-        <path d="M3 17h18"/>
-        <path d="M7 4v16"/>
-        <path d="M17 4v16"/>
-      </svg>
+    <button class="nav-btn" data-page="pending" onclick="showPage('pending')">
+      <span class="nav-icon">!</span>
+      Pending Accounts
+    </button>
+
+    <button class="nav-btn" data-page="transactions" onclick="showPage('transactions')">
+      <span class="nav-icon">↔</span>
       Transactions
     </button>
 
-    <button class="nav-btn" data-section="cancellations">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-        <circle cx="12" cy="12" r="9"/>
-        <path d="M8 8l8 8"/>
-        <path d="M16 8l-8 8"/>
-      </svg>
-      Cancellation Requests
-      <span class="nav-count hidden" id="pendingCancellationCount">0</span>
+    <button class="nav-btn" data-page="cancellations" onclick="showPage('cancellations')">
+      <span class="nav-icon">↶</span>
+      Cancellations
     </button>
 
+    <div class="sidebar-bottom">
 
-    <div class="nav-label">System</div>
-
-    <button class="nav-btn" data-section="settings">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-        <circle cx="12" cy="12" r="3"/>
-        <path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-1.9 1.9-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.04 1.56V20h-2.7v-.09A1.7 1.7 0 0 0 11.18 18.35a1.7 1.7 0 0 0-1.88.34l-.06.06-1.9-1.9.06-.06A1.7 1.7 0 0 0 7.74 15a1.7 1.7 0 0 0-1.56-1.04H6v-2.7h.18A1.7 1.7 0 0 0 7.74 10a1.7 1.7 0 0 0-.34-1.88l-.06-.06 1.9-1.9.06.06a1.7 1.7 0 0 0 1.88.34A1.7 1.7 0 0 0 12.22 5V4.9h2.7V5a1.7 1.7 0 0 0 1.04 1.56 1.7 1.7 0 0 0 1.88-.34l.06-.06 1.9 1.9-.06.06a1.7 1.7 0 0 0-.34 1.88A1.7 1.7 0 0 0 21 11.26h.1v2.7H21A1.7 1.7 0 0 0 19.4 15z"/>
-      </svg>
-      Settings
-    </button>
-
-
-    <div class="sidebar-footer">
-
-      <div class="admin-mini">
-        <div class="admin-avatar" id="adminAvatar">A</div>
-
-        <div>
-          <strong id="adminName">Administrator</strong>
-          <span id="adminEmailDisplay">Administrator</span>
-        </div>
-      </div>
-
-      <button class="logout-btn" id="logoutBtn">
-        Sign out
+      <button class="nav-btn logout-btn" onclick="adminLogout()">
+        <span class="nav-icon">↪</span>
+        Sign Out
       </button>
 
     </div>
@@ -1379,545 +1001,375 @@ tr:last-child td{
   </aside>
 
 
-  <!-- MAIN -->
-
   <main class="main">
 
-    <div class="topbar">
+    <header class="topbar">
 
-      <div class="topbar-left">
-        <button class="mobile-menu" id="mobileMenu">
-          ☰
-        </button>
+      <button class="menu-btn" onclick="toggleSidebar()">☰</button>
 
-        <h1 id="pageHeading">Dashboard</h1>
-        <p id="pageSubheading">Manage your Cash Flow Bank prototype.</p>
+      <div></div>
+
+      <div class="admin-user">
+        <span>Administrator</span>
+        <div class="admin-avatar">A</div>
       </div>
 
-      <button class="btn dark" id="refreshBtn">
-        ↻ Refresh
-      </button>
-
-    </div>
+    </header>
 
 
-    <!-- ==============================
-         DASHBOARD
-    ============================== -->
+    <div class="content">
 
-    <section class="section active" id="section-dashboard">
+      <!-- DASHBOARD -->
+      <section class="page active" id="page-dashboard">
 
-      <div class="hero">
+        <div class="page-heading">
+          <div>
+            <h2>Dashboard</h2>
+            <p>Manage customers, transactions and account activity.</p>
+          </div>
+        </div>
 
-        <div class="hero-content">
+        <div class="stats">
 
-          <div class="eyebrow">
-            Administration
+          <div class="stat-card">
+            <div class="stat-top">
+              <span class="stat-label">Total Customers</span>
+              <div class="stat-icon">◉</div>
+            </div>
+            <div class="stat-value" id="statCustomers">0</div>
           </div>
 
-          <h2>Cash Flow Bank Admin Console</h2>
+          <div class="stat-card">
+            <div class="stat-top">
+              <span class="stat-label">Pending Accounts</span>
+              <div class="stat-icon">!</div>
+            </div>
+            <div class="stat-value" id="statPending">0</div>
+          </div>
 
-          <p>
-            Manage customer accounts, transaction workflows, cancellation
-            requests, account balances, profile information, and transaction
-            timestamps from one place.
-          </p>
+          <div class="stat-card">
+            <div class="stat-top">
+              <span class="stat-label">Total Balance</span>
+              <div class="stat-icon">$</div>
+            </div>
+            <div class="stat-value" id="statBalance">$0.00</div>
+          </div>
 
-          <div class="hero-chip">
-            ● Prototype administration environment
+          <div class="stat-card">
+            <div class="stat-top">
+              <span class="stat-label">Transactions</span>
+              <div class="stat-icon">↔</div>
+            </div>
+            <div class="stat-value" id="statTransactions">0</div>
           </div>
 
         </div>
 
-      </div>
 
+        <div class="dashboard-grid">
 
-      <div class="stats">
-
-        <div class="stat">
-          <div class="stat-top">
-            <span class="stat-label">Customers</span>
-            <div class="stat-icon">👥</div>
-          </div>
-          <div class="stat-value" id="statCustomers">0</div>
-        </div>
-
-        <div class="stat">
-          <div class="stat-top">
-            <span class="stat-label">Pending Accounts</span>
-            <div class="stat-icon">⏳</div>
-          </div>
-          <div class="stat-value" id="statPending">0</div>
-        </div>
-
-        <div class="stat">
-          <div class="stat-top">
-            <span class="stat-label">Total Balance</span>
-            <div class="stat-icon">💰</div>
-          </div>
-          <div class="stat-value" id="statBalance">$0.00</div>
-        </div>
-
-        <div class="stat">
-          <div class="stat-top">
-            <span class="stat-label">Transactions</span>
-            <div class="stat-icon">↔</div>
-          </div>
-          <div class="stat-value" id="statTransactions">0</div>
-        </div>
-
-        <div class="stat">
-          <div class="stat-top">
-            <span class="stat-label">Cancellation Requests</span>
-            <div class="stat-icon">↩</div>
-          </div>
-          <div class="stat-value" id="statCancellations">0</div>
-        </div>
-
-      </div>
-
-
-      <div class="pending-grid">
-
-        <div class="card">
-
-          <div class="card-header">
-            <div>
-              <h3>Pending Account Approvals</h3>
-              <p>Customers waiting for administrator review.</p>
+          <div class="card">
+            <div class="card-head">
+              <h3>Recent Transactions</h3>
+              <button class="small-btn" onclick="showPage('transactions')">
+                View All
+              </button>
             </div>
 
-            <button class="btn" onclick="openSection('customers')">
-              View all
-            </button>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Customer</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                    <th>Date</th>
+                  </tr>
+                </thead>
+                <tbody id="dashboardTransactions">
+                </tbody>
+              </table>
+            </div>
           </div>
 
-          <div id="dashboardPendingCustomers"></div>
 
-        </div>
+          <div class="card quick-card">
 
-
-        <div class="card">
-
-          <div class="card-header">
-            <div>
-              <h3>Pending Transactions</h3>
-              <p>Transfers awaiting administrator action.</p>
+            <div class="card-head" style="padding:0 0 18px;border:0;">
+              <h3>Quick Overview</h3>
             </div>
 
-            <button class="btn" onclick="openSection('transactions')">
-              View all
-            </button>
+            <div class="quick-list">
+
+              <div class="quick-item">
+                <div>
+                  <strong>Pending approvals</strong>
+                  <span>Accounts waiting for review</span>
+                </div>
+                <strong id="quickPending">0</strong>
+              </div>
+
+              <div class="quick-item">
+                <div>
+                  <strong>Cancellation requests</strong>
+                  <span>Requests awaiting action</span>
+                </div>
+                <strong id="quickCancellations">0</strong>
+              </div>
+
+              <div class="quick-item">
+                <div>
+                  <strong>Active customers</strong>
+                  <span>Currently active accounts</span>
+                </div>
+                <strong id="quickActive">0</strong>
+              </div>
+
+            </div>
+
           </div>
 
-          <div id="dashboardPendingTransactions"></div>
-
         </div>
 
-      </div>
+      </section>
 
 
-      <div class="card">
+      <!-- CUSTOMERS -->
+      <section class="page" id="page-customers">
 
-        <div class="card-header">
-
+        <div class="page-heading">
           <div>
-            <h3>Recent Customers</h3>
-            <p>Recently created customer accounts.</p>
-          </div>
-
-          <button class="btn" onclick="openSection('customers')">
-            Customers
-          </button>
-
-        </div>
-
-        <div class="table-wrap">
-          <table>
-
-            <thead>
-              <tr>
-                <th>Customer</th>
-                <th>Account</th>
-                <th>Status</th>
-                <th>Balance</th>
-                <th>Created</th>
-                <th></th>
-              </tr>
-            </thead>
-
-            <tbody id="recentCustomersBody"></tbody>
-
-          </table>
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <!-- ==============================
-         CUSTOMERS
-    ============================== -->
-
-    <section class="section" id="section-customers">
-
-      <div class="page-title">
-        <h2>Customers</h2>
-        <p>Manage customer accounts, balances, profile information and approval status.</p>
-      </div>
-
-
-      <div class="card">
-
-        <div class="card-header">
-
-          <div>
-            <h3>Customer Accounts</h3>
-            <p>Administrator-controlled customer information.</p>
+            <h2>Customers</h2>
+            <p>View and manage customer accounts.</p>
           </div>
 
           <div class="toolbar">
-
             <input
-              id="customerSearch"
               class="search"
+              id="customerSearch"
               placeholder="Search name, email or account..."
+              oninput="renderCustomers()"
             >
 
-            <select id="customerStatusFilter" class="small-select">
-              <option value="all">All statuses</option>
+            <select class="filter" id="customerFilter" onchange="renderCustomers()">
+              <option value="all">All Statuses</option>
               <option value="pending">Pending</option>
               <option value="active">Active</option>
               <option value="rejected">Rejected</option>
             </select>
-
           </div>
-
         </div>
 
-        <div class="table-wrap">
 
-          <table>
+        <div class="card">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Customer</th>
+                  <th>Account</th>
+                  <th>Type</th>
+                  <th>Balance</th>
+                  <th>Status</th>
+                  <th>Created</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
 
-            <thead>
-              <tr>
-                <th>Customer</th>
-                <th>Account</th>
-                <th>Status</th>
-                <th>Balance</th>
-                <th>Credit Score</th>
-                <th>Created</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-
-            <tbody id="customersBody"></tbody>
-
-          </table>
-
+              <tbody id="customersTable">
+              </tbody>
+            </table>
+          </div>
         </div>
 
-      </div>
-
-    </section>
+      </section>
 
 
-    <!-- ==============================
-         TRANSACTIONS
-    ============================== -->
+      <!-- PENDING -->
+      <section class="page" id="page-pending">
 
-    <section class="section" id="section-transactions">
-
-      <div class="page-title">
-        <h2>Transactions</h2>
-        <p>Review transfers and manage their workflow, status and timestamps.</p>
-      </div>
-
-
-      <div class="card">
-
-        <div class="card-header">
-
+        <div class="page-heading">
           <div>
-            <h3>Transaction Ledger</h3>
-            <p>
-              Transaction timestamps can be edited by an administrator.
-            </p>
+            <h2>Pending Accounts</h2>
+            <p>Review new customer registration requests.</p>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Customer</th>
+                  <th>Email</th>
+                  <th>Country</th>
+                  <th>Account Type</th>
+                  <th>Created</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+
+              <tbody id="pendingTable">
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+      </section>
+
+
+      <!-- TRANSACTIONS -->
+      <section class="page" id="page-transactions">
+
+        <div class="page-heading">
+          <div>
+            <h2>Transactions</h2>
+            <p>Review, approve, complete and refund transactions.</p>
           </div>
 
           <div class="toolbar">
-
             <input
-              id="transactionSearch"
               class="search"
-              placeholder="Search transaction, customer or recipient..."
+              id="transactionSearch"
+              placeholder="Search transactions..."
+              oninput="renderTransactions()"
             >
 
-            <select id="transactionStatusFilter" class="small-select">
-              <option value="all">All statuses</option>
+            <select
+              class="filter"
+              id="transactionFilter"
+              onchange="renderTransactions()"
+            >
+              <option value="all">All Statuses</option>
               <option value="pending">Pending</option>
               <option value="approved">Approved</option>
               <option value="completed">Completed</option>
               <option value="declined">Declined</option>
               <option value="refunded">Refunded</option>
             </select>
-
           </div>
-
         </div>
 
 
-        <div class="table-wrap">
+        <div class="card">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Customer</th>
+                  <th>Recipient</th>
+                  <th>Amount</th>
+                  <th>Status</th>
+                  <th>Transaction Date</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
 
-          <table>
-
-            <thead>
-              <tr>
-                <th>Transaction</th>
-                <th>Customer</th>
-                <th>Recipient</th>
-                <th>Amount</th>
-                <th>Status</th>
-                <th>Date & Time</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-
-            <tbody id="transactionsBody"></tbody>
-
-          </table>
-
+              <tbody id="transactionsTable">
+              </tbody>
+            </table>
+          </div>
         </div>
 
-      </div>
-
-    </section>
+      </section>
 
 
-    <!-- ==============================
-         CANCELLATIONS
-    ============================== -->
+      <!-- CANCELLATIONS -->
+      <section class="page" id="page-cancellations">
 
-    <section class="section" id="section-cancellations">
-
-      <div class="page-title">
-        <h2>Cancellation Requests</h2>
-        <p>Review customer requests to cancel pending transfers.</p>
-      </div>
-
-
-      <div class="card">
-
-        <div class="card-header">
-
+        <div class="page-heading">
           <div>
-            <h3>Transfer Cancellation Requests</h3>
-            <p>Refunds are recorded instead of deleting transactions.</p>
+            <h2>Cancellation Requests</h2>
+            <p>Review customer requests to cancel transactions.</p>
           </div>
-
-          <select id="cancellationFilter" class="small-select">
-            <option value="all">All requests</option>
-            <option value="pending">Pending</option>
-            <option value="approved">Approved</option>
-            <option value="declined">Declined</option>
-          </select>
-
-        </div>
-
-
-        <div class="table-wrap">
-
-          <table>
-
-            <thead>
-              <tr>
-                <th>Customer</th>
-                <th>Transaction</th>
-                <th>Amount</th>
-                <th>Reason</th>
-                <th>Requested</th>
-                <th>Status</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-
-            <tbody id="cancellationsBody"></tbody>
-
-          </table>
-
-        </div>
-
-      </div>
-
-    </section>
-
-
-    <!-- ==============================
-         SETTINGS
-    ============================== -->
-
-    <section class="section" id="section-settings">
-
-      <div class="page-title">
-        <h2>Settings</h2>
-        <p>Administrator account settings.</p>
-      </div>
-
-
-      <div class="grid-two">
-
-        <div class="card">
-
-          <div class="card-header">
-            <div>
-              <h3>Administrator</h3>
-              <p>Current signed-in administrator.</p>
-            </div>
-          </div>
-
-          <div class="card-body">
-
-            <div class="detail-grid">
-
-              <div class="detail">
-                <div class="detail-label">Email</div>
-                <div class="detail-value" id="settingsEmail">—</div>
-              </div>
-
-              <div class="detail">
-                <div class="detail-label">UID</div>
-                <div class="detail-value mono" id="settingsUid">—</div>
-              </div>
-
-              <div class="detail">
-                <div class="detail-label">Role</div>
-                <div class="detail-value">Administrator</div>
-              </div>
-
-              <div class="detail">
-                <div class="detail-label">Environment</div>
-                <div class="detail-value">Prototype</div>
-              </div>
-
-            </div>
-
-          </div>
-
         </div>
 
 
         <div class="card">
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Customer</th>
+                  <th>Transaction</th>
+                  <th>Amount</th>
+                  <th>Reason</th>
+                  <th>Requested</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
 
-          <div class="card-header">
-            <div>
-              <h3>Password</h3>
-              <p>Change the Firebase Authentication password.</p>
-            </div>
+              <tbody id="cancellationsTable">
+              </tbody>
+            </table>
           </div>
-
-          <div class="card-body">
-
-            <div class="form-group">
-              <label>New password</label>
-              <input
-                id="newAdminPassword"
-                class="input"
-                type="password"
-                minlength="6"
-                placeholder="At least 6 characters"
-              >
-            </div>
-
-            <button class="btn dark" id="changePasswordBtn">
-              Change Password
-            </button>
-
-          </div>
-
         </div>
 
-      </div>
+      </section>
 
-    </section>
+    </div>
 
   </main>
 
 </div>
 
 
-<!-- ==============================
-     CUSTOMER MODAL
-============================== -->
-
+<!-- CUSTOMER MODAL -->
 <div class="modal-overlay" id="customerModal">
 
-  <div class="modal large">
+  <div class="modal">
 
-    <div class="modal-header">
-
-      <div>
-        <h3>Edit Customer</h3>
-        <p>Administrator-controlled customer profile.</p>
-      </div>
-
-      <button class="close-btn" onclick="closeModal('customerModal')">
-        ×
-      </button>
-
+    <div class="modal-head">
+      <h3>Edit Customer</h3>
+      <button class="close-btn" onclick="closeModal('customerModal')">×</button>
     </div>
-
 
     <div class="modal-body">
 
-      <input type="hidden" id="editCustomerUid">
+      <input type="hidden" id="editUid">
 
+      <div class="photo-preview">
 
-      <div class="profile-preview">
-
-        <div class="avatar" id="customerPhotoPreview">
-          ?
+        <div class="big-avatar" id="editPhotoPreview">
+          U
         </div>
 
         <div>
-          <strong id="customerPreviewName">Customer</strong>
-          <span id="customerPreviewAccount">Account</span>
+          <strong id="editPhotoName">Customer</strong>
+          <div style="color:#71817b;font-size:12px;margin-top:4px;">
+            Profile picture
+          </div>
         </div>
 
-      </div>
-
-
-      <div class="section-divider">
-        Account Information
       </div>
 
 
       <div class="form-grid">
 
-        <div class="form-group">
-          <label>Account number</label>
-          <input id="editAccountNumber" class="input" readonly>
+        <div class="field">
+          <label>Name</label>
+          <input id="editName">
         </div>
 
-        <div class="form-group">
-          <label>Firebase UID</label>
-          <input id="editCustomerUidDisplay" class="input" readonly>
+        <div class="field">
+          <label>Email</label>
+          <input id="editEmail" type="email">
         </div>
 
-        <div class="form-group">
-          <label>Account status</label>
-
-          <select id="editStatus" class="select">
-            <option value="pending">Pending</option>
-            <option value="active">Active</option>
-            <option value="rejected">Rejected</option>
-          </select>
+        <div class="field">
+          <label>Phone</label>
+          <input id="editPhone">
         </div>
 
-        <div class="form-group">
-          <label>Account type</label>
+        <div class="field">
+          <label>Country</label>
+          <input id="editCountry">
+        </div>
 
-          <select id="editAccountType" class="select">
+        <div class="field">
+          <label>Account Type</label>
+          <select id="editAccountType">
             <option value="Savings">Savings</option>
             <option value="Current">Current</option>
             <option value="Business">Business</option>
@@ -1925,123 +1377,62 @@ tr:last-child td{
           </select>
         </div>
 
-      </div>
-
-
-      <div class="section-divider">
-        Customer Profile
-      </div>
-
-
-      <div class="form-grid">
-
-        <div class="form-group">
-          <label>Full name</label>
-          <input id="editName" class="input">
+        <div class="field">
+          <label>Status</label>
+          <select id="editStatus">
+            <option value="pending">Pending</option>
+            <option value="active">Active</option>
+            <option value="rejected">Rejected</option>
+          </select>
         </div>
 
-        <div class="form-group">
-          <label>Email</label>
-          <input id="editEmail" class="input" type="email">
-        </div>
-
-        <div class="form-group">
-          <label>Phone</label>
-          <input id="editPhone" class="input">
-        </div>
-
-        <div class="form-group">
-          <label>Country</label>
-          <input id="editCountry" class="input">
-        </div>
-
-        <div class="form-group full">
-          <label>Profile photo URL</label>
-          <input
-            id="editPhotoURL"
-            class="input"
-            placeholder="https://..."
-          >
-        </div>
-
-      </div>
-
-
-      <div class="section-divider">
-        Account Controls
-      </div>
-
-
-      <div class="form-grid three">
-
-        <div class="form-group">
+        <div class="field">
           <label>Balance</label>
-          <input
-            id="editBalance"
-            class="input"
-            type="number"
-            step="0.01"
-            min="0"
-          >
+          <input id="editBalance" type="number" step="0.01" min="0">
         </div>
 
-        <div class="form-group">
-          <label>Account limit</label>
-          <input
-            id="editAccountLimit"
-            class="input"
-            type="number"
-            step="0.01"
-            min="0"
-          >
+        <div class="field">
+          <label>Account Limit</label>
+          <input id="editAccountLimit" type="number" step="0.01" min="0">
         </div>
 
-        <div class="form-group">
-          <label>Credit score</label>
-          <input
-            id="editCreditScore"
-            class="input"
-            type="number"
-            min="0"
-            max="1000"
-          >
+        <div class="field">
+          <label>Credit Score</label>
+          <input id="editCreditScore" type="number" min="0" max="850">
         </div>
 
-      </div>
-
-
-      <div class="section-divider">
-        Account Creation Date
-      </div>
-
-
-      <div class="form-grid">
-
-        <div class="form-group">
-          <label>Creation date</label>
-          <input id="editCreatedDate" class="input" type="date">
+        <div class="field">
+          <label>Account Creation Date & Time</label>
+          <input id="editCreatedAt" type="datetime-local">
         </div>
 
-        <div class="form-group">
-          <label>Creation time</label>
-          <input id="editCreatedTime" class="input" type="time">
+        <div class="field">
+          <label>Account Number</label>
+          <input id="editAccountNumber" readonly>
+        </div>
+
+        <div class="field">
+          <label>Firebase UID</label>
+          <input id="editUidDisplay" readonly>
+        </div>
+
+        <div class="field full">
+          <label>Profile Photo URL</label>
+          <input id="editPhotoURL" placeholder="https://...">
         </div>
 
       </div>
 
     </div>
 
-
     <div class="modal-footer">
-
-      <button class="btn" onclick="closeModal('customerModal')">
+      <button class="small-btn" onclick="closeModal('customerModal')">
         Cancel
       </button>
 
-      <button class="btn dark" id="saveCustomerBtn">
+      <button class="small-btn green" onclick="saveCustomer()">
         Save Customer
       </button>
-
     </div>
 
   </div>
@@ -2049,316 +1440,137 @@ tr:last-child td{
 </div>
 
 
-<!-- ==============================
-     TRANSACTION MODAL
-============================== -->
-
+<!-- TRANSACTION MODAL -->
 <div class="modal-overlay" id="transactionModal">
 
   <div class="modal large">
 
-    <div class="modal-header">
-
-      <div>
-        <h3>Transaction Details</h3>
-        <p>Edit transaction information and administrator controls.</p>
-      </div>
-
-      <button class="close-btn" onclick="closeModal('transactionModal')">
-        ×
-      </button>
-
+    <div class="modal-head">
+      <h3>Transaction Details</h3>
+      <button class="close-btn" onclick="closeModal('transactionModal')">×</button>
     </div>
-
 
     <div class="modal-body">
 
-      <input type="hidden" id="editTransactionId">
+      <input type="hidden" id="txId">
 
+      <div class="tx-highlight">
 
-      <div class="section-divider">
-        Transaction Information
-      </div>
+        <small>Transaction Amount</small>
 
-
-      <div class="detail-grid">
-
-        <div class="detail">
-          <div class="detail-label">Transaction ID</div>
-          <div class="detail-value mono" id="txDetailId">—</div>
+        <div class="amount" id="txAmount">
+          $0.00
         </div>
 
-        <div class="detail">
-          <div class="detail-label">Customer</div>
-          <div class="detail-value" id="txDetailCustomer">—</div>
+        <div style="margin-top:8px;" id="txStatusText">
+          Pending
         </div>
 
-        <div class="detail">
-          <div class="detail-label">Transaction Type</div>
-          <div class="detail-value" id="txDetailType">—</div>
-        </div>
-
-        <div class="detail">
-          <div class="detail-label">Current Status</div>
-          <div class="detail-value" id="txDetailStatus">—</div>
-        </div>
-
-      </div>
-
-
-      <div class="section-divider">
-        Transfer Details
       </div>
 
 
       <div class="form-grid">
 
-        <div class="form-group">
-          <label>Recipient name</label>
-          <input id="editTxRecipient" class="input">
+        <div class="field">
+          <label>Customer</label>
+          <input id="txCustomer" readonly>
         </div>
 
-        <div class="form-group">
-          <label>Recipient account</label>
-          <input id="editTxAccountNumber" class="input">
+        <div class="field">
+          <label>Customer Account</label>
+          <input id="txCustomerAccount" readonly>
         </div>
 
-        <div class="form-group">
-          <label>Bank name</label>
-          <input id="editTxBankName" class="input">
+        <div class="field">
+          <label>Recipient</label>
+          <input id="txRecipient" readonly>
         </div>
 
-        <div class="form-group">
+        <div class="field">
+          <label>Recipient Account</label>
+          <input id="txRecipientAccount" readonly>
+        </div>
+
+        <div class="field">
+          <label>Bank Name</label>
+          <input id="txBank" readonly>
+        </div>
+
+        <div class="field">
           <label>Currency</label>
-          <input id="editTxCurrency" class="input" placeholder="USD">
+          <input id="txCurrency" readonly>
         </div>
 
-        <div class="form-group">
-          <label>Amount</label>
-          <input
-            id="editTxAmount"
-            class="input"
-            type="number"
-            min="0"
-            step="0.01"
-          >
-        </div>
-
-        <div class="form-group">
-          <label>Status</label>
-
-          <select id="editTxStatus" class="select">
-            <option value="pending">Pending</option>
-            <option value="approved">Approved</option>
-            <option value="completed">Completed</option>
-            <option value="declined">Declined</option>
-            <option value="refunded">Refunded</option>
-          </select>
-
-        </div>
-
-        <div class="form-group full">
+        <div class="field full">
           <label>Note</label>
-          <textarea id="editTxNote" class="textarea"></textarea>
+          <textarea id="txNote" rows="3" readonly></textarea>
+        </div>
+
+        <div class="field">
+          <label>Original Created Date</label>
+          <input id="txOriginalDate" readonly>
+        </div>
+
+        <div class="field">
+          <label>Transaction Date & Time</label>
+          <input id="txDateTime" type="datetime-local">
         </div>
 
       </div>
 
-
-      <!-- IMPORTANT NEW DATE/TIME SECTION -->
-
-      <div class="section-divider">
-        Transaction Date & Time
+      <div class="notice">
+        Changing the transaction date/time changes the displayed transaction date.
+        The original creation timestamp is preserved separately.
       </div>
 
-
-      <div class="datetime-box">
-
-        <div class="datetime-label">
-          Administrator Transaction Timestamp
-        </div>
-
-
-        <div class="datetime-grid">
-
-          <div class="form-group" style="margin-bottom:0;">
-            <label>Date — Day / Month / Year</label>
-
-            <input
-              id="editTxDate"
-              class="input"
-              type="date"
-            >
-          </div>
-
-
-          <div class="form-group" style="margin-bottom:0;">
-            <label>Time</label>
-
-            <input
-              id="editTxTime"
-              class="input"
-              type="time"
-              step="60"
-            >
-          </div>
-
-        </div>
-
-
-        <div class="datetime-help">
-          Change the calendar date to modify the day, month, or year.
-          Change the time to modify the hour and minute. The saved timestamp
-          will be displayed in transaction history using this administrator-selected value.
-        </div>
-
-
-        <div class="datetime-preview" id="txDatePreview">
-          Selected timestamp: —
-        </div>
-
-      </div>
-
-
-      <div class="section-divider">
-        Transaction Accounting State
-      </div>
-
-
-      <div class="detail-grid">
-
-        <div class="detail">
-          <div class="detail-label">Balance deducted</div>
-          <div class="detail-value" id="txBalanceDeducted">No</div>
-        </div>
-
-        <div class="detail">
-          <div class="detail-label">Refunded amount</div>
-          <div class="detail-value" id="txRefundAmount">$0.00</div>
-        </div>
-
-        <div class="detail">
-          <div class="detail-label">Original timestamp</div>
-          <div class="detail-value" id="txOriginalTimestamp">—</div>
-        </div>
-
-        <div class="detail">
-          <div class="detail-label">Last updated</div>
-          <div class="detail-value" id="txUpdatedTimestamp">—</div>
-        </div>
-
-      </div>
-
-
-      <div id="transactionActionArea" style="margin-top:20px;"></div>
+      <div id="txBalanceInfo"></div>
 
     </div>
-
 
     <div class="modal-footer">
 
-      <button class="btn" onclick="closeModal('transactionModal')">
+      <button class="small-btn" onclick="closeModal('transactionModal')">
         Close
       </button>
 
-      <button class="btn dark" id="saveTransactionBtn">
-        Save Transaction
+      <button
+        class="small-btn blue"
+        id="saveTxDateBtn"
+        onclick="saveTransactionDate()"
+      >
+        Save Date & Time
       </button>
 
-    </div>
-
-  </div>
-
-</div>
-
-
-<!-- ==============================
-     CANCELLATION MODAL
-============================== -->
-
-<div class="modal-overlay" id="cancellationModal">
-
-  <div class="modal">
-
-    <div class="modal-header">
-
-      <div>
-        <h3>Cancellation Request</h3>
-        <p>Review the customer's cancellation request.</p>
-      </div>
-
-      <button class="close-btn" onclick="closeModal('cancellationModal')">
-        ×
+      <button
+        class="small-btn green"
+        id="approveTxBtn"
+        onclick="approveCurrentTransaction()"
+      >
+        Approve
       </button>
 
-    </div>
-
-
-    <div class="modal-body">
-
-      <input type="hidden" id="editCancellationId">
-
-      <div class="detail-grid">
-
-        <div class="detail">
-          <div class="detail-label">Customer</div>
-          <div class="detail-value" id="cancelCustomer">—</div>
-        </div>
-
-        <div class="detail">
-          <div class="detail-label">Transaction</div>
-          <div class="detail-value mono" id="cancelTransaction">—</div>
-        </div>
-
-        <div class="detail">
-          <div class="detail-label">Amount</div>
-          <div class="detail-value" id="cancelAmount">—</div>
-        </div>
-
-        <div class="detail">
-          <div class="detail-label">Requested</div>
-          <div class="detail-value" id="cancelRequested">—</div>
-        </div>
-
-      </div>
-
-
-      <div class="section-divider">
-        Customer Reason
-      </div>
-
-      <div class="detail">
-        <div class="detail-value" id="cancelReason" style="font-weight:500;line-height:1.6;">
-          —
-        </div>
-      </div>
-
-
-      <div class="section-divider">
-        Request Status
-      </div>
-
-      <select id="editCancellationStatus" class="select">
-        <option value="pending">Pending</option>
-        <option value="approved">Approved</option>
-        <option value="declined">Declined</option>
-      </select>
-
-    </div>
-
-
-    <div class="modal-footer">
-
-      <button class="btn" onclick="closeModal('cancellationModal')">
-        Close
+      <button
+        class="small-btn green"
+        id="completeTxBtn"
+        onclick="completeCurrentTransaction()"
+      >
+        Complete
       </button>
 
-      <button class="btn red" id="declineCancellationBtn">
+      <button
+        class="small-btn red"
+        id="declineTxBtn"
+        onclick="declineCurrentTransaction()"
+      >
         Decline
       </button>
 
-      <button class="btn green" id="approveCancellationBtn">
-        Approve & Refund
+      <button
+        class="small-btn red"
+        id="refundTxBtn"
+        onclick="refundCurrentTransaction()"
+      >
+        Refund
       </button>
 
     </div>
@@ -2368,13 +1580,12 @@ tr:last-child td{
 </div>
 
 
-<div id="toast" class="toast"></div>
+<div class="toast" id="toast"></div>
 
 
 <script>
-
 /* =========================================================
-   FIREBASE CONFIG
+   FIREBASE
 ========================================================= */
 
 const firebaseConfig = {
@@ -2393,22 +1604,22 @@ const auth = firebase.auth();
 const db = firebase.firestore();
 
 
-/* =========================================================
-   STATE
-========================================================= */
+/*
+  ONLY THE PASSWORD IS SHOWN TO THE ADMIN.
+
+  Firebase Email/Password Auth still requires an email internally.
+  This email is NOT displayed in the login screen.
+*/
+const ADMIN_EMAIL = "admin@cashflowbank.com";
+
 
 let currentAdmin = null;
 
-let users = [];
+let customers = [];
 let transactions = [];
-let cancellationRequests = [];
+let cancellations = [];
 
-let unsubscribeUsers = null;
-let unsubscribeTransactions = null;
-let unsubscribeCancellations = null;
-
-let selectedTransaction = null;
-let selectedCancellation = null;
+let currentTransaction = null;
 
 
 /* =========================================================
@@ -2434,41 +1645,25 @@ function escapeHTML(value){
 }
 
 
-function money(amount,currency="USD"){
-  const value = Number(amount || 0);
+function money(value,currency="USD"){
+  const amount = Number(value || 0);
 
-  try{
-    return new Intl.NumberFormat("en-US",{
-      style:"currency",
-      currency:currency || "USD"
-    }).format(value);
-  }catch(e){
-    return `${currency || "USD"} ${value.toFixed(2)}`;
-  }
+  let symbol = "$";
+
+  if(currency === "EUR") symbol = "€";
+  if(currency === "GBP") symbol = "£";
+  if(currency === "NGN") symbol = "₦";
+  if(currency === "GHS") symbol = "₵";
+  if(currency === "KES") symbol = "KSh ";
+
+  return symbol + amount.toLocaleString(undefined,{
+    minimumFractionDigits:2,
+    maximumFractionDigits:2
+  });
 }
 
 
-function getCurrency(tx){
-  return tx?.currency || "USD";
-}
-
-
-function initials(name){
-  if(!name){
-    return "?";
-  }
-
-  return name
-    .trim()
-    .split(/\s+/)
-    .slice(0,2)
-    .map(x => x[0])
-    .join("")
-    .toUpperCase();
-}
-
-
-function getTimestamp(value){
+function toDate(value){
 
   if(!value){
     return null;
@@ -2482,15 +1677,11 @@ function getTimestamp(value){
     return value;
   }
 
-  if(typeof value === "string"){
-    const d = new Date(value);
-
-    if(!isNaN(d.getTime())){
-      return d;
-    }
+  if(typeof value === "number"){
+    return new Date(value);
   }
 
-  if(typeof value === "number"){
+  if(typeof value === "string"){
     const d = new Date(value);
 
     if(!isNaN(d.getTime())){
@@ -2502,712 +1693,462 @@ function getTimestamp(value){
 }
 
 
-function formatDateTime(value){
-
-  const date = getTimestamp(value);
-
-  if(!date){
-    return "—";
-  }
-
-  return new Intl.DateTimeFormat("en-US",{
-    month:"short",
-    day:"2-digit",
-    year:"numeric",
-    hour:"numeric",
-    minute:"2-digit"
-  }).format(date);
-}
-
-
 function formatDate(value){
 
-  const date = getTimestamp(value);
+  const d = toDate(value);
 
-  if(!date){
+  if(!d){
     return "—";
   }
 
-  return new Intl.DateTimeFormat("en-US",{
+  return d.toLocaleString([],{
+    year:"numeric",
     month:"short",
-    day:"2-digit",
-    year:"numeric"
-  }).format(date);
+    day:"numeric",
+    hour:"2-digit",
+    minute:"2-digit"
+  });
 }
 
 
-/* =========================================================
-   DATETIME HELPERS
-========================================================= */
+function toDateInputValue(value){
 
-function pad(number){
-  return String(number).padStart(2,"0");
-}
+  const d = toDate(value);
 
-
-function dateToLocalInput(date){
-
-  if(!date){
-    return {
-      date:"",
-      time:""
-    };
+  if(!d){
+    return "";
   }
 
-  return {
-    date:
-      `${date.getFullYear()}-${pad(date.getMonth()+1)}-${pad(date.getDate())}`,
+  const pad = n => String(n).padStart(2,"0");
 
-    time:
-      `${pad(date.getHours())}:${pad(date.getMinutes())}`
-  };
-}
-
-
-function localInputToDate(dateString,timeString){
-
-  if(!dateString){
-    return null;
-  }
-
-  const time = timeString || "00:00";
-
-  const parts = dateString.split("-");
-
-  if(parts.length !== 3){
-    return null;
-  }
-
-  const year = Number(parts[0]);
-  const month = Number(parts[1]);
-  const day = Number(parts[2]);
-
-  const timeParts = time.split(":");
-
-  const hour = Number(timeParts[0] || 0);
-  const minute = Number(timeParts[1] || 0);
-
-  const date = new Date(
-    year,
-    month - 1,
-    day,
-    hour,
-    minute,
-    0,
-    0
+  return (
+    d.getFullYear() + "-" +
+    pad(d.getMonth()+1) + "-" +
+    pad(d.getDate()) + "T" +
+    pad(d.getHours()) + ":" +
+    pad(d.getMinutes())
   );
+}
+
+
+function timestampFromInput(value){
+
+  if(!value){
+    return null;
+  }
+
+  const date = new Date(value);
 
   if(isNaN(date.getTime())){
     return null;
   }
 
-  return date;
+  return firebase.firestore.Timestamp.fromDate(date);
 }
 
 
-function updateTransactionDatePreview(){
+function initials(name){
 
-  const dateValue = $("editTxDate").value;
-  const timeValue = $("editTxTime").value;
+  const text = String(name || "User").trim();
 
-  const date = localInputToDate(
-    dateValue,
-    timeValue
-  );
-
-  if(!date){
-
-    $("txDatePreview").textContent =
-      "Selected timestamp: —";
-
-    return;
+  if(!text){
+    return "U";
   }
 
-  $("txDatePreview").textContent =
-    "Selected timestamp: " + formatDateTime(date);
+  const parts = text.split(/\s+/);
+
+  return (
+    (parts[0]?.[0] || "U") +
+    (parts[1]?.[0] || "")
+  ).toUpperCase();
 }
 
 
-$("editTxDate").addEventListener(
-  "change",
-  updateTransactionDatePreview
-);
+function avatarHTML(user){
 
-$("editTxTime").addEventListener(
-  "change",
-  updateTransactionDatePreview
-);
+  const letter = escapeHTML(initials(user.name));
+
+  if(user.photoURL){
+    return `
+      <div class="avatar">
+        <img
+          src="${escapeHTML(user.photoURL)}"
+          alt=""
+          onerror="this.style.display='none';this.parentElement.textContent='${letter}'"
+        >
+      </div>
+    `;
+  }
+
+  return `
+    <div class="avatar">
+      ${letter}
+    </div>
+  `;
+}
 
 
-/* =========================================================
-   TOAST
-========================================================= */
+function statusBadge(status){
 
-let toastTimer = null;
+  const value = String(status || "pending").toLowerCase();
+
+  return `
+    <span class="badge ${escapeHTML(value)}">
+      ${escapeHTML(value)}
+    </span>
+  `;
+}
+
 
 function toast(message,error=false){
 
-  const element = $("toast");
+  const el = $("toast");
 
-  element.textContent = message;
+  el.textContent = message;
 
-  element.classList.toggle("error",error);
-  element.classList.add("show");
+  el.classList.toggle("error",error);
+  el.classList.add("show");
 
-  clearTimeout(toastTimer);
+  clearTimeout(window.toastTimer);
 
-  toastTimer = setTimeout(()=>{
-    element.classList.remove("show");
-  },3500);
+  window.toastTimer = setTimeout(()=>{
+    el.classList.remove("show");
+  },3200);
 }
 
 
 /* =========================================================
-   MODALS
+   PASSWORD LOGIN
 ========================================================= */
 
-function openModal(id){
-  $(id).classList.add("show");
+function togglePassword(){
+
+  const input = $("adminPassword");
+  const button = $("passwordToggle");
+
+  if(input.type === "password"){
+    input.type = "text";
+    button.textContent = "Hide";
+  }else{
+    input.type = "password";
+    button.textContent = "Show";
+  }
 }
 
 
-function closeModal(id){
-  $(id).classList.remove("show");
-}
+async function adminLogin(){
 
+  const password = $("adminPassword").value.trim();
+  const error = $("loginError");
+  const button = $("loginBtn");
 
-window.addEventListener("click",(event)=>{
+  error.style.display = "none";
 
-  document.querySelectorAll(".modal-overlay").forEach(modal=>{
+  if(!password){
+    error.textContent = "Enter the administrator password.";
+    error.style.display = "block";
+    return;
+  }
 
-    if(event.target === modal){
-      modal.classList.remove("show");
+  button.disabled = true;
+  button.textContent = "Signing in...";
+
+  try{
+
+    const credential =
+      await auth.signInWithEmailAndPassword(
+        ADMIN_EMAIL,
+        password
+      );
+
+    const adminSnap =
+      await db.collection("admins")
+        .doc(credential.user.uid)
+        .get();
+
+    if(
+      !adminSnap.exists ||
+      adminSnap.data().role !== "admin"
+    ){
+
+      await auth.signOut();
+
+      throw new Error(
+        "This account does not have administrator access."
+      );
     }
 
-  });
+    currentAdmin = credential.user;
 
+    $("loginScreen").classList.add("hidden");
+    $("adminApp").classList.remove("hidden");
+
+    await loadAllData();
+
+  }catch(error){
+
+    console.error(error);
+
+    $("loginError").textContent =
+      error.message ||
+      "Unable to sign in.";
+
+    $("loginError").style.display = "block";
+
+  }finally{
+
+    button.disabled = false;
+    button.textContent = "Sign In";
+  }
+}
+
+
+$("adminPassword").addEventListener("keydown",event=>{
+  if(event.key === "Enter"){
+    adminLogin();
+  }
 });
 
 
+async function adminLogout(){
+
+  try{
+    await auth.signOut();
+  }catch(error){
+    console.error(error);
+  }
+
+  currentAdmin = null;
+
+  $("adminApp").classList.add("hidden");
+  $("loginScreen").classList.remove("hidden");
+  $("adminPassword").value = "";
+}
+
+
 /* =========================================================
-   AUTH
+   AUTH OBSERVER
 ========================================================= */
 
 auth.onAuthStateChanged(async user=>{
 
   if(!user){
-
-    currentAdmin = null;
-
-    $("loginPage").classList.remove("hidden");
     $("adminApp").classList.add("hidden");
-
+    $("loginScreen").classList.remove("hidden");
     return;
   }
 
   try{
 
-    const adminDoc = await db
-      .collection("admins")
-      .doc(user.uid)
-      .get();
+    const snap =
+      await db.collection("admins")
+        .doc(user.uid)
+        .get();
 
     if(
-      !adminDoc.exists ||
-      adminDoc.data().role !== "admin"
+      !snap.exists ||
+      snap.data().role !== "admin"
     ){
-
       await auth.signOut();
-
-      showLoginError(
-        "This account does not have administrator access."
-      );
-
       return;
     }
 
     currentAdmin = user;
 
-    $("loginPage").classList.add("hidden");
+    $("loginScreen").classList.add("hidden");
     $("adminApp").classList.remove("hidden");
 
-    $("adminEmailDisplay").textContent =
-      user.email || "Administrator";
-
-    $("settingsEmail").textContent =
-      user.email || "—";
-
-    $("settingsUid").textContent =
-      user.uid;
-
-    $("adminAvatar").textContent =
-      initials(user.email || "Admin");
-
-    await startRealtimeListeners();
+    await loadAllData();
 
   }catch(error){
 
     console.error(error);
 
     await auth.signOut();
-
-    showLoginError(
-      "Unable to verify administrator access."
-    );
   }
-
 });
 
 
-$("adminLoginForm").addEventListener(
-  "submit",
-  async event=>{
-
-    event.preventDefault();
-
-    const email =
-      $("adminEmail").value.trim();
-
-    const password =
-      $("adminPassword").value;
-
-    $("loginError").classList.add("hidden");
-
-    $("loginBtn").disabled = true;
-
-    $("loginBtn").innerHTML =
-      `<span class="loading">
-        <span class="spinner"></span>
-        Signing in...
-      </span>`;
-
-    try{
-
-      await auth.signInWithEmailAndPassword(
-        email,
-        password
-      );
-
-    }catch(error){
-
-      console.error(error);
-
-      showLoginError(
-        firebaseAuthError(error)
-      );
-
-    }finally{
-
-      $("loginBtn").disabled = false;
-
-      $("loginBtn").textContent =
-        "Sign in to Admin";
-
-    }
-
-  }
-);
-
-
-function firebaseAuthError(error){
-
-  const code = error?.code || "";
-
-  if(
-    code.includes("invalid-credential") ||
-    code.includes("wrong-password") ||
-    code.includes("user-not-found")
-  ){
-    return "The email or password is incorrect.";
-  }
-
-  if(code.includes("too-many-requests")){
-    return "Too many attempts. Please wait and try again.";
-  }
-
-  return error?.message ||
-    "Unable to sign in.";
-}
-
-
-function showLoginError(message){
-
-  $("loginError").textContent = message;
-
-  $("loginError").classList.remove("hidden");
-}
-
-
-$("logoutBtn").addEventListener(
-  "click",
-  async ()=>{
-
-    if(!confirm("Sign out of the admin panel?")){
-      return;
-    }
-
-    await stopRealtimeListeners();
-
-    await auth.signOut();
-
-  }
-);
-
-
 /* =========================================================
-   FIRESTORE REALTIME LISTENERS
+   NAVIGATION
 ========================================================= */
 
-async function startRealtimeListeners(){
+function showPage(page){
 
-  stopRealtimeListeners();
+  document.querySelectorAll(".page")
+    .forEach(el=>el.classList.remove("active"));
 
-  unsubscribeUsers =
-    db.collection("users")
-      .onSnapshot(
-        snapshot=>{
+  const target = $("page-" + page);
 
-          users = snapshot.docs.map(doc=>({
-            id:doc.id,
-            ...doc.data()
-          }));
+  if(target){
+    target.classList.add("active");
+  }
 
-          users.sort(
-            (a,b)=>
-              getTimestamp(b.createdAt)?.getTime() -
-              getTimestamp(a.createdAt)?.getTime()
-          );
-
-          renderEverything();
-
-        },
-        error=>{
-          console.error("Users listener:",error);
-          toast("Unable to load customers.",true);
-        }
+  document.querySelectorAll(".nav-btn[data-page]")
+    .forEach(btn=>{
+      btn.classList.toggle(
+        "active",
+        btn.dataset.page === page
       );
+    });
 
+  $("sidebar").classList.remove("open");
 
-  unsubscribeTransactions =
-    db.collection("transactions")
-      .onSnapshot(
-        snapshot=>{
+  if(page === "dashboard"){
+    renderDashboard();
+  }
 
-          transactions = snapshot.docs.map(doc=>({
-            id:doc.id,
-            ...doc.data()
-          }));
+  if(page === "customers"){
+    renderCustomers();
+  }
 
-          transactions.sort(
-            (a,b)=>{
-              const ad =
-                getTimestamp(a.createdAt)?.getTime() || 0;
+  if(page === "pending"){
+    renderPending();
+  }
 
-              const bd =
-                getTimestamp(b.createdAt)?.getTime() || 0;
+  if(page === "transactions"){
+    renderTransactions();
+  }
 
-              return bd - ad;
-            }
-          );
-
-          renderEverything();
-
-        },
-        error=>{
-          console.error("Transactions listener:",error);
-          toast("Unable to load transactions.",true);
-        }
-      );
-
-
-  unsubscribeCancellations =
-    db.collection("cancellationRequests")
-      .onSnapshot(
-        snapshot=>{
-
-          cancellationRequests =
-            snapshot.docs.map(doc=>({
-              id:doc.id,
-              ...doc.data()
-            }));
-
-          cancellationRequests.sort(
-            (a,b)=>{
-              const ad =
-                getTimestamp(a.createdAt)?.getTime() || 0;
-
-              const bd =
-                getTimestamp(b.createdAt)?.getTime() || 0;
-
-              return bd - ad;
-            }
-          );
-
-          renderEverything();
-
-        },
-        error=>{
-          console.error(
-            "Cancellation listener:",
-            error
-          );
-
-          toast(
-            "Unable to load cancellation requests.",
-            true
-          );
-        }
-      );
-
+  if(page === "cancellations"){
+    renderCancellations();
+  }
 }
 
 
-function stopRealtimeListeners(){
-
-  if(unsubscribeUsers){
-    unsubscribeUsers();
-    unsubscribeUsers = null;
-  }
-
-  if(unsubscribeTransactions){
-    unsubscribeTransactions();
-    unsubscribeTransactions = null;
-  }
-
-  if(unsubscribeCancellations){
-    unsubscribeCancellations();
-    unsubscribeCancellations = null;
-  }
-
+function toggleSidebar(){
+  $("sidebar").classList.toggle("open");
 }
 
 
 /* =========================================================
-   RENDER EVERYTHING
+   LOAD DATA
 ========================================================= */
 
-function renderEverything(){
+async function loadAllData(){
 
-  updateStats();
+  try{
 
-  renderCustomers();
+    const [
+      customerSnap,
+      transactionSnap,
+      cancellationSnap
+    ] = await Promise.all([
 
-  renderTransactions();
+      db.collection("users").get(),
 
-  renderCancellations();
+      db.collection("transactions").get(),
 
-  renderDashboardPending();
+      db.collection("cancellationRequests").get()
 
-  renderRecentCustomers();
+    ]);
 
+
+    customers = customerSnap.docs.map(doc=>({
+      id:doc.id,
+      ...doc.data()
+    }));
+
+
+    transactions = transactionSnap.docs.map(doc=>({
+      id:doc.id,
+      ...doc.data()
+    }));
+
+
+    cancellations = cancellationSnap.docs.map(doc=>({
+      id:doc.id,
+      ...doc.data()
+    }));
+
+
+    customers.sort((a,b)=>{
+      const da = toDate(a.createdAt)?.getTime() || 0;
+      const dbb = toDate(b.createdAt)?.getTime() || 0;
+      return dbb - da;
+    });
+
+
+    transactions.sort((a,b)=>{
+      const da =
+        toDate(a.transactionAt || a.createdAt)?.getTime() || 0;
+
+      const dbb =
+        toDate(b.transactionAt || b.createdAt)?.getTime() || 0;
+
+      return dbb - da;
+    });
+
+
+    cancellations.sort((a,b)=>{
+      const da = toDate(a.createdAt)?.getTime() || 0;
+      const dbb = toDate(b.createdAt)?.getTime() || 0;
+      return dbb - da;
+    });
+
+
+    renderDashboard();
+    renderCustomers();
+    renderPending();
+    renderTransactions();
+    renderCancellations();
+
+  }catch(error){
+
+    console.error(error);
+
+    toast(
+      "Could not load administration data.",
+      true
+    );
+  }
 }
 
 
 /* =========================================================
-   STATS
+   DASHBOARD
 ========================================================= */
 
-function updateStats(){
+function renderDashboard(){
 
-  const pendingUsers =
-    users.filter(
-      u=>u.status === "pending"
-    ).length;
+  const pending =
+    customers.filter(x=>x.status === "pending").length;
+
+  const active =
+    customers.filter(x=>x.status === "active").length;
+
+  const pendingCancellations =
+    cancellations.filter(x=>x.status === "pending").length;
+
 
   const totalBalance =
-    users.reduce(
-      (sum,user)=>
-        sum + Number(user.balance || 0),
+    customers.reduce(
+      (sum,user)=>sum + Number(user.balance || 0),
       0
     );
 
-  const pendingCancellations =
-    cancellationRequests.filter(
-      r=>r.status === "pending"
-    ).length;
 
-  $("statCustomers").textContent =
-    users.length;
+  $("statCustomers").textContent = customers.length;
+  $("statPending").textContent = pending;
+  $("statBalance").textContent = money(totalBalance);
+  $("statTransactions").textContent = transactions.length;
 
-  $("statPending").textContent =
-    pendingUsers;
-
-  $("statBalance").textContent =
-    money(totalBalance,"USD");
-
-  $("statTransactions").textContent =
-    transactions.length;
-
-  $("statCancellations").textContent =
-    pendingCancellations;
+  $("quickPending").textContent = pending;
+  $("quickCancellations").textContent = pendingCancellations;
+  $("quickActive").textContent = active;
 
 
-  if(pendingUsers > 0){
+  const rows = transactions.slice(0,8);
 
-    $("pendingCustomerCount").textContent =
-      pendingUsers;
+  const tbody = $("dashboardTransactions");
 
-    $("pendingCustomerCount")
-      .classList.remove("hidden");
+  if(!rows.length){
 
-  }else{
-
-    $("pendingCustomerCount")
-      .classList.add("hidden");
-
-  }
-
-
-  if(pendingCancellations > 0){
-
-    $("pendingCancellationCount").textContent =
-      pendingCancellations;
-
-    $("pendingCancellationCount")
-      .classList.remove("hidden");
-
-  }else{
-
-    $("pendingCancellationCount")
-      .classList.add("hidden");
-
-  }
-
-}
-
-
-/* =========================================================
-   USER LOOKUP
-========================================================= */
-
-function getUser(uid){
-
-  return users.find(
-    user=>user.id === uid ||
-    user.uid === uid
-  ) || null;
-
-}
-
-
-/* =========================================================
-   AVATAR
-========================================================= */
-
-function avatarHTML(user,sizeClass=""){
-
-  const photo =
-    user?.photoURL ||
-    user?.profilePhoto ||
-    "";
-
-  if(photo){
-
-    return `
-      <div class="avatar ${sizeClass}">
-        <img
-          src="${escapeHTML(photo)}"
-          alt=""
-          onerror="this.parentElement.innerHTML='${escapeHTML(initials(user?.name || "U"))}'"
-        >
-      </div>
-    `;
-
-  }
-
-  return `
-    <div class="avatar ${sizeClass}">
-      ${escapeHTML(initials(user?.name || "User"))}
-    </div>
-  `;
-
-}
-
-
-/* =========================================================
-   STATUS BADGE
-========================================================= */
-
-function statusBadge(status){
-
-  const value =
-    String(status || "pending").toLowerCase();
-
-  const label =
-    value.charAt(0).toUpperCase() +
-    value.slice(1);
-
-  return `
-    <span class="badge ${escapeHTML(value)}">
-      ${escapeHTML(label)}
-    </span>
-  `;
-
-}
-
-
-/* =========================================================
-   CUSTOMERS TABLE
-========================================================= */
-
-function renderCustomers(){
-
-  const body =
-    $("customersBody");
-
-  const search =
-    $("customerSearch")?.value
-      .trim()
-      .toLowerCase() || "";
-
-  const filter =
-    $("customerStatusFilter")?.value || "all";
-
-
-  let list = [...users];
-
-
-  if(search){
-
-    list = list.filter(user=>{
-
-      const text = [
-        user.name,
-        user.email,
-        user.accountNumber,
-        user.phone,
-        user.country
-      ]
-      .join(" ")
-      .toLowerCase();
-
-      return text.includes(search);
-
-    });
-
-  }
-
-
-  if(filter !== "all"){
-
-    list =
-      list.filter(
-        user=>
-          String(user.status || "pending")
-            .toLowerCase() === filter
-      );
-
-  }
-
-
-  if(!list.length){
-
-    body.innerHTML = `
+    tbody.innerHTML = `
       <tr>
-        <td colspan="7">
+        <td colspan="4">
           <div class="empty">
-            <strong>No customers found</strong>
-            Try changing your search or filter.
+            No transactions yet.
           </div>
         </td>
       </tr>
@@ -3217,305 +2158,193 @@ function renderCustomers(){
   }
 
 
-  body.innerHTML =
-    list.map(user=>{
+  tbody.innerHTML = rows.map(tx=>{
 
-      return `
-        <tr>
+    const user =
+      customers.find(x=>x.id === tx.userId) || {};
 
-          <td>
-            <div class="user-cell">
+    const date =
+      tx.transactionAt || tx.createdAt;
 
-              ${avatarHTML(user)}
+    return `
+      <tr>
 
-              <div>
-                <div class="user-name">
-                  ${escapeHTML(user.name || "Unnamed")}
-                </div>
-
-                <div class="user-email">
-                  ${escapeHTML(user.email || "—")}
-                </div>
-              </div>
-
+        <td>
+          <div class="customer-mini">
+            ${avatarHTML(user)}
+            <div>
+              <strong>${escapeHTML(user.name || tx.userName || "Customer")}</strong>
+              <span>${escapeHTML(user.accountNumber || "")}</span>
             </div>
-          </td>
+          </div>
+        </td>
+
+        <td>
+          ${money(tx.amount,tx.currency)}
+        </td>
+
+        <td>
+          ${statusBadge(tx.status)}
+        </td>
+
+        <td>
+          ${formatDate(date)}
+        </td>
+
+      </tr>
+    `;
+
+  }).join("");
+}
 
 
-          <td>
-            <div class="mono">
-              ${escapeHTML(user.accountNumber || "—")}
+/* =========================================================
+   CUSTOMERS
+========================================================= */
+
+function renderCustomers(){
+
+  const search =
+    $("customerSearch").value.trim().toLowerCase();
+
+  const filter =
+    $("customerFilter").value;
+
+
+  const rows = customers.filter(user=>{
+
+    const matchesSearch =
+      !search ||
+      String(user.name || "").toLowerCase().includes(search) ||
+      String(user.email || "").toLowerCase().includes(search) ||
+      String(user.accountNumber || "").toLowerCase().includes(search) ||
+      String(user.phone || "").toLowerCase().includes(search);
+
+    const matchesFilter =
+      filter === "all" ||
+      user.status === filter;
+
+    return matchesSearch && matchesFilter;
+  });
+
+
+  const tbody = $("customersTable");
+
+
+  if(!rows.length){
+
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="7">
+          <div class="empty">
+            No customers found.
+          </div>
+        </td>
+      </tr>
+    `;
+
+    return;
+  }
+
+
+  tbody.innerHTML = rows.map(user=>{
+
+    return `
+      <tr>
+
+        <td>
+          <div class="customer-mini">
+            ${avatarHTML(user)}
+            <div>
+              <strong>${escapeHTML(user.name || "Unnamed")}</strong>
+              <span>${escapeHTML(user.email || "")}</span>
             </div>
+          </div>
+        </td>
 
-            <div class="muted" style="font-size:9px;margin-top:3px;">
-              ${escapeHTML(user.accountType || "—")}
-            </div>
-          </td>
+        <td>
+          <strong>${escapeHTML(user.accountNumber || "—")}</strong>
+        </td>
 
+        <td>
+          ${escapeHTML(user.accountType || "—")}
+        </td>
 
-          <td>
-            ${statusBadge(user.status || "pending")}
-          </td>
+        <td>
+          <strong>${money(user.balance)}</strong>
+        </td>
 
+        <td>
+          ${statusBadge(user.status)}
+        </td>
 
-          <td>
-            <span class="amount">
-              ${money(user.balance || 0,"USD")}
-            </span>
-          </td>
+        <td>
+          ${formatDate(user.createdAt)}
+        </td>
 
+        <td>
 
-          <td>
-            ${escapeHTML(
-              user.creditScore ??
-              "—"
-            )}
-          </td>
+          <div class="actions">
 
+            <button
+              class="small-btn"
+              onclick="openCustomer('${user.id}')"
+            >
+              Edit
+            </button>
 
-          <td>
-            ${formatDate(user.createdAt)}
-          </td>
-
-
-          <td>
-
-            <div class="action-row">
-
-              ${
-                user.status === "pending"
-                ?
-                `
+            ${
+              user.status === "pending"
+              ?
+              `
                 <button
-                  class="btn green"
-                  onclick="quickApproveUser('${user.id}')"
+                  class="small-btn green"
+                  onclick="approveCustomer('${user.id}')"
                 >
                   Approve
                 </button>
 
                 <button
-                  class="btn red"
-                  onclick="quickRejectUser('${user.id}')"
+                  class="small-btn red"
+                  onclick="rejectCustomer('${user.id}')"
                 >
                   Reject
                 </button>
-                `
-                :
-                ""
-              }
+              `
+              :
+              ""
+            }
 
-              <button
-                class="btn"
-                onclick="openCustomer('${user.id}')"
-              >
-                Edit
-              </button>
+          </div>
 
-            </div>
+        </td>
 
-          </td>
+      </tr>
+    `;
 
-        </tr>
-      `;
-
-    }).join("");
-
+  }).join("");
 }
 
 
 /* =========================================================
-   DASHBOARD CUSTOMER APPROVALS
+   PENDING
 ========================================================= */
 
-function renderDashboardPending(){
+function renderPending(){
 
-  const body =
-    $("dashboardPendingCustomers");
+  const rows =
+    customers.filter(x=>x.status === "pending");
 
-  const pending =
-    users
-      .filter(u=>u.status === "pending")
-      .slice(0,5);
+  const tbody = $("pendingTable");
 
 
-  if(!pending.length){
+  if(!rows.length){
 
-    body.innerHTML = `
-      <div class="empty">
-        <strong>No pending accounts</strong>
-        All current customer accounts have been reviewed.
-      </div>
-    `;
-
-  }else{
-
-    body.innerHTML =
-      pending.map(user=>{
-
-        return `
-          <div style="
-            display:flex;
-            align-items:center;
-            justify-content:space-between;
-            gap:10px;
-            padding:13px 18px;
-            border-bottom:1px solid #edf1ef;
-          ">
-
-            <div class="user-cell">
-
-              ${avatarHTML(user)}
-
-              <div>
-                <div class="user-name">
-                  ${escapeHTML(user.name || "Unnamed")}
-                </div>
-
-                <div class="user-email">
-                  ${escapeHTML(user.accountNumber || "—")}
-                </div>
-              </div>
-
-            </div>
-
-
-            <div class="action-row">
-
-              <button
-                class="btn green"
-                onclick="quickApproveUser('${user.id}')"
-              >
-                Approve
-              </button>
-
-              <button
-                class="btn red"
-                onclick="quickRejectUser('${user.id}')"
-              >
-                Reject
-              </button>
-
-            </div>
-
-          </div>
-        `;
-
-      }).join("");
-
-  }
-
-
-  const pendingTransactions =
-    transactions
-      .filter(
-        tx=>
-          String(tx.status).toLowerCase() ===
-          "pending"
-      )
-      .slice(0,5);
-
-
-  const transactionBox =
-    $("dashboardPendingTransactions");
-
-
-  if(!pendingTransactions.length){
-
-    transactionBox.innerHTML = `
-      <div class="empty">
-        <strong>No pending transactions</strong>
-        There are no transfers awaiting review.
-      </div>
-    `;
-
-  }else{
-
-    transactionBox.innerHTML =
-      pendingTransactions.map(tx=>{
-
-        const user =
-          getUser(tx.userId);
-
-        return `
-          <div style="
-            display:flex;
-            align-items:center;
-            justify-content:space-between;
-            gap:10px;
-            padding:13px 18px;
-            border-bottom:1px solid #edf1ef;
-          ">
-
-            <div>
-
-              <div style="font-weight:800;font-size:12px;">
-                ${escapeHTML(
-                  tx.recipient ||
-                  tx.recipientName ||
-                  "Transfer"
-                )}
-              </div>
-
-              <div class="muted" style="font-size:10px;margin-top:3px;">
-                ${escapeHTML(user?.name || "Customer")}
-                ·
-                ${money(
-                  tx.amount || 0,
-                  getCurrency(tx)
-                )}
-              </div>
-
-            </div>
-
-            <button
-              class="btn dark"
-              onclick="openTransaction('${tx.id}')"
-            >
-              Review
-            </button>
-
-          </div>
-        `;
-
-      }).join("");
-
-  }
-
-}
-
-
-/* =========================================================
-   RECENT CUSTOMERS
-========================================================= */
-
-function renderRecentCustomers(){
-
-  const body =
-    $("recentCustomersBody");
-
-  const list =
-    [...users]
-      .sort(
-        (a,b)=>{
-          const ad =
-            getTimestamp(a.createdAt)?.getTime() || 0;
-
-          const bd =
-            getTimestamp(b.createdAt)?.getTime() || 0;
-
-          return bd-ad;
-        }
-      )
-      .slice(0,8);
-
-
-  if(!list.length){
-
-    body.innerHTML = `
+    tbody.innerHTML = `
       <tr>
         <td colspan="6">
           <div class="empty">
-            <strong>No customers yet</strong>
+            No pending accounts.
           </div>
         </td>
       </tr>
@@ -3525,147 +2354,193 @@ function renderRecentCustomers(){
   }
 
 
-  body.innerHTML =
-    list.map(user=>{
+  tbody.innerHTML = rows.map(user=>{
 
-      return `
-        <tr>
+    return `
+      <tr>
 
-          <td>
-            <div class="user-cell">
-
-              ${avatarHTML(user)}
-
-              <div>
-                <div class="user-name">
-                  ${escapeHTML(user.name || "Unnamed")}
-                </div>
-
-                <div class="user-email">
-                  ${escapeHTML(user.email || "—")}
-                </div>
-              </div>
-
+        <td>
+          <div class="customer-mini">
+            ${avatarHTML(user)}
+            <div>
+              <strong>${escapeHTML(user.name || "Unnamed")}</strong>
+              <span>${escapeHTML(user.accountNumber || "")}</span>
             </div>
-          </td>
+          </div>
+        </td>
 
-          <td class="mono">
-            ${escapeHTML(user.accountNumber || "—")}
-          </td>
+        <td>
+          ${escapeHTML(user.email || "—")}
+        </td>
 
-          <td>
-            ${statusBadge(user.status || "pending")}
-          </td>
+        <td>
+          ${escapeHTML(user.country || "—")}
+        </td>
 
-          <td class="amount">
-            ${money(user.balance || 0,"USD")}
-          </td>
+        <td>
+          ${escapeHTML(user.accountType || "—")}
+        </td>
 
-          <td>
-            ${formatDate(user.createdAt)}
-          </td>
+        <td>
+          ${formatDate(user.createdAt)}
+        </td>
 
-          <td>
+        <td>
+
+          <div class="actions">
+
             <button
-              class="btn"
+              class="small-btn"
               onclick="openCustomer('${user.id}')"
             >
-              Edit
+              Review
             </button>
-          </td>
 
-        </tr>
-      `;
+            <button
+              class="small-btn green"
+              onclick="approveCustomer('${user.id}')"
+            >
+              Approve
+            </button>
 
-    }).join("");
+            <button
+              class="small-btn red"
+              onclick="rejectCustomer('${user.id}')"
+            >
+              Reject
+            </button>
 
+          </div>
+
+        </td>
+
+      </tr>
+    `;
+
+  }).join("");
 }
 
 
 /* =========================================================
-   OPEN CUSTOMER
+   CUSTOMER APPROVAL
+========================================================= */
+
+async function approveCustomer(uid){
+
+  if(!confirm("Approve this customer account?")){
+    return;
+  }
+
+  try{
+
+    await db.collection("users")
+      .doc(uid)
+      .update({
+        status:"active",
+        updatedAt:firebase.firestore.FieldValue.serverTimestamp()
+      });
+
+    const user =
+      customers.find(x=>x.id === uid);
+
+    if(user){
+      user.status = "active";
+    }
+
+    renderDashboard();
+    renderCustomers();
+    renderPending();
+
+    toast("Customer account approved.");
+
+  }catch(error){
+
+    console.error(error);
+
+    toast(
+      "Unable to approve customer.",
+      true
+    );
+  }
+}
+
+
+async function rejectCustomer(uid){
+
+  if(!confirm("Reject this customer account?")){
+    return;
+  }
+
+  try{
+
+    await db.collection("users")
+      .doc(uid)
+      .update({
+        status:"rejected",
+        updatedAt:firebase.firestore.FieldValue.serverTimestamp()
+      });
+
+    const user =
+      customers.find(x=>x.id === uid);
+
+    if(user){
+      user.status = "rejected";
+    }
+
+    renderDashboard();
+    renderCustomers();
+    renderPending();
+
+    toast("Customer account rejected.");
+
+  }catch(error){
+
+    console.error(error);
+
+    toast(
+      "Unable to reject customer.",
+      true
+    );
+  }
+}
+
+
+/* =========================================================
+   CUSTOMER MODAL
 ========================================================= */
 
 function openCustomer(uid){
 
   const user =
-    getUser(uid);
+    customers.find(x=>x.id === uid);
 
   if(!user){
-
     toast("Customer not found.",true);
     return;
-
   }
 
 
-  $("editCustomerUid").value =
-    uid;
+  $("editUid").value = user.id;
+  $("editUidDisplay").value = user.id;
 
-  $("editCustomerUidDisplay").value =
-    uid;
+  $("editName").value = user.name || "";
+  $("editEmail").value = user.email || "";
+  $("editPhone").value = user.phone || "";
+  $("editCountry").value = user.country || "";
+  $("editAccountType").value = user.accountType || "Savings";
+  $("editStatus").value = user.status || "pending";
+  $("editBalance").value = Number(user.balance || 0);
+  $("editAccountLimit").value = Number(user.accountLimit || 0);
+  $("editCreditScore").value = Number(user.creditScore || 0);
+  $("editCreatedAt").value = toDateInputValue(user.createdAt);
+  $("editAccountNumber").value = user.accountNumber || "";
+  $("editPhotoURL").value = user.photoURL || "";
 
-  $("editAccountNumber").value =
-    user.accountNumber || "";
-
-  $("editStatus").value =
-    normalizeUserStatus(user.status);
-
-  $("editAccountType").value =
-    user.accountType || "Savings";
-
-  $("editName").value =
-    user.name || "";
-
-  $("editEmail").value =
-    user.email || "";
-
-  $("editPhone").value =
-    user.phone || "";
-
-  $("editCountry").value =
-    user.country || "";
-
-  $("editPhotoURL").value =
-    user.photoURL || "";
-
-  $("editBalance").value =
-    Number(user.balance || 0);
-
-  $("editAccountLimit").value =
-    Number(user.accountLimit || 0);
-
-  $("editCreditScore").value =
-    user.creditScore ?? "";
-
-
-
-  const created =
-    getTimestamp(user.createdAt) ||
-    new Date();
-
-
-  const local =
-    dateToLocalInput(created);
-
-
-  $("editCreatedDate").value =
-    local.date;
-
-  $("editCreatedTime").value =
-    local.time;
-
-
-  $("customerPreviewName").textContent =
+  $("editPhotoName").textContent =
     user.name || "Customer";
 
-  $("customerPreviewAccount").textContent =
-    user.accountNumber ||
-    uid;
 
-
-  const preview =
-    $("customerPhotoPreview");
+  const preview = $("editPhotoPreview");
 
   if(user.photoURL){
 
@@ -3673,413 +2548,201 @@ function openCustomer(uid){
       <img
         src="${escapeHTML(user.photoURL)}"
         alt=""
-        style="width:100%;height:100%;object-fit:cover;"
-        onerror="this.parentElement.innerHTML='${escapeHTML(initials(user.name || "U"))}'"
+        onerror="this.style.display='none';this.parentElement.textContent='${escapeHTML(initials(user.name))}'"
       >
     `;
 
   }else{
 
     preview.textContent =
-      initials(user.name || "User");
-
+      initials(user.name);
   }
 
 
-  openModal("customerModal");
-
+  $("customerModal").classList.add("show");
 }
 
 
-function normalizeUserStatus(status){
+async function saveCustomer(){
 
-  const value =
-    String(status || "pending")
-      .toLowerCase();
+  const uid = $("editUid").value;
 
-  if(value === "approved"){
-    return "active";
-  }
-
-  if(value === "declined"){
-    return "rejected";
-  }
-
-  if(
-    ["pending","active","rejected"]
-      .includes(value)
-  ){
-    return value;
-  }
-
-  return "pending";
-}
-
-
-/* =========================================================
-   SAVE CUSTOMER
-========================================================= */
-
-$("saveCustomerBtn").addEventListener(
-  "click",
-  async ()=>{
-
-    const uid =
-      $("editCustomerUid").value;
-
-    if(!uid){
-      toast("Customer ID is missing.",true);
-      return;
-    }
-
-
-    const name =
-      $("editName").value.trim();
-
-    if(!name){
-      toast("Customer name is required.",true);
-      return;
-    }
-
-
-    const balance =
-      Number($("editBalance").value);
-
-    const accountLimit =
-      Number($("editAccountLimit").value);
-
-    const creditScore =
-      Number($("editCreditScore").value);
-
-
-    if(!Number.isFinite(balance) || balance < 0){
-      toast("Enter a valid balance.",true);
-      return;
-    }
-
-
-    if(!Number.isFinite(accountLimit) || accountLimit < 0){
-      toast("Enter a valid account limit.",true);
-      return;
-    }
-
-
-    if(
-      !Number.isFinite(creditScore) ||
-      creditScore < 0
-    ){
-      toast("Enter a valid credit score.",true);
-      return;
-    }
-
-
-    const createdDate =
-      $("editCreatedDate").value;
-
-    const createdTime =
-      $("editCreatedTime").value ||
-      "00:00";
-
-
-    const createdAt =
-      localInputToDate(
-        createdDate,
-        createdTime
-      );
-
-
-    if(!createdAt){
-
-      toast(
-        "Enter a valid account creation date.",
-        true
-      );
-
-      return;
-
-    }
-
-
-    const updates = {
-
-      name,
-
-      email:
-        $("editEmail").value.trim(),
-
-      phone:
-        $("editPhone").value.trim(),
-
-      country:
-        $("editCountry").value.trim(),
-
-      photoURL:
-        $("editPhotoURL").value.trim(),
-
-      accountType:
-        $("editAccountType").value,
-
-      status:
-        $("editStatus").value,
-
-      balance,
-
-      accountLimit,
-
-      creditScore,
-
-      createdAt:
-        firebase.firestore.Timestamp
-          .fromDate(createdAt),
-
-      updatedAt:
-        firebase.firestore.FieldValue.serverTimestamp()
-
-    };
-
-
-    const button =
-      $("saveCustomerBtn");
-
-    button.disabled = true;
-
-    button.textContent =
-      "Saving...";
-
-
-    try{
-
-      await db
-        .collection("users")
-        .doc(uid)
-        .update(updates);
-
-
-      closeModal("customerModal");
-
-      toast("Customer updated successfully.");
-
-    }catch(error){
-
-      console.error(error);
-
-      toast(
-        error.message ||
-        "Unable to update customer.",
-        true
-      );
-
-    }finally{
-
-      button.disabled = false;
-
-      button.textContent =
-        "Save Customer";
-
-    }
-
-  }
-);
-
-
-/* =========================================================
-   QUICK CUSTOMER APPROVAL
-========================================================= */
-
-async function quickApproveUser(uid){
-
-  const user =
-    getUser(uid);
-
-  if(!user){
-    toast("Customer not found.",true);
+  if(!uid){
     return;
   }
 
 
+  const createdAt =
+    timestampFromInput(
+      $("editCreatedAt").value
+    );
+
+
   if(
-    !confirm(
-      `Approve ${user.name || "this customer"}?`
-    )
+    $("editCreatedAt").value &&
+    !createdAt
   ){
+
+    toast(
+      "Invalid creation date.",
+      true
+    );
+
     return;
+  }
+
+
+  const balance =
+    Number($("editBalance").value || 0);
+
+  const accountLimit =
+    Number($("editAccountLimit").value || 0);
+
+  const creditScore =
+    Number($("editCreditScore").value || 0);
+
+
+  if(balance < 0){
+    toast("Balance cannot be negative.",true);
+    return;
+  }
+
+  if(accountLimit < 0){
+    toast("Account limit cannot be negative.",true);
+    return;
+  }
+
+
+  const data = {
+
+    name:$("editName").value.trim(),
+
+    email:$("editEmail").value.trim(),
+
+    phone:$("editPhone").value.trim(),
+
+    country:$("editCountry").value.trim(),
+
+    accountType:$("editAccountType").value,
+
+    status:$("editStatus").value,
+
+    balance:balance,
+
+    accountLimit:accountLimit,
+
+    creditScore:creditScore,
+
+    photoURL:$("editPhotoURL").value.trim(),
+
+    updatedAt:firebase.firestore.FieldValue.serverTimestamp()
+
+  };
+
+
+  if(createdAt){
+    data.createdAt = createdAt;
   }
 
 
   try{
 
-    await db
-      .collection("users")
+    await db.collection("users")
       .doc(uid)
-      .update({
+      .update(data);
 
-        status:"active",
 
-        updatedAt:
-          firebase.firestore.FieldValue
-            .serverTimestamp()
+    const user =
+      customers.find(x=>x.id === uid);
+
+    if(user){
+
+      Object.keys(data).forEach(key=>{
+
+        if(key !== "updatedAt"){
+          user[key] = data[key];
+        }
 
       });
 
+    }
 
-    toast("Customer approved.");
+
+    closeModal("customerModal");
+
+    renderDashboard();
+    renderCustomers();
+    renderPending();
+
+    toast("Customer updated successfully.");
 
   }catch(error){
 
     console.error(error);
 
     toast(
-      error.message ||
-      "Unable to approve customer.",
+      "Unable to update customer.",
       true
     );
-
   }
-
-}
-
-
-async function quickRejectUser(uid){
-
-  const user =
-    getUser(uid);
-
-  if(!user){
-    toast("Customer not found.",true);
-    return;
-  }
-
-
-  if(
-    !confirm(
-      `Reject ${user.name || "this customer"}?`
-    )
-  ){
-    return;
-  }
-
-
-  try{
-
-    await db
-      .collection("users")
-      .doc(uid)
-      .update({
-
-        status:"rejected",
-
-        updatedAt:
-          firebase.firestore.FieldValue
-            .serverTimestamp()
-
-      });
-
-
-    toast("Customer rejected.");
-
-  }catch(error){
-
-    console.error(error);
-
-    toast(
-      error.message ||
-      "Unable to reject customer.",
-      true
-    );
-
-  }
-
 }
 
 
 /* =========================================================
-   TRANSACTIONS TABLE
+   TRANSACTIONS
 ========================================================= */
 
 function renderTransactions(){
 
-  const body =
-    $("transactionsBody");
-
   const search =
-    $("transactionSearch")?.value
-      .trim()
-      .toLowerCase() || "";
+    $("transactionSearch").value.trim().toLowerCase();
 
   const filter =
-    $("transactionStatusFilter")?.value ||
-    "all";
+    $("transactionFilter").value;
 
 
-  let list =
-    [...transactions];
+  const rows = transactions.filter(tx=>{
+
+    const user =
+      customers.find(x=>x.id === tx.userId) || {};
+
+    const text = [
+
+      tx.id,
+      tx.recipient,
+      tx.accountNumber,
+      tx.bankName,
+      tx.note,
+      tx.status,
+      user.name,
+      user.email,
+      user.accountNumber
+
+    ].join(" ").toLowerCase();
 
 
-  if(search){
+    const matchesSearch =
+      !search || text.includes(search);
 
-    list =
-      list.filter(tx=>{
-
-        const user =
-          getUser(tx.userId);
-
-        const text = [
-
-          tx.id,
-
-          tx.userId,
-
-          tx.type,
-
-          tx.transferType,
-
-          tx.recipient,
-
-          tx.recipientName,
-
-          tx.accountNumber,
-
-          tx.bankName,
-
-          tx.note,
-
-          user?.name,
-
-          user?.email,
-
-          user?.accountNumber
-
-        ]
-        .join(" ")
-        .toLowerCase();
-
-        return text.includes(search);
-
-      });
-
-  }
+    const matchesFilter =
+      filter === "all" ||
+      tx.status === filter;
 
 
-  if(filter !== "all"){
-
-    list =
-      list.filter(
-        tx=>
-          String(tx.status || "pending")
-            .toLowerCase() === filter
-      );
-
-  }
+    return matchesSearch && matchesFilter;
+  });
 
 
-  if(!list.length){
+  const tbody = $("transactionsTable");
 
-    body.innerHTML = `
+
+  if(!rows.length){
+
+    tbody.innerHTML = `
       <tr>
-        <td colspan="7">
+        <td colspan="6">
           <div class="empty">
-            <strong>No transactions found</strong>
-            Try changing your search or status filter.
+            No transactions found.
           </div>
         </td>
       </tr>
@@ -4089,155 +2752,85 @@ function renderTransactions(){
   }
 
 
-  body.innerHTML =
-    list.map(tx=>{
+  tbody.innerHTML = rows.map(tx=>{
 
-      const user =
-        getUser(tx.userId);
-
-
-      const recipient =
-        tx.recipient ||
-        tx.recipientName ||
-        "Transfer";
+    const user =
+      customers.find(x=>x.id === tx.userId) || {};
 
 
-      const timestamp =
-        getDisplayTransactionTimestamp(tx);
+    const transactionDate =
+      tx.transactionAt || tx.createdAt;
 
 
-      return `
-        <tr>
+    return `
+      <tr>
 
-          <td>
+        <td>
 
-            <div class="mono">
-              ${escapeHTML(
-                tx.id.substring(0,12)
-              )}...
-            </div>
+          <div class="customer-mini">
 
-            <div class="muted" style="font-size:9px;margin-top:3px;">
-              ${escapeHTML(
-                tx.transferType ||
-                tx.type ||
-                "Transaction"
-              )}
-            </div>
+            ${avatarHTML(user)}
 
-          </td>
-
-
-          <td>
-
-            <div style="font-weight:750;">
-              ${escapeHTML(
-                user?.name ||
-                tx.userName ||
-                "Customer"
-              )}
-            </div>
-
-            <div class="muted" style="font-size:9px;margin-top:3px;">
-              ${escapeHTML(
-                user?.accountNumber ||
-                tx.userAccountNumber ||
-                "—"
-              )}
-            </div>
-
-          </td>
-
-
-          <td>
-
-            <div style="font-weight:750;">
-              ${escapeHTML(recipient)}
-            </div>
-
-            <div class="muted" style="font-size:9px;margin-top:3px;">
-              ${escapeHTML(
-                tx.bankName ||
-                "—"
-              )}
-            </div>
-
-          </td>
-
-
-          <td class="amount">
-            ${money(
-              tx.amount || 0,
-              getCurrency(tx)
-            )}
-          </td>
-
-
-          <td>
-            ${statusBadge(tx.status || "pending")}
-          </td>
-
-
-          <td>
             <div>
-              ${formatDateTime(timestamp)}
+              <strong>
+                ${escapeHTML(user.name || tx.userName || "Customer")}
+              </strong>
+
+              <span>
+                ${escapeHTML(user.accountNumber || "")}
+              </span>
             </div>
 
-            ${
-              tx.customCreatedAt
-              ?
-              `
-              <div style="
-                color:#0d6145;
-                font-size:9px;
-                margin-top:3px;
-              ">
-                Admin-adjusted
-              </div>
-              `
-              :
-              ""
-            }
+          </div>
 
-          </td>
+        </td>
 
 
-          <td>
+        <td>
 
-            <button
-              class="btn dark"
-              onclick="openTransaction('${tx.id}')"
-            >
-              Manage
-            </button>
+          <strong>
+            ${escapeHTML(tx.recipient || "—")}
+          </strong>
 
-          </td>
+          <span style="display:block;color:#71817b;font-size:11px;margin-top:3px;">
+            ${escapeHTML(tx.accountNumber || "")}
+          </span>
 
-        </tr>
-      `;
-
-    }).join("");
-
-}
+        </td>
 
 
-/* =========================================================
-   TRANSACTION DISPLAY TIMESTAMP
-========================================================= */
+        <td>
+          <strong>
+            ${money(tx.amount,tx.currency)}
+          </strong>
+        </td>
 
-function getDisplayTransactionTimestamp(tx){
 
-  /*
-    Priority:
-    1. customCreatedAt
-    2. createdAt
-  */
+        <td>
+          ${statusBadge(tx.status)}
+        </td>
 
-  return (
-    tx.customCreatedAt ||
-    tx.createdAt
-  );
 
+        <td>
+          ${formatDate(transactionDate)}
+        </td>
+
+
+        <td>
+
+          <button
+            class="small-btn"
+            onclick="openTransaction('${tx.id}')"
+          >
+            View
+          </button>
+
+        </td>
+
+      </tr>
+    `;
+
+  }).join("");
 }
 
 
@@ -4248,509 +2841,7 @@ function getDisplayTransactionTimestamp(tx){
 function openTransaction(id){
 
   const tx =
-    transactions.find(
-      item=>item.id === id
-    );
-
-  if(!tx){
-
-    toast(
-      "Transaction not found.",
-      true
-    );
-
-    return;
-  }
-
-
-  selectedTransaction = tx;
-
-
-  $("editTransactionId").value =
-    id;
-
-  $("txDetailId").textContent =
-    id;
-
-  const user =
-    getUser(tx.userId);
-
-
-  $("txDetailCustomer").textContent =
-    user?.name ||
-    tx.userName ||
-    tx.userId ||
-    "Customer";
-
-
-  $("txDetailType").textContent =
-    tx.transferType ||
-    tx.type ||
-    "Transaction";
-
-
-  $("txDetailStatus").innerHTML =
-    statusBadge(tx.status || "pending");
-
-
-  $("editTxRecipient").value =
-    tx.recipient ||
-    tx.recipientName ||
-    "";
-
-  $("editTxAccountNumber").value =
-    tx.accountNumber ||
-    tx.recipientAccountNumber ||
-    "";
-
-  $("editTxBankName").value =
-    tx.bankName ||
-    "";
-
-  $("editTxCurrency").value =
-    tx.currency ||
-    "USD";
-
-  $("editTxAmount").value =
-    Number(tx.amount || 0);
-
-  $("editTxNote").value =
-    tx.note ||
-    "";
-
-  $("editTxStatus").value =
-    normalizeTransactionStatus(
-      tx.status
-    );
-
-
-  /* ---------------------------------------
-     DATE + TIME
-  --------------------------------------- */
-
-  const timestamp =
-    getTimestamp(
-      tx.customCreatedAt ||
-      tx.createdAt
-    ) || new Date();
-
-
-  const local =
-    dateToLocalInput(timestamp);
-
-
-  $("editTxDate").value =
-    local.date;
-
-  $("editTxTime").value =
-    local.time;
-
-
-  updateTransactionDatePreview();
-
-
-  /* ---------------------------------------
-     ACCOUNTING DETAILS
-  --------------------------------------- */
-
-  $("txBalanceDeducted").textContent =
-    tx.balanceDeducted === true
-      ? "Yes"
-      : "No";
-
-
-  $("txRefundAmount").textContent =
-    money(
-      tx.refundAmount || 0,
-      getCurrency(tx)
-    );
-
-
-  $("txOriginalTimestamp").textContent =
-    formatDateTime(
-      tx.originalCreatedAt ||
-      tx.createdAt
-    );
-
-
-  $("txUpdatedTimestamp").textContent =
-    formatDateTime(
-      tx.updatedAt
-    );
-
-
-  renderTransactionActions(tx);
-
-
-  openModal("transactionModal");
-
-}
-
-
-function normalizeTransactionStatus(status){
-
-  const value =
-    String(status || "pending")
-      .toLowerCase();
-
-  if(
-    [
-      "pending",
-      "approved",
-      "completed",
-      "declined",
-      "refunded"
-    ].includes(value)
-  ){
-    return value;
-  }
-
-  return "pending";
-}
-
-
-/* =========================================================
-   TRANSACTION ACTIONS
-========================================================= */
-
-function renderTransactionActions(tx){
-
-  const area =
-    $("transactionActionArea");
-
-
-  let html = `
-    <div class="section-divider">
-      Administrator Actions
-    </div>
-
-    <div class="action-row">
-  `;
-
-
-  const status =
-    String(tx.status || "pending")
-      .toLowerCase();
-
-
-  if(status === "pending"){
-
-    html += `
-      <button
-        class="btn green"
-        onclick="approveTransaction('${tx.id}')"
-      >
-        Approve Transfer
-      </button>
-
-      <button
-        class="btn red"
-        onclick="declineTransaction('${tx.id}')"
-      >
-        Decline Transfer
-      </button>
-    `;
-
-  }
-
-
-  if(status === "approved"){
-
-    html += `
-      <button
-        class="btn green"
-        onclick="completeTransaction('${tx.id}')"
-      >
-        Mark Completed
-      </button>
-
-      <button
-        class="btn red"
-        onclick="declineTransaction('${tx.id}')"
-      >
-        Decline / Refund
-      </button>
-    `;
-
-  }
-
-
-  if(status === "completed"){
-
-    html += `
-      <button
-        class="btn purple"
-        onclick="refundTransaction('${tx.id}')"
-      >
-        Refund Transaction
-      </button>
-    `;
-
-  }
-
-
-  if(status === "refunded"){
-
-    html += `
-      <span class="badge refunded">
-        Already Refunded
-      </span>
-    `;
-
-  }
-
-
-  if(status === "declined"){
-
-    html += `
-      <span class="badge declined">
-        Transaction Declined
-      </span>
-    `;
-
-  }
-
-
-  html += `
-    </div>
-  `;
-
-
-  area.innerHTML = html;
-
-}
-
-
-/* =========================================================
-   SAVE TRANSACTION
-========================================================= */
-
-$("saveTransactionBtn").addEventListener(
-  "click",
-  async ()=>{
-
-    const id =
-      $("editTransactionId").value;
-
-    if(!id){
-
-      toast(
-        "Transaction ID is missing.",
-        true
-      );
-
-      return;
-    }
-
-
-    const tx =
-      transactions.find(
-        item=>item.id === id
-      );
-
-
-    if(!tx){
-
-      toast(
-        "Transaction could not be found.",
-        true
-      );
-
-      return;
-    }
-
-
-    const amount =
-      Number($("editTxAmount").value);
-
-
-    if(!Number.isFinite(amount) || amount < 0){
-
-      toast(
-        "Enter a valid transaction amount.",
-        true
-      );
-
-      return;
-
-    }
-
-
-    const dateValue =
-      $("editTxDate").value;
-
-    const timeValue =
-      $("editTxTime").value ||
-      "00:00";
-
-
-    const selectedDate =
-      localInputToDate(
-        dateValue,
-        timeValue
-      );
-
-
-    if(!selectedDate){
-
-      toast(
-        "Enter a valid transaction date and time.",
-        true
-      );
-
-      return;
-    }
-
-
-    const updates = {
-
-      recipient:
-        $("editTxRecipient")
-          .value.trim(),
-
-      recipientName:
-        $("editTxRecipient")
-          .value.trim(),
-
-      accountNumber:
-        $("editTxAccountNumber")
-          .value.trim(),
-
-      bankName:
-        $("editTxBankName")
-          .value.trim(),
-
-      currency:
-        $("editTxCurrency")
-          .value.trim()
-          .toUpperCase() || "USD",
-
-      amount,
-
-      note:
-        $("editTxNote")
-          .value.trim(),
-
-      status:
-        normalizeTransactionStatus(
-          $("editTxStatus").value
-        ),
-
-      /*
-        The custom timestamp is what the
-        customer-facing transaction history
-        can use for display.
-      */
-      customCreatedAt:
-        firebase.firestore.Timestamp
-          .fromDate(selectedDate),
-
-      /*
-        Preserve the first/original timestamp.
-        This is only written if one doesn't
-        already exist.
-      */
-      updatedAt:
-        firebase.firestore.FieldValue
-          .serverTimestamp(),
-
-      lastEditedBy:
-        currentAdmin?.uid || null
-
-    };
-
-
-    if(!tx.originalCreatedAt){
-
-      updates.originalCreatedAt =
-        tx.createdAt ||
-        firebase.firestore.Timestamp
-          .fromDate(new Date());
-
-    }
-
-
-    /*
-      Mark that an administrator manually
-      selected the transaction timestamp.
-    */
-
-    updates.customCreatedAtEdited = true;
-
-
-    const button =
-      $("saveTransactionBtn");
-
-    button.disabled = true;
-
-    button.textContent =
-      "Saving...";
-
-
-    try{
-
-      await db
-        .collection("transactions")
-        .doc(id)
-        .update(updates);
-
-
-      toast(
-        "Transaction updated successfully."
-      );
-
-
-      /*
-        Keep the modal open so the admin
-        can see the saved timestamp.
-      */
-
-      setTimeout(()=>{
-
-        const fresh =
-          transactions.find(
-            item=>item.id === id
-          );
-
-        if(fresh){
-          openTransaction(id);
-        }
-
-      },300);
-
-    }catch(error){
-
-      console.error(error);
-
-      toast(
-        error.message ||
-        "Unable to update transaction.",
-        true
-      );
-
-    }finally{
-
-      button.disabled = false;
-
-      button.textContent =
-        "Save Transaction";
-
-    }
-
-  }
-);
-
-
-/* =========================================================
-   APPROVE TRANSACTION
-========================================================= */
-
-async function approveTransaction(id){
-
-  const tx =
-    transactions.find(
-      item=>item.id === id
-    );
+    transactions.find(x=>x.id === id);
 
   if(!tx){
     toast("Transaction not found.",true);
@@ -4758,376 +2849,293 @@ async function approveTransaction(id){
   }
 
 
-  if(
-    !confirm(
-      "Approve this transfer?"
-    )
-  ){
+  currentTransaction = tx;
+
+
+  const user =
+    customers.find(x=>x.id === tx.userId) || {};
+
+
+  $("txId").value = tx.id;
+
+
+  $("txAmount").textContent =
+    money(tx.amount,tx.currency);
+
+
+  $("txStatusText").textContent =
+    String(tx.status || "pending").toUpperCase();
+
+
+  $("txCustomer").value =
+    user.name || tx.userName || "Customer";
+
+
+  $("txCustomerAccount").value =
+    user.accountNumber || "";
+
+
+  $("txRecipient").value =
+    tx.recipient || "";
+
+
+  $("txRecipientAccount").value =
+    tx.accountNumber || "";
+
+
+  $("txBank").value =
+    tx.bankName || "";
+
+
+  $("txCurrency").value =
+    tx.currency || "USD";
+
+
+  $("txNote").value =
+    tx.note || "";
+
+
+  $("txOriginalDate").value =
+    formatDate(tx.createdAt);
+
+
+  $("txDateTime").value =
+    toDateInputValue(
+      tx.transactionAt || tx.createdAt
+    );
+
+
+  const deducted =
+    tx.balanceDeducted === true;
+
+
+  $("txBalanceInfo").innerHTML = `
+
+    <div class="info-grid">
+
+      <div class="info-box">
+        <span>Balance Deducted</span>
+        <strong>
+          ${deducted ? "Yes" : "No"}
+        </strong>
+      </div>
+
+      <div class="info-box">
+        <span>Transaction ID</span>
+        <strong>${escapeHTML(tx.id)}</strong>
+      </div>
+
+      <div class="info-box">
+        <span>Refunded Amount</span>
+        <strong>
+          ${tx.refundAmount != null
+            ? money(tx.refundAmount,tx.currency)
+            : "—"}
+        </strong>
+      </div>
+
+      <div class="info-box">
+        <span>Updated</span>
+        <strong>
+          ${formatDate(tx.updatedAt)}
+        </strong>
+      </div>
+
+    </div>
+  `;
+
+
+  updateTransactionButtons();
+
+  $("transactionModal").classList.add("show");
+}
+
+
+function updateTransactionButtons(){
+
+  const tx = currentTransaction;
+
+  if(!tx){
     return;
   }
 
 
-  try{
-
-    await db.runTransaction(
-      async transaction=>{
-
-        const txRef =
-          db.collection("transactions")
-            .doc(id);
-
-        const txSnap =
-          await transaction.get(txRef);
+  const status =
+    String(tx.status || "pending").toLowerCase();
 
 
-        if(!txSnap.exists){
-          throw new Error(
-            "Transaction no longer exists."
-          );
-        }
+  $("approveTxBtn").style.display =
+    status === "pending" ? "inline-block" : "none";
 
 
-        const currentTx =
-          txSnap.data();
+  $("completeTxBtn").style.display =
+    status === "approved" ? "inline-block" : "none";
 
 
-        if(
-          currentTx.status !== "pending" &&
-          currentTx.status !== "approved"
-        ){
-
-          throw new Error(
-            "This transaction can no longer be approved."
-          );
-
-        }
+  $("declineTxBtn").style.display =
+    ["pending","approved"].includes(status)
+    ? "inline-block"
+    : "none";
 
 
-        let userRef = null;
-        let userSnap = null;
-
-
-        if(currentTx.userId){
-
-          userRef =
-            db.collection("users")
-              .doc(currentTx.userId);
-
-          userSnap =
-            await transaction.get(userRef);
-
-          if(!userSnap.exists){
-
-            throw new Error(
-              "Customer account was not found."
-            );
-
-          }
-
-        }
-
-
-        const amount =
-          Number(currentTx.amount || 0);
-
-
-        /*
-          If the customer-side code already
-          deducted the balance, do NOT deduct
-          it again.
-        */
-
-        if(
-          currentTx.balanceDeducted !== true &&
-          amount > 0 &&
-          userSnap
-        ){
-
-          const userData =
-            userSnap.data();
-
-          const balance =
-            Number(userData.balance || 0);
-
-
-          if(balance < amount){
-
-            throw new Error(
-              "Customer balance is insufficient."
-            );
-
-          }
-
-
-          transaction.update(
-            userRef,
-            {
-
-              balance:
-                balance - amount,
-
-              updatedAt:
-                firebase.firestore
-                  .FieldValue
-                  .serverTimestamp()
-
-            }
-          );
-
-
-          transaction.update(
-            txRef,
-            {
-
-              balanceDeducted:true,
-
-              balanceDeductedAt:
-                firebase.firestore
-                  .FieldValue
-                  .serverTimestamp()
-
-            }
-          );
-
-        }
-
-
-        transaction.update(
-          txRef,
-          {
-
-            status:"approved",
-
-            approvedAt:
-              firebase.firestore
-                .FieldValue
-                .serverTimestamp(),
-
-            updatedAt:
-              firebase.firestore
-                .FieldValue
-                .serverTimestamp(),
-
-            approvedBy:
-              currentAdmin?.uid || null
-
-          }
-        );
-
-      }
-    );
-
-
-    toast(
-      "Transfer approved."
-    );
-
-
-    openTransaction(id);
-
-  }catch(error){
-
-    console.error(error);
-
-    toast(
-      error.message ||
-      "Unable to approve transaction.",
-      true
-    );
-
-  }
+  $("refundTxBtn").style.display =
+    ["approved","completed"].includes(status)
+    && tx.balanceDeducted === true
+    ? "inline-block"
+    : "none";
 
 }
 
 
 /* =========================================================
-   COMPLETE TRANSACTION
+   TRANSACTION DATE / TIME / YEAR
 ========================================================= */
 
-async function completeTransaction(id){
+async function saveTransactionDate(){
 
-  if(
-    !confirm(
-      "Mark this transaction as completed?"
-    )
-  ){
+  if(!currentTransaction){
+    return;
+  }
+
+
+  const value =
+    $("txDateTime").value;
+
+
+  const timestamp =
+    timestampFromInput(value);
+
+
+  if(!timestamp){
+
+    toast(
+      "Choose a valid transaction date and time.",
+      true
+    );
+
     return;
   }
 
 
   try{
 
-    await db
-      .collection("transactions")
-      .doc(id)
+    await db.collection("transactions")
+      .doc(currentTransaction.id)
       .update({
 
-        status:"completed",
-
-        completedAt:
-          firebase.firestore
-            .FieldValue
-            .serverTimestamp(),
+        transactionAt:timestamp,
 
         updatedAt:
-          firebase.firestore
-            .FieldValue
-            .serverTimestamp(),
-
-        completedBy:
-          currentAdmin?.uid || null
+          firebase.firestore.FieldValue.serverTimestamp()
 
       });
 
 
+    currentTransaction.transactionAt =
+      timestamp;
+
+
+    const local =
+      transactions.find(x=>x.id === currentTransaction.id);
+
+    if(local){
+      local.transactionAt = timestamp;
+    }
+
+
+    renderDashboard();
+    renderTransactions();
+
     toast(
-      "Transaction marked completed."
+      "Transaction date and time updated."
     );
-
-
-    openTransaction(id);
 
   }catch(error){
 
     console.error(error);
 
     toast(
-      error.message ||
-      "Unable to complete transaction.",
+      "Unable to update transaction date.",
       true
     );
-
   }
-
 }
 
 
 /* =========================================================
-   DECLINE TRANSACTION
+   TRANSACTION CORE OPERATIONS
 ========================================================= */
 
-async function declineTransaction(id){
+async function approveCurrentTransaction(){
 
-  const tx =
-    transactions.find(
-      item=>item.id === id
-    );
-
-  if(!tx){
-    toast("Transaction not found.",true);
+  if(!currentTransaction){
     return;
   }
 
+  await approveTransaction(
+    currentTransaction.id
+  );
+}
 
-  if(
-    !confirm(
-      "Decline this transaction? If funds were already deducted, they will be restored once."
-    )
-  ){
+
+async function completeCurrentTransaction(){
+
+  if(!currentTransaction){
+    return;
+  }
+
+  await completeTransaction(
+    currentTransaction.id
+  );
+}
+
+
+async function declineCurrentTransaction(){
+
+  if(!currentTransaction){
+    return;
+  }
+
+  await declineTransaction(
+    currentTransaction.id
+  );
+}
+
+
+async function refundCurrentTransaction(){
+
+  if(!currentTransaction){
+    return;
+  }
+
+  await refundTransaction(
+    currentTransaction.id
+  );
+}
+
+
+/* APPROVE */
+
+async function approveTransaction(txId){
+
+  if(!confirm("Approve this transaction?")){
     return;
   }
 
 
   try{
 
-    await refundOrDecline(
-      id,
-      "declined"
-    );
-
-    toast(
-      "Transaction declined."
-    );
-
-
-    openTransaction(id);
-
-  }catch(error){
-
-    console.error(error);
-
-    toast(
-      error.message ||
-      "Unable to decline transaction.",
-      true
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   REFUND TRANSACTION
-========================================================= */
-
-async function refundTransaction(id){
-
-  if(
-    !confirm(
-      "Refund this transaction? The refund will only restore the balance if this transaction actually deducted funds."
-    )
-  ){
-    return;
-  }
-
-
-  try{
-
-    await refundOrDecline(
-      id,
-      "refunded"
-    );
-
-
-    toast(
-      "Transaction refunded."
-    );
-
-
-    openTransaction(id);
-
-  }catch(error){
-
-    console.error(error);
-
-    toast(
-      error.message ||
-      "Unable to refund transaction.",
-      true
-    );
-
-  }
-
-}
-
-
-/* =========================================================
-   ATOMIC REFUND / DECLINE
-========================================================= */
-
-async function refundOrDecline(
-  id,
-  targetStatus
-){
-
-  await db.runTransaction(
-    async transaction=>{
+    await db.runTransaction(async transaction=>{
 
       const txRef =
-        db.collection("transactions")
-          .doc(id);
+        db.collection("transactions").doc(txId);
 
       const txSnap =
         await transaction.get(txRef);
 
 
       if(!txSnap.exists){
-
-        throw new Error(
-          "Transaction no longer exists."
-        );
-
+        throw new Error("Transaction not found.");
       }
 
 
@@ -5135,53 +3143,238 @@ async function refundOrDecline(
         txSnap.data();
 
 
-      if(tx.status === "refunded"){
-
+      if(tx.status !== "pending"){
         throw new Error(
-          "This transaction has already been refunded."
+          "This transaction is no longer pending."
+        );
+      }
+
+
+      const userRef =
+        db.collection("users").doc(tx.userId);
+
+      const userSnap =
+        await transaction.get(userRef);
+
+
+      if(!userSnap.exists){
+        throw new Error("Customer account not found.");
+      }
+
+
+      const user =
+        userSnap.data();
+
+
+      let balance =
+        Number(user.balance || 0);
+
+
+      const amount =
+        Number(tx.amount || 0);
+
+
+      if(amount <= 0){
+        throw new Error("Invalid transaction amount.");
+      }
+
+
+      const alreadyDeducted =
+        tx.balanceDeducted === true;
+
+
+      if(!alreadyDeducted){
+
+        if(balance < amount){
+
+          throw new Error(
+            "Customer does not have enough available balance."
+          );
+
+        }
+
+        balance -= amount;
+
+        transaction.update(
+          userRef,
+          {
+            balance:balance,
+            updatedAt:
+              firebase.firestore.FieldValue.serverTimestamp()
+          }
         );
 
       }
 
 
-      let refundAmount = 0;
+      transaction.update(
+        txRef,
+        {
+
+          status:"approved",
+
+          balanceDeducted:true,
+
+          balanceDeductedAt:
+            alreadyDeducted
+              ? (tx.balanceDeductedAt || firebase.firestore.FieldValue.serverTimestamp())
+              : firebase.firestore.FieldValue.serverTimestamp(),
+
+          updatedAt:
+            firebase.firestore.FieldValue.serverTimestamp()
+
+        }
+      );
+
+    });
+
+
+    await loadAllData();
+
+    closeModal("transactionModal");
+
+    toast("Transaction approved.");
+
+  }catch(error){
+
+    console.error(error);
+
+    toast(
+      error.message || "Unable to approve transaction.",
+      true
+    );
+  }
+}
+
+
+/* COMPLETE */
+
+async function completeTransaction(txId){
+
+  if(!confirm("Mark this transaction as completed?")){
+    return;
+  }
+
+
+  try{
+
+    const ref =
+      db.collection("transactions").doc(txId);
+
+
+    const snap = await ref.get();
+
+
+    if(!snap.exists){
+      throw new Error("Transaction not found.");
+    }
+
+
+    const tx = snap.data();
+
+
+    if(tx.status !== "approved"){
+      throw new Error(
+        "Only approved transactions can be completed."
+      );
+    }
+
+
+    await ref.update({
+
+      status:"completed",
+
+      completedAt:
+        firebase.firestore.FieldValue.serverTimestamp(),
+
+      updatedAt:
+        firebase.firestore.FieldValue.serverTimestamp()
+
+    });
+
+
+    await loadAllData();
+
+    closeModal("transactionModal");
+
+    toast("Transaction completed.");
+
+  }catch(error){
+
+    console.error(error);
+
+    toast(
+      error.message || "Unable to complete transaction.",
+      true
+    );
+  }
+}
+
+
+/* DECLINE */
+
+async function declineTransaction(txId){
+
+  if(!confirm("Decline this transaction?")){
+    return;
+  }
+
+
+  try{
+
+    await db.runTransaction(async transaction=>{
+
+      const txRef =
+        db.collection("transactions").doc(txId);
+
+      const txSnap =
+        await transaction.get(txRef);
+
+
+      if(!txSnap.exists){
+        throw new Error("Transaction not found.");
+      }
+
+
+      const tx =
+        txSnap.data();
 
 
       if(
-        tx.balanceDeducted === true &&
-        tx.userId
+        !["pending","approved"].includes(
+          tx.status
+        )
       ){
 
-        const userRef =
-          db.collection("users")
-            .doc(tx.userId);
-
-        const userSnap =
-          await transaction.get(userRef);
+        throw new Error(
+          "This transaction cannot be declined."
+        );
+      }
 
 
-        if(!userSnap.exists){
+      const userRef =
+        db.collection("users").doc(tx.userId);
 
-          throw new Error(
-            "Customer account was not found."
-          );
+      const userSnap =
+        await transaction.get(userRef);
 
-        }
 
+      if(!userSnap.exists){
+        throw new Error("Customer account not found.");
+      }
+
+
+      const amount =
+        Number(tx.amount || 0);
+
+
+      if(tx.balanceDeducted === true){
 
         const user =
           userSnap.data();
 
-
         const balance =
           Number(user.balance || 0);
-
-        const amount =
-          Number(tx.amount || 0);
-
-
-        refundAmount =
-          amount;
 
 
         transaction.update(
@@ -5192,9 +3385,7 @@ async function refundOrDecline(
               balance + amount,
 
             updatedAt:
-              firebase.firestore
-                .FieldValue
-                .serverTimestamp()
+              firebase.firestore.FieldValue.serverTimestamp()
 
           }
         );
@@ -5206,81 +3397,197 @@ async function refundOrDecline(
         txRef,
         {
 
-          status:targetStatus,
+          status:"declined",
 
           balanceDeducted:false,
 
-          refundAmount,
+          refundAmount:
+            tx.balanceDeducted === true
+              ? amount
+              : 0,
 
           refundedAt:
-            refundAmount > 0
-              ?
-              firebase.firestore
-                .FieldValue
-                .serverTimestamp()
-              :
-              null,
+            tx.balanceDeducted === true
+              ? firebase.firestore.FieldValue.serverTimestamp()
+              : null,
 
           refundReason:
-            targetStatus === "refunded"
-              ? "Administrator refund"
-              : "Transaction declined",
+            "Transaction declined by administrator.",
 
           updatedAt:
-            firebase.firestore
-              .FieldValue
-              .serverTimestamp(),
-
-          handledBy:
-            currentAdmin?.uid || null
+            firebase.firestore.FieldValue.serverTimestamp()
 
         }
       );
 
-    }
-  );
+    });
 
+
+    await loadAllData();
+
+    closeModal("transactionModal");
+
+    toast("Transaction declined.");
+
+  }catch(error){
+
+    console.error(error);
+
+    toast(
+      error.message || "Unable to decline transaction.",
+      true
+    );
+  }
+}
+
+
+/* REFUND */
+
+async function refundTransaction(txId){
+
+  if(!confirm("Refund this transaction to the customer's balance?")){
+    return;
+  }
+
+
+  try{
+
+    await db.runTransaction(async transaction=>{
+
+      const txRef =
+        db.collection("transactions").doc(txId);
+
+      const txSnap =
+        await transaction.get(txRef);
+
+
+      if(!txSnap.exists){
+        throw new Error("Transaction not found.");
+      }
+
+
+      const tx =
+        txSnap.data();
+
+
+      if(
+        !["approved","completed"].includes(
+          tx.status
+        )
+      ){
+
+        throw new Error(
+          "This transaction cannot be refunded."
+        );
+      }
+
+
+      if(tx.balanceDeducted !== true){
+
+        throw new Error(
+          "This transaction has not deducted the customer's balance."
+        );
+      }
+
+
+      const userRef =
+        db.collection("users").doc(tx.userId);
+
+      const userSnap =
+        await transaction.get(userRef);
+
+
+      if(!userSnap.exists){
+        throw new Error("Customer account not found.");
+      }
+
+
+      const user =
+        userSnap.data();
+
+
+      const amount =
+        Number(tx.amount || 0);
+
+
+      const balance =
+        Number(user.balance || 0);
+
+
+      transaction.update(
+        userRef,
+        {
+
+          balance:
+            balance + amount,
+
+          updatedAt:
+            firebase.firestore.FieldValue.serverTimestamp()
+
+        }
+      );
+
+
+      transaction.update(
+        txRef,
+        {
+
+          status:"refunded",
+
+          balanceDeducted:false,
+
+          refundAmount:amount,
+
+          refundedAt:
+            firebase.firestore.FieldValue.serverTimestamp(),
+
+          refundReason:
+            "Refunded by administrator.",
+
+          updatedAt:
+            firebase.firestore.FieldValue.serverTimestamp()
+
+        }
+      );
+
+    });
+
+
+    await loadAllData();
+
+    closeModal("transactionModal");
+
+    toast("Transaction refunded.");
+
+  }catch(error){
+
+    console.error(error);
+
+    toast(
+      error.message || "Unable to refund transaction.",
+      true
+    );
+  }
 }
 
 
 /* =========================================================
-   CANCELLATIONS TABLE
+   CANCELLATIONS
 ========================================================= */
 
 function renderCancellations(){
 
-  const body =
-    $("cancellationsBody");
-
-  const filter =
-    $("cancellationFilter")?.value ||
-    "all";
+  const tbody =
+    $("cancellationsTable");
 
 
-  let list =
-    [...cancellationRequests];
+  if(!cancellations.length){
 
-
-  if(filter !== "all"){
-
-    list =
-      list.filter(
-        request=>
-          String(request.status || "pending")
-            .toLowerCase() === filter
-      );
-
-  }
-
-
-  if(!list.length){
-
-    body.innerHTML = `
+    tbody.innerHTML = `
       <tr>
         <td colspan="7">
           <div class="empty">
-            <strong>No cancellation requests</strong>
-            There are no requests matching the selected filter.
+            No cancellation requests.
           </div>
         </td>
       </tr>
@@ -5290,891 +3597,381 @@ function renderCancellations(){
   }
 
 
-  body.innerHTML =
-    list.map(request=>{
+  tbody.innerHTML = cancellations.map(request=>{
 
-      const user =
-        getUser(request.userId);
-
-
-      const tx =
-        transactions.find(
-          item=>
-            item.id === request.transactionId
-        );
+    const user =
+      customers.find(x=>x.id === request.userId) || {};
 
 
-      return `
-        <tr>
+    const tx =
+      transactions.find(
+        x=>x.id === request.transactionId
+      ) || {};
 
-          <td>
 
-            <div class="user-cell">
+    return `
+      <tr>
 
-              ${avatarHTML(user)}
+        <td>
 
-              <div>
-                <div class="user-name">
-                  ${escapeHTML(
-                    user?.name ||
-                    request.userName ||
-                    "Customer"
-                  )}
-                </div>
+          <div class="customer-mini">
+            ${avatarHTML(user)}
 
-                <div class="user-email">
-                  ${escapeHTML(
-                    user?.accountNumber ||
-                    "—"
-                  )}
-                </div>
+            <div>
+              <strong>
+                ${escapeHTML(user.name || request.userName || "Customer")}
+              </strong>
+
+              <span>
+                ${escapeHTML(user.accountNumber || "")}
+              </span>
+            </div>
+          </div>
+
+        </td>
+
+
+        <td>
+          <button
+            class="small-btn"
+            onclick="openTransaction('${escapeHTML(request.transactionId || "")}')"
+          >
+            ${escapeHTML(request.transactionId || "View")}
+          </button>
+        </td>
+
+
+        <td>
+          ${tx.amount != null
+            ? money(tx.amount,tx.currency)
+            : "—"}
+        </td>
+
+
+        <td>
+          ${escapeHTML(request.reason || "No reason provided")}
+        </td>
+
+
+        <td>
+          ${formatDate(request.createdAt)}
+        </td>
+
+
+        <td>
+          ${statusBadge(request.status)}
+        </td>
+
+
+        <td>
+
+          ${
+            request.status === "pending"
+            ?
+            `
+              <div class="actions">
+
+                <button
+                  class="small-btn green"
+                  onclick="approveCancellation('${request.id}')"
+                >
+                  Approve
+                </button>
+
+                <button
+                  class="small-btn red"
+                  onclick="declineCancellation('${request.id}')"
+                >
+                  Decline
+                </button>
+
               </div>
+            `
+            :
+            "—"
+          }
 
-            </div>
+        </td>
 
-          </td>
+      </tr>
+    `;
 
-
-          <td>
-
-            <div class="mono">
-              ${escapeHTML(
-                request.transactionId ||
-                "—"
-              )}
-            </div>
-
-            <div class="muted" style="font-size:9px;margin-top:3px;">
-              ${escapeHTML(
-                tx?.recipient ||
-                tx?.recipientName ||
-                "Transfer"
-              )}
-            </div>
-
-          </td>
-
-
-          <td class="amount">
-
-            ${
-              tx
-              ?
-              money(
-                tx.amount || 0,
-                getCurrency(tx)
-              )
-              :
-              "—"
-            }
-
-          </td>
-
-
-          <td>
-
-            <div style="
-              max-width:220px;
-              white-space:nowrap;
-              overflow:hidden;
-              text-overflow:ellipsis;
-            ">
-              ${escapeHTML(
-                request.reason ||
-                "No reason provided"
-              )}
-            </div>
-
-          </td>
-
-
-          <td>
-            ${formatDateTime(
-              request.createdAt
-            )}
-          </td>
-
-
-          <td>
-            ${statusBadge(
-              request.status || "pending"
-            )}
-          </td>
-
-
-          <td>
-
-            <button
-              class="btn dark"
-              onclick="openCancellation('${request.id}')"
-            >
-              Review
-            </button>
-
-          </td>
-
-        </tr>
-      `;
-
-    }).join("");
-
+  }).join("");
 }
 
 
-/* =========================================================
-   OPEN CANCELLATION
-========================================================= */
+/* APPROVE CANCELLATION */
 
-function openCancellation(id){
+async function approveCancellation(requestId){
 
-  const request =
-    cancellationRequests.find(
-      item=>item.id === id
-    );
-
-  if(!request){
-
-    toast(
-      "Cancellation request not found.",
-      true
-    );
-
+  if(!confirm("Approve this cancellation and refund the transaction if necessary?")){
     return;
   }
 
 
-  selectedCancellation =
-    request;
+  try{
+
+    await db.runTransaction(async transaction=>{
+
+      const requestRef =
+        db.collection("cancellationRequests")
+          .doc(requestId);
 
 
-  const user =
-    getUser(request.userId);
+      const requestSnap =
+        await transaction.get(requestRef);
 
 
-  const tx =
-    transactions.find(
-      item=>
-        item.id ===
-        request.transactionId
-    );
-
-
-  $("editCancellationId").value =
-    id;
-
-
-  $("cancelCustomer").textContent =
-    user?.name ||
-    request.userName ||
-    "Customer";
-
-
-  $("cancelTransaction").textContent =
-    request.transactionId ||
-    "—";
-
-
-  $("cancelAmount").textContent =
-    tx
-      ?
-      money(
-        tx.amount || 0,
-        getCurrency(tx)
-      )
-      :
-      "—";
-
-
-  $("cancelRequested").textContent =
-    formatDateTime(
-      request.createdAt
-    );
-
-
-  $("cancelReason").textContent =
-    request.reason ||
-    "No reason provided";
-
-
-  $("editCancellationStatus").value =
-    request.status ||
-    "pending";
-
-
-  openModal("cancellationModal");
-
-}
-
-
-/* =========================================================
-   APPROVE CANCELLATION
-========================================================= */
-
-$("approveCancellationBtn")
-  .addEventListener(
-    "click",
-    async ()=>{
-
-      if(!selectedCancellation){
-        return;
+      if(!requestSnap.exists){
+        throw new Error(
+          "Cancellation request not found."
+        );
       }
 
 
       const request =
-        selectedCancellation;
+        requestSnap.data();
 
 
-      if(
-        !confirm(
-          "Approve this cancellation and process the refund if funds were deducted?"
-        )
-      ){
-        return;
+      if(request.status !== "pending"){
+        throw new Error(
+          "This cancellation request has already been processed."
+        );
       }
 
 
-      try{
+      const txRef =
+        db.collection("transactions")
+          .doc(request.transactionId);
 
-        await db.runTransaction(
-          async transaction=>{
 
-            const requestRef =
-              db.collection(
-                "cancellationRequests"
-              )
-              .doc(request.id);
+      const txSnap =
+        await transaction.get(txRef);
 
 
-            const requestSnap =
-              await transaction.get(
-                requestRef
-              );
+      if(!txSnap.exists){
+        throw new Error(
+          "Linked transaction not found."
+        );
+      }
 
 
-            if(!requestSnap.exists){
+      const tx =
+        txSnap.data();
 
-              throw new Error(
-                "Cancellation request no longer exists."
-              );
 
-            }
+      const userRef =
+        db.collection("users")
+          .doc(tx.userId);
 
 
-            const currentRequest =
-              requestSnap.data();
+      const userSnap =
+        await transaction.get(userRef);
 
 
-            if(
-              currentRequest.status ===
-              "approved"
-            ){
+      if(!userSnap.exists){
+        throw new Error(
+          "Customer account not found."
+        );
+      }
 
-              throw new Error(
-                "This cancellation has already been approved."
-              );
 
-            }
+      if(tx.balanceDeducted === true){
 
+        const user =
+          userSnap.data();
 
-            const txRef =
-              db.collection("transactions")
-                .doc(
-                  currentRequest.transactionId
-                );
 
+        const amount =
+          Number(tx.amount || 0);
 
-            const txSnap =
-              await transaction.get(
-                txRef
-              );
 
+        const balance =
+          Number(user.balance || 0);
 
-            if(!txSnap.exists){
 
-              throw new Error(
-                "Linked transaction was not found."
-              );
+        transaction.update(
+          userRef,
+          {
 
-            }
+            balance:
+              balance + amount,
 
-
-            const tx =
-              txSnap.data();
-
-
-            let refundAmount = 0;
-
-
-            if(
-              tx.balanceDeducted === true &&
-              tx.userId
-            ){
-
-              const userRef =
-                db.collection("users")
-                  .doc(tx.userId);
-
-
-              const userSnap =
-                await transaction.get(
-                  userRef
-                );
-
-
-              if(!userSnap.exists){
-
-                throw new Error(
-                  "Customer account was not found."
-                );
-
-              }
-
-
-              const user =
-                userSnap.data();
-
-
-              const balance =
-                Number(user.balance || 0);
-
-              const amount =
-                Number(tx.amount || 0);
-
-
-              refundAmount =
-                amount;
-
-
-              transaction.update(
-                userRef,
-                {
-
-                  balance:
-                    balance + amount,
-
-                  updatedAt:
-                    firebase.firestore
-                      .FieldValue
-                      .serverTimestamp()
-
-                }
-              );
-
-            }
-
-
-            transaction.update(
-              txRef,
-              {
-
-                status:"refunded",
-
-                balanceDeducted:false,
-
-                refundAmount,
-
-                refundedAt:
-                  firebase.firestore
-                    .FieldValue
-                    .serverTimestamp(),
-
-                refundReason:
-                  "Customer cancellation approved",
-
-                cancelledBy:
-                  "admin",
-
-                updatedAt:
-                  firebase.firestore
-                    .FieldValue
-                    .serverTimestamp()
-
-              }
-            );
-
-
-            transaction.update(
-              requestRef,
-              {
-
-                status:"approved",
-
-                reviewedAt:
-                  firebase.firestore
-                    .FieldValue
-                    .serverTimestamp(),
-
-                reviewedBy:
-                  currentAdmin?.uid || null,
-
-                refundAmount
-
-              }
-            );
+            updatedAt:
+              firebase.firestore.FieldValue.serverTimestamp()
 
           }
         );
 
 
-        closeModal(
-          "cancellationModal"
+        transaction.update(
+          txRef,
+          {
+
+            status:"refunded",
+
+            balanceDeducted:false,
+
+            refundAmount:amount,
+
+            refundedAt:
+              firebase.firestore.FieldValue.serverTimestamp(),
+
+            refundReason:
+              "Refunded after customer cancellation request.",
+
+            updatedAt:
+              firebase.firestore.FieldValue.serverTimestamp()
+
+          }
         );
 
+      }else{
 
-        toast(
-          "Cancellation approved and transaction refunded."
-        );
+        transaction.update(
+          txRef,
+          {
 
+            status:"refunded",
 
-      }catch(error){
+            refundAmount:
+              Number(tx.refundAmount || 0),
 
-        console.error(error);
+            refundReason:
+              "Cancellation approved; no additional balance refund was required.",
 
-        toast(
-          error.message ||
-          "Unable to process cancellation.",
-          true
-        );
+            updatedAt:
+              firebase.firestore.FieldValue.serverTimestamp()
 
-      }
-
-    }
-  );
-
-
-/* =========================================================
-   DECLINE CANCELLATION
-========================================================= */
-
-$("declineCancellationBtn")
-  .addEventListener(
-    "click",
-    async ()=>{
-
-      if(!selectedCancellation){
-        return;
-      }
-
-
-      if(
-        !confirm(
-          "Decline this cancellation request?"
-        )
-      ){
-        return;
-      }
-
-
-      try{
-
-        await db
-          .collection(
-            "cancellationRequests"
-          )
-          .doc(
-            selectedCancellation.id
-          )
-          .update({
-
-            status:"declined",
-
-            reviewedAt:
-              firebase.firestore
-                .FieldValue
-                .serverTimestamp(),
-
-            reviewedBy:
-              currentAdmin?.uid || null
-
-          });
-
-
-        closeModal(
-          "cancellationModal"
-        );
-
-
-        toast(
-          "Cancellation request declined."
-        );
-
-
-      }catch(error){
-
-        console.error(error);
-
-        toast(
-          error.message ||
-          "Unable to decline cancellation.",
-          true
+          }
         );
 
       }
 
-    }
-  );
+
+      transaction.update(
+        requestRef,
+        {
+
+          status:"approved",
+
+          resolvedAt:
+            firebase.firestore.FieldValue.serverTimestamp(),
+
+          resolvedBy:
+            currentAdmin.uid
+
+        }
+      );
+
+    });
 
 
-/* =========================================================
-   MANUAL CANCELLATION STATUS SAVE
-========================================================= */
+    await loadAllData();
 
-$("editCancellationStatus")
-  .addEventListener(
-    "change",
-    async event=>{
-
-      if(!selectedCancellation){
-        return;
-      }
-
-
-      const status =
-        event.target.value;
-
-
-      /*
-        Pending -> Approved should go through
-        the refund workflow instead of directly
-        changing the request status.
-      */
-
-      if(status === "approved"){
-
-        event.target.value =
-          selectedCancellation.status ||
-          "pending";
-
-        $("approveCancellationBtn")
-          .click();
-
-        return;
-      }
-
-
-      try{
-
-        await db
-          .collection(
-            "cancellationRequests"
-          )
-          .doc(
-            selectedCancellation.id
-          )
-          .update({
-
-            status,
-
-            reviewedAt:
-              firebase.firestore
-                .FieldValue
-                .serverTimestamp(),
-
-            reviewedBy:
-              currentAdmin?.uid || null
-
-          });
-
-
-        toast(
-          "Cancellation status updated."
-        );
-
-      }catch(error){
-
-        console.error(error);
-
-        toast(
-          error.message ||
-          "Unable to update request.",
-          true
-        );
-
-      }
-
-    }
-  );
-
-
-/* =========================================================
-   SEARCH / FILTER EVENTS
-========================================================= */
-
-$("customerSearch")
-  .addEventListener(
-    "input",
-    renderCustomers
-  );
-
-
-$("customerStatusFilter")
-  .addEventListener(
-    "change",
-    renderCustomers
-  );
-
-
-$("transactionSearch")
-  .addEventListener(
-    "input",
-    renderTransactions
-  );
-
-
-$("transactionStatusFilter")
-  .addEventListener(
-    "change",
-    renderTransactions
-  );
-
-
-$("cancellationFilter")
-  .addEventListener(
-    "change",
-    renderCancellations
-  );
-
-
-/* =========================================================
-   NAVIGATION
-========================================================= */
-
-const sectionTitles = {
-
-  dashboard:{
-    title:"Dashboard",
-    subtitle:
-      "Manage your Cash Flow Bank prototype."
-  },
-
-  customers:{
-    title:"Customers",
-    subtitle:
-      "Manage customer accounts and approvals."
-  },
-
-  transactions:{
-    title:"Transactions",
-    subtitle:
-      "Review transfers and transaction timestamps."
-  },
-
-  cancellations:{
-    title:"Cancellation Requests",
-    subtitle:
-      "Review customer cancellation requests."
-  },
-
-  settings:{
-    title:"Settings",
-    subtitle:
-      "Manage administrator settings."
-
-  }
-
-};
-
-
-document
-  .querySelectorAll(".nav-btn")
-  .forEach(button=>{
-
-    button.addEventListener(
-      "click",
-      ()=>{
-
-        openSection(
-          button.dataset.section
-        );
-
-      }
+    toast(
+      "Cancellation approved."
     );
 
-  });
+  }catch(error){
 
+    console.error(error);
 
-function openSection(section){
-
-  document
-    .querySelectorAll(".nav-btn")
-    .forEach(button=>{
-
-      button.classList.toggle(
-        "active",
-        button.dataset.section === section
-      );
-
-    });
-
-
-  document
-    .querySelectorAll(".section")
-    .forEach(element=>{
-
-      element.classList.toggle(
-        "active",
-        element.id ===
-          `section-${section}`
-      );
-
-    });
-
-
-  const info =
-    sectionTitles[section] ||
-    sectionTitles.dashboard;
-
-
-  $("pageHeading").textContent =
-    info.title;
-
-  $("pageSubheading").textContent =
-    info.subtitle;
-
-
-  if(window.innerWidth <= 950){
-
-    $("sidebar")
-      .classList.remove("open");
-
+    toast(
+      error.message ||
+      "Unable to approve cancellation.",
+      true
+    );
   }
-
 }
 
 
-$("mobileMenu")
-  .addEventListener(
-    "click",
-    ()=>{
+/* DECLINE CANCELLATION */
 
-      $("sidebar")
-        .classList.toggle("open");
+async function declineCancellation(requestId){
 
+  if(!confirm("Decline this cancellation request?")){
+    return;
+  }
+
+
+  try{
+
+    await db.collection("cancellationRequests")
+      .doc(requestId)
+      .update({
+
+        status:"declined",
+
+        resolvedAt:
+          firebase.firestore.FieldValue.serverTimestamp(),
+
+        resolvedBy:
+          currentAdmin.uid
+
+      });
+
+
+    const request =
+      cancellations.find(
+        x=>x.id === requestId
+      );
+
+
+    if(request){
+      request.status = "declined";
     }
-  );
 
 
-$("refreshBtn")
-  .addEventListener(
-    "click",
-    async ()=>{
+    renderCancellations();
 
-      toast("Refreshing data...");
+    toast(
+      "Cancellation request declined."
+    );
 
-      try{
+  }catch(error){
 
-        await startRealtimeListeners();
+    console.error(error);
 
-        setTimeout(()=>{
-          toast("Data refreshed.");
-        },500);
-
-      }catch(error){
-
-        console.error(error);
-
-        toast(
-          "Unable to refresh.",
-          true
-        );
-
-      }
-
-    }
-  );
+    toast(
+      "Unable to decline cancellation.",
+      true
+    );
+  }
+}
 
 
 /* =========================================================
-   CHANGE ADMIN PASSWORD
+   MODALS
 ========================================================= */
 
-$("changePasswordBtn")
-  .addEventListener(
-    "click",
-    async ()=>{
+function closeModal(id){
 
-      const password =
-        $("newAdminPassword")
-          .value;
+  $(id).classList.remove("show");
 
-
-      if(password.length < 6){
-
-        toast(
-          "Password must contain at least 6 characters.",
-          true
-        );
-
-        return;
-      }
+  if(id === "transactionModal"){
+    currentTransaction = null;
+  }
+}
 
 
-      const user =
-        auth.currentUser;
+document.querySelectorAll(".modal-overlay")
+.forEach(overlay=>{
 
+  overlay.addEventListener("click",event=>{
 
-      if(!user){
-
-        toast(
-          "You are not signed in.",
-          true
-        );
-
-        return;
-      }
-
-
-      try{
-
-        await user.updatePassword(
-          password
-        );
-
-
-        $("newAdminPassword")
-          .value = "";
-
-
-        toast(
-          "Administrator password changed."
-        );
-
-      }catch(error){
-
-        console.error(error);
-
-
-        if(
-          error.code ===
-          "auth/requires-recent-login"
-        ){
-
-          toast(
-            "For security, sign out and sign back in before changing the password.",
-            true
-          );
-
-        }else{
-
-          toast(
-            error.message ||
-            "Unable to change password.",
-            true
-          );
-
-        }
-
-      }
-
+    if(event.target === overlay){
+      overlay.classList.remove("show");
     }
-  );
+
+  });
+
+});
 
 
 /* =========================================================
-   INITIAL PAGE
+   START
 ========================================================= */
-
-openSection("dashboard");
 
 </script>
 
