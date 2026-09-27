@@ -1,3803 +1,3807 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#7f1721">
-  <title>Cash Flow Bank — Admin</title>
-
-  <style>
-    :root {
-      --red: #7f1721;
-      --red2: #991b1b;
-      --red3: #b91c1c;
-      --red-soft: #fdf0f1;
-      --white: #ffffff;
-      --bg: #f7f7f8;
-      --card: #ffffff;
-      --text: #171717;
-      --muted: #737373;
-      --border: #e5e5e5;
-      --success: #15803d;
-      --warning: #b45309;
-      --danger: #b91c1c;
-      --shadow: 0 18px 50px rgba(0,0,0,.08);
-      --sidebar: #5f1018;
-    }
-
-    body.dark {
-      --bg: #111111;
-      --card: #1b1b1b;
-      --text: #f5f5f5;
-      --muted: #a3a3a3;
-      --border: #303030;
-      --red-soft: #32171a;
-      --white: #171717;
-      --shadow: 0 18px 50px rgba(0,0,0,.35);
-      --sidebar: #260b0e;
-    }
-
-    * {
-      box-sizing: border-box;
-    }
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      margin: 0;
-      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: var(--bg);
-      color: var(--text);
-    }
-
-    button,
-    input,
-    select,
-    textarea {
-      font: inherit;
-    }
-
-    button {
-      cursor: pointer;
-    }
-
-    svg {
-      width: 20px;
-      height: 20px;
-      display: block;
-    }
-
-    .hidden {
-      display: none !important;
-    }
-
-    /* LOGIN */
-
-    #loginScreen {
-      min-height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 24px;
-      background:
-        radial-gradient(circle at top right, rgba(127,23,33,.18), transparent 35%),
-        radial-gradient(circle at bottom left, rgba(127,23,33,.12), transparent 35%),
-        var(--bg);
-    }
-
-    .login-wrap {
-      width: min(460px, 100%);
-    }
-
-    .login-brand {
-      text-align: center;
-      margin-bottom: 25px;
-    }
-
-    .brand-mark {
-      width: 68px;
-      height: 68px;
-      margin: auto;
-      border-radius: 22px;
-      display: grid;
-      place-items: center;
-      background: linear-gradient(145deg, var(--red), var(--red2));
-      color: white;
-      box-shadow: 0 18px 40px rgba(127,23,33,.25);
-    }
-
-    .brand-mark svg {
-      width: 34px;
-      height: 34px;
-    }
-
-    .login-brand h1 {
-      margin: 16px 0 5px;
-      font-size: 27px;
-    }
-
-    .login-brand p {
-      margin: 0;
-      color: var(--muted);
-    }
-
-    .login-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 26px;
-      padding: 28px;
-      box-shadow: var(--shadow);
-    }
-
-    .login-card h2 {
-      margin: 0 0 7px;
-    }
-
-    .login-card .sub {
-      margin: 0 0 25px;
-      color: var(--muted);
-      font-size: 14px;
-    }
-
-    .field {
-      margin-bottom: 17px;
-    }
-
-    .field label {
-      display: block;
-      font-size: 13px;
-      font-weight: 700;
-      margin-bottom: 7px;
-    }
-
-    .input,
-    .select,
-    .textarea {
-      width: 100%;
-      padding: 13px 14px;
-      border: 1px solid var(--border);
-      border-radius: 13px;
-      background: var(--card);
-      color: var(--text);
-      outline: none;
-    }
-
-    .input:focus,
-    .select:focus,
-    .textarea:focus {
-      border-color: var(--red2);
-      box-shadow: 0 0 0 3px rgba(127,23,33,.1);
-    }
-
-    .primary-btn,
-    .danger-btn,
-    .success-btn,
-    .ghost-btn {
-      border: 0;
-      border-radius: 12px;
-      padding: 11px 15px;
-      font-weight: 750;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-    }
-
-    .primary-btn {
-      color: white;
-      background: linear-gradient(135deg, var(--red), var(--red2));
-    }
-
-    .success-btn {
-      color: white;
-      background: var(--success);
-    }
-
-    .danger-btn {
-      color: white;
-      background: var(--danger);
-    }
-
-    .ghost-btn {
-      background: var(--red-soft);
-      color: var(--red);
-    }
-
-    .wide {
-      width: 100%;
-    }
-
-    .login-error {
-      color: var(--danger);
-      background: rgba(185,28,28,.08);
-      padding: 11px 13px;
-      border-radius: 11px;
-      font-size: 13px;
-      margin-bottom: 15px;
-    }
-
-    .prototype-note {
-      margin-top: 16px;
-      padding: 12px 14px;
-      border-radius: 13px;
-      background: rgba(180,83,9,.08);
-      color: var(--warning);
-      font-size: 12px;
-      line-height: 1.5;
-    }
-
-    /* APP */
-
-    #app {
-      min-height: 100vh;
-    }
-
-    .app-shell {
-      min-height: 100vh;
-      display: flex;
-    }
-
-    .sidebar {
-      width: 260px;
-      flex: 0 0 260px;
-      background: var(--sidebar);
-      color: white;
-      min-height: 100vh;
-      position: fixed;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      z-index: 100;
-      padding: 22px 15px;
-      transition: .25s ease;
-    }
-
-    .sidebar-brand {
-      display: flex;
-      align-items: center;
-      gap: 11px;
-      padding: 5px 10px 26px;
-    }
-
-    .sidebar-brand .mini-mark {
-      width: 40px;
-      height: 40px;
-      border-radius: 13px;
-      background: rgba(255,255,255,.14);
-      display: grid;
-      place-items: center;
-    }
-
-    .sidebar-brand strong {
-      font-size: 16px;
-    }
-
-    .sidebar-brand small {
-      display: block;
-      opacity: .7;
-      margin-top: 2px;
-      font-size: 10px;
-    }
-
-    .nav-title {
-      padding: 0 11px 9px;
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: .13em;
-      opacity: .55;
-    }
-
-    .nav {
-      display: grid;
-      gap: 5px;
-    }
-
-    .nav button {
-      width: 100%;
-      border: 0;
-      color: rgba(255,255,255,.76);
-      background: transparent;
-      padding: 12px;
-      border-radius: 12px;
-      display: flex;
-      align-items: center;
-      gap: 11px;
-      text-align: left;
-      font-weight: 650;
-    }
-
-    .nav button:hover,
-    .nav button.active {
-      color: white;
-      background: rgba(255,255,255,.12);
-    }
-
-    .sidebar-bottom {
-      position: absolute;
-      left: 15px;
-      right: 15px;
-      bottom: 20px;
-    }
-
-    .sidebar-bottom button {
-      width: 100%;
-    }
-
-    .main {
-      width: calc(100% - 260px);
-      margin-left: 260px;
-      min-width: 0;
-    }
-
-    .topbar {
-      height: 76px;
-      background: var(--card);
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 28px;
-      position: sticky;
-      top: 0;
-      z-index: 60;
-    }
-
-    .top-left {
-      display: flex;
-      align-items: center;
-      gap: 13px;
-    }
-
-    .menu-btn {
-      display: none;
-      border: 0;
-      background: var(--red-soft);
-      color: var(--red);
-      border-radius: 11px;
-      padding: 9px;
-    }
-
-    .page-heading h2 {
-      margin: 0;
-      font-size: 19px;
-    }
-
-    .page-heading p {
-      margin: 2px 0 0;
-      color: var(--muted);
-      font-size: 12px;
-    }
-
-    .top-actions {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-
-    .search-box {
-      position: relative;
-    }
-
-    .search-box svg {
-      position: absolute;
-      left: 12px;
-      top: 11px;
-      color: var(--muted);
-    }
-
-    .search-box input {
-      width: 220px;
-      border: 1px solid var(--border);
-      background: var(--bg);
-      color: var(--text);
-      border-radius: 12px;
-      padding: 10px 12px 10px 38px;
-      outline: none;
-    }
-
-    .icon-btn {
-      width: 39px;
-      height: 39px;
-      border: 1px solid var(--border);
-      background: var(--card);
-      color: var(--text);
-      border-radius: 12px;
-      display: grid;
-      place-items: center;
-    }
-
-    .admin-chip {
-      display: flex;
-      align-items: center;
-      gap: 9px;
-      margin-left: 4px;
-    }
-
-    .admin-avatar {
-      width: 38px;
-      height: 38px;
-      border-radius: 50%;
-      display: grid;
-      place-items: center;
-      background: var(--red);
-      color: white;
-      font-weight: 800;
-    }
-
-    .admin-chip strong {
-      display: block;
-      font-size: 12px;
-    }
-
-    .admin-chip span {
-      display: block;
-      font-size: 10px;
-      color: var(--muted);
-    }
-
-    .content {
-      padding: 28px;
-      max-width: 1600px;
-      margin: auto;
-    }
-
-    .prototype-banner {
-      background: var(--red-soft);
-      border: 1px solid rgba(127,23,33,.15);
-      color: var(--red);
-      border-radius: 15px;
-      padding: 13px 15px;
-      margin-bottom: 23px;
-      font-size: 12px;
-      line-height: 1.5;
-    }
-
-    /* CARDS */
-
-    .stats {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-      margin-bottom: 22px;
-    }
-
-    .stat-card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 19px;
-      box-shadow: 0 8px 30px rgba(0,0,0,.035);
-    }
-
-    .stat-top {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .stat-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 12px;
-      display: grid;
-      place-items: center;
-      background: var(--red-soft);
-      color: var(--red);
-    }
-
-    .stat-label {
-      color: var(--muted);
-      font-size: 12px;
-      font-weight: 650;
-    }
-
-    .stat-value {
-      font-size: 27px;
-      font-weight: 850;
-      margin-top: 14px;
-    }
-
-    .stat-description {
-      color: var(--muted);
-      font-size: 11px;
-      margin-top: 4px;
-    }
-
-    .grid-2 {
-      display: grid;
-      grid-template-columns: 1.35fr .85fr;
-      gap: 18px;
-    }
-
-    .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 19px;
-      box-shadow: 0 8px 30px rgba(0,0,0,.035);
-      overflow: hidden;
-    }
-
-    .card-header {
-      padding: 18px 19px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-    }
-
-    .card-header h3 {
-      margin: 0;
-      font-size: 15px;
-    }
-
-    .card-header p {
-      margin: 4px 0 0;
-      font-size: 11px;
-      color: var(--muted);
-    }
-
-    .card-body {
-      padding: 18px 19px;
-    }
-
-    .table-wrap {
-      overflow-x: auto;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      min-width: 720px;
-    }
-
-    th,
-    td {
-      padding: 13px 15px;
-      text-align: left;
-      border-bottom: 1px solid var(--border);
-      font-size: 12px;
-      white-space: nowrap;
-    }
-
-    th {
-      color: var(--muted);
-      font-size: 10px;
-      text-transform: uppercase;
-      letter-spacing: .05em;
-      font-weight: 750;
-    }
-
-    tbody tr:hover {
-      background: var(--red-soft);
-    }
-
-    .customer-cell {
-      display: flex;
-      align-items: center;
-      gap: 9px;
-    }
-
-    .customer-avatar {
-      width: 34px;
-      height: 34px;
-      border-radius: 50%;
-      background: var(--red-soft);
-      color: var(--red);
-      display: grid;
-      place-items: center;
-      font-size: 11px;
-      font-weight: 800;
-      overflow: hidden;
-      flex: 0 0 34px;
-    }
-
-    .customer-avatar img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .customer-cell strong {
-      display: block;
-      font-size: 12px;
-    }
-
-    .customer-cell span {
-      display: block;
-      color: var(--muted);
-      font-size: 10px;
-      margin-top: 2px;
-    }
-
-    .badge {
-      display: inline-flex;
-      padding: 5px 8px;
-      border-radius: 99px;
-      font-size: 10px;
-      font-weight: 800;
-      text-transform: capitalize;
-    }
-
-    .badge.pending {
-      background: #fff7ed;
-      color: #c2410c;
-    }
-
-    .badge.active,
-    .badge.completed,
-    .badge.approved,
-    .badge.verified {
-      background: #ecfdf5;
-      color: #15803d;
-    }
-
-    .badge.rejected,
-    .badge.declined,
-    .badge.refunded {
-      background: #fef2f2;
-      color: #b91c1c;
-    }
-
-    .badge.processing {
-      background: #eff6ff;
-      color: #1d4ed8;
-    }
-
-    .row-actions {
-      display: flex;
-      gap: 6px;
-    }
-
-    .small-btn {
-      border: 0;
-      padding: 7px 9px;
-      border-radius: 8px;
-      font-size: 10px;
-      font-weight: 750;
-    }
-
-    .small-btn.primary {
-      background: var(--red-soft);
-      color: var(--red);
-    }
-
-    .small-btn.green {
-      background: #ecfdf5;
-      color: #15803d;
-    }
-
-    .small-btn.red {
-      background: #fef2f2;
-      color: #b91c1c;
-    }
-
-    .empty {
-      text-align: center;
-      color: var(--muted);
-      padding: 35px 15px;
-      font-size: 12px;
-    }
-
-    /* PAGES */
-
-    .page {
-      display: none;
-    }
-
-    .page.active {
-      display: block;
-    }
-
-    .page-toolbar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      margin-bottom: 18px;
-      flex-wrap: wrap;
-    }
-
-    .filters {
-      display: flex;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .filters .input,
-    .filters .select {
-      width: auto;
-      min-width: 150px;
-      padding: 10px 12px;
-    }
-
-    /* ACTIVITY */
-
-    .activity-list {
-      display: grid;
-      gap: 0;
-    }
-
-    .activity {
-      display: flex;
-      gap: 13px;
-      padding: 16px 0;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .activity:last-child {
-      border-bottom: 0;
-    }
-
-    .activity-icon {
-      width: 35px;
-      height: 35px;
-      flex: 0 0 35px;
-      border-radius: 11px;
-      display: grid;
-      place-items: center;
-      background: var(--red-soft);
-      color: var(--red);
-    }
-
-    .activity strong {
-      font-size: 12px;
-    }
-
-    .activity p {
-      margin: 3px 0;
-      font-size: 11px;
-      color: var(--muted);
-    }
-
-    .activity time {
-      font-size: 9px;
-      color: var(--muted);
-    }
-
-    /* MODAL */
-
-    .modal-backdrop {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,.58);
-      z-index: 500;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      padding: 18px;
-    }
-
-    .modal-backdrop.show {
-      display: flex;
-    }
-
-    .modal {
-      width: min(720px, 100%);
-      max-height: 90vh;
-      overflow: auto;
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: 23px;
-      box-shadow: 0 30px 80px rgba(0,0,0,.25);
-    }
-
-    .modal-header {
-      padding: 18px 20px;
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      position: sticky;
-      top: 0;
-      background: var(--card);
-      z-index: 2;
-    }
-
-    .modal-header h3 {
-      margin: 0;
-      font-size: 16px;
-    }
-
-    .modal-close {
-      width: 34px;
-      height: 34px;
-      border: 0;
-      background: var(--red-soft);
-      color: var(--red);
-      border-radius: 10px;
-      display: grid;
-      place-items: center;
-    }
-
-    .modal-body {
-      padding: 20px;
-    }
-
-    .modal-footer {
-      padding: 15px 20px;
-      border-top: 1px solid var(--border);
-      display: flex;
-      justify-content: flex-end;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .profile-preview {
-      display: flex;
-      gap: 15px;
-      align-items: center;
-      margin-bottom: 20px;
-    }
-
-    .large-avatar {
-      width: 65px;
-      height: 65px;
-      border-radius: 20px;
-      background: var(--red-soft);
-      color: var(--red);
-      display: grid;
-      place-items: center;
-      font-size: 20px;
-      font-weight: 850;
-      overflow: hidden;
-    }
-
-    .large-avatar img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .profile-preview h3 {
-      margin: 0;
-    }
-
-    .profile-preview p {
-      margin: 4px 0 0;
-      color: var(--muted);
-      font-size: 12px;
-    }
-
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 14px;
-    }
-
-    .full {
-      grid-column: 1 / -1;
-    }
-
-    .detail-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-      margin-bottom: 20px;
-    }
-
-    .detail-box {
-      background: var(--bg);
-      border: 1px solid var(--border);
-      border-radius: 13px;
-      padding: 12px;
-    }
-
-    .detail-box span {
-      display: block;
-      color: var(--muted);
-      font-size: 9px;
-      text-transform: uppercase;
-      letter-spacing: .04em;
-      margin-bottom: 5px;
-    }
-
-    .detail-box strong {
-      font-size: 13px;
-    }
-
-    /* TOAST */
-
-    #toast {
-      position: fixed;
-      right: 20px;
-      bottom: 20px;
-      z-index: 1000;
-      background: #171717;
-      color: white;
-      padding: 13px 16px;
-      border-radius: 13px;
-      box-shadow: 0 20px 50px rgba(0,0,0,.25);
-      max-width: 350px;
-      font-size: 12px;
-      transform: translateY(20px);
-      opacity: 0;
-      pointer-events: none;
-      transition: .25s ease;
-    }
-
-    #toast.show {
-      transform: translateY(0);
-      opacity: 1;
-    }
-
-    #toast.success {
-      background: #166534;
-    }
-
-    #toast.error {
-      background: #991b1b;
-    }
-
-    /* RESPONSIVE */
-
-    @media (max-width: 1100px) {
-      .stats {
-        grid-template-columns: repeat(2, 1fr);
-      }
-
-      .grid-2 {
-        grid-template-columns: 1fr;
-      }
-    }
-
-    @media (max-width: 800px) {
-      .sidebar {
-        transform: translateX(-100%);
-      }
-
-      .sidebar.open {
-        transform: translateX(0);
-      }
-
-      .main {
-        width: 100%;
-        margin-left: 0;
-      }
-
-      .menu-btn {
-        display: grid;
-        place-items: center;
-      }
-
-      .search-box {
-        display: none;
-      }
-
-      .content {
-        padding: 18px;
-      }
-
-      .topbar {
-        padding: 0 18px;
-      }
-
-      .admin-chip div:last-child {
-        display: none;
-      }
-    }
-
-    @media (max-width: 600px) {
-      .stats {
-        grid-template-columns: 1fr;
-      }
-
-      .form-grid {
-        grid-template-columns: 1fr;
-      }
-
-      .detail-grid {
-        grid-template-columns: 1fr 1fr;
-      }
-
-      .topbar {
-        height: 68px;
-      }
-
-      .page-heading p {
-        display: none;
-      }
-
-      .prototype-banner {
-        font-size: 11px;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="theme-color" content="#7f1721">
+<title>Cash Flow Bank — Admin</title>
+
+<style>
+:root{
+  --red:#7f1721;
+  --red2:#991b1b;
+  --red3:#b91c1c;
+  --red-soft:#fdf0f1;
+  --white:#fff;
+  --bg:#f7f7f8;
+  --card:#fff;
+  --text:#171717;
+  --muted:#737373;
+  --border:#e5e5e5;
+  --success:#15803d;
+  --warning:#b45309;
+  --danger:#b91c1c;
+  --shadow:0 18px 50px rgba(0,0,0,.08);
+  --sidebar:#5f1018;
+}
+
+body.dark{
+  --bg:#111;
+  --card:#1b1b1b;
+  --text:#f5f5f5;
+  --muted:#a3a3a3;
+  --border:#303030;
+  --red-soft:#32171a;
+  --white:#171717;
+  --shadow:0 18px 50px rgba(0,0,0,.35);
+  --sidebar:#260b0e;
+}
+
+*{box-sizing:border-box}
+
+html{scroll-behavior:smooth}
+
+body{
+  margin:0;
+  font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:var(--bg);
+  color:var(--text);
+}
+
+button,input,select,textarea{font:inherit}
+button{cursor:pointer}
+svg{width:20px;height:20px;display:block}
+.hidden{display:none!important}
+
+/* LOGIN */
+
+#loginScreen{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:24px;
+  background:
+    radial-gradient(circle at top right,rgba(127,23,33,.18),transparent 35%),
+    radial-gradient(circle at bottom left,rgba(127,23,33,.12),transparent 35%),
+    var(--bg);
+}
+
+.login-wrap{
+  width:min(460px,100%);
+}
+
+.login-brand{
+  text-align:center;
+  margin-bottom:25px;
+}
+
+.brand-mark{
+  width:68px;
+  height:68px;
+  margin:auto;
+  border-radius:22px;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(145deg,var(--red),var(--red2));
+  color:#fff;
+  box-shadow:0 18px 40px rgba(127,23,33,.25);
+}
+
+.brand-mark svg{
+  width:34px;
+  height:34px;
+}
+
+.login-brand h1{
+  margin:16px 0 5px;
+  font-size:27px;
+}
+
+.login-brand p{
+  margin:0;
+  color:var(--muted);
+}
+
+.login-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:26px;
+  padding:28px;
+  box-shadow:var(--shadow);
+}
+
+.login-card h2{
+  margin:0 0 7px;
+}
+
+.login-card .sub{
+  margin:0 0 25px;
+  color:var(--muted);
+  font-size:14px;
+}
+
+.field{
+  margin-bottom:17px;
+}
+
+.field label{
+  display:block;
+  font-size:13px;
+  font-weight:700;
+  margin-bottom:7px;
+}
+
+.input,.select,.textarea{
+  width:100%;
+  padding:13px 14px;
+  border:1px solid var(--border);
+  border-radius:13px;
+  background:var(--card);
+  color:var(--text);
+  outline:none;
+}
+
+.input:focus,.select:focus,.textarea:focus{
+  border-color:var(--red2);
+  box-shadow:0 0 0 3px rgba(127,23,33,.1);
+}
+
+.primary-btn,
+.danger-btn,
+.success-btn,
+.ghost-btn{
+  border:0;
+  border-radius:12px;
+  padding:11px 15px;
+  font-weight:750;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:8px;
+}
+
+.primary-btn{
+  color:#fff;
+  background:linear-gradient(135deg,var(--red),var(--red2));
+}
+
+.success-btn{
+  color:#fff;
+  background:var(--success);
+}
+
+.danger-btn{
+  color:#fff;
+  background:var(--danger);
+}
+
+.ghost-btn{
+  background:var(--red-soft);
+  color:var(--red);
+}
+
+.wide{width:100%}
+
+.login-error{
+  color:var(--danger);
+  background:rgba(185,28,28,.08);
+  padding:11px 13px;
+  border-radius:11px;
+  font-size:13px;
+  margin-bottom:15px;
+}
+
+.prototype-note{
+  margin-top:16px;
+  padding:12px 14px;
+  border-radius:13px;
+  background:rgba(180,83,9,.08);
+  color:var(--warning);
+  font-size:12px;
+  line-height:1.5;
+}
+
+/* APP */
+
+#app{min-height:100vh}
+
+.app-shell{
+  min-height:100vh;
+  display:flex;
+}
+
+.sidebar{
+  width:260px;
+  flex:0 0 260px;
+  background:var(--sidebar);
+  color:#fff;
+  min-height:100vh;
+  position:fixed;
+  left:0;
+  top:0;
+  bottom:0;
+  z-index:100;
+  padding:22px 15px;
+  transition:.25s ease;
+}
+
+.sidebar-brand{
+  display:flex;
+  align-items:center;
+  gap:11px;
+  padding:5px 10px 26px;
+}
+
+.mini-mark{
+  width:40px;
+  height:40px;
+  border-radius:13px;
+  background:rgba(255,255,255,.14);
+  display:grid;
+  place-items:center;
+}
+
+.sidebar-brand strong{
+  font-size:16px;
+}
+
+.sidebar-brand small{
+  display:block;
+  opacity:.7;
+  margin-top:2px;
+  font-size:10px;
+}
+
+.nav-title{
+  padding:0 11px 9px;
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:.13em;
+  opacity:.55;
+}
+
+.nav{
+  display:grid;
+  gap:5px;
+}
+
+.nav button{
+  width:100%;
+  border:0;
+  color:rgba(255,255,255,.76);
+  background:transparent;
+  padding:12px;
+  border-radius:12px;
+  display:flex;
+  align-items:center;
+  gap:11px;
+  text-align:left;
+  font-weight:650;
+}
+
+.nav button:hover,
+.nav button.active{
+  color:#fff;
+  background:rgba(255,255,255,.12);
+}
+
+.sidebar-bottom{
+  position:absolute;
+  left:15px;
+  right:15px;
+  bottom:20px;
+}
+
+.sidebar-bottom button{
+  width:100%;
+}
+
+.main{
+  width:calc(100% - 260px);
+  margin-left:260px;
+  min-width:0;
+}
+
+.topbar{
+  height:76px;
+  background:var(--card);
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 28px;
+  position:sticky;
+  top:0;
+  z-index:60;
+}
+
+.top-left{
+  display:flex;
+  align-items:center;
+  gap:13px;
+}
+
+.menu-btn{
+  display:none;
+  border:0;
+  background:var(--red-soft);
+  color:var(--red);
+  border-radius:11px;
+  padding:9px;
+}
+
+.page-heading h2{
+  margin:0;
+  font-size:19px;
+}
+
+.page-heading p{
+  margin:2px 0 0;
+  color:var(--muted);
+  font-size:12px;
+}
+
+.top-actions{
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+
+.search-box{
+  position:relative;
+}
+
+.search-box svg{
+  position:absolute;
+  left:12px;
+  top:11px;
+  color:var(--muted);
+}
+
+.search-box input{
+  width:220px;
+  border:1px solid var(--border);
+  background:var(--bg);
+  color:var(--text);
+  border-radius:12px;
+  padding:10px 12px 10px 38px;
+  outline:none;
+}
+
+.icon-btn{
+  width:39px;
+  height:39px;
+  border:1px solid var(--border);
+  background:var(--card);
+  color:var(--text);
+  border-radius:12px;
+  display:grid;
+  place-items:center;
+}
+
+.admin-chip{
+  display:flex;
+  align-items:center;
+  gap:9px;
+  margin-left:4px;
+}
+
+.admin-avatar{
+  width:38px;
+  height:38px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:var(--red);
+  color:#fff;
+  font-weight:800;
+}
+
+.admin-chip strong{
+  display:block;
+  font-size:12px;
+}
+
+.admin-chip span{
+  display:block;
+  font-size:10px;
+  color:var(--muted);
+}
+
+.content{
+  padding:28px;
+  max-width:1600px;
+  margin:auto;
+}
+
+.prototype-banner{
+  background:var(--red-soft);
+  border:1px solid rgba(127,23,33,.15);
+  color:var(--red);
+  border-radius:15px;
+  padding:13px 15px;
+  margin-bottom:23px;
+  font-size:12px;
+  line-height:1.5;
+}
+
+/* STATS */
+
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:16px;
+  margin-bottom:22px;
+}
+
+.stat-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:18px;
+  padding:19px;
+  box-shadow:0 8px 30px rgba(0,0,0,.035);
+}
+
+.stat-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.stat-icon{
+  width:40px;
+  height:40px;
+  border-radius:12px;
+  display:grid;
+  place-items:center;
+  background:var(--red-soft);
+  color:var(--red);
+}
+
+.stat-label{
+  color:var(--muted);
+  font-size:12px;
+  font-weight:650;
+}
+
+.stat-value{
+  font-size:27px;
+  font-weight:850;
+  margin-top:14px;
+}
+
+.stat-description{
+  color:var(--muted);
+  font-size:11px;
+  margin-top:4px;
+}
+
+.grid-2{
+  display:grid;
+  grid-template-columns:1.35fr .85fr;
+  gap:18px;
+}
+
+.card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:19px;
+  box-shadow:0 8px 30px rgba(0,0,0,.035);
+  overflow:hidden;
+}
+
+.card-header{
+  padding:18px 19px;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+}
+
+.card-header h3{
+  margin:0;
+  font-size:15px;
+}
+
+.card-header p{
+  margin:4px 0 0;
+  font-size:11px;
+  color:var(--muted);
+}
+
+.card-body{
+  padding:18px 19px;
+}
+
+.table-wrap{
+  overflow-x:auto;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  min-width:720px;
+}
+
+th,td{
+  padding:13px 15px;
+  text-align:left;
+  border-bottom:1px solid var(--border);
+  font-size:12px;
+  white-space:nowrap;
+}
+
+th{
+  color:var(--muted);
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:.05em;
+  font-weight:750;
+}
+
+tbody tr:hover{
+  background:var(--red-soft);
+}
+
+.customer-cell{
+  display:flex;
+  align-items:center;
+  gap:9px;
+}
+
+.customer-avatar{
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  background:var(--red-soft);
+  color:var(--red);
+  display:grid;
+  place-items:center;
+  font-size:11px;
+  font-weight:800;
+  overflow:hidden;
+  flex:0 0 34px;
+}
+
+.customer-avatar img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.customer-cell strong{
+  display:block;
+  font-size:12px;
+}
+
+.customer-cell span{
+  display:block;
+  color:var(--muted);
+  font-size:10px;
+  margin-top:2px;
+}
+
+.badge{
+  display:inline-flex;
+  padding:5px 8px;
+  border-radius:99px;
+  font-size:10px;
+  font-weight:800;
+  text-transform:capitalize;
+}
+
+.badge.pending{
+  background:#fff7ed;
+  color:#c2410c;
+}
+
+.badge.active,
+.badge.completed,
+.badge.approved,
+.badge.verified{
+  background:#ecfdf5;
+  color:#15803d;
+}
+
+.badge.rejected,
+.badge.declined,
+.badge.refunded{
+  background:#fef2f2;
+  color:#b91c1c;
+}
+
+.badge.processing{
+  background:#eff6ff;
+  color:#1d4ed8;
+}
+
+.row-actions{
+  display:flex;
+  gap:6px;
+  flex-wrap:wrap;
+}
+
+.small-btn{
+  border:0;
+  padding:7px 9px;
+  border-radius:8px;
+  font-size:10px;
+  font-weight:750;
+}
+
+.small-btn.primary{
+  background:var(--red-soft);
+  color:var(--red);
+}
+
+.small-btn.green{
+  background:#ecfdf5;
+  color:#15803d;
+}
+
+.small-btn.red{
+  background:#fef2f2;
+  color:#b91c1c;
+}
+
+.empty{
+  text-align:center;
+  color:var(--muted);
+  padding:35px 15px;
+  font-size:12px;
+}
+
+/* PAGES */
+
+.page{display:none}
+.page.active{display:block}
+
+.page-toolbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-bottom:18px;
+  flex-wrap:wrap;
+}
+
+.filters{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.filters .input,
+.filters .select{
+  width:auto;
+  min-width:150px;
+  padding:10px 12px;
+}
+
+/* ACTIVITY */
+
+.activity-list{
+  display:grid;
+  gap:0;
+}
+
+.activity{
+  display:flex;
+  gap:13px;
+  padding:16px 0;
+  border-bottom:1px solid var(--border);
+}
+
+.activity:last-child{
+  border-bottom:0;
+}
+
+.activity-icon{
+  width:35px;
+  height:35px;
+  flex:0 0 35px;
+  border-radius:11px;
+  display:grid;
+  place-items:center;
+  background:var(--red-soft);
+  color:var(--red);
+}
+
+.activity strong{font-size:12px}
+
+.activity p{
+  margin:3px 0;
+  font-size:11px;
+  color:var(--muted);
+}
+
+.activity time{
+  font-size:9px;
+  color:var(--muted);
+}
+
+/* MODAL */
+
+.modal-backdrop{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.58);
+  z-index:500;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:18px;
+}
+
+.modal-backdrop.show{display:flex}
+
+.modal{
+  width:min(720px,100%);
+  max-height:90vh;
+  overflow:auto;
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:23px;
+  box-shadow:0 30px 80px rgba(0,0,0,.25);
+}
+
+.modal-header{
+  padding:18px 20px;
+  border-bottom:1px solid var(--border);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  position:sticky;
+  top:0;
+  background:var(--card);
+  z-index:2;
+}
+
+.modal-header h3{
+  margin:0;
+  font-size:16px;
+}
+
+.modal-close{
+  width:34px;
+  height:34px;
+  border:0;
+  background:var(--red-soft);
+  color:var(--red);
+  border-radius:10px;
+  display:grid;
+  place-items:center;
+}
+
+.modal-body{padding:20px}
+
+.modal-footer{
+  padding:15px 20px;
+  border-top:1px solid var(--border);
+  display:flex;
+  justify-content:flex-end;
+  gap:8px;
+  flex-wrap:wrap;
+}
+
+.profile-preview{
+  display:flex;
+  gap:15px;
+  align-items:center;
+  margin-bottom:20px;
+}
+
+.large-avatar{
+  width:65px;
+  height:65px;
+  border-radius:20px;
+  background:var(--red-soft);
+  color:var(--red);
+  display:grid;
+  place-items:center;
+  font-size:20px;
+  font-weight:850;
+  overflow:hidden;
+}
+
+.large-avatar img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+}
+
+.profile-preview h3{margin:0}
+
+.profile-preview p{
+  margin:4px 0 0;
+  color:var(--muted);
+  font-size:12px;
+}
+
+.form-grid{
+  display:grid;
+  grid-template-columns:repeat(2,1fr);
+  gap:14px;
+}
+
+.full{grid-column:1/-1}
+
+.detail-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin-bottom:20px;
+}
+
+.detail-box{
+  background:var(--bg);
+  border:1px solid var(--border);
+  border-radius:13px;
+  padding:12px;
+}
+
+.detail-box span{
+  display:block;
+  color:var(--muted);
+  font-size:9px;
+  text-transform:uppercase;
+  letter-spacing:.04em;
+  margin-bottom:5px;
+}
+
+.detail-box strong{font-size:13px}
+
+/* TOAST */
+
+#toast{
+  position:fixed;
+  right:20px;
+  bottom:20px;
+  z-index:1000;
+  background:#171717;
+  color:#fff;
+  padding:13px 16px;
+  border-radius:13px;
+  box-shadow:0 20px 50px rgba(0,0,0,.25);
+  max-width:350px;
+  font-size:12px;
+  transform:translateY(20px);
+  opacity:0;
+  pointer-events:none;
+  transition:.25s ease;
+}
+
+#toast.show{
+  transform:translateY(0);
+  opacity:1;
+}
+
+#toast.success{background:#166534}
+#toast.error{background:#991b1b}
+
+/* RESPONSIVE */
+
+@media(max-width:1100px){
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .grid-2{grid-template-columns:1fr}
+}
+
+@media(max-width:800px){
+
+  .sidebar{
+    transform:translateX(-100%);
+  }
+
+  .sidebar.open{
+    transform:translateX(0);
+  }
+
+  .main{
+    width:100%;
+    margin-left:0;
+  }
+
+  .menu-btn{
+    display:grid;
+    place-items:center;
+  }
+
+  .search-box{display:none}
+
+  .content{padding:18px}
+
+  .topbar{padding:0 18px}
+
+  .admin-chip div:last-child{
+    display:none;
+  }
+}
+
+@media(max-width:600px){
+
+  .stats{
+    grid-template-columns:1fr;
+  }
+
+  .form-grid{
+    grid-template-columns:1fr;
+  }
+
+  .detail-grid{
+    grid-template-columns:1fr 1fr;
+  }
+
+  .topbar{height:68px}
+
+  .page-heading p{display:none}
+
+  .prototype-banner{font-size:11px}
+}
+</style>
 </head>
 
 <body>
 
-  <!-- LOGIN -->
-  <section id="loginScreen">
-    <div class="login-wrap">
-
-      <div class="login-brand">
-        <div class="brand-mark">
-          <svg viewBox="0 0 48 48" fill="none">
-            <path d="M8 18L24 8L40 18" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-            <path d="M11 20V37M19 20V37M29 20V37M37 20V37" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
-            <path d="M7 40H41" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
-          </svg>
-        </div>
-        <h1>Cash Flow Bank</h1>
-        <p>Administrator Portal</p>
-      </div>
-
-      <div class="login-card">
-        <h2>Administrator Sign In</h2>
-        <p class="sub">Use the dedicated Firebase administrator account.</p>
-
-        <div id="loginError" class="login-error hidden"></div>
-
-        <form id="loginForm">
-
-          <div class="field">
-            <label>Email address</label>
-            <input
-              id="loginEmail"
-              class="input"
-              type="email"
-              autocomplete="username"
-              required
-              placeholder="Administrator email"
-            >
-          </div>
-
-          <div class="field">
-            <label>Password</label>
-            <input
-              id="loginPassword"
-              class="input"
-              type="password"
-              autocomplete="current-password"
-              required
-              placeholder="Password"
-            >
-          </div>
-
-          <button class="primary-btn wide" type="submit">
-            <svg viewBox="0 0 24 24" fill="none">
-              <path d="M15 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h9" stroke="currentColor" stroke-width="2"/>
-              <path d="M10 12h10M17 8l4 4-4 4" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            Sign In
-          </button>
-
-        </form>
-
-        <div class="prototype-note">
-          <strong>Prototype notice:</strong>
-          This is an administrative interface for the Cash Flow Bank prototype.
-          It is not a real banking system or real-money ledger.
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-
-  <!-- APPLICATION -->
-  <section id="app" class="hidden">
-
-    <div class="app-shell">
-
-      <!-- SIDEBAR -->
-      <aside id="sidebar" class="sidebar">
-
-        <div class="sidebar-brand">
-          <div class="mini-mark">
-            <svg viewBox="0 0 48 48" fill="none">
-              <path d="M8 18L24 8L40 18" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
-              <path d="M11 20V37M19 20V37M29 20V37M37 20V37" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
-              <path d="M7 40H41" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
-            </svg>
-          </div>
-          <div>
-            <strong>Cash Flow Bank</strong>
-            <small>Administrator</small>
-          </div>
-        </div>
-
-        <div class="nav-title">Management</div>
-
-        <nav class="nav">
-
-          <button class="nav-item active" data-page="overview">
-            <svg viewBox="0 0 24 24" fill="none">
-              <rect x="3" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/>
-              <rect x="14" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/>
-              <rect x="3" y="14" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/>
-              <rect x="14" y="14" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/>
-            </svg>
-            Overview
-          </button>
-
-          <button class="nav-item" data-page="pending">
-            <svg viewBox="0 0 24 24" fill="none">
-              <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
-              <path d="M12 7v5l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-            Pending Accounts
-          </button>
-
-          <button class="nav-item" data-page="customers">
-            <svg viewBox="0 0 24 24" fill="none">
-              <circle cx="9" cy="8" r="3" stroke="currentColor" stroke-width="2"/>
-              <path d="M3 20c.7-3.4 2.7-5 6-5s5.3 1.6 6 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              <path d="M16 11c2.5 0 4 1.3 5 4M16 5.5a2.5 2.5 0 0 1 0 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-            Customers
-          </button>
-
-          <button class="nav-item" data-page="transactions">
-            <svg viewBox="0 0 24 24" fill="none">
-              <rect x="3" y="5" width="18" height="14" rx="2" stroke="currentColor" stroke-width="2"/>
-              <path d="M3 10h18M7 15h4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-            Transactions
-          </button>
-
-          <button class="nav-item" data-page="cancellations">
-            <svg viewBox="0 0 24 24" fill="none">
-              <path d="M4 7h16M7 4h10l1 3H6l1-3Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
-              <path d="M7 10v8a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-8M10 13v4M14 13v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-            Cancellation Requests
-          </button>
-
-          <button class="nav-item" data-page="activity">
-            <svg viewBox="0 0 24 24" fill="none">
-              <path d="M4 17V7M10 17V4M16 17v-7M22 17V3" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-            Activity
-          </button>
-
-          <button class="nav-item" data-page="settings">
-            <svg viewBox="0 0 24 24" fill="none">
-              <path d="M12 15.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7Z" stroke="currentColor" stroke-width="2"/>
-              <path d="m19.4 15 .1.1a2 2 0 0 1-2.8 2.8l-.1-.1a2 2 0 0 0-3.4 1.4V19a2 2 0 0 1-4 0v-.2A2 2 0 0 0 5.8 17l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1A2 2 0 0 0 1.6 10.8H2a2 2 0 0 1 0-4h.2A2 2 0 0 0 4.8 3.4l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1A2 2 0 0 0 11 1.9V2a2 2 0 0 1 4 0v.2a2 2 0 0 0 3.4 1.4l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1A2 2 0 0 0 21.6 10h.2a2 2 0 0 1 0 4h-.2a2 2 0 0 0-2.2 1Z" stroke="currentColor" stroke-width="1.3"/>
-            </svg>
-            Settings
-          </button>
-
-        </nav>
-
-        <div class="sidebar-bottom">
-          <button id="logoutBtn" class="ghost-btn wide">
-            <svg viewBox="0 0 24 24" fill="none">
-              <path d="M10 4H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h5" stroke="currentColor" stroke-width="2"/>
-              <path d="M14 8l4 4-4 4M18 12H9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-            </svg>
-            Sign Out
-          </button>
-        </div>
-
-      </aside>
-
-
-      <!-- MAIN -->
-      <main class="main">
-
-        <header class="topbar">
-
-          <div class="top-left">
-
-            <button id="menuBtn" class="menu-btn">
-              <svg viewBox="0 0 24 24" fill="none">
-                <path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-            </button>
-
-            <div class="page-heading">
-              <h2 id="pageTitle">Overview</h2>
-              <p>Cash Flow Bank administrative control center</p>
-            </div>
-
-          </div>
-
-          <div class="top-actions">
-
-            <div class="search-box">
-              <svg viewBox="0 0 24 24" fill="none">
-                <circle cx="11" cy="11" r="7" stroke="currentColor" stroke-width="2"/>
-                <path d="m16 16 5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-              </svg>
-              <input id="globalSearch" type="search" placeholder="Search customers...">
-            </div>
-
-            <button id="themeBtn" class="icon-btn" title="Toggle theme">
-              <svg viewBox="0 0 24 24" fill="none">
-                <path d="M20 15.5A8.5 8.5 0 0 1 8.5 4 8.5 8.5 0 1 0 20 15.5Z" stroke="currentColor" stroke-width="2"/>
-              </svg>
-            </button>
-
-            <div class="admin-chip">
-              <div class="admin-avatar">A</div>
-              <div>
-                <strong>Administrator</strong>
-                <span id="adminEmailLabel">Authorized Admin</span>
-              </div>
-            </div>
-
-          </div>
-
-        </header>
-
-
-        <div class="content">
-
-          <div class="prototype-banner">
-            <strong>Prototype administrative dashboard.</strong>
-            This interface is for managing simulated Cash Flow Bank data. It is not a real bank, deposit-taking institution, or real-money ledger.
-          </div>
-
-
-          <!-- OVERVIEW -->
-          <section id="page-overview" class="page active">
-
-            <div class="stats">
-
-              <div class="stat-card">
-                <div class="stat-top">
-                  <div class="stat-label">Customers</div>
-                  <div class="stat-icon">
-                    <svg viewBox="0 0 24 24" fill="none">
-                      <circle cx="9" cy="8" r="3" stroke="currentColor" stroke-width="2"/>
-                      <path d="M3 20c.7-3.4 2.7-5 6-5s5.3 1.6 6 5" stroke="currentColor" stroke-width="2"/>
-                    </svg>
-                  </div>
-                </div>
-                <div id="statCustomers" class="stat-value">0</div>
-                <div class="stat-description">Customer profiles</div>
-              </div>
-
-              <div class="stat-card">
-                <div class="stat-top">
-                  <div class="stat-label">Pending Accounts</div>
-                  <div class="stat-icon">
-                    <svg viewBox="0 0 24 24" fill="none">
-                      <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
-                      <path d="M12 7v5l3 2" stroke="currentColor" stroke-width="2"/>
-                    </svg>
-                  </div>
-                </div>
-                <div id="statPending" class="stat-value">0</div>
-                <div class="stat-description">Waiting for review</div>
-              </div>
-
-              <div class="stat-card">
-                <div class="stat-top">
-                  <div class="stat-label">Total Funds Added</div>
-                  <div class="stat-icon">
-                    <svg viewBox="0 0 24 24" fill="none">
-                      <path d="M12 3v18M17 7c0-2-2-3-5-3S7 5 7 7s2.5 3 5 4 5 2 5 4-2 4-5 4-5-1-5-4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    </svg>
-                  </div>
-                </div>
-                <div id="statFunds" class="stat-value">$0.00</div>
-                <div class="stat-description">Recorded prototype funds</div>
-              </div>
-
-              <div class="stat-card">
-                <div class="stat-top">
-                  <div class="stat-label">Transactions</div>
-                  <div class="stat-icon">
-                    <svg viewBox="0 0 24 24" fill="none">
-                      <path d="M5 7h14M5 12h14M5 17h9" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-                    </svg>
-                  </div>
-                </div>
-                <div id="statTransactions" class="stat-value">0</div>
-                <div class="stat-description">Recorded transactions</div>
-              </div>
-
-            </div>
-
-
-            <div class="grid-2">
-
-              <div class="card">
-                <div class="card-header">
-                  <div>
-                    <h3>Pending Account Reviews</h3>
-                    <p>Accounts waiting for an administrator decision</p>
-                  </div>
-                  <button class="ghost-btn" data-goto="pending">View all</button>
-                </div>
-                <div class="table-wrap">
-                  <table>
-                    <thead>
-                      <tr>
-                        <th>Customer</th>
-                        <th>Account</th>
-                        <th>Created</th>
-                        <th>Action</th>
-                      </tr>
-                    </thead>
-                    <tbody id="overviewPendingBody"></tbody>
-                  </table>
-                </div>
-              </div>
-
-
-              <div class="card">
-                <div class="card-header">
-                  <div>
-                    <h3>Recent Activity</h3>
-                    <p>Latest administrative events</p>
-                  </div>
-                </div>
-
-                <div class="card-body">
-                  <div id="overviewActivity" class="activity-list"></div>
-                </div>
-              </div>
-
-            </div>
-
-          </section>
-
-
-          <!-- PENDING -->
-          <section id="page-pending" class="page">
-
-            <div class="page-toolbar">
-              <div>
-                <h3 style="margin:0 0 5px;">Pending Accounts</h3>
-                <div style="font-size:12px;color:var(--muted);">
-                  Review newly created customer accounts.
-                </div>
-              </div>
-              <button id="refreshPending" class="ghost-btn">Refresh</button>
-            </div>
-
-            <div class="card">
-              <div class="table-wrap">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Customer</th>
-                      <th>Account Number</th>
-                      <th>Country</th>
-                      <th>Type</th>
-                      <th>Created</th>
-                      <th>Status</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody id="pendingBody"></tbody>
-                </table>
-              </div>
-            </div>
-
-          </section>
-
-
-          <!-- CUSTOMERS -->
-          <section id="page-customers" class="page">
-
-            <div class="page-toolbar">
-              <div>
-                <h3 style="margin:0 0 5px;">Customers</h3>
-                <div style="font-size:12px;color:var(--muted);">
-                  Search and manage customer prototype records.
-                </div>
-              </div>
-
-              <div class="filters">
-                <input id="customerSearch" class="input" placeholder="Search name, email, account...">
-                <select id="customerStatusFilter" class="select">
-                  <option value="">All statuses</option>
-                  <option value="pending">Pending</option>
-                  <option value="active">Active</option>
-                  <option value="rejected">Rejected</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="card">
-              <div class="table-wrap">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Customer</th>
-                      <th>Account</th>
-                      <th>Status</th>
-                      <th>Balance</th>
-                      <th>Funds Added</th>
-                      <th>Created</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody id="customersBody"></tbody>
-                </table>
-              </div>
-            </div>
-
-          </section>
-
-
-          <!-- TRANSACTIONS -->
-          <section id="page-transactions" class="page">
-
-            <div class="page-toolbar">
-              <div>
-                <h3 style="margin:0 0 5px;">Transactions</h3>
-                <div style="font-size:12px;color:var(--muted);">
-                  Review prototype transfer records.
-                </div>
-              </div>
-
-              <div class="filters">
-                <select id="txStatusFilter" class="select">
-                  <option value="">All statuses</option>
-                  <option value="pending">Pending</option>
-                  <option value="approved">Approved</option>
-                  <option value="completed">Completed</option>
-                  <option value="declined">Declined</option>
-                  <option value="refunded">Refunded</option>
-                </select>
-
-                <select id="txTypeFilter" class="select">
-                  <option value="">All transfer types</option>
-                  <option value="instant">Instant</option>
-                  <option value="wire">Wire</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="card">
-              <div class="table-wrap">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Customer</th>
-                      <th>Recipient</th>
-                      <th>Amount</th>
-                      <th>Type</th>
-                      <th>Status</th>
-                      <th>Transaction Date</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody id="transactionsBody"></tbody>
-                </table>
-              </div>
-            </div>
-
-          </section>
-
-
-          <!-- CANCELLATIONS -->
-          <section id="page-cancellations" class="page">
-
-            <div class="page-toolbar">
-              <div>
-                <h3 style="margin:0 0 5px;">Cancellation Requests</h3>
-                <div style="font-size:12px;color:var(--muted);">
-                  Review customer cancellation requests.
-                </div>
-              </div>
-            </div>
-
-            <div class="card">
-              <div class="table-wrap">
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Customer</th>
-                      <th>Transaction</th>
-                      <th>Amount</th>
-                      <th>Reason</th>
-                      <th>Status</th>
-                      <th>Requested</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody id="cancellationsBody"></tbody>
-                </table>
-              </div>
-            </div>
-
-          </section>
-
-
-          <!-- ACTIVITY -->
-          <section id="page-activity" class="page">
-
-            <div class="card">
-              <div class="card-header">
-                <div>
-                  <h3>Administrative Activity</h3>
-                  <p>Actions recorded during this browser session.</p>
-                </div>
-              </div>
-
-              <div class="card-body">
-                <div id="activityList" class="activity-list"></div>
-              </div>
-            </div>
-
-          </section>
-
-
-          <!-- SETTINGS -->
-          <section id="page-settings" class="page">
-
-            <div class="grid-2">
-
-              <div class="card">
-                <div class="card-header">
-                  <div>
-                    <h3>Appearance</h3>
-                    <p>Choose the administrator interface theme.</p>
-                  </div>
-                </div>
-
-                <div class="card-body">
-
-                  <button id="settingsThemeBtn" class="ghost-btn">
-                    Toggle Light / Dark
-                  </button>
-
-                </div>
-              </div>
-
-
-              <div class="card">
-                <div class="card-header">
-                  <div>
-                    <h3>Administrator Account</h3>
-                    <p>Current Firebase Authentication account.</p>
-                  </div>
-                </div>
-
-                <div class="card-body">
-
-                  <div class="detail-box">
-                    <span>Email</span>
-                    <strong id="settingsAdminEmail">—</strong>
-                  </div>
-
-                  <br>
-
-                  <div class="prototype-note">
-                    Administrator authorization is handled through Firebase Authentication and the Firestore security rules. No administrator password is stored in this page.
-                  </div>
-
-                </div>
-              </div>
-
-            </div>
-
-          </section>
-
-        </div>
-      </main>
-
-    </div>
-  </section>
-
-
-  <!-- CUSTOMER MODAL -->
-  <div id="customerModal" class="modal-backdrop">
-
-    <div class="modal">
-
-      <div class="modal-header">
-        <h3>Customer Details</h3>
-
-        <button class="modal-close" onclick="closeModal('customerModal')">
-          <svg viewBox="0 0 24 24" fill="none">
-            <path d="m7 7 10 10M17 7 7 17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-        </button>
-      </div>
-
-      <div class="modal-body">
-
-        <div id="customerModalContent"></div>
-
-      </div>
-
-    </div>
-
-  </div>
-
-
-  <!-- TRANSACTION MODAL -->
-  <div id="transactionModal" class="modal-backdrop">
-
-    <div class="modal">
-
-      <div class="modal-header">
-        <h3>Edit Transaction</h3>
-
-        <button class="modal-close" onclick="closeModal('transactionModal')">
-          <svg viewBox="0 0 24 24" fill="none">
-            <path d="m7 7 10 10M17 7 7 17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
-          </svg>
-        </button>
-      </div>
-
-      <div class="modal-body">
-        <div id="transactionModalContent"></div>
-      </div>
-
-    </div>
-
-  </div>
-
-
-  <div id="toast"></div>
-
-
-  <!-- FIREBASE -->
-  <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-auth-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore-compat.js"></script>
-
-
-  <script>
-
-    /* =========================================================
-       CASH FLOW BANK ADMIN
-       ========================================================= */
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyB6M6TgGnHPWOnDr9xO4JYJbx4qtZr9W2w",
-      authDomain: "cashflowbank-9068.firebaseapp.com",
-      databaseURL: "https://cashflowbank-9068-default-rtdb.firebaseio.com",
-      projectId: "cashflowbank-9068",
-      storageBucket: "cashflowbank-9068.firebasestorage.app",
-      messagingSenderId: "38012287371",
-      appId: "1:38012287371:web:e3e8df73166ae0fc84d78e"
-    };
+<!-- LOGIN -->
+<section id="loginScreen">
 
+<div class="login-wrap">
+
+<div class="login-brand">
+
+<div class="brand-mark">
+<svg viewBox="0 0 48 48" fill="none">
+<path d="M8 18L24 8L40 18" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M11 20V37M19 20V37M29 20V37M37 20V37" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+<path d="M7 40H41" stroke="currentColor" stroke-width="3" stroke-linecap="round"/>
+</svg>
+</div>
+
+<h1>Cash Flow Bank</h1>
+<p>Administrator Portal</p>
+
+</div>
+
+<div class="login-card">
+
+<h2>Administrator Sign In</h2>
+
+<p class="sub">
+Sign in with the Firebase Authentication account you created for administration.
+</p>
+
+<div id="loginError" class="login-error hidden"></div>
+
+<form id="loginForm">
+
+<div class="field">
+<label>Email address</label>
+<input
+id="loginEmail"
+class="input"
+type="email"
+autocomplete="username"
+required
+placeholder="Administrator email">
+</div>
+
+<div class="field">
+<label>Password</label>
+<input
+id="loginPassword"
+class="input"
+type="password"
+autocomplete="current-password"
+required
+placeholder="Password">
+</div>
+
+<button id="loginButton" class="primary-btn wide" type="submit">
+
+<svg viewBox="0 0 24 24" fill="none">
+<path d="M10 4H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h5"
+stroke="currentColor" stroke-width="2"/>
+<path d="M14 8l4 4-4 4M18 12H9"
+stroke="currentColor" stroke-width="2"
+stroke-linecap="round"
+stroke-linejoin="round"/>
+</svg>
+
+Sign In
+
+</button>
+
+</form>
+
+<div class="prototype-note">
+<strong>Prototype notice:</strong>
+This is an administrative interface for the Cash Flow Bank prototype.
+It is not a real bank, deposit-taking institution, or real-money ledger.
+</div>
+
+</div>
+</div>
+</section>
+
+
+<!-- APP -->
+<section id="app" class="hidden">
+
+<div class="app-shell">
+
+<!-- SIDEBAR -->
+<aside id="sidebar" class="sidebar">
+
+<div class="sidebar-brand">
+
+<div class="mini-mark">
+<svg viewBox="0 0 48 48" fill="none">
+<path d="M8 18L24 8L40 18" stroke="currentColor" stroke-width="3"/>
+<path d="M11 20V37M19 20V37M29 20V37M37 20V37"
+stroke="currentColor" stroke-width="3"/>
+<path d="M7 40H41" stroke="currentColor" stroke-width="3"/>
+</svg>
+</div>
+
+<div>
+<strong>Cash Flow Bank</strong>
+<small>Administrator</small>
+</div>
+
+</div>
+
+<div class="nav-title">Management</div>
+
+<nav class="nav">
+
+<button class="nav-item active" data-page="overview">
+<svg viewBox="0 0 24 24" fill="none">
+<rect x="3" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/>
+<rect x="14" y="3" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/>
+<rect x="3" y="14" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/>
+<rect x="14" y="14" width="7" height="7" rx="1.5" stroke="currentColor" stroke-width="2"/>
+</svg>
+Overview
+</button>
+
+<button class="nav-item" data-page="pending">
+<svg viewBox="0 0 24 24" fill="none">
+<circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/>
+<path d="M12 7v5l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+</svg>
+Pending Accounts
+</button>
+
+<button class="nav-item" data-page="customers">
+<svg viewBox="0 0 24 24" fill="none">
+<circle cx="9" cy="8" r="3" stroke="currentColor" stroke-width="2"/>
+<path d="M3 20c.7-3.4 2.7-5 6-5s5.3 1.6 6 5"
+stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+<path d="M16 11c2.5 0 4 1.3 5 4M16 5.5a2.5 2.5 0 0 1 0 5"
+stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+</svg>
+Customers
+</button>
+
+<button class="nav-item" data-page="transactions">
+<svg viewBox="0 0 24 24" fill="none">
+<rect x="3" y="5" width="18" height="14" rx="2"
+stroke="currentColor" stroke-width="2"/>
+<path d="M3 10h18M7 15h4"
+stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+</svg>
+Transactions
+</button>
+
+<button class="nav-item" data-page="cancellations">
+<svg viewBox="0 0 24 24" fill="none">
+<path d="M4 7h16M7 4h10l1 3H6l1-3Z"
+stroke="currentColor" stroke-width="2"/>
+<path d="M7 10v8a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2v-8"
+stroke="currentColor" stroke-width="2"/>
+</svg>
+Cancellation Requests
+</button>
+
+<button class="nav-item" data-page="activity">
+<svg viewBox="0 0 24 24" fill="none">
+<path d="M4 17V7M10 17V4M16 17v-7M22 17V3"
+stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+</svg>
+Activity
+</button>
+
+<button class="nav-item" data-page="settings">
+<svg viewBox="0 0 24 24" fill="none">
+<circle cx="12" cy="12" r="3.5"
+stroke="currentColor" stroke-width="2"/>
+<path d="M19 12a7 7 0 0 0-.3-2l2-1.2-2-3.4-2.1 1.2a7 7 0 0 0-3.6-2V2h-4v2.6a7 7 0 0 0-3.6 2L3.3 5.4l-2 3.4 2 1.2a7 7 0 0 0 0 4l-2 1.2 2 3.4 2.1-1.2a7 7 0 0 0 3.6 2V22h4v-2.6a7 7 0 0 0 3.6-2l2.1 1.2 2-3.4-2-1.2c.2-.6.3-1.3.3-2Z"
+stroke="currentColor" stroke-width="1.4"/>
+</svg>
+Settings
+</button>
+
+</nav>
+
+<div class="sidebar-bottom">
+
+<button id="logoutBtn" class="ghost-btn wide">
+
+<svg viewBox="0 0 24 24" fill="none">
+<path d="M10 4H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h5"
+stroke="currentColor" stroke-width="2"/>
+<path d="M14 8l4 4-4 4M18 12H9"
+stroke="currentColor" stroke-width="2"
+stroke-linecap="round"/>
+</svg>
+
+Sign Out
+
+</button>
+
+</div>
+
+</aside>
+
+
+<!-- MAIN -->
+<main class="main">
+
+<header class="topbar">
+
+<div class="top-left">
+
+<button id="menuBtn" class="menu-btn">
+<svg viewBox="0 0 24 24" fill="none">
+<path d="M4 6h16M4 12h16M4 18h16"
+stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+</svg>
+</button>
+
+<div class="page-heading">
+<h2 id="pageTitle">Overview</h2>
+<p>Cash Flow Bank administrative control center</p>
+</div>
+
+</div>
+
+<div class="top-actions">
+
+<div class="search-box">
+<svg viewBox="0 0 24 24" fill="none">
+<circle cx="11" cy="11" r="7"
+stroke="currentColor" stroke-width="2"/>
+<path d="m16 16 5 5"
+stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+</svg>
+<input id="globalSearch" type="search" placeholder="Search customers...">
+</div>
+
+<button id="themeBtn" class="icon-btn">
+
+<svg viewBox="0 0 24 24" fill="none">
+<path d="M20 15.5A8.5 8.5 0 0 1 8.5 4 8.5 8.5 0 1 0 20 15.5Z"
+stroke="currentColor" stroke-width="2"/>
+</svg>
+
+</button>
+
+<div class="admin-chip">
+
+<div class="admin-avatar">A</div>
+
+<div>
+<strong>Administrator</strong>
+<span id="adminEmailLabel">Firebase Admin</span>
+</div>
+
+</div>
+
+</div>
+</header>
+
+
+<div class="content">
+
+<div class="prototype-banner">
+
+<strong>Prototype administrative dashboard.</strong>
+This interface manages simulated Cash Flow Bank data.
+It is not a real bank, deposit-taking institution, or real-money ledger.
+
+</div>
+
+
+<!-- OVERVIEW -->
+<section id="page-overview" class="page active">
+
+<div class="stats">
+
+<div class="stat-card">
+<div class="stat-top">
+<div class="stat-label">Customers</div>
+<div class="stat-icon">👤</div>
+</div>
+<div id="statCustomers" class="stat-value">0</div>
+<div class="stat-description">Customer profiles</div>
+</div>
+
+<div class="stat-card">
+<div class="stat-top">
+<div class="stat-label">Pending Accounts</div>
+<div class="stat-icon">◷</div>
+</div>
+<div id="statPending" class="stat-value">0</div>
+<div class="stat-description">Waiting for review</div>
+</div>
+
+<div class="stat-card">
+<div class="stat-top">
+<div class="stat-label">Total Funds Added</div>
+<div class="stat-icon">$</div>
+</div>
+<div id="statFunds" class="stat-value">$0.00</div>
+<div class="stat-description">Recorded prototype funds</div>
+</div>
+
+<div class="stat-card">
+<div class="stat-top">
+<div class="stat-label">Transactions</div>
+<div class="stat-icon">≡</div>
+</div>
+<div id="statTransactions" class="stat-value">0</div>
+<div class="stat-description">Recorded transactions</div>
+</div>
+
+</div>
+
+
+<div class="grid-2">
+
+<div class="card">
+
+<div class="card-header">
+
+<div>
+<h3>Pending Account Reviews</h3>
+<p>Accounts waiting for an administrator decision</p>
+</div>
+
+<button class="ghost-btn" data-goto="pending">
+View all
+</button>
+
+</div>
+
+<div class="table-wrap">
+
+<table>
+
+<thead>
+<tr>
+<th>Customer</th>
+<th>Account</th>
+<th>Created</th>
+<th>Action</th>
+</tr>
+</thead>
+
+<tbody id="overviewPendingBody"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+
+<div class="card">
+
+<div class="card-header">
+
+<div>
+<h3>Recent Activity</h3>
+<p>Latest administrative events</p>
+</div>
+
+</div>
+
+<div class="card-body">
+<div id="overviewActivity" class="activity-list"></div>
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- PENDING -->
+<section id="page-pending" class="page">
+
+<div class="page-toolbar">
+
+<div>
+<h3 style="margin:0 0 5px;">Pending Accounts</h3>
+<div style="font-size:12px;color:var(--muted);">
+Review newly created customer accounts.
+</div>
+</div>
+
+<button id="refreshPending" class="ghost-btn">
+Refresh
+</button>
+
+</div>
+
+<div class="card">
+
+<div class="table-wrap">
+
+<table>
+
+<thead>
+<tr>
+<th>Customer</th>
+<th>Account Number</th>
+<th>Country</th>
+<th>Type</th>
+<th>Created</th>
+<th>Status</th>
+<th>Actions</th>
+</tr>
+</thead>
+
+<tbody id="pendingBody"></tbody>
+
+</table>
+
+</div>
+</div>
+
+</section>
+
+
+<!-- CUSTOMERS -->
+<section id="page-customers" class="page">
+
+<div class="page-toolbar">
+
+<div>
+<h3 style="margin:0 0 5px;">Customers</h3>
+<div style="font-size:12px;color:var(--muted);">
+Search and manage customer prototype records.
+</div>
+</div>
+
+<div class="filters">
+
+<input
+id="customerSearch"
+class="input"
+placeholder="Search name, email, account...">
+
+<select id="customerStatusFilter" class="select">
+
+<option value="">All statuses</option>
+<option value="pending">Pending</option>
+<option value="active">Active</option>
+<option value="rejected">Rejected</option>
+
+</select>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<div class="table-wrap">
+
+<table>
+
+<thead>
+<tr>
+<th>Customer</th>
+<th>Account</th>
+<th>Status</th>
+<th>Balance</th>
+<th>Funds Added</th>
+<th>Created</th>
+<th>Actions</th>
+</tr>
+</thead>
+
+<tbody id="customersBody"></tbody>
+
+</table>
+
+</div>
+</div>
+
+</section>
+
+
+<!-- TRANSACTIONS -->
+<section id="page-transactions" class="page">
+
+<div class="page-toolbar">
+
+<div>
+<h3 style="margin:0 0 5px;">Transactions</h3>
+<div style="font-size:12px;color:var(--muted);">
+Review prototype transfer records.
+</div>
+</div>
+
+<div class="filters">
+
+<select id="txStatusFilter" class="select">
+<option value="">All statuses</option>
+<option value="pending">Pending</option>
+<option value="approved">Approved</option>
+<option value="completed">Completed</option>
+<option value="declined">Declined</option>
+<option value="refunded">Refunded</option>
+</select>
+
+<select id="txTypeFilter" class="select">
+<option value="">All transfer types</option>
+<option value="instant">Instant</option>
+<option value="wire">Wire</option>
+</select>
+
+</div>
+</div>
+
+<div class="card">
+
+<div class="table-wrap">
+
+<table>
+
+<thead>
+<tr>
+<th>Customer</th>
+<th>Recipient</th>
+<th>Amount</th>
+<th>Type</th>
+<th>Status</th>
+<th>Transaction Date</th>
+<th>Actions</th>
+</tr>
+</thead>
+
+<tbody id="transactionsBody"></tbody>
+
+</table>
+
+</div>
+</div>
+
+</section>
+
+
+<!-- CANCELLATIONS -->
+<section id="page-cancellations" class="page">
+
+<div class="page-toolbar">
+
+<div>
+<h3 style="margin:0 0 5px;">Cancellation Requests</h3>
+<div style="font-size:12px;color:var(--muted);">
+Review customer cancellation requests.
+</div>
+</div>
+
+</div>
+
+<div class="card">
+
+<div class="table-wrap">
+
+<table>
+
+<thead>
+<tr>
+<th>Customer</th>
+<th>Transaction</th>
+<th>Amount</th>
+<th>Reason</th>
+<th>Status</th>
+<th>Requested</th>
+<th>Actions</th>
+</tr>
+</thead>
+
+<tbody id="cancellationsBody"></tbody>
+
+</table>
+
+</div>
+</div>
+
+</section>
+
+
+<!-- ACTIVITY -->
+<section id="page-activity" class="page">
+
+<div class="card">
+
+<div class="card-header">
+
+<div>
+<h3>Administrative Activity</h3>
+<p>Actions recorded during this browser session.</p>
+</div>
+
+</div>
+
+<div class="card-body">
+<div id="activityList" class="activity-list"></div>
+</div>
+
+</div>
+
+</section>
+
+
+<!-- SETTINGS -->
+<section id="page-settings" class="page">
+
+<div class="grid-2">
+
+<div class="card">
+
+<div class="card-header">
+
+<div>
+<h3>Appearance</h3>
+<p>Choose the administrator interface theme.</p>
+</div>
+
+</div>
+
+<div class="card-body">
+
+<button id="settingsThemeBtn" class="ghost-btn">
+Toggle Light / Dark
+</button>
+
+</div>
+
+</div>
+
+
+<div class="card">
+
+<div class="card-header">
+
+<div>
+<h3>Administrator Account</h3>
+<p>Current Firebase Authentication account.</p>
+</div>
+
+</div>
+
+<div class="card-body">
+
+<div class="detail-box">
+
+<span>Email</span>
+
+<strong id="settingsAdminEmail">—</strong>
+
+</div>
+
+<br>
+
+<div class="prototype-note">
+
+Firebase Authentication controls the sign-in.
+Firestore security rules still control access to customer and transaction data.
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+</div>
+</main>
+</div>
+</section>
+
+
+<!-- CUSTOMER MODAL -->
+<div id="customerModal" class="modal-backdrop">
+
+<div class="modal">
+
+<div class="modal-header">
+
+<h3>Customer Details</h3>
+
+<button class="modal-close" onclick="closeModal('customerModal')">
+
+<svg viewBox="0 0 24 24" fill="none">
+<path d="m7 7 10 10M17 7 7 17"
+stroke="currentColor" stroke-width="2"
+stroke-linecap="round"/>
+</svg>
+
+</button>
+
+</div>
+
+<div class="modal-body">
+<div id="customerModalContent"></div>
+</div>
+
+</div>
+</div>
+
+
+<!-- TRANSACTION MODAL -->
+<div id="transactionModal" class="modal-backdrop">
+
+<div class="modal">
+
+<div class="modal-header">
+
+<h3>Edit Transaction</h3>
+
+<button class="modal-close" onclick="closeModal('transactionModal')">
+
+<svg viewBox="0 0 24 24" fill="none">
+<path d="m7 7 10 10M17 7 7 17"
+stroke="currentColor" stroke-width="2"
+stroke-linecap="round"/>
+</svg>
+
+</button>
+
+</div>
+
+<div class="modal-body">
+<div id="transactionModalContent"></div>
+</div>
+
+</div>
+</div>
+
+
+<div id="toast"></div>
+
+
+<!-- FIREBASE COMPAT -->
+<script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.0/firebase-firestore-compat.js"></script>
+
+<script>
+
+/* =========================================================
+   FIREBASE CONFIG
+   ========================================================= */
+
+const firebaseConfig = {
+  apiKey: "AIzaSyB6M6TtGnHPWOnDr9xO4JYJbx4qtZr9W2w",
+  authDomain: "cashflowbank-9068.firebaseapp.com",
+  databaseURL: "https://cashflowbank-9068-default-rtdb.firebaseio.com",
+  projectId: "cashflowbank-9068",
+  storageBucket: "cashflowbank-9068.firebasestorage.app",
+  messagingSenderId: "38012287371",
+  appId: "1:38012287371:web:e3e8df73166ae0fc84d78e"
+};
+
+
+/* =========================================================
+   FIREBASE START
+   ========================================================= */
+
+try {
+
+  if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
+  }
 
-    const auth = firebase.auth();
-    const db = firebase.firestore();
+} catch(error) {
 
+  console.error("Firebase initialization error:",error);
 
-    /* =========================================================
-       IMPORTANT
-       Replace this with the email used for your ADMIN Firebase
-       Authentication account.
-       ========================================================= */
-
-    const ADMIN_EMAIL = "YOUR-ADMIN-EMAIL@example.com";
+}
 
 
-    /* =========================================================
-       STATE
-       ========================================================= */
+/* =========================================================
+   SERVICES
+   ========================================================= */
 
-    let currentUser = null;
-
-    let users = [];
-    let transactions = [];
-    let cancellations = [];
-
-    let activity = [];
-
-    let selectedCustomer = null;
-    let selectedTransaction = null;
+const auth = firebase.auth();
+const db = firebase.firestore();
 
 
-    /* =========================================================
-       HELPERS
-       ========================================================= */
+/* =========================================================
+   STATE
+   ========================================================= */
 
-    function escapeHTML(value) {
-      return String(value ?? "")
-        .replaceAll("&", "&amp;")
-        .replaceAll("<", "&lt;")
-        .replaceAll(">", "&gt;")
-        .replaceAll('"', "&quot;")
-        .replaceAll("'", "&#039;");
+let currentUser = null;
+let users = [];
+let transactions = [];
+let cancellations = [];
+let activity = [];
+
+
+/* =========================================================
+   HELPERS
+   ========================================================= */
+
+function escapeHTML(value){
+
+  return String(value ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+
+}
+
+
+function money(value){
+
+  return new Intl.NumberFormat("en-US",{
+    style:"currency",
+    currency:"USD",
+    minimumFractionDigits:2
+  }).format(Number(value || 0));
+
+}
+
+
+function dateValue(value){
+
+  if(!value) return "";
+
+  if(typeof value === "string"){
+    return value.substring(0,10);
+  }
+
+  if(value.toDate){
+
+    const d=value.toDate();
+
+    return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}-${String(d.getDate()).padStart(2,"0")}`;
+
+  }
+
+  if(value instanceof Date){
+
+    return `${value.getFullYear()}-${String(value.getMonth()+1).padStart(2,"0")}-${String(value.getDate()).padStart(2,"0")}`;
+
+  }
+
+  return "";
+
+}
+
+
+function displayDate(value){
+
+  const d=dateValue(value);
+
+  if(!d) return "—";
+
+  const date=new Date(d+"T00:00:00");
+
+  if(Number.isNaN(date.getTime())) return d;
+
+  return date.toLocaleDateString("en-US",{
+    year:"numeric",
+    month:"short",
+    day:"numeric"
+  });
+
+}
+
+
+function timestampFromDate(date){
+
+  return firebase.firestore.Timestamp.fromDate(
+    new Date(date+"T00:00:00")
+  );
+
+}
+
+
+function initials(name){
+
+  const parts=String(name||"Customer")
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean);
+
+  if(!parts.length) return "C";
+
+  if(parts.length===1){
+    return parts[0].substring(0,2).toUpperCase();
+  }
+
+  return (
+    parts[0][0]+
+    parts[parts.length-1][0]
+  ).toUpperCase();
+
+}
+
+
+function customerAvatar(user,large=false){
+
+  const cls=large?"large-avatar":"customer-avatar";
+
+  if(user.photoURL){
+
+    return `
+      <div class="${cls}">
+        <img src="${escapeHTML(user.photoURL)}" alt="">
+      </div>
+    `;
+
+  }
+
+  return `
+    <div class="${cls}">
+      ${escapeHTML(initials(user.name))}
+    </div>
+  `;
+
+}
+
+
+function statusBadge(status){
+
+  const safe=String(status||"unknown").toLowerCase();
+
+  return `
+    <span class="badge ${escapeHTML(safe)}">
+      ${escapeHTML(safe)}
+    </span>
+  `;
+
+}
+
+
+function toast(message,type="success"){
+
+  const el=document.getElementById("toast");
+
+  el.textContent=message;
+  el.className="";
+  el.id="toast";
+
+  el.classList.add("show",type);
+
+  setTimeout(()=>{
+    el.classList.remove("show");
+  },3500);
+
+}
+
+
+function openModal(id){
+  document.getElementById(id).classList.add("show");
+}
+
+
+function closeModal(id){
+  document.getElementById(id).classList.remove("show");
+}
+
+
+/* =========================================================
+   ACTIVITY
+   ========================================================= */
+
+function loadActivity(){
+
+  try{
+
+    const stored=JSON.parse(
+      localStorage.getItem("cashflow_admin_activity")||"[]"
+    );
+
+    activity=stored.map(item=>({
+      ...item,
+      time:new Date(item.time)
+    }));
+
+  }catch{
+
+    activity=[];
+
+  }
+
+}
+
+
+function logActivity(title,description){
+
+  activity.unshift({
+    title,
+    description,
+    time:new Date()
+  });
+
+  activity=activity.slice(0,50);
+
+  localStorage.setItem(
+    "cashflow_admin_activity",
+    JSON.stringify(activity)
+  );
+
+  renderActivity();
+
+}
+
+
+/* =========================================================
+   LOGIN
+   ========================================================= */
+
+auth.onAuthStateChanged(async user=>{
+
+  if(!user){
+
+    currentUser=null;
+
+    document.getElementById("loginScreen")
+      .classList.remove("hidden");
+
+    document.getElementById("app")
+      .classList.add("hidden");
+
+    return;
+
+  }
+
+
+  currentUser=user;
+
+  document.getElementById("loginScreen")
+    .classList.add("hidden");
+
+  document.getElementById("app")
+    .classList.remove("hidden");
+
+  document.getElementById("adminEmailLabel")
+    .textContent=user.email||"Firebase Account";
+
+  document.getElementById("settingsAdminEmail")
+    .textContent=user.email||"—";
+
+
+  await loadData();
+
+});
+
+
+document.getElementById("loginForm")
+.addEventListener("submit",async event=>{
+
+  event.preventDefault();
+
+  const email=
+    document.getElementById("loginEmail")
+    .value
+    .trim();
+
+  const password=
+    document.getElementById("loginPassword")
+    .value;
+
+  const errorBox=
+    document.getElementById("loginError");
+
+  const button=
+    document.getElementById("loginButton");
+
+
+  errorBox.classList.add("hidden");
+
+  button.disabled=true;
+  button.textContent="Signing in...";
+
+
+  try{
+
+    await auth.signInWithEmailAndPassword(
+      email,
+      password
+    );
+
+  }catch(error){
+
+    console.error(error);
+
+    let message="Unable to sign in.";
+
+    switch(error.code){
+
+      case "auth/invalid-credential":
+        message="The email or password is incorrect.";
+        break;
+
+      case "auth/user-not-found":
+        message="No Firebase Authentication account was found with this email.";
+        break;
+
+      case "auth/wrong-password":
+        message="The password is incorrect.";
+        break;
+
+      case "auth/invalid-email":
+        message="Please enter a valid email address.";
+        break;
+
+      case "auth/too-many-requests":
+        message="Too many attempts. Please try again later.";
+        break;
+
+      case "auth/api-key-not-valid":
+        message=
+          "Firebase rejected the API key. Check the Web API key in Firebase Project Settings.";
+        break;
+
+      default:
+        message=error.message||message;
+
     }
 
+    errorBox.textContent=message;
+    errorBox.classList.remove("hidden");
 
-    function money(value) {
-      const number = Number(value || 0);
+  }finally{
 
-      return new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-        minimumFractionDigits: 2
-      }).format(number);
+    button.disabled=false;
+
+    button.innerHTML=`
+      <svg viewBox="0 0 24 24" fill="none">
+        <path d="M10 4H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h5"
+        stroke="currentColor" stroke-width="2"/>
+        <path d="M14 8l4 4-4 4M18 12H9"
+        stroke="currentColor"
+        stroke-width="2"
+        stroke-linecap="round"/>
+      </svg>
+      Sign In
+    `;
+
+  }
+
+});
+
+
+document.getElementById("logoutBtn")
+.addEventListener("click",async()=>{
+
+  await auth.signOut();
+
+});
+
+
+/* =========================================================
+   FIRESTORE DATA
+   ========================================================= */
+
+async function loadData(){
+
+  try{
+
+    const [
+      usersSnapshot,
+      txSnapshot,
+      cancellationSnapshot
+    ]=await Promise.all([
+
+      db.collection("users").get(),
+
+      db.collection("transactions").get(),
+
+      db.collection("cancellationRequests").get()
+
+    ]);
+
+
+    users=usersSnapshot.docs.map(doc=>({
+      id:doc.id,
+      ...doc.data()
+    }));
+
+
+    transactions=txSnapshot.docs.map(doc=>({
+      id:doc.id,
+      ...doc.data()
+    }));
+
+
+    cancellations=
+      cancellationSnapshot.docs.map(doc=>({
+        id:doc.id,
+        ...doc.data()
+      }));
+
+
+    renderAll();
+
+
+  }catch(error){
+
+    console.error(error);
+
+    let message="Could not load Firebase data.";
+
+    if(error.code==="permission-denied"){
+
+      message=
+        "Firebase Authentication worked, but Firestore Rules denied access.";
+
     }
 
+    toast(message,"error");
 
-    function dateValue(value) {
+  }
 
-      if (!value) return "";
-
-      if (typeof value === "string") {
-        return value.substring(0, 10);
-      }
-
-      if (value.toDate) {
-        const d = value.toDate();
-
-        const year = d.getFullYear();
-        const month = String(d.getMonth() + 1).padStart(2, "0");
-        const day = String(d.getDate()).padStart(2, "0");
-
-        return `${year}-${month}-${day}`;
-      }
-
-      if (value instanceof Date) {
-        const year = value.getFullYear();
-        const month = String(value.getMonth() + 1).padStart(2, "0");
-        const day = String(value.getDate()).padStart(2, "0");
-
-        return `${year}-${month}-${day}`;
-      }
-
-      return "";
-    }
+}
 
 
-    function displayDate(value) {
+/* =========================================================
+   RENDER ALL
+   ========================================================= */
 
-      const d = dateValue(value);
+function renderAll(){
 
-      if (!d) return "—";
+  renderStats();
+  renderOverview();
+  renderPending();
+  renderCustomers();
+  renderTransactions();
+  renderCancellations();
+  renderActivity();
 
-      const date = new Date(d + "T00:00:00");
-
-      if (Number.isNaN(date.getTime())) return d;
-
-      return date.toLocaleDateString("en-US", {
-        year: "numeric",
-        month: "short",
-        day: "numeric"
-      });
-    }
-
-
-    function timestampFromDate(dateString) {
-      return firebase.firestore.Timestamp.fromDate(
-        new Date(dateString + "T00:00:00")
-      );
-    }
+}
 
 
-    function initials(name) {
+/* =========================================================
+   STATS
+   ========================================================= */
 
-      const parts = String(name || "Customer")
-        .trim()
-        .split(/\s+/)
-        .filter(Boolean);
+function renderStats(){
 
-      if (!parts.length) return "C";
+  const pending=
+    users.filter(u=>u.status==="pending").length;
 
-      if (parts.length === 1) {
-        return parts[0].substring(0, 2).toUpperCase();
-      }
-
-      return (
-        parts[0][0] +
-        parts[parts.length - 1][0]
-      ).toUpperCase();
-    }
+  const totalFunds=
+    users.reduce(
+      (sum,u)=>sum+Number(u.totalFundsAdded||0),
+      0
+    );
 
 
-    function customerAvatar(user, large = false) {
+  document.getElementById("statCustomers")
+    .textContent=users.length;
 
-      const cls = large ? "large-avatar" : "customer-avatar";
+  document.getElementById("statPending")
+    .textContent=pending;
 
-      if (user.photoURL) {
+  document.getElementById("statFunds")
+    .textContent=money(totalFunds);
 
-        return `
-          <div class="${cls}">
-            <img src="${escapeHTML(user.photoURL)}" alt="">
+  document.getElementById("statTransactions")
+    .textContent=transactions.length;
+
+}
+
+
+/* =========================================================
+   OVERVIEW
+   ========================================================= */
+
+function renderOverview(){
+
+  const body=
+    document.getElementById("overviewPendingBody");
+
+  const pending=
+    users
+      .filter(u=>u.status==="pending")
+      .slice(0,5);
+
+
+  if(!pending.length){
+
+    body.innerHTML=`
+      <tr>
+        <td colspan="4">
+          <div class="empty">
+            No pending accounts.
           </div>
-        `;
+        </td>
+      </tr>
+    `;
 
-      }
+    return;
 
-      return `
-        <div class="${cls}">
-          ${escapeHTML(initials(user.name))}
+  }
+
+
+  body.innerHTML=pending.map(user=>`
+
+    <tr>
+
+      <td>
+        <div class="customer-cell">
+
+          ${customerAvatar(user)}
+
+          <div>
+            <strong>${escapeHTML(user.name||"Customer")}</strong>
+            <span>${escapeHTML(user.email||"")}</span>
+          </div>
+
         </div>
-      `;
-    }
+      </td>
 
+      <td>
+        ${escapeHTML(user.accountNumber||"—")}
+      </td>
 
-    function statusBadge(status) {
+      <td>
+        ${displayDate(user.createdAtDisplay||user.createdAt)}
+      </td>
 
-      const safe = String(status || "unknown").toLowerCase();
+      <td>
 
-      return `
-        <span class="badge ${escapeHTML(safe)}">
-          ${escapeHTML(safe)}
-        </span>
-      `;
-    }
+        <div class="row-actions">
 
+          <button
+            class="small-btn green"
+            onclick="approveCustomer('${user.id}')">
+            Approve
+          </button>
 
-    function logActivity(title, description) {
+          <button
+            class="small-btn red"
+            onclick="declineCustomer('${user.id}')">
+            Decline
+          </button>
 
-      activity.unshift({
-        title,
-        description,
-        time: new Date()
-      });
+        </div>
 
-      activity = activity.slice(0, 50);
+      </td>
 
-      localStorage.setItem(
-        "cashflow_admin_activity",
-        JSON.stringify(activity)
-      );
+    </tr>
 
-      renderActivity();
-    }
+  `).join("");
 
+}
 
-    function loadActivity() {
 
-      try {
+/* =========================================================
+   PENDING
+   ========================================================= */
 
-        const stored = JSON.parse(
-          localStorage.getItem("cashflow_admin_activity") || "[]"
-        );
+function renderPending(){
 
-        activity = stored.map(item => ({
-          ...item,
-          time: new Date(item.time)
-        }));
+  const body=
+    document.getElementById("pendingBody");
 
-      } catch {
+  const pending=
+    users.filter(u=>u.status==="pending");
 
-        activity = [];
 
-      }
-    }
+  if(!pending.length){
 
+    body.innerHTML=`
+      <tr>
+        <td colspan="7">
+          <div class="empty">
+            There are no pending accounts.
+          </div>
+        </td>
+      </tr>
+    `;
 
-    function toast(message, type = "success") {
+    return;
 
-      const element = document.getElementById("toast");
+  }
 
-      element.textContent = message;
 
-      element.className = "";
-      element.id = "toast";
-      element.classList.add("show", type);
+  body.innerHTML=pending.map(user=>`
 
-      setTimeout(() => {
-        element.classList.remove("show");
-      }, 3500);
-    }
+    <tr>
 
+      <td>
+        <div class="customer-cell">
 
-    function closeModal(id) {
-      document.getElementById(id).classList.remove("show");
-    }
+          ${customerAvatar(user)}
 
+          <div>
+            <strong>${escapeHTML(user.name||"Customer")}</strong>
+            <span>${escapeHTML(user.email||"")}</span>
+          </div>
 
-    function openModal(id) {
-      document.getElementById(id).classList.add("show");
-    }
+        </div>
+      </td>
 
+      <td>${escapeHTML(user.accountNumber||"—")}</td>
 
-    /* =========================================================
-       AUTHENTICATION
-       ========================================================= */
+      <td>${escapeHTML(user.country||"—")}</td>
 
-    auth.onAuthStateChanged(async user => {
+      <td>${escapeHTML(user.accountType||"—")}</td>
 
-      if (!user) {
+      <td>${displayDate(user.createdAtDisplay||user.createdAt)}</td>
 
-        currentUser = null;
+      <td>${statusBadge(user.status)}</td>
 
-        document.getElementById("loginScreen")
-          .classList.remove("hidden");
+      <td>
 
-        document.getElementById("app")
-          .classList.add("hidden");
+        <div class="row-actions">
 
-        return;
-      }
+          <button
+            class="small-btn green"
+            onclick="approveCustomer('${user.id}')">
+            Approve
+          </button>
 
+          <button
+            class="small-btn red"
+            onclick="declineCustomer('${user.id}')">
+            Decline
+          </button>
 
-      /*
-       * Email-based administrator check.
-       *
-       * This replaces the admins/{UID} check.
-       */
+          <button
+            class="small-btn primary"
+            onclick="viewCustomer('${user.id}')">
+            View
+          </button>
 
-      if (
-        !ADMIN_EMAIL ||
-        ADMIN_EMAIL === "YOUR-ADMIN-EMAIL@example.com"
-      ) {
+        </div>
 
-        await auth.signOut();
+      </td>
 
-        showLoginError(
-          "Set your administrator email in the ADMIN_EMAIL variable in admin.html first."
-        );
+    </tr>
 
-        return;
-      }
+  `).join("");
 
+}
 
-      if (
-        String(user.email || "").toLowerCase() !==
-        ADMIN_EMAIL.toLowerCase()
-      ) {
 
-        await auth.signOut();
+/* =========================================================
+   CUSTOMERS
+   ========================================================= */
 
-        showLoginError(
-          "This Firebase account is not the authorized administrator account."
-        );
+function renderCustomers(){
 
-        return;
-      }
+  const body=
+    document.getElementById("customersBody");
 
+  const search=
+    document.getElementById("customerSearch")
+    .value
+    .trim()
+    .toLowerCase();
 
-      currentUser = user;
+  const status=
+    document.getElementById("customerStatusFilter")
+    .value;
 
-      document.getElementById("loginScreen")
-        .classList.add("hidden");
 
-      document.getElementById("app")
-        .classList.remove("hidden");
+  const filtered=users.filter(user=>{
 
-      document.getElementById("adminEmailLabel")
-        .textContent = user.email;
+    const searchable=[
+      user.name,
+      user.email,
+      user.accountNumber,
+      user.country,
+      user.accountType
+    ]
+    .join(" ")
+    .toLowerCase();
 
-      document.getElementById("settingsAdminEmail")
-        .textContent = user.email;
 
-      await loadData();
+    return(
+      (!search||searchable.includes(search)) &&
+      (!status||user.status===status)
+    );
 
-    });
+  });
 
 
-    function showLoginError(message) {
+  if(!filtered.length){
 
-      const box = document.getElementById("loginError");
+    body.innerHTML=`
+      <tr>
+        <td colspan="7">
+          <div class="empty">
+            No customers match your search.
+          </div>
+        </td>
+      </tr>
+    `;
 
-      box.textContent = message;
+    return;
 
-      box.classList.remove("hidden");
+  }
 
-    }
 
+  body.innerHTML=filtered.map(user=>`
 
-    document.getElementById("loginForm")
-      .addEventListener("submit", async event => {
+    <tr>
 
-        event.preventDefault();
+      <td>
 
-        const email =
-          document.getElementById("loginEmail").value.trim();
+        <div class="customer-cell">
 
-        const password =
-          document.getElementById("loginPassword").value;
+          ${customerAvatar(user)}
 
+          <div>
+            <strong>${escapeHTML(user.name||"Customer")}</strong>
+            <span>${escapeHTML(user.email||"")}</span>
+          </div>
 
-        if (
-          ADMIN_EMAIL !== "YOUR-ADMIN-EMAIL@example.com" &&
-          email.toLowerCase() !== ADMIN_EMAIL.toLowerCase()
-        ) {
+        </div>
 
-          showLoginError(
-            "Please use the administrator email configured in admin.html."
-          );
+      </td>
 
-          return;
-        }
+      <td>${escapeHTML(user.accountNumber||"—")}</td>
 
+      <td>${statusBadge(user.status)}</td>
 
-        try {
+      <td>${money(user.balance)}</td>
 
-          const button =
-            event.target.querySelector("button");
+      <td>${money(user.totalFundsAdded)}</td>
 
-          button.disabled = true;
-          button.textContent = "Signing in...";
+      <td>${displayDate(user.createdAtDisplay||user.createdAt)}</td>
 
-          await auth.signInWithEmailAndPassword(
-            email,
-            password
-          );
+      <td>
 
-        } catch (error) {
+        <button
+          class="small-btn primary"
+          onclick="viewCustomer('${user.id}')">
+          Manage
+        </button>
 
-          console.error(error);
+      </td>
 
-          showLoginError(
-            firebaseAuthError(error)
-          );
+    </tr>
 
-        } finally {
+  `).join("");
 
-          const button =
-            event.target.querySelector("button");
+}
 
-          button.disabled = false;
 
-          button.innerHTML = `
-            <svg viewBox="0 0 24 24" fill="none">
-              <path d="M10 4H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h5"
-                stroke="currentColor" stroke-width="2"/>
-              <path d="M14 8l4 4-4 4M18 12H9"
-                stroke="currentColor" stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"/>
-            </svg>
-            Sign In
-          `;
+/* =========================================================
+   TRANSACTIONS
+   ========================================================= */
 
-        }
+function renderTransactions(){
 
-      });
+  const body=
+    document.getElementById("transactionsBody");
 
+  const status=
+    document.getElementById("txStatusFilter").value;
 
-    function firebaseAuthError(error) {
+  const type=
+    document.getElementById("txTypeFilter").value;
 
-      switch (error.code) {
 
-        case "auth/invalid-credential":
-          return "The email or password is incorrect.";
+  const filtered=transactions.filter(tx=>{
 
-        case "auth/user-not-found":
-          return "No Firebase Authentication account was found with this email.";
+    return(
+      (!status||tx.status===status) &&
+      (!type||tx.transferType===type)
+    );
 
-        case "auth/wrong-password":
-          return "The password is incorrect.";
+  });
 
-        case "auth/invalid-email":
-          return "Please enter a valid email address.";
 
-        case "auth/too-many-requests":
-          return "Too many sign-in attempts. Please try again later.";
+  if(!filtered.length){
 
-        default:
-          return error.message || "Unable to sign in.";
+    body.innerHTML=`
+      <tr>
+        <td colspan="7">
+          <div class="empty">
+            No transactions found.
+          </div>
+        </td>
+      </tr>
+    `;
 
-      }
+    return;
 
-    }
+  }
 
 
-    document.getElementById("logoutBtn")
-      .addEventListener("click", async () => {
+  body.innerHTML=filtered.map(tx=>{
 
-        await auth.signOut();
+    const customer=
+      users.find(u=>u.id===tx.userId);
 
-      });
 
+    return`
 
-    /* =========================================================
-       LOAD FIRESTORE DATA
-       ========================================================= */
+      <tr>
 
-    async function loadData() {
+        <td>
 
-      try {
+          <div class="customer-cell">
 
-        const [usersSnapshot, txSnapshot, cancellationSnapshot] =
-          await Promise.all([
-            db.collection("users").get(),
-            db.collection("transactions").get(),
-            db.collection("cancellationRequests").get()
-          ]);
+            ${customerAvatar(customer||{name:"Customer"})}
 
+            <div>
+              <strong>
+                ${escapeHTML(customer?.name||"Customer")}
+              </strong>
 
-        users = usersSnapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        }));
-
-
-        transactions = txSnapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        }));
-
-
-        cancellations = cancellationSnapshot.docs.map(doc => ({
-          id: doc.id,
-          ...doc.data()
-        }));
-
-
-        renderAll();
-
-      } catch (error) {
-
-        console.error(error);
-
-        toast(
-          "Could not load Firebase data. Check your Firestore Rules.",
-          "error"
-        );
-
-      }
-
-    }
-
-
-    /* =========================================================
-       RENDER
-       ========================================================= */
-
-    function renderAll() {
-
-      renderStats();
-      renderPending();
-      renderCustomers();
-      renderTransactions();
-      renderCancellations();
-      renderActivity();
-      renderOverview();
-
-    }
-
-
-    function renderStats() {
-
-      const pending =
-        users.filter(u => u.status === "pending").length;
-
-      const totalFunds =
-        users.reduce(
-          (sum, u) => sum + Number(u.totalFundsAdded || 0),
-          0
-        );
-
-
-      document.getElementById("statCustomers")
-        .textContent = users.length;
-
-      document.getElementById("statPending")
-        .textContent = pending;
-
-      document.getElementById("statFunds")
-        .textContent = money(totalFunds);
-
-      document.getElementById("statTransactions")
-        .textContent = transactions.length;
-
-    }
-
-
-    function renderOverview() {
-
-      const body =
-        document.getElementById("overviewPendingBody");
-
-      const pending =
-        users.filter(u => u.status === "pending")
-          .slice(0, 5);
-
-
-      if (!pending.length) {
-
-        body.innerHTML = `
-          <tr>
-            <td colspan="4">
-              <div class="empty">No pending accounts.</div>
-            </td>
-          </tr>
-        `;
-
-        return;
-      }
-
-
-      body.innerHTML = pending.map(user => `
-
-        <tr>
-
-          <td>
-            <div class="customer-cell">
-              ${customerAvatar(user)}
-              <div>
-                <strong>${escapeHTML(user.name || "Customer")}</strong>
-                <span>${escapeHTML(user.email || "")}</span>
-              </div>
+              <span>
+                ${escapeHTML(customer?.accountNumber||"")}
+              </span>
             </div>
-          </td>
 
-          <td>${escapeHTML(user.accountNumber || "—")}</td>
+          </div>
 
-          <td>${displayDate(user.createdAtDisplay || user.createdAt)}</td>
+        </td>
 
-          <td>
-            <div class="row-actions">
+        <td>
+          ${escapeHTML(tx.recipientName||"—")}
+        </td>
 
-              <button
-                class="small-btn green"
-                onclick="approveCustomer('${user.id}')">
-                Approve
-              </button>
+        <td>
+          ${money(tx.amount)}
+        </td>
 
-              <button
-                class="small-btn red"
-                onclick="declineCustomer('${user.id}')">
-                Decline
-              </button>
+        <td>
+          ${escapeHTML(tx.transferType||"—")}
+        </td>
 
-            </div>
-          </td>
+        <td>
+          ${statusBadge(tx.status)}
+        </td>
 
-        </tr>
+        <td>
+          ${displayDate(
+            tx.transactionDateDisplay||
+            tx.transactionDate||
+            tx.createdAt
+          )}
+        </td>
 
-      `).join("");
+        <td>
 
-    }
+          <div class="row-actions">
 
-
-    function renderPending() {
-
-      const body =
-        document.getElementById("pendingBody");
-
-      const pending =
-        users.filter(u => u.status === "pending");
-
-
-      if (!pending.length) {
-
-        body.innerHTML = `
-          <tr>
-            <td colspan="7">
-              <div class="empty">
-                There are no pending accounts.
-              </div>
-            </td>
-          </tr>
-        `;
-
-        return;
-      }
-
-
-      body.innerHTML = pending.map(user => `
-
-        <tr>
-
-          <td>
-            <div class="customer-cell">
-              ${customerAvatar(user)}
-              <div>
-                <strong>${escapeHTML(user.name || "Customer")}</strong>
-                <span>${escapeHTML(user.email || "")}</span>
-              </div>
-            </div>
-          </td>
-
-          <td>${escapeHTML(user.accountNumber || "—")}</td>
-
-          <td>${escapeHTML(user.country || "—")}</td>
-
-          <td>${escapeHTML(user.accountType || "—")}</td>
-
-          <td>${displayDate(user.createdAtDisplay || user.createdAt)}</td>
-
-          <td>${statusBadge(user.status)}</td>
-
-          <td>
-            <div class="row-actions">
-
-              <button
-                class="small-btn green"
-                onclick="approveCustomer('${user.id}')">
-                Approve
-              </button>
-
-              <button
-                class="small-btn red"
-                onclick="declineCustomer('${user.id}')">
-                Decline
-              </button>
-
-              <button
-                class="small-btn primary"
-                onclick="viewCustomer('${user.id}')">
-                View
-              </button>
-
-            </div>
-          </td>
-
-        </tr>
-
-      `).join("");
-
-    }
-
-
-    function renderCustomers() {
-
-      const body =
-        document.getElementById("customersBody");
-
-      const search =
-        document.getElementById("customerSearch")
-          .value
-          .trim()
-          .toLowerCase();
-
-      const status =
-        document.getElementById("customerStatusFilter")
-          .value;
-
-
-      const filtered = users.filter(user => {
-
-        const searchable = [
-          user.name,
-          user.email,
-          user.accountNumber,
-          user.country,
-          user.accountType
-        ]
-        .join(" ")
-        .toLowerCase();
-
-
-        return (
-          (!search || searchable.includes(search)) &&
-          (!status || user.status === status)
-        );
-
-      });
-
-
-      if (!filtered.length) {
-
-        body.innerHTML = `
-          <tr>
-            <td colspan="7">
-              <div class="empty">
-                No customers match your search.
-              </div>
-            </td>
-          </tr>
-        `;
-
-        return;
-      }
-
-
-      body.innerHTML = filtered.map(user => `
-
-        <tr>
-
-          <td>
-            <div class="customer-cell">
-              ${customerAvatar(user)}
-              <div>
-                <strong>${escapeHTML(user.name || "Customer")}</strong>
-                <span>${escapeHTML(user.email || "")}</span>
-              </div>
-            </div>
-          </td>
-
-          <td>${escapeHTML(user.accountNumber || "—")}</td>
-
-          <td>${statusBadge(user.status)}</td>
-
-          <td>${money(user.balance)}</td>
-
-          <td>${money(user.totalFundsAdded)}</td>
-
-          <td>${displayDate(user.createdAtDisplay || user.createdAt)}</td>
-
-          <td>
             <button
               class="small-btn primary"
-              onclick="viewCustomer('${user.id}')">
-              Manage
+              onclick="editTransaction('${tx.id}')">
+              Edit
             </button>
-          </td>
 
-        </tr>
+            ${
+              tx.status==="pending"
+              ?`
 
-      `).join("");
+                <button
+                  class="small-btn green"
+                  onclick="updateTransactionStatus('${tx.id}','approved')">
+                  Approve
+                </button>
 
-    }
+                <button
+                  class="small-btn red"
+                  onclick="updateTransactionStatus('${tx.id}','declined')">
+                  Decline
+                </button>
+
+              `:""
+            }
+
+            ${
+              tx.status==="approved"
+              ?`
+
+                <button
+                  class="small-btn green"
+                  onclick="updateTransactionStatus('${tx.id}','completed')">
+                  Complete
+                </button>
+
+              `:""
+            }
+
+            ${
+              tx.status==="completed"
+              ?`
+
+                <button
+                  class="small-btn red"
+                  onclick="updateTransactionStatus('${tx.id}','refunded')">
+                  Refund
+                </button>
+
+              `:""
+            }
+
+          </div>
+
+        </td>
+
+      </tr>
+
+    `;
+
+  }).join("");
+
+}
 
 
-    function renderTransactions() {
+/* =========================================================
+   CANCELLATIONS
+   ========================================================= */
 
-      const body =
-        document.getElementById("transactionsBody");
+function renderCancellations(){
 
-      const status =
-        document.getElementById("txStatusFilter").value;
-
-      const type =
-        document.getElementById("txTypeFilter").value;
+  const body=
+    document.getElementById("cancellationsBody");
 
 
-      const filtered = transactions.filter(tx => {
+  if(!cancellations.length){
 
-        return (
-          (!status || tx.status === status) &&
-          (!type || tx.transferType === type)
-        );
+    body.innerHTML=`
+      <tr>
+        <td colspan="7">
+          <div class="empty">
+            No cancellation requests.
+          </div>
+        </td>
+      </tr>
+    `;
 
-      });
+    return;
 
-
-      if (!filtered.length) {
-
-        body.innerHTML = `
-          <tr>
-            <td colspan="7">
-              <div class="empty">
-                No transactions found.
-              </div>
-            </td>
-          </tr>
-        `;
-
-        return;
-      }
+  }
 
 
-      body.innerHTML = filtered.map(tx => {
+  body.innerHTML=cancellations.map(request=>{
 
-        const customer =
-          users.find(u => u.id === tx.userId);
+    const customer=
+      users.find(u=>u.id===request.userId);
 
 
-        return `
+    return`
 
-          <tr>
+      <tr>
 
-            <td>
-              <div class="customer-cell">
-                ${customerAvatar(customer || {name:"Customer"})}
-                <div>
-                  <strong>
-                    ${escapeHTML(customer?.name || "Customer")}
-                  </strong>
-                  <span>
-                    ${escapeHTML(customer?.accountNumber || "")}
-                  </span>
-                </div>
-              </div>
-            </td>
+        <td>
 
-            <td>
-              ${escapeHTML(tx.recipientName || "—")}
-            </td>
+          <div class="customer-cell">
 
-            <td>
-              ${money(tx.amount)}
-            </td>
+            ${customerAvatar(customer||{name:"Customer"})}
 
-            <td>
-              ${escapeHTML(tx.transferType || "—")}
-            </td>
+            <div>
+              <strong>
+                ${escapeHTML(customer?.name||"Customer")}
+              </strong>
 
-            <td>
-              ${statusBadge(tx.status)}
-            </td>
+              <span>
+                ${escapeHTML(customer?.accountNumber||"")}
+              </span>
+            </div>
 
-            <td>
-              ${displayDate(
-                tx.transactionDateDisplay ||
-                tx.transactionDate ||
-                tx.createdAt
-              )}
-            </td>
+          </div>
 
-            <td>
+        </td>
+
+        <td>
+          ${escapeHTML(request.transactionId||"—")}
+        </td>
+
+        <td>
+          ${money(request.amount)}
+        </td>
+
+        <td>
+          ${escapeHTML(request.reason||"—")}
+        </td>
+
+        <td>
+          ${statusBadge(request.status)}
+        </td>
+
+        <td>
+          ${displayDate(request.createdAt)}
+        </td>
+
+        <td>
+
+          ${
+            request.status==="pending"
+            ?`
 
               <div class="row-actions">
 
                 <button
-                  class="small-btn primary"
-                  onclick="editTransaction('${tx.id}')">
-                  Edit
+                  class="small-btn green"
+                  onclick="handleCancellation('${request.id}','approved')">
+                  Refund
                 </button>
 
-                ${
-                  tx.status === "pending"
-                    ? `
-                      <button
-                        class="small-btn green"
-                        onclick="updateTransactionStatus('${tx.id}','approved')">
-                        Approve
-                      </button>
-
-                      <button
-                        class="small-btn red"
-                        onclick="updateTransactionStatus('${tx.id}','declined')">
-                        Decline
-                      </button>
-                    `
-                    : ""
-                }
-
-                ${
-                  tx.status === "approved"
-                    ? `
-                      <button
-                        class="small-btn green"
-                        onclick="updateTransactionStatus('${tx.id}','completed')">
-                        Complete
-                      </button>
-                    `
-                    : ""
-                }
-
-                ${
-                  tx.status === "completed"
-                    ? `
-                      <button
-                        class="small-btn red"
-                        onclick="updateTransactionStatus('${tx.id}','refunded')">
-                        Refund
-                      </button>
-                    `
-                    : ""
-                }
+                <button
+                  class="small-btn red"
+                  onclick="handleCancellation('${request.id}','declined')">
+                  Decline
+                </button>
 
               </div>
 
-            </td>
-
-          </tr>
-
-        `;
-
-      }).join("");
-
-    }
-
-
-    function renderCancellations() {
-
-      const body =
-        document.getElementById("cancellationsBody");
-
-
-      if (!cancellations.length) {
-
-        body.innerHTML = `
-          <tr>
-            <td colspan="7">
-              <div class="empty">
-                No cancellation requests.
-              </div>
-            </td>
-          </tr>
-        `;
-
-        return;
-      }
-
-
-      body.innerHTML = cancellations.map(request => {
-
-        const customer =
-          users.find(u => u.id === request.userId);
-
-
-        return `
-
-          <tr>
-
-            <td>
-              <div class="customer-cell">
-                ${customerAvatar(customer || {name:"Customer"})}
-                <div>
-                  <strong>
-                    ${escapeHTML(customer?.name || "Customer")}
-                  </strong>
-                  <span>
-                    ${escapeHTML(customer?.accountNumber || "")}
-                  </span>
-                </div>
-              </div>
-            </td>
-
-            <td>
-              ${escapeHTML(
-                request.transactionId || "—"
-              )}
-            </td>
-
-            <td>
-              ${money(request.amount)}
-            </td>
-
-            <td>
-              ${escapeHTML(request.reason || "—")}
-            </td>
-
-            <td>
-              ${statusBadge(request.status)}
-            </td>
-
-            <td>
-              ${displayDate(request.createdAt)}
-            </td>
-
-            <td>
-
-              ${
-                request.status === "pending"
-                  ? `
-                    <div class="row-actions">
-
-                      <button
-                        class="small-btn green"
-                        onclick="handleCancellation('${request.id}','approved')">
-                        Refund
-                      </button>
-
-                      <button
-                        class="small-btn red"
-                        onclick="handleCancellation('${request.id}','declined')">
-                        Decline
-                      </button>
-
-                    </div>
-                  `
-                  : statusBadge(request.status)
-              }
-
-            </td>
-
-          </tr>
-
-        `;
-
-      }).join("");
-
-    }
-
-
-    function renderActivity() {
-
-      const container =
-        document.getElementById("activityList");
-
-      const overview =
-        document.getElementById("overviewActivity");
-
-
-      const html =
-        activity.length
-          ? activity.map(item => `
-
-              <div class="activity">
-
-                <div class="activity-icon">
-
-                  <svg viewBox="0 0 24 24" fill="none">
-                    <path
-                      d="M12 3v18M3 12h18"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"/>
-                  </svg>
-
-                </div>
-
-                <div>
-
-                  <strong>
-                    ${escapeHTML(item.title)}
-                  </strong>
-
-                  <p>
-                    ${escapeHTML(item.description)}
-                  </p>
-
-                  <time>
-                    ${new Date(item.time).toLocaleString()}
-                  </time>
-
-                </div>
-
-              </div>
-
-            `).join("")
-          : `
-              <div class="empty">
-                No administrative activity recorded yet.
-              </div>
-            `;
-
-
-      container.innerHTML = html;
-
-      overview.innerHTML =
-        activity.slice(0, 5).length
-          ? activity.slice(0, 5).map(item => `
-
-              <div class="activity">
-
-                <div class="activity-icon">
-                  <svg viewBox="0 0 24 24" fill="none">
-                    <path
-                      d="M12 3v18M3 12h18"
-                      stroke="currentColor"
-                      stroke-width="2"
-                      stroke-linecap="round"/>
-                  </svg>
-                </div>
-
-                <div>
-                  <strong>${escapeHTML(item.title)}</strong>
-                  <p>${escapeHTML(item.description)}</p>
-                  <time>${new Date(item.time).toLocaleString()}</time>
-                </div>
-
-              </div>
-
-            `).join("")
-          : `
-              <div class="empty">
-                No recent activity.
-              </div>
-            `;
-
-    }
-
-
-    /* =========================================================
-       CUSTOMER ACTIONS
-       ========================================================= */
-
-    async function approveCustomer(id) {
-
-      const user =
-        users.find(u => u.id === id);
-
-      if (!user) return;
-
-
-      try {
-
-        await db.collection("users")
-          .doc(id)
-          .update({
-
-            status: "active",
-
-            approvedAt:
-              firebase.firestore.FieldValue.serverTimestamp(),
-
-            updatedAt:
-              firebase.firestore.FieldValue.serverTimestamp()
-
-          });
-
-
-        logActivity(
-          "Account approved",
-          `${user.name || "Customer"} was approved.`
-        );
-
-
-        toast("Account approved.");
-
-        await loadData();
-
-      } catch (error) {
-
-        console.error(error);
-
-        toast(
-          "Unable to approve account. Check Firestore Rules.",
-          "error"
-        );
-
-      }
-
-    }
-
-
-    async function declineCustomer(id) {
-
-      const user =
-        users.find(u => u.id === id);
-
-      if (!user) return;
-
-
-      if (
-        !confirm(
-          `Decline the account for ${user.name || "this customer"}?`
-        )
-      ) return;
-
-
-      try {
-
-        await db.collection("users")
-          .doc(id)
-          .update({
-
-            status: "rejected",
-
-            rejectedAt:
-              firebase.firestore.FieldValue.serverTimestamp(),
-
-            updatedAt:
-              firebase.firestore.FieldValue.serverTimestamp()
-
-          });
-
-
-        logActivity(
-          "Account declined",
-          `${user.name || "Customer"} was declined.`
-        );
-
-
-        toast("Account declined.");
-
-        await loadData();
-
-      } catch (error) {
-
-        console.error(error);
-
-        toast(
-          "Unable to decline account.",
-          "error"
-        );
-
-      }
-
-    }
-
-
-    async function deleteCustomer(id) {
-
-      const user =
-        users.find(u => u.id === id);
-
-      if (!user) return;
-
-
-      if (
-        !confirm(
-          `Delete the Firestore customer profile for ${user.name || "this customer"}?`
-        )
-      ) return;
-
-
-      try {
-
-        await db.collection("users")
-          .doc(id)
-          .delete();
-
-
-        logActivity(
-          "Customer profile deleted",
-          `${user.name || "Customer"} profile record was deleted.`
-        );
-
-
-        toast("Customer profile deleted.");
-
-        await loadData();
-
-      } catch (error) {
-
-        console.error(error);
-
-        toast(
-          "Unable to delete customer.",
-          "error"
-        );
-
-      }
-
-    }
-
-
-    function viewCustomer(id) {
-
-      const user =
-        users.find(u => u.id === id);
-
-      if (!user) return;
-
-      selectedCustomer = user;
-
-
-      document.getElementById("customerModalContent")
-        .innerHTML = `
-
-          <div class="profile-preview">
-
-            ${customerAvatar(user, true)}
-
-            <div>
-              <h3>
-                ${escapeHTML(user.name || "Customer")}
-              </h3>
-
-              <p>
-                ${escapeHTML(user.email || "No email")}
-              </p>
-
-              <div style="margin-top:7px;">
-                ${statusBadge(user.status)}
-              </div>
-            </div>
-
-          </div>
-
-
-          <div class="detail-grid">
-
-            <div class="detail-box">
-              <span>Account Number</span>
-              <strong>
-                ${escapeHTML(user.accountNumber || "—")}
-              </strong>
-            </div>
-
-            <div class="detail-box">
-              <span>Account Type</span>
-              <strong>
-                ${escapeHTML(user.accountType || "—")}
-              </strong>
-            </div>
-
-            <div class="detail-box">
-              <span>Country</span>
-              <strong>
-                ${escapeHTML(user.country || "—")}
-              </strong>
-            </div>
-
-            <div class="detail-box">
-              <span>KYC</span>
-              <strong>
-                ${escapeHTML(user.kycStatus || "Pending")}
-              </strong>
-            </div>
-
-            <div class="detail-box">
-              <span>Balance</span>
-              <strong>
-                ${money(user.balance)}
-              </strong>
-            </div>
-
-            <div class="detail-box">
-              <span>Funds Added</span>
-              <strong>
-                ${money(user.totalFundsAdded)}
-              </strong>
-            </div>
-
-          </div>
-
-
-          <div class="form-grid">
-
-            <div class="field">
-
-              <label>Balance</label>
-
-              <input
-                id="editBalance"
-                class="input"
-                type="number"
-                step="0.01"
-                value="${Number(user.balance || 0)}">
-
-            </div>
-
-
-            <div class="field">
-
-              <label>Total Funds Added</label>
-
-              <input
-                id="editFunds"
-                class="input"
-                type="number"
-                step="0.01"
-                value="${Number(user.totalFundsAdded || 0)}">
-
-            </div>
-
-
-            <div class="field">
-
-              <label>Account Limit</label>
-
-              <input
-                id="editLimit"
-                class="input"
-                type="number"
-                step="0.01"
-                value="${Number(user.accountLimit || 0)}">
-
-            </div>
-
-
-            <div class="field">
-
-              <label>Credit Score</label>
-
-              <input
-                id="editCreditScore"
-                class="input"
-                type="number"
-                min="0"
-                max="1000"
-                value="${Number(user.creditScore || 0)}">
-
-            </div>
-
-
-            <div class="field">
-
-              <label>Account Status</label>
-
-              <select id="editStatus" class="select">
-
-                <option value="pending"
-                  ${user.status === "pending" ? "selected" : ""}>
-                  Pending
-                </option>
-
-                <option value="active"
-                  ${user.status === "active" ? "selected" : ""}>
-                  Active
-                </option>
-
-                <option value="rejected"
-                  ${user.status === "rejected" ? "selected" : ""}>
-                  Rejected
-                </option>
-
-              </select>
-
-            </div>
-
-
-            <div class="field">
-
-              <label>KYC Status</label>
-
-              <select id="editKyc" class="select">
-
-                <option value="Pending"
-                  ${user.kycStatus === "Pending" ? "selected" : ""}>
-                  Pending
-                </option>
-
-                <option value="Verified"
-                  ${user.kycStatus === "Verified" ? "selected" : ""}>
-                  Verified
-                </option>
-
-              </select>
-
-            </div>
-
-
-            <div class="field full">
-
-              <label>Account Created Date</label>
-
-              <input
-                id="editCreatedDate"
-                class="input"
-                type="date"
-                value="${dateValue(
-                  user.createdAtDisplay ||
-                  user.createdAt
-                )}">
-
-            </div>
-
-          </div>
-
-        `;
-
-
-      document.getElementById("customerModalContent")
-        .insertAdjacentHTML(
-          "beforeend",
-
-          `
-
-            <div class="modal-footer"
-              style="padding:15px 0 0;margin-top:15px;border-top:1px solid var(--border);">
-
-              <button
-                class="danger-btn"
-                onclick="deleteCustomer('${id}')">
-                Delete Profile
-              </button>
-
-              <button
-                class="primary-btn"
-                onclick="saveCustomer('${id}')">
-                Save Changes
-              </button>
-
-            </div>
-
-          `
-        );
-
-
-      openModal("customerModal");
-
-    }
-
-
-    async function saveCustomer(id) {
-
-      const user =
-        users.find(u => u.id === id);
-
-      if (!user) return;
-
-
-      const balance =
-        Number(document.getElementById("editBalance").value || 0);
-
-      const funds =
-        Number(document.getElementById("editFunds").value || 0);
-
-      const limit =
-        Number(document.getElementById("editLimit").value || 0);
-
-      const creditScore =
-        Number(document.getElementById("editCreditScore").value || 0);
-
-      const status =
-        document.getElementById("editStatus").value;
-
-      const kycStatus =
-        document.getElementById("editKyc").value;
-
-      const createdDate =
-        document.getElementById("editCreatedDate").value;
-
-
-      if (!createdDate) {
-
-        toast(
-          "Please choose an account creation date.",
-          "error"
-        );
-
-        return;
-      }
-
-
-      try {
-
-        await db.collection("users")
-          .doc(id)
-          .update({
-
-            balance,
-            totalFundsAdded: funds,
-            accountLimit: limit,
-            creditScore,
-            status,
-            kycStatus,
-
-            createdAt:
-              timestampFromDate(createdDate),
-
-            createdAtDisplay:
-              createdDate,
-
-            updatedAt:
-              firebase.firestore.FieldValue.serverTimestamp()
-
-          });
-
-
-        logActivity(
-          "Customer updated",
-          `${user.name || "Customer"} profile information was updated.`
-        );
-
-
-        closeModal("customerModal");
-
-        toast("Customer updated successfully.");
-
-        await loadData();
-
-      } catch (error) {
-
-        console.error(error);
-
-        toast(
-          "Unable to update customer. Check Firestore Rules.",
-          "error"
-        );
-
-      }
-
-    }
-
-
-    /* =========================================================
-       TRANSACTION ACTIONS
-       ========================================================= */
-
-    function editTransaction(id) {
-
-      const tx =
-        transactions.find(t => t.id === id);
-
-      if (!tx) return;
-
-      selectedTransaction = tx;
-
-
-      document.getElementById("transactionModalContent")
-        .innerHTML = `
-
-          <div class="detail-grid">
-
-            <div class="detail-box">
-              <span>Recipient</span>
-              <strong>
-                ${escapeHTML(tx.recipientName || "—")}
-              </strong>
-            </div>
-
-            <div class="detail-box">
-              <span>Amount</span>
-              <strong>
-                ${money(tx.amount)}
-              </strong>
-            </div>
-
-            <div class="detail-box">
-              <span>Transfer Type</span>
-              <strong>
-                ${escapeHTML(tx.transferType || "—")}
-              </strong>
-            </div>
-
-          </div>
-
-
-          <div class="form-grid">
-
-            <div class="field">
-
-              <label>Status</label>
-
-              <select id="editTxStatus" class="select">
-
-                <option value="pending"
-                  ${tx.status === "pending" ? "selected" : ""}>
-                  Pending
-                </option>
-
-                <option value="approved"
-                  ${tx.status === "approved" ? "selected" : ""}>
-                  Approved
-                </option>
-
-                <option value="completed"
-                  ${tx.status === "completed" ? "selected" : ""}>
-                  Completed
-                </option>
-
-                <option value="declined"
-                  ${tx.status === "declined" ? "selected" : ""}>
-                  Declined
-                </option>
-
-                <option value="refunded"
-                  ${tx.status === "refunded" ? "selected" : ""}>
-                  Refunded
-                </option>
-
-              </select>
-
-            </div>
-
-
-            <div class="field">
-
-              <label>Transaction Date</label>
-
-              <input
-                id="editTxDate"
-                class="input"
-                type="date"
-                value="${dateValue(
-                  tx.transactionDateDisplay ||
-                  tx.transactionDate ||
-                  tx.createdAt
-                )}">
-
-            </div>
-
-
-            <div class="field full">
-
-              <label>Note</label>
-
-              <textarea
-                id="editTxNote"
-                class="textarea"
-                rows="4">${escapeHTML(tx.note || "")}</textarea>
-
-            </div>
-
-          </div>
-
-
-          <div class="modal-footer"
-            style="padding:15px 0 0;margin-top:15px;border-top:1px solid var(--border);">
-
-            <button
-              class="primary-btn"
-              onclick="saveTransaction('${id}')">
-              Save Transaction
-            </button>
-
-          </div>
-
-        `;
-
-
-      openModal("transactionModal");
-
-    }
-
-
-    async function saveTransaction(id) {
-
-      const status =
-        document.getElementById("editTxStatus").value;
-
-      const date =
-        document.getElementById("editTxDate").value;
-
-      const note =
-        document.getElementById("editTxNote").value.trim();
-
-
-      if (!date) {
-
-        toast(
-          "Please choose a transaction date.",
-          "error"
-        );
-
-        return;
-      }
-
-
-      try {
-
-        await db.collection("transactions")
-          .doc(id)
-          .update({
-
-            status,
-
-            transactionDate:
-              timestampFromDate(date),
-
-            transactionDateDisplay:
-              date,
-
-            note,
-
-            updatedAt:
-              firebase.firestore.FieldValue.serverTimestamp()
-
-          });
-
-
-        logActivity(
-          "Transaction updated",
-          `Transaction ${id} was updated.`
-        );
-
-
-        closeModal("transactionModal");
-
-        toast("Transaction updated.");
-
-        await loadData();
-
-      } catch (error) {
-
-        console.error(error);
-
-        toast(
-          "Unable to update transaction.",
-          "error"
-        );
-
-      }
-
-    }
-
-
-    async function updateTransactionStatus(id, status) {
-
-      const tx =
-        transactions.find(t => t.id === id);
-
-      if (!tx) return;
-
-
-      try {
-
-        await db.collection("transactions")
-          .doc(id)
-          .update({
-
-            status,
-
-            processedAt:
-              firebase.firestore.FieldValue.serverTimestamp(),
-
-            updatedAt:
-              firebase.firestore.FieldValue.serverTimestamp()
-
-          });
-
-
-        logActivity(
-          "Transaction status changed",
-          `Transaction ${id} changed to ${status}.`
-        );
-
-
-        toast(`Transaction marked ${status}.`);
-
-        await loadData();
-
-      } catch (error) {
-
-        console.error(error);
-
-        toast(
-          "Unable to update transaction status.",
-          "error"
-        );
-
-      }
-
-    }
-
-
-    /* =========================================================
-       CANCELLATIONS
-       ========================================================= */
-
-    async function handleCancellation(id, decision) {
-
-      const request =
-        cancellations.find(r => r.id === id);
-
-      if (!request) return;
-
-
-      try {
-
-        await db.collection("cancellationRequests")
-          .doc(id)
-          .update({
-
-            status: decision,
-
-            processedAt:
-              firebase.firestore.FieldValue.serverTimestamp(),
-
-            updatedAt:
-              firebase.firestore.FieldValue.serverTimestamp()
-
-          });
-
-
-        if (
-          decision === "approved" &&
-          request.transactionId
-        ) {
-
-          const tx =
-            transactions.find(
-              t => t.id === request.transactionId
-            );
-
-
-          if (tx) {
-
-            await db.collection("transactions")
-              .doc(request.transactionId)
-              .update({
-
-                status: "refunded",
-
-                updatedAt:
-                  firebase.firestore.FieldValue.serverTimestamp(),
-
-                processedAt:
-                  firebase.firestore.FieldValue.serverTimestamp()
-
-              });
-
+            `
+            :statusBadge(request.status)
           }
 
-        }
+        </td>
+
+      </tr>
+
+    `;
+
+  }).join("");
+
+}
 
 
-        logActivity(
-          decision === "approved"
-            ? "Cancellation approved"
-            : "Cancellation declined",
-          `Cancellation request ${id} was ${decision}.`
+/* =========================================================
+   ACTIVITY
+   ========================================================= */
+
+function renderActivity(){
+
+  const container=
+    document.getElementById("activityList");
+
+  const overview=
+    document.getElementById("overviewActivity");
+
+
+  const makeHTML=(items)=>{
+
+    if(!items.length){
+
+      return`
+        <div class="empty">
+          No administrative activity recorded yet.
+        </div>
+      `;
+
+    }
+
+
+    return items.map(item=>`
+
+      <div class="activity">
+
+        <div class="activity-icon">+</div>
+
+        <div>
+
+          <strong>${escapeHTML(item.title)}</strong>
+
+          <p>${escapeHTML(item.description)}</p>
+
+          <time>
+            ${new Date(item.time).toLocaleString()}
+          </time>
+
+        </div>
+
+      </div>
+
+    `).join("");
+
+  };
+
+
+  container.innerHTML=makeHTML(activity);
+
+  overview.innerHTML=makeHTML(activity.slice(0,5));
+
+}
+
+
+/* =========================================================
+   CUSTOMER ACTIONS
+   ========================================================= */
+
+async function approveCustomer(id){
+
+  const user=users.find(u=>u.id===id);
+
+  if(!user)return;
+
+
+  try{
+
+    await db.collection("users")
+    .doc(id)
+    .update({
+
+      status:"active",
+
+      approvedAt:
+        firebase.firestore.FieldValue.serverTimestamp(),
+
+      updatedAt:
+        firebase.firestore.FieldValue.serverTimestamp()
+
+    });
+
+
+    logActivity(
+      "Account approved",
+      `${user.name||"Customer"} was approved.`
+    );
+
+
+    toast("Account approved.");
+
+    await loadData();
+
+
+  }catch(error){
+
+    console.error(error);
+
+    toast(
+      "Unable to approve account. Firestore Rules may be blocking this action.",
+      "error"
+    );
+
+  }
+
+}
+
+
+async function declineCustomer(id){
+
+  const user=users.find(u=>u.id===id);
+
+  if(!user)return;
+
+
+  if(!confirm(
+    `Decline the account for ${user.name||"this customer"}?`
+  ))return;
+
+
+  try{
+
+    await db.collection("users")
+    .doc(id)
+    .update({
+
+      status:"rejected",
+
+      rejectedAt:
+        firebase.firestore.FieldValue.serverTimestamp(),
+
+      updatedAt:
+        firebase.firestore.FieldValue.serverTimestamp()
+
+    });
+
+
+    logActivity(
+      "Account declined",
+      `${user.name||"Customer"} was declined.`
+    );
+
+
+    toast("Account declined.");
+
+    await loadData();
+
+
+  }catch(error){
+
+    console.error(error);
+
+    toast(
+      "Unable to decline account.",
+      "error"
+    );
+
+  }
+
+}
+
+
+async function deleteCustomer(id){
+
+  const user=users.find(u=>u.id===id);
+
+  if(!user)return;
+
+
+  if(!confirm(
+    `Delete the Firestore customer profile for ${user.name||"this customer"}?`
+  ))return;
+
+
+  try{
+
+    await db.collection("users")
+    .doc(id)
+    .delete();
+
+
+    logActivity(
+      "Customer profile deleted",
+      `${user.name||"Customer"} profile record was deleted.`
+    );
+
+
+    toast("Customer profile deleted.");
+
+    await loadData();
+
+
+  }catch(error){
+
+    console.error(error);
+
+    toast(
+      "Unable to delete customer.",
+      "error"
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   CUSTOMER MODAL
+   ========================================================= */
+
+function viewCustomer(id){
+
+  const user=users.find(u=>u.id===id);
+
+  if(!user)return;
+
+
+  document.getElementById("customerModalContent")
+  .innerHTML=`
+
+    <div class="profile-preview">
+
+      ${customerAvatar(user,true)}
+
+      <div>
+
+        <h3>
+          ${escapeHTML(user.name||"Customer")}
+        </h3>
+
+        <p>
+          ${escapeHTML(user.email||"No email")}
+        </p>
+
+        <div style="margin-top:7px;">
+          ${statusBadge(user.status)}
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <div class="detail-grid">
+
+      <div class="detail-box">
+        <span>Account Number</span>
+        <strong>
+          ${escapeHTML(user.accountNumber||"—")}
+        </strong>
+      </div>
+
+      <div class="detail-box">
+        <span>Account Type</span>
+        <strong>
+          ${escapeHTML(user.accountType||"—")}
+        </strong>
+      </div>
+
+      <div class="detail-box">
+        <span>Country</span>
+        <strong>
+          ${escapeHTML(user.country||"—")}
+        </strong>
+      </div>
+
+      <div class="detail-box">
+        <span>KYC</span>
+        <strong>
+          ${escapeHTML(user.kycStatus||"Pending")}
+        </strong>
+      </div>
+
+      <div class="detail-box">
+        <span>Balance</span>
+        <strong>
+          ${money(user.balance)}
+        </strong>
+      </div>
+
+      <div class="detail-box">
+        <span>Funds Added</span>
+        <strong>
+          ${money(user.totalFundsAdded)}
+        </strong>
+      </div>
+
+    </div>
+
+
+    <div class="form-grid">
+
+      <div class="field">
+
+        <label>Balance</label>
+
+        <input
+          id="editBalance"
+          class="input"
+          type="number"
+          step="0.01"
+          value="${Number(user.balance||0)}">
+
+      </div>
+
+
+      <div class="field">
+
+        <label>Total Funds Added</label>
+
+        <input
+          id="editFunds"
+          class="input"
+          type="number"
+          step="0.01"
+          value="${Number(user.totalFundsAdded||0)}">
+
+      </div>
+
+
+      <div class="field">
+
+        <label>Account Limit</label>
+
+        <input
+          id="editLimit"
+          class="input"
+          type="number"
+          step="0.01"
+          value="${Number(user.accountLimit||0)}">
+
+      </div>
+
+
+      <div class="field">
+
+        <label>Credit Score</label>
+
+        <input
+          id="editCreditScore"
+          class="input"
+          type="number"
+          min="0"
+          max="1000"
+          value="${Number(user.creditScore||0)}">
+
+      </div>
+
+
+      <div class="field">
+
+        <label>Account Status</label>
+
+        <select id="editStatus" class="select">
+
+          <option value="pending"
+          ${user.status==="pending"?"selected":""}>
+          Pending
+          </option>
+
+          <option value="active"
+          ${user.status==="active"?"selected":""}>
+          Active
+          </option>
+
+          <option value="rejected"
+          ${user.status==="rejected"?"selected":""}>
+          Rejected
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <div class="field">
+
+        <label>KYC Status</label>
+
+        <select id="editKyc" class="select">
+
+          <option value="Pending"
+          ${user.kycStatus==="Pending"?"selected":""}>
+          Pending
+          </option>
+
+          <option value="Verified"
+          ${user.kycStatus==="Verified"?"selected":""}>
+          Verified
+          </option>
+
+        </select>
+
+      </div>
+
+
+      <div class="field full">
+
+        <label>Account Created Date</label>
+
+        <input
+          id="editCreatedDate"
+          class="input"
+          type="date"
+          value="${dateValue(user.createdAtDisplay||user.createdAt)}">
+
+      </div>
+
+    </div>
+
+
+    <div class="modal-footer"
+    style="padding:15px 0 0;margin-top:15px;border-top:1px solid var(--border);">
+
+      <button
+        class="danger-btn"
+        onclick="deleteCustomer('${id}')">
+        Delete Profile
+      </button>
+
+      <button
+        class="primary-btn"
+        onclick="saveCustomer('${id}')">
+        Save Changes
+      </button>
+
+    </div>
+
+  `;
+
+
+  openModal("customerModal");
+
+}
+
+
+async function saveCustomer(id){
+
+  const user=users.find(u=>u.id===id);
+
+  if(!user)return;
+
+
+  const balance=
+    Number(document.getElementById("editBalance").value||0);
+
+  const funds=
+    Number(document.getElementById("editFunds").value||0);
+
+  const limit=
+    Number(document.getElementById("editLimit").value||0);
+
+  const creditScore=
+    Number(document.getElementById("editCreditScore").value||0);
+
+  const status=
+    document.getElementById("editStatus").value;
+
+  const kycStatus=
+    document.getElementById("editKyc").value;
+
+  const createdDate=
+    document.getElementById("editCreatedDate").value;
+
+
+  if(!createdDate){
+
+    toast(
+      "Please choose an account creation date.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  try{
+
+    await db.collection("users")
+    .doc(id)
+    .update({
+
+      balance,
+      totalFundsAdded:funds,
+      accountLimit:limit,
+      creditScore,
+      status,
+      kycStatus,
+
+      createdAt:
+        timestampFromDate(createdDate),
+
+      createdAtDisplay:
+        createdDate,
+
+      updatedAt:
+        firebase.firestore.FieldValue.serverTimestamp()
+
+    });
+
+
+    logActivity(
+      "Customer updated",
+      `${user.name||"Customer"} profile information was updated.`
+    );
+
+
+    closeModal("customerModal");
+
+    toast("Customer updated successfully.");
+
+    await loadData();
+
+
+  }catch(error){
+
+    console.error(error);
+
+    toast(
+      "Unable to update customer. Firestore Rules may be blocking this action.",
+      "error"
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   TRANSACTION EDIT
+   ========================================================= */
+
+function editTransaction(id){
+
+  const tx=transactions.find(t=>t.id===id);
+
+  if(!tx)return;
+
+
+  document.getElementById("transactionModalContent")
+  .innerHTML=`
+
+    <div class="detail-grid">
+
+      <div class="detail-box">
+        <span>Recipient</span>
+        <strong>
+          ${escapeHTML(tx.recipientName||"—")}
+        </strong>
+      </div>
+
+      <div class="detail-box">
+        <span>Amount</span>
+        <strong>${money(tx.amount)}</strong>
+      </div>
+
+      <div class="detail-box">
+        <span>Transfer Type</span>
+        <strong>
+          ${escapeHTML(tx.transferType||"—")}
+        </strong>
+      </div>
+
+    </div>
+
+
+    <div class="form-grid">
+
+      <div class="field">
+
+        <label>Status</label>
+
+        <select id="editTxStatus" class="select">
+
+          ${["pending","approved","completed","declined","refunded"]
+          .map(status=>`
+            <option
+              value="${status}"
+              ${tx.status===status?"selected":""}>
+              ${status.charAt(0).toUpperCase()+status.slice(1)}
+            </option>
+          `).join("")}
+
+        </select>
+
+      </div>
+
+
+      <div class="field">
+
+        <label>Transaction Date</label>
+
+        <input
+          id="editTxDate"
+          class="input"
+          type="date"
+          value="${dateValue(
+            tx.transactionDateDisplay||
+            tx.transactionDate||
+            tx.createdAt
+          )}">
+
+      </div>
+
+
+      <div class="field full">
+
+        <label>Note</label>
+
+        <textarea
+          id="editTxNote"
+          class="textarea"
+          rows="4">${escapeHTML(tx.note||"")}</textarea>
+
+      </div>
+
+    </div>
+
+
+    <div class="modal-footer"
+    style="padding:15px 0 0;margin-top:15px;border-top:1px solid var(--border);">
+
+      <button
+        class="primary-btn"
+        onclick="saveTransaction('${id}')">
+        Save Transaction
+      </button>
+
+    </div>
+
+  `;
+
+
+  openModal("transactionModal");
+
+}
+
+
+async function saveTransaction(id){
+
+  const status=
+    document.getElementById("editTxStatus").value;
+
+  const date=
+    document.getElementById("editTxDate").value;
+
+  const note=
+    document.getElementById("editTxNote").value.trim();
+
+
+  if(!date){
+
+    toast(
+      "Please choose a transaction date.",
+      "error"
+    );
+
+    return;
+
+  }
+
+
+  try{
+
+    await db.collection("transactions")
+    .doc(id)
+    .update({
+
+      status,
+
+      transactionDate:
+        timestampFromDate(date),
+
+      transactionDateDisplay:
+        date,
+
+      note,
+
+      updatedAt:
+        firebase.firestore.FieldValue.serverTimestamp()
+
+    });
+
+
+    logActivity(
+      "Transaction updated",
+      `Transaction ${id} was updated.`
+    );
+
+
+    closeModal("transactionModal");
+
+    toast("Transaction updated.");
+
+    await loadData();
+
+
+  }catch(error){
+
+    console.error(error);
+
+    toast(
+      "Unable to update transaction.",
+      "error"
+    );
+
+  }
+
+}
+
+
+async function updateTransactionStatus(id,status){
+
+  const tx=transactions.find(t=>t.id===id);
+
+  if(!tx)return;
+
+
+  try{
+
+    await db.collection("transactions")
+    .doc(id)
+    .update({
+
+      status,
+
+      processedAt:
+        firebase.firestore.FieldValue.serverTimestamp(),
+
+      updatedAt:
+        firebase.firestore.FieldValue.serverTimestamp()
+
+    });
+
+
+    logActivity(
+      "Transaction status changed",
+      `Transaction ${id} changed to ${status}.`
+    );
+
+
+    toast(`Transaction marked ${status}.`);
+
+    await loadData();
+
+
+  }catch(error){
+
+    console.error(error);
+
+    toast(
+      "Unable to update transaction status.",
+      "error"
+    );
+
+  }
+
+}
+
+
+/* =========================================================
+   CANCELLATIONS
+   ========================================================= */
+
+async function handleCancellation(id,decision){
+
+  const request=
+    cancellations.find(r=>r.id===id);
+
+  if(!request)return;
+
+
+  try{
+
+    await db.collection("cancellationRequests")
+    .doc(id)
+    .update({
+
+      status:decision,
+
+      processedAt:
+        firebase.firestore.FieldValue.serverTimestamp(),
+
+      updatedAt:
+        firebase.firestore.FieldValue.serverTimestamp()
+
+    });
+
+
+    if(
+      decision==="approved" &&
+      request.transactionId
+    ){
+
+      const tx=
+        transactions.find(
+          t=>t.id===request.transactionId
         );
 
 
-        toast(
-          decision === "approved"
-            ? "Cancellation approved."
-            : "Cancellation declined."
-        );
+      if(tx){
 
+        await db.collection("transactions")
+        .doc(request.transactionId)
+        .update({
 
-        await loadData();
+          status:"refunded",
 
-      } catch (error) {
+          processedAt:
+            firebase.firestore.FieldValue.serverTimestamp(),
 
-        console.error(error);
+          updatedAt:
+            firebase.firestore.FieldValue.serverTimestamp()
 
-        toast(
-          "Unable to process cancellation.",
-          "error"
-        );
+        });
 
       }
 
     }
 
 
-    /* =========================================================
-       NAVIGATION
-       ========================================================= */
-
-    const pageNames = {
-      overview: "Overview",
-      pending: "Pending Accounts",
-      customers: "Customers",
-      transactions: "Transactions",
-      cancellations: "Cancellation Requests",
-      activity: "Activity",
-      settings: "Settings"
-    };
+    logActivity(
+      decision==="approved"
+      ?"Cancellation approved"
+      :"Cancellation declined",
+      `Cancellation request ${id} was ${decision}.`
+    );
 
 
-    function openPage(page) {
-
-      document.querySelectorAll(".page")
-        .forEach(element => {
-          element.classList.remove("active");
-        });
-
-
-      const target =
-        document.getElementById("page-" + page);
-
-      if (target) {
-        target.classList.add("active");
-      }
+    toast(
+      decision==="approved"
+      ?"Cancellation approved."
+      :"Cancellation declined."
+    );
 
 
-      document.querySelectorAll(".nav-item")
-        .forEach(button => {
-
-          button.classList.toggle(
-            "active",
-            button.dataset.page === page
-          );
-
-        });
+    await loadData();
 
 
-      document.getElementById("pageTitle")
-        .textContent =
-        pageNames[page] || "Overview";
+  }catch(error){
+
+    console.error(error);
+
+    toast(
+      "Unable to process cancellation.",
+      "error"
+    );
+
+  }
+
+}
 
 
-      document.getElementById("sidebar")
-        .classList.remove("open");
+/* =========================================================
+   NAVIGATION
+   ========================================================= */
+
+const pageNames={
+  overview:"Overview",
+  pending:"Pending Accounts",
+  customers:"Customers",
+  transactions:"Transactions",
+  cancellations:"Cancellation Requests",
+  activity:"Activity",
+  settings:"Settings"
+};
 
 
-      if (page === "customers") {
-        renderCustomers();
-      }
+function openPage(page){
 
-      if (page === "transactions") {
-        renderTransactions();
-      }
+  document.querySelectorAll(".page")
+  .forEach(element=>{
+    element.classList.remove("active");
+  });
 
-      if (page === "pending") {
-        renderPending();
-      }
 
-      if (page === "cancellations") {
-        renderCancellations();
-      }
+  const target=
+    document.getElementById("page-"+page);
 
+  if(target){
+    target.classList.add("active");
+  }
+
+
+  document.querySelectorAll(".nav-item")
+  .forEach(button=>{
+    button.classList.toggle(
+      "active",
+      button.dataset.page===page
+    );
+  });
+
+
+  document.getElementById("pageTitle")
+    .textContent=pageNames[page]||"Overview";
+
+
+  document.getElementById("sidebar")
+    .classList.remove("open");
+
+}
+
+
+document.querySelectorAll(".nav-item")
+.forEach(button=>{
+
+  button.addEventListener("click",()=>{
+    openPage(button.dataset.page);
+  });
+
+});
+
+
+document.querySelectorAll("[data-goto]")
+.forEach(button=>{
+
+  button.addEventListener("click",()=>{
+    openPage(button.dataset.goto);
+  });
+
+});
+
+
+document.getElementById("menuBtn")
+.addEventListener("click",()=>{
+
+  document.getElementById("sidebar")
+    .classList.toggle("open");
+
+});
+
+
+/* =========================================================
+   FILTERS
+   ========================================================= */
+
+document.getElementById("customerSearch")
+.addEventListener("input",renderCustomers);
+
+document.getElementById("customerStatusFilter")
+.addEventListener("change",renderCustomers);
+
+document.getElementById("txStatusFilter")
+.addEventListener("change",renderTransactions);
+
+document.getElementById("txTypeFilter")
+.addEventListener("change",renderTransactions);
+
+
+document.getElementById("globalSearch")
+.addEventListener("input",event=>{
+
+  const value=
+    event.target.value.trim();
+
+  openPage("customers");
+
+  document.getElementById("customerSearch")
+    .value=value;
+
+  renderCustomers();
+
+});
+
+
+document.getElementById("refreshPending")
+.addEventListener("click",loadData);
+
+
+/* =========================================================
+   THEME
+   ========================================================= */
+
+function applyTheme(){
+
+  const theme=
+    localStorage.getItem("cashflow_admin_theme")||
+    "light";
+
+  document.body.classList.toggle(
+    "dark",
+    theme==="dark"
+  );
+
+}
+
+
+function toggleTheme(){
+
+  const isDark=
+    document.body.classList.contains("dark");
+
+  localStorage.setItem(
+    "cashflow_admin_theme",
+    isDark?"light":"dark"
+  );
+
+  applyTheme();
+
+}
+
+
+document.getElementById("themeBtn")
+.addEventListener("click",toggleTheme);
+
+document.getElementById("settingsThemeBtn")
+.addEventListener("click",toggleTheme);
+
+applyTheme();
+
+loadActivity();
+
+
+/* =========================================================
+   MODAL BACKDROP
+   ========================================================= */
+
+document.querySelectorAll(".modal-backdrop")
+.forEach(backdrop=>{
+
+  backdrop.addEventListener("click",event=>{
+
+    if(event.target===backdrop){
+      backdrop.classList.remove("show");
     }
 
+  });
 
-    document.querySelectorAll(".nav-item")
-      .forEach(button => {
+});
 
-        button.addEventListener("click", () => {
-
-          openPage(button.dataset.page);
-
-        });
-
-      });
-
-
-    document.querySelectorAll("[data-goto]")
-      .forEach(button => {
-
-        button.addEventListener("click", () => {
-
-          openPage(button.dataset.goto);
-
-        });
-
-      });
-
-
-    document.getElementById("menuBtn")
-      .addEventListener("click", () => {
-
-        document.getElementById("sidebar")
-          .classList.toggle("open");
-
-      });
-
-
-    /* =========================================================
-       SEARCH / FILTERS
-       ========================================================= */
-
-    document.getElementById("customerSearch")
-      .addEventListener("input", renderCustomers);
-
-    document.getElementById("customerStatusFilter")
-      .addEventListener("change", renderCustomers);
-
-    document.getElementById("txStatusFilter")
-      .addEventListener("change", renderTransactions);
-
-    document.getElementById("txTypeFilter")
-      .addEventListener("change", renderTransactions);
-
-
-    document.getElementById("globalSearch")
-      .addEventListener("input", event => {
-
-        const value =
-          event.target.value.trim();
-
-        if (!value) return;
-
-        openPage("customers");
-
-        document.getElementById("customerSearch")
-          .value = value;
-
-        renderCustomers();
-
-      });
-
-
-    document.getElementById("refreshPending")
-      .addEventListener("click", loadData);
-
-
-    /* =========================================================
-       THEME
-       ========================================================= */
-
-    function applyTheme() {
-
-      const theme =
-        localStorage.getItem(
-          "cashflow_admin_theme"
-        ) || "light";
-
-
-      document.body.classList.toggle(
-        "dark",
-        theme === "dark"
-      );
-
-    }
-
-
-    function toggleTheme() {
-
-      const dark =
-        document.body.classList.contains("dark");
-
-
-      const newTheme =
-        dark ? "light" : "dark";
-
-
-      localStorage.setItem(
-        "cashflow_admin_theme",
-        newTheme
-      );
-
-
-      applyTheme();
-
-    }
-
-
-    document.getElementById("themeBtn")
-      .addEventListener("click", toggleTheme);
-
-    document.getElementById("settingsThemeBtn")
-      .addEventListener("click", toggleTheme);
-
-
-    applyTheme();
-
-    loadActivity();
-
-
-    /* =========================================================
-       CLOSE MODALS BY CLICKING BACKDROP
-       ========================================================= */
-
-    document.querySelectorAll(".modal-backdrop")
-      .forEach(backdrop => {
-
-        backdrop.addEventListener("click", event => {
-
-          if (event.target === backdrop) {
-
-            backdrop.classList.remove("show");
-
-          }
-
-        });
-
-      });
-
-  </script>
+</script>
 
 </body>
 </html>
