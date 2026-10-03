@@ -1,786 +1,2211 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<meta
-name="viewport"
-content="width=device-width,initial-scale=1.0">
-
-<title>Cash Flow Bank Admin</title>
+<title>Cash Flow Bank — Admin</title>
 
 <script src="https://cdn.tailwindcss.com"></script>
 
 <style>
+  html {
+    scroll-behavior: smooth;
+  }
 
-body{
-font-family:
-Inter,
-system-ui,
--apple-system,
-BlinkMacSystemFont,
-"Segoe UI",
-sans-serif
-}
+  body {
+    margin: 0;
+    background: #020617;
+    color: white;
+    font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont,
+      "Segoe UI", sans-serif;
+  }
 
-.glass{
-background:rgba(9,24,32,.82);
-border:1px solid rgba(255,255,255,.08);
-backdrop-filter:blur(14px)
-}
+  .glass {
+    background: rgba(15, 23, 42, .72);
+    border: 1px solid rgba(148, 163, 184, .15);
+    backdrop-filter: blur(18px);
+  }
 
-.hidden-page{
-display:none
-}
+  .card {
+    background: rgba(15, 23, 42, .9);
+    border: 1px solid rgba(148, 163, 184, .12);
+  }
 
+  .hidden-app {
+    display: none !important;
+  }
+
+  .spin {
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
 </style>
-
 </head>
 
+<body>
 
-<body class="bg-slate-950 text-white">
+<!-- =========================================================
+     LOADING SCREEN
+========================================================= -->
 
-<div class="min-h-screen flex">
+<div id="loadingScreen"
+     class="fixed inset-0 z-[999] flex items-center justify-center bg-slate-950">
 
+  <div class="text-center px-6">
 
-<!-- SIDEBAR -->
+    <div class="mx-auto mb-5 h-12 w-12 rounded-full border-4 border-slate-700 border-t-emerald-400 spin"></div>
 
-<aside
-class="hidden lg:flex w-72 flex-col border-r border-white/10 bg-[#07151c] p-5 fixed inset-y-0">
+    <h1 class="text-xl font-bold">
+      Checking administrator access...
+    </h1>
 
-<div class="flex items-center gap-3 mb-8">
+    <p class="mt-2 text-sm text-slate-400">
+      Connecting securely to Firebase
+    </p>
 
-<div
-class="w-10 h-10 rounded-xl bg-emerald-400/10 border border-emerald-400/30 grid place-items-center text-emerald-300 font-black">
-
-CF
-
-</div>
-
-<div>
-
-<b>Cash Flow Bank</b>
-
-<small
-class="block text-[10px] text-emerald-300 tracking-widest">
-ADMIN
-</small>
-
-</div>
-
+  </div>
 </div>
 
 
-<nav class="space-y-1 text-sm">
+<!-- =========================================================
+     ACCESS DENIED
+========================================================= -->
 
-<button
-data-page="dashboard"
-class="nav w-full text-left px-4 py-3 rounded-xl bg-white/5">
-Dashboard
-</button>
+<div id="accessDenied"
+     class="hidden-app min-h-screen flex items-center justify-center px-6">
 
-<button
-data-page="customers"
-class="nav w-full text-left px-4 py-3 rounded-xl text-slate-400 hover:text-white">
-Customers
-</button>
+  <div class="w-full max-w-lg text-center">
 
-<button
-data-page="accounts"
-class="nav w-full text-left px-4 py-3 rounded-xl text-slate-400 hover:text-white">
-Accounts
-</button>
+    <div class="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-3xl bg-red-500/10 border border-red-500/20">
 
-<button
-data-page="transactions"
-class="nav w-full text-left px-4 py-3 rounded-xl text-slate-400 hover:text-white">
-Transactions
-</button>
+      <svg width="36"
+           height="36"
+           viewBox="0 0 24 24"
+           fill="none"
+           stroke="currentColor"
+           stroke-width="1.8"
+           class="text-red-400">
 
-<button
-data-page="loans"
-class="nav w-full text-left px-4 py-3 rounded-xl text-slate-400 hover:text-white">
-Loans
-</button>
+        <path d="M12 9v4"/>
+        <path d="M12 17h.01"/>
+        <path d="M10.3 3.5 2.8 17a2 2 0 0 0 1.75 3h14.9a2 2 0 0 0 1.75-3L13.7 3.5a2 2 0 0 0-3.4 0Z"/>
 
-<button
-data-page="cards"
-class="nav w-full text-left px-4 py-3 rounded-xl text-slate-400 hover:text-white">
-Cards
-</button>
+      </svg>
 
-<button
-data-page="audit"
-class="nav w-full text-left px-4 py-3 rounded-xl text-slate-400 hover:text-white">
-Audit logs
-</button>
+    </div>
 
-</nav>
+    <p class="text-sm font-semibold uppercase tracking-[.25em] text-emerald-400">
+      Cash Flow Bank
+    </p>
+
+    <h1 id="deniedTitle"
+        class="mt-3 text-4xl font-black">
+      Admin access required
+    </h1>
+
+    <p id="deniedMessage"
+       class="mt-5 text-slate-400 leading-7">
+      Your account does not have administrator access.
+    </p>
 
 
-<div class="mt-auto">
+    <!-- DEBUG INFORMATION -->
 
-<button
-id="logout"
-class="w-full px-4 py-3 rounded-xl border border-white/10 text-sm">
-Sign out
-</button>
+    <div class="mt-8 rounded-2xl border border-slate-800 bg-slate-900/80 p-5 text-left">
 
-</div>
+      <p class="text-xs font-bold uppercase tracking-wider text-slate-500">
+        Diagnostic information
+      </p>
 
-</aside>
+      <div class="mt-4 space-y-3 text-sm">
 
+        <div>
+          <span class="text-slate-500">
+            Signed-in email:
+          </span>
 
-<!-- MAIN -->
+          <div id="debugEmail"
+               class="mt-1 break-all text-white">
+            —
+          </div>
+        </div>
 
-<main class="lg:ml-72 flex-1 min-w-0">
+        <div>
+          <span class="text-slate-500">
+            Firebase UID:
+          </span>
 
+          <div id="debugUid"
+               class="mt-1 break-all font-mono text-emerald-300">
+            —
+          </div>
+        </div>
 
-<header
-class="sticky top-0 z-30 bg-slate-950/90 backdrop-blur border-b border-white/10">
+        <div>
+          <span class="text-slate-500">
+            Admin document:
+          </span>
 
-<div
-class="px-5 lg:px-8 h-20 flex items-center justify-between">
+          <div id="debugAdminDocument"
+               class="mt-1 text-white">
+            —
+          </div>
+        </div>
 
-<div>
+        <div>
+          <span class="text-slate-500">
+            Active:
+          </span>
 
-<p class="text-xs text-emerald-300 uppercase tracking-widest">
-Control center
-</p>
+          <div id="debugActive"
+               class="mt-1 text-white">
+            —
+          </div>
+        </div>
 
-<h1 class="text-xl font-bold">
-Cash Flow Bank Admin
-</h1>
+        <div>
+          <span class="text-slate-500">
+            Error:
+          </span>
 
-</div>
+          <div id="debugError"
+               class="mt-1 break-words text-red-300">
+            —
+          </div>
+        </div>
 
-<div
-id="adminEmail"
-class="text-xs text-slate-500">
-</div>
+      </div>
 
-</div>
-
-</header>
-
-
-<div class="p-5 lg:p-8">
-
-
-<!-- DASHBOARD -->
-
-<section
-id="dashboard"
-class="page">
-
-<div class="grid sm:grid-cols-2 xl:grid-cols-4 gap-4">
-
-
-<div class="glass rounded-2xl p-5">
-
-<p class="text-xs text-slate-500">
-Customers
-</p>
-
-<b
-id="metricCustomers"
-class="text-3xl block mt-2">
-0
-</b>
-
-</div>
+    </div>
 
 
-<div class="glass rounded-2xl p-5">
+    <div class="mt-7 flex flex-col sm:flex-row gap-3 justify-center">
 
-<p class="text-xs text-slate-500">
-Accounts
-</p>
+      <button
+        onclick="location.reload()"
+        class="rounded-xl bg-emerald-400 px-6 py-3 font-bold text-slate-950 hover:bg-emerald-300">
 
-<b
-id="metricAccounts"
-class="text-3xl block mt-2">
-0
-</b>
+        Try Again
 
-</div>
+      </button>
 
+      <button
+        onclick="goToWebsite()"
+        class="rounded-xl border border-slate-700 px-6 py-3 font-bold text-white hover:bg-slate-900">
 
-<div class="glass rounded-2xl p-5">
+        Return to Website
 
-<p class="text-xs text-slate-500">
-Transactions
-</p>
+      </button>
 
-<b
-id="metricTransactions"
-class="text-3xl block mt-2">
-0
-</b>
+    </div>
 
+  </div>
 </div>
 
 
-<div class="glass rounded-2xl p-5">
+<!-- =========================================================
+     ADMIN APPLICATION
+========================================================= -->
 
-<p class="text-xs text-slate-500">
-Admin role
-</p>
+<div id="adminApp"
+     class="hidden-app min-h-screen">
 
-<b
-id="metricRole"
-class="text-lg block mt-3">
-Checking…
-</b>
+
+  <!-- TOP BAR -->
+
+  <header class="sticky top-0 z-50 border-b border-slate-800 bg-slate-950/90 backdrop-blur-xl">
+
+    <div class="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6">
+
+      <div>
+
+        <div class="text-xs font-bold uppercase tracking-[.25em] text-emerald-400">
+          Control Center
+        </div>
+
+        <h1 class="mt-1 text-xl font-black sm:text-2xl">
+          Cash Flow Bank Admin
+        </h1>
+
+      </div>
+
+
+      <div class="flex items-center gap-3">
+
+        <button
+          onclick="loadDashboard()"
+          class="hidden rounded-xl border border-slate-700 px-4 py-2 text-sm font-semibold hover:bg-slate-900 sm:block">
+
+          Refresh
+
+        </button>
+
+        <button
+          onclick="adminSignOut()"
+          class="rounded-xl bg-red-500/10 border border-red-500/20 px-4 py-2 text-sm font-semibold text-red-300 hover:bg-red-500/20">
+
+          Sign out
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </header>
+
+
+  <main class="mx-auto max-w-7xl px-4 py-8 sm:px-6">
+
+
+    <!-- ADMIN PROFILE -->
+
+    <section class="glass rounded-3xl p-5 sm:p-7">
+
+      <div class="flex flex-col gap-5 md:flex-row md:items-center md:justify-between">
+
+        <div>
+
+          <p class="text-sm text-slate-400">
+            Signed in as administrator
+          </p>
+
+          <h2 id="adminEmail"
+              class="mt-1 text-xl font-bold break-all">
+            —
+          </h2>
+
+          <p class="mt-2 text-xs text-slate-500 break-all">
+            UID:
+            <span id="adminUid"
+                  class="font-mono text-slate-400">
+              —
+            </span>
+          </p>
+
+        </div>
+
+
+        <div class="flex items-center gap-2 rounded-full border border-emerald-500/20 bg-emerald-500/10 px-4 py-2">
+
+          <span class="h-2.5 w-2.5 rounded-full bg-emerald-400"></span>
+
+          <span class="text-sm font-bold text-emerald-300">
+            Administrator verified
+          </span>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         STATISTICS
+    ====================================================== -->
+
+    <section class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+
+
+      <div class="card rounded-3xl p-5">
+
+        <div class="flex items-center justify-between">
+
+          <span class="text-sm text-slate-400">
+            Customers
+          </span>
+
+          <div class="rounded-xl bg-emerald-500/10 p-3 text-emerald-400">
+
+            <svg width="22"
+                 height="22"
+                 viewBox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="1.8">
+
+              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+              <circle cx="9" cy="7" r="4"/>
+              <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+              <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+
+            </svg>
+
+          </div>
+
+        </div>
+
+        <div id="usersCount"
+             class="mt-5 text-3xl font-black">
+          0
+        </div>
+
+      </div>
+
+
+      <div class="card rounded-3xl p-5">
+
+        <div class="flex items-center justify-between">
+
+          <span class="text-sm text-slate-400">
+            Accounts
+          </span>
+
+          <div class="rounded-xl bg-blue-500/10 p-3 text-blue-400">
+
+            <svg width="22"
+                 height="22"
+                 viewBox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="1.8">
+
+              <rect x="3" y="5" width="18" height="14" rx="2"/>
+              <path d="M7 9h10"/>
+              <path d="M7 13h5"/>
+
+            </svg>
+
+          </div>
+
+        </div>
+
+        <div id="accountsCount"
+             class="mt-5 text-3xl font-black">
+          0
+        </div>
+
+      </div>
+
+
+      <div class="card rounded-3xl p-5">
+
+        <div class="flex items-center justify-between">
+
+          <span class="text-sm text-slate-400">
+            Transactions
+          </span>
+
+          <div class="rounded-xl bg-violet-500/10 p-3 text-violet-400">
+
+            <svg width="22"
+                 height="22"
+                 viewBox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="1.8">
+
+              <path d="M7 7h14"/>
+              <path d="m17 3 4 4-4 4"/>
+              <path d="M17 17H3"/>
+              <path d="m7 21-4-4 4-4"/>
+
+            </svg>
+
+          </div>
+
+        </div>
+
+        <div id="transactionsCount"
+             class="mt-5 text-3xl font-black">
+          0
+        </div>
+
+      </div>
+
+
+      <div class="card rounded-3xl p-5">
+
+        <div class="flex items-center justify-between">
+
+          <span class="text-sm text-slate-400">
+            Loans
+          </span>
+
+          <div class="rounded-xl bg-amber-500/10 p-3 text-amber-400">
+
+            <svg width="22"
+                 height="22"
+                 viewBox="0 0 24 24"
+                 fill="none"
+                 stroke="currentColor"
+                 stroke-width="1.8">
+
+              <rect x="3" y="4" width="18" height="16" rx="2"/>
+              <path d="M7 8h10"/>
+              <path d="M7 12h6"/>
+              <path d="M7 16h4"/>
+
+            </svg>
+
+          </div>
+
+        </div>
+
+        <div id="loansCount"
+             class="mt-5 text-3xl font-black">
+          0
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         NAVIGATION
+    ====================================================== -->
+
+    <section class="mt-8">
+
+      <div class="flex gap-2 overflow-x-auto pb-2">
+
+        <button
+          onclick="showSection('overview')"
+          class="navButton rounded-xl bg-emerald-400 px-4 py-2 text-sm font-bold text-slate-950">
+          Overview
+        </button>
+
+        <button
+          onclick="showSection('customers')"
+          class="navButton rounded-xl border border-slate-700 px-4 py-2 text-sm font-bold">
+          Customers
+        </button>
+
+        <button
+          onclick="showSection('accounts')"
+          class="navButton rounded-xl border border-slate-700 px-4 py-2 text-sm font-bold">
+          Accounts
+        </button>
+
+        <button
+          onclick="showSection('transactions')"
+          class="navButton rounded-xl border border-slate-700 px-4 py-2 text-sm font-bold">
+          Transactions
+        </button>
+
+        <button
+          onclick="showSection('loans')"
+          class="navButton rounded-xl border border-slate-700 px-4 py-2 text-sm font-bold">
+          Loans
+        </button>
+
+        <button
+          onclick="showSection('cards')"
+          class="navButton rounded-xl border border-slate-700 px-4 py-2 text-sm font-bold">
+          Cards
+        </button>
+
+        <button
+          onclick="showSection('audit')"
+          class="navButton rounded-xl border border-slate-700 px-4 py-2 text-sm font-bold">
+          Audit Logs
+        </button>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         OVERVIEW
+    ====================================================== -->
+
+    <section id="section-overview"
+             class="adminSection mt-6">
+
+      <div class="grid gap-6 lg:grid-cols-2">
+
+        <div class="card rounded-3xl p-6">
+
+          <h3 class="text-xl font-bold">
+            Administrator dashboard
+          </h3>
+
+          <p class="mt-3 leading-7 text-slate-400">
+            This control center reads customer, account,
+            transaction and loan information from your
+            Firebase Firestore database.
+          </p>
+
+          <div class="mt-6 rounded-2xl border border-emerald-500/20 bg-emerald-500/5 p-4">
+
+            <p class="text-sm font-bold text-emerald-300">
+              Access verified
+            </p>
+
+            <p class="mt-1 text-sm text-slate-400">
+              Your Firebase account has an active administrator record.
+            </p>
+
+          </div>
+
+        </div>
+
+
+        <div class="card rounded-3xl p-6">
+
+          <h3 class="text-xl font-bold">
+            System status
+          </h3>
+
+          <div class="mt-5 space-y-4">
+
+            <div class="flex items-center justify-between">
+
+              <span class="text-slate-400">
+                Firebase Authentication
+              </span>
+
+              <span class="text-emerald-400 font-bold">
+                Connected
+              </span>
+
+            </div>
+
+            <div class="flex items-center justify-between">
+
+              <span class="text-slate-400">
+                Firestore
+              </span>
+
+              <span id="firestoreStatus"
+                    class="text-emerald-400 font-bold">
+                Connected
+              </span>
+
+            </div>
+
+            <div class="flex items-center justify-between">
+
+              <span class="text-slate-400">
+                Admin authorization
+              </span>
+
+              <span class="text-emerald-400 font-bold">
+                Active
+              </span>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         CUSTOMERS
+    ====================================================== -->
+
+    <section id="section-customers"
+             class="adminSection hidden mt-6">
+
+      <div class="card rounded-3xl overflow-hidden">
+
+        <div class="border-b border-slate-800 p-5">
+
+          <h3 class="text-xl font-bold">
+            Customers
+          </h3>
+
+          <p class="mt-1 text-sm text-slate-400">
+            Registered customer accounts.
+          </p>
+
+        </div>
+
+        <div class="overflow-x-auto">
+
+          <table class="w-full text-left text-sm">
+
+            <thead class="bg-slate-900">
+
+              <tr>
+
+                <th class="px-5 py-4 text-slate-400">
+                  Name
+                </th>
+
+                <th class="px-5 py-4 text-slate-400">
+                  Email
+                </th>
+
+                <th class="px-5 py-4 text-slate-400">
+                  Country
+                </th>
+
+                <th class="px-5 py-4 text-slate-400">
+                  Status
+                </th>
+
+              </tr>
+
+            </thead>
+
+            <tbody id="customersTable"
+                   class="divide-y divide-slate-800">
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         ACCOUNTS
+    ====================================================== -->
+
+    <section id="section-accounts"
+             class="adminSection hidden mt-6">
+
+      <div class="card rounded-3xl overflow-hidden">
+
+        <div class="border-b border-slate-800 p-5">
+
+          <h3 class="text-xl font-bold">
+            Accounts
+          </h3>
+
+          <p class="mt-1 text-sm text-slate-400">
+            Customer account records.
+          </p>
+
+        </div>
+
+        <div class="overflow-x-auto">
+
+          <table class="w-full text-left text-sm">
+
+            <thead class="bg-slate-900">
+
+              <tr>
+
+                <th class="px-5 py-4 text-slate-400">
+                  Account
+                </th>
+
+                <th class="px-5 py-4 text-slate-400">
+                  Type
+                </th>
+
+                <th class="px-5 py-4 text-slate-400">
+                  Balance
+                </th>
+
+                <th class="px-5 py-4 text-slate-400">
+                  Status
+                </th>
+
+              </tr>
+
+            </thead>
+
+            <tbody id="accountsTable"
+                   class="divide-y divide-slate-800">
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         TRANSACTIONS
+    ====================================================== -->
+
+    <section id="section-transactions"
+             class="adminSection hidden mt-6">
+
+      <div class="card rounded-3xl overflow-hidden">
+
+        <div class="border-b border-slate-800 p-5">
+
+          <h3 class="text-xl font-bold">
+            Transactions
+          </h3>
+
+          <p class="mt-1 text-sm text-slate-400">
+            Transaction records stored in Firestore.
+          </p>
+
+        </div>
+
+        <div class="overflow-x-auto">
+
+          <table class="w-full text-left text-sm">
+
+            <thead class="bg-slate-900">
+
+              <tr>
+
+                <th class="px-5 py-4 text-slate-400">
+                  Type
+                </th>
+
+                <th class="px-5 py-4 text-slate-400">
+                  Amount
+                </th>
+
+                <th class="px-5 py-4 text-slate-400">
+                  User ID
+                </th>
+
+                <th class="px-5 py-4 text-slate-400">
+                  Status
+                </th>
+
+              </tr>
+
+            </thead>
+
+            <tbody id="transactionsTable"
+                   class="divide-y divide-slate-800">
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         LOANS
+    ====================================================== -->
+
+    <section id="section-loans"
+             class="adminSection hidden mt-6">
+
+      <div class="card rounded-3xl overflow-hidden">
+
+        <div class="border-b border-slate-800 p-5">
+
+          <h3 class="text-xl font-bold">
+            Loans
+          </h3>
+
+          <p class="mt-1 text-sm text-slate-400">
+            Loan applications and records.
+          </p>
+
+        </div>
+
+        <div class="overflow-x-auto">
+
+          <table class="w-full text-left text-sm">
+
+            <thead class="bg-slate-900">
+
+              <tr>
+
+                <th class="px-5 py-4 text-slate-400">
+                  User ID
+                </th>
+
+                <th class="px-5 py-4 text-slate-400">
+                  Amount
+                </th>
+
+                <th class="px-5 py-4 text-slate-400">
+                  Status
+                </th>
+
+              </tr>
+
+            </thead>
+
+            <tbody id="loansTable"
+                   class="divide-y divide-slate-800">
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         CARDS
+    ====================================================== -->
+
+    <section id="section-cards"
+             class="adminSection hidden mt-6">
+
+      <div class="card rounded-3xl p-6">
+
+        <h3 class="text-xl font-bold">
+          Credit Cards
+        </h3>
+
+        <p class="mt-2 text-slate-400">
+          Card records will appear here when the
+          <code class="text-emerald-300">creditCards</code>
+          collection contains data.
+        </p>
+
+        <div id="cardsList"
+             class="mt-6 space-y-3">
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         AUDIT LOGS
+    ====================================================== -->
+
+    <section id="section-audit"
+             class="adminSection hidden mt-6">
+
+      <div class="card rounded-3xl overflow-hidden">
+
+        <div class="border-b border-slate-800 p-5">
+
+          <h3 class="text-xl font-bold">
+            Audit Logs
+          </h3>
+
+          <p class="mt-1 text-sm text-slate-400">
+            Administrative activity records.
+          </p>
+
+        </div>
+
+        <div class="overflow-x-auto">
+
+          <table class="w-full text-left text-sm">
+
+            <thead class="bg-slate-900">
+
+              <tr>
+
+                <th class="px-5 py-4 text-slate-400">
+                  Action
+                </th>
+
+                <th class="px-5 py-4 text-slate-400">
+                  Admin
+                </th>
+
+                <th class="px-5 py-4 text-slate-400">
+                  Target
+                </th>
+
+                <th class="px-5 py-4 text-slate-400">
+                  Time
+                </th>
+
+              </tr>
+
+            </thead>
+
+            <tbody id="auditTable"
+                   class="divide-y divide-slate-800">
+
+            </tbody>
+
+          </table>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- FOOTER -->
+
+    <footer class="mt-12 border-t border-slate-800 py-8 text-center">
+
+      <p class="text-xs text-slate-500">
+        Cash Flow Bank development environment.
+        No real customer funds or payment rails are connected.
+      </p>
+
+    </footer>
+
+  </main>
 
 </div>
 
-</div>
 
-
-<div class="glass rounded-3xl p-6 mt-6">
-
-<h2 class="font-bold">
-System status
-</h2>
-
-<p
-id="status"
-class="text-sm text-slate-400 mt-2">
-Loading secure admin data…
-</p>
-
-</div>
-
-</section>
-
-
-<!-- CUSTOMERS -->
-
-<section
-id="customers"
-class="page hidden-page">
-
-<div class="flex items-center justify-between gap-4 mb-5">
-
-<div>
-
-<h2 class="text-2xl font-black">
-Customers
-</h2>
-
-<p class="text-sm text-slate-500">
-Customer profiles stored in Firestore.
-</p>
-
-</div>
-
-</div>
-
-
-<div class="glass rounded-3xl overflow-x-auto">
-
-<table class="w-full text-sm">
-
-<thead
-class="text-left text-slate-500 border-b border-white/10">
-
-<tr>
-
-<th class="p-4">Name</th>
-
-<th class="p-4">Email</th>
-
-<th class="p-4">Account</th>
-
-<th class="p-4">Status</th>
-
-<th class="p-4">Created</th>
-
-</tr>
-
-</thead>
-
-<tbody id="customerRows">
-</tbody>
-
-</table>
-
-</div>
-
-</section>
-
-
-<!-- ACCOUNTS -->
-
-<section
-id="accounts"
-class="page hidden-page">
-
-<h2 class="text-2xl font-black">
-Accounts
-</h2>
-
-<div
-class="glass rounded-3xl overflow-x-auto mt-5">
-
-<table class="w-full text-sm">
-
-<thead
-class="text-left text-slate-500 border-b border-white/10">
-
-<tr>
-
-<th class="p-4">Type</th>
-
-<th class="p-4">Account</th>
-
-<th class="p-4">Balance</th>
-
-<th class="p-4">User ID</th>
-
-</tr>
-
-</thead>
-
-<tbody id="accountRows">
-</tbody>
-
-</table>
-
-</div>
-
-</section>
-
-
-<!-- TRANSACTIONS -->
-
-<section
-id="transactions"
-class="page hidden-page">
-
-<h2 class="text-2xl font-black">
-Transactions
-</h2>
-
-<div
-class="glass rounded-3xl p-6 mt-5 text-sm text-slate-500">
-
-No transaction collection records loaded yet.
-
-</div>
-
-</section>
-
-
-<!-- LOANS -->
-
-<section
-id="loans"
-class="page hidden-page">
-
-<h2 class="text-2xl font-black">
-Loans
-</h2>
-
-<div
-class="glass rounded-3xl p-6 mt-5 text-sm text-slate-500">
-
-Loan workflow is ready for the next server-side implementation step.
-
-</div>
-
-</section>
-
-
-<!-- CARDS -->
-
-<section
-id="cards"
-class="page hidden-page">
-
-<h2 class="text-2xl font-black">
-Cards
-</h2>
-
-<div
-class="glass rounded-3xl p-6 mt-5 text-sm text-slate-500">
-
-Card workflow is ready for the next implementation step.
-
-</div>
-
-</section>
-
-
-<!-- AUDIT -->
-
-<section
-id="audit"
-class="page hidden-page">
-
-<h2 class="text-2xl font-black">
-Audit logs
-</h2>
-
-<div
-class="glass rounded-3xl p-6 mt-5 text-sm text-slate-500">
-
-Privileged actions should be written by trusted server-side code.
-
-</div>
-
-</section>
-
-
-</div>
-
-</main>
-
-</div>
-
-
-<!-- BLOCKED -->
-
-<div
-id="blocked"
-class="fixed inset-0 bg-slate-950 hidden items-center justify-center p-6">
-
-<div class="max-w-md text-center">
-
-<h2 class="text-3xl font-black">
-Admin access required
-</h2>
-
-<p class="text-slate-400 mt-3">
-Your authenticated account is not listed as an active administrator.
-</p>
-
-<a
-href="index.html"
-class="inline-block mt-6 px-5 py-3 rounded-xl bg-emerald-400 text-slate-950 font-bold">
-
-Return to website
-
-</a>
-
-</div>
-
-</div>
-
-
-<!-- FIREBASE -->
+<!-- =========================================================
+     FIREBASE
+========================================================= -->
 
 <script type="module">
 
-import {
-initializeApp
-}
-from
-"https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
 
 import {
-getAuth,
-onAuthStateChanged,
-signOut
+  getAuth,
+  onAuthStateChanged,
+  signOut
 }
-from
-"https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
 
 import {
-getFirestore,
-doc,
-getDoc,
-collection,
-getDocs
+  getFirestore,
+  doc,
+  getDoc,
+  collection,
+  getDocs
 }
-from
-"https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
 
+
+/* =========================================================
+   FIREBASE CONFIG
+========================================================= */
 
 const firebaseConfig = {
 
-apiKey:
-"AIzaSyAVd2DY_EgwutXbPdcFNsj4LJG-5e5zjw",
+  apiKey: "AIzaSyAVd2SY_EgwutXbPdcFNsj4LJG-5e5zjw",
 
-authDomain:
-"bank-d221d.firebaseapp.com",
+  authDomain:
+    "bank-d221d.firebaseapp.com",
 
-projectId:
-"bank-d221d",
+  projectId:
+    "bank-d221d",
 
-storageBucket:
-"bank-d221d.firebasestorage.app",
+  storageBucket:
+    "bank-d221d.firebasestorage.app",
 
-messagingSenderId:
-"17227399657",
+  messagingSenderId:
+    "17227399657",
 
-appId:
-"1:17227399657:web:cc4e711a2fe110235c4b78"
+  appId:
+    "1:17227399657:web:cc4e711a2fe110235c4b78"
 
 };
 
+
+/* =========================================================
+   INITIALIZE FIREBASE
+========================================================= */
 
 const app =
-initializeApp(firebaseConfig);
+  initializeApp(firebaseConfig);
 
 const auth =
-getAuth(app);
+  getAuth(app);
 
 const db =
-getFirestore(app);
+  getFirestore(app);
 
 
-document.querySelectorAll(".nav")
-.forEach(button=>{
+/* =========================================================
+   DOM HELPERS
+========================================================= */
 
-button.onclick = ()=>{
+const loadingScreen =
+  document.getElementById("loadingScreen");
 
-document
-.querySelectorAll(".page")
-.forEach(page=>
-page.classList.add("hidden-page")
-);
+const accessDenied =
+  document.getElementById("accessDenied");
 
-document
-.getElementById(button.dataset.page)
-.classList.remove("hidden-page");
+const adminApp =
+  document.getElementById("adminApp");
 
-document
-.querySelectorAll(".nav")
-.forEach(item=>
-item.classList.remove("bg-white/5")
-);
 
-button.classList.add("bg-white/5");
+function showLoading() {
 
-};
+  loadingScreen.classList.remove("hidden-app");
+
+  accessDenied.classList.add("hidden-app");
+
+  adminApp.classList.add("hidden-app");
+
+}
+
+
+function showAdmin() {
+
+  loadingScreen.classList.add("hidden-app");
+
+  accessDenied.classList.add("hidden-app");
+
+  adminApp.classList.remove("hidden-app");
+
+}
+
+
+function showDenied(
+  title,
+  message,
+  user = null,
+  adminDocument = "Unknown",
+  active = "Unknown",
+  error = ""
+) {
+
+  loadingScreen.classList.add("hidden-app");
+
+  adminApp.classList.add("hidden-app");
+
+  accessDenied.classList.remove("hidden-app");
+
+  document.getElementById("deniedTitle")
+    .textContent = title;
+
+  document.getElementById("deniedMessage")
+    .textContent = message;
+
+  document.getElementById("debugEmail")
+    .textContent =
+      user?.email || "Not signed in";
+
+  document.getElementById("debugUid")
+    .textContent =
+      user?.uid || "Not available";
+
+  document.getElementById("debugAdminDocument")
+    .textContent =
+      adminDocument;
+
+  document.getElementById("debugActive")
+    .textContent =
+      String(active);
+
+  document.getElementById("debugError")
+    .textContent =
+      error || "None";
+
+}
+
+
+/* =========================================================
+   ADMIN AUTHORIZATION
+========================================================= */
+
+onAuthStateChanged(auth, async (user) => {
+
+  showLoading();
+
+  console.log(
+    "Firebase auth state:",
+    user
+  );
+
+
+  // ---------------------------------------------------------
+  // NO USER
+  // ---------------------------------------------------------
+
+  if (!user) {
+
+    showDenied(
+      "Sign-in required",
+      "You are not currently signed in to Firebase."
+    );
+
+    return;
+  }
+
+
+  console.log(
+    "SIGNED-IN EMAIL:",
+    user.email
+  );
+
+  console.log(
+    "SIGNED-IN UID:",
+    user.uid
+  );
+
+
+  // ---------------------------------------------------------
+  // CHECK ADMINS/{UID}
+  // ---------------------------------------------------------
+
+  try {
+
+    const adminRef =
+      doc(
+        db,
+        "admins",
+        user.uid
+      );
+
+
+    const adminSnap =
+      await getDoc(adminRef);
+
+
+    console.log(
+      "Admin document exists:",
+      adminSnap.exists()
+    );
+
+
+    // -------------------------------------------------------
+    // ADMIN DOCUMENT DOES NOT EXIST
+    // -------------------------------------------------------
+
+    if (!adminSnap.exists()) {
+
+      showDenied(
+        "Admin account not found",
+        "Your signed-in Firebase UID does not have an administrators document.",
+        user,
+        "NOT FOUND",
+        "Unknown",
+        "No document at admins/" + user.uid
+      );
+
+      return;
+    }
+
+
+    // -------------------------------------------------------
+    // READ ADMIN DATA
+    // -------------------------------------------------------
+
+    const adminData =
+      adminSnap.data();
+
+
+    console.log(
+      "ADMIN DATA:",
+      adminData
+    );
+
+
+    const active =
+      adminData.active;
+
+
+    // -------------------------------------------------------
+    // ACTIVE MUST BE BOOLEAN TRUE
+    // -------------------------------------------------------
+
+    if (active !== true) {
+
+      showDenied(
+        "Administrator inactive",
+        "Your administrator document exists, but active is not set to the Boolean value true.",
+        user,
+        "FOUND",
+        active,
+        "Expected active === true"
+      );
+
+      return;
+    }
+
+
+    // -------------------------------------------------------
+    // ADMIN ACCESS GRANTED
+    // -------------------------------------------------------
+
+    console.log(
+      "ADMIN ACCESS GRANTED"
+    );
+
+
+    document.getElementById("adminEmail")
+      .textContent =
+        user.email || "Administrator";
+
+
+    document.getElementById("adminUid")
+      .textContent =
+        user.uid;
+
+
+    showAdmin();
+
+
+    // Load dashboard data
+    await loadDashboard();
+
+  }
+
+  catch (error) {
+
+    console.error(
+      "ADMIN CHECK ERROR:",
+      error
+    );
+
+
+    showDenied(
+      "Admin check failed",
+      "Firebase rejected the administrator check.",
+      user,
+      "ERROR",
+      "Unknown",
+      error.code
+        ? error.code + " — " + error.message
+        : error.message
+    );
+
+  }
 
 });
 
 
-document.getElementById("logout")
-.onclick =
-()=>signOut(auth);
+/* =========================================================
+   LOAD DASHBOARD
+========================================================= */
+
+async function loadDashboard() {
+
+  try {
+
+    document.getElementById("firestoreStatus")
+      .textContent = "Loading...";
 
 
-function formatDate(value){
+    // -------------------------------------------------------
+    // USERS
+    // -------------------------------------------------------
 
-return value?.toDate
-?
-value.toDate().toLocaleString()
-:
-"—";
+    const usersSnap =
+      await getDocs(
+        collection(db, "users")
+      );
+
+
+    document.getElementById("usersCount")
+      .textContent =
+        usersSnap.size;
+
+
+    renderCustomers(
+      usersSnap
+    );
+
+
+    // -------------------------------------------------------
+    // ACCOUNTS
+    // -------------------------------------------------------
+
+    const accountsSnap =
+      await getDocs(
+        collection(db, "accounts")
+      );
+
+
+    document.getElementById("accountsCount")
+      .textContent =
+        accountsSnap.size;
+
+
+    renderAccounts(
+      accountsSnap
+    );
+
+
+    // -------------------------------------------------------
+    // TRANSACTIONS
+    // -------------------------------------------------------
+
+    const transactionsSnap =
+      await getDocs(
+        collection(db, "transactions")
+      );
+
+
+    document.getElementById("transactionsCount")
+      .textContent =
+        transactionsSnap.size;
+
+
+    renderTransactions(
+      transactionsSnap
+    );
+
+
+    // -------------------------------------------------------
+    // LOANS
+    // -------------------------------------------------------
+
+    const loansSnap =
+      await getDocs(
+        collection(db, "loans")
+      );
+
+
+    document.getElementById("loansCount")
+      .textContent =
+        loansSnap.size;
+
+
+    renderLoans(
+      loansSnap
+    );
+
+
+    // -------------------------------------------------------
+    // CARDS
+    // -------------------------------------------------------
+
+    try {
+
+      const cardsSnap =
+        await getDocs(
+          collection(db, "creditCards")
+        );
+
+      renderCards(
+        cardsSnap
+      );
+
+    }
+
+    catch (error) {
+
+      console.warn(
+        "Credit cards collection unavailable:",
+        error
+      );
+
+      document.getElementById("cardsList")
+        .innerHTML = `
+          <div class="rounded-2xl border border-slate-800 p-4 text-sm text-slate-400">
+            No credit card data available.
+          </div>
+        `;
+
+    }
+
+
+    // -------------------------------------------------------
+    // AUDIT LOGS
+    // -------------------------------------------------------
+
+    try {
+
+      const auditSnap =
+        await getDocs(
+          collection(db, "auditLogs")
+        );
+
+      renderAuditLogs(
+        auditSnap
+      );
+
+    }
+
+    catch (error) {
+
+      console.warn(
+        "Audit logs unavailable:",
+        error
+      );
+
+      document.getElementById("auditTable")
+        .innerHTML = emptyRow(
+          4,
+          "No audit logs available."
+        );
+
+    }
+
+
+    document.getElementById("firestoreStatus")
+      .textContent =
+        "Connected";
+
+
+  }
+
+  catch (error) {
+
+    console.error(
+      "DASHBOARD LOAD ERROR:",
+      error
+    );
+
+
+    document.getElementById("firestoreStatus")
+      .textContent =
+        "Permission error";
+
+
+    alert(
+      "The admin account was verified, but Firestore denied one or more dashboard reads.\n\n" +
+      error.message
+    );
+
+  }
 
 }
 
 
-async function loadAdmin(user){
+/* =========================================================
+   CUSTOMERS
+========================================================= */
 
-document.getElementById(
-"adminEmail"
-).textContent =
-user.email || "";
+function renderCustomers(snapshot) {
 
-
-const admin =
-await getDoc(
-doc(db,"admins",user.uid)
-);
+  const table =
+    document.getElementById("customersTable");
 
 
-if(
-!admin.exists() ||
-admin.data().active !== true
-){
+  if (snapshot.empty) {
 
-document
-.getElementById("blocked")
-.classList.remove("hidden");
+    table.innerHTML =
+      emptyRow(
+        4,
+        "No customers found."
+      );
 
-document
-.getElementById("blocked")
-.classList.add("flex");
-
-return;
-
-}
+    return;
+  }
 
 
-document.getElementById(
-"metricRole"
-).textContent =
-admin.data().role || "ADMIN";
+  let html = "";
 
 
-const [
-usersSnapshot,
-accountsSnapshot
-] = await Promise.all([
+  snapshot.forEach((item) => {
 
-getDocs(
-collection(db,"users")
-),
-
-getDocs(
-collection(db,"accounts")
-)
-
-]);
+    const data =
+      item.data();
 
 
-document.getElementById(
-"metricCustomers"
-).textContent =
-usersSnapshot.size;
+    html += `
+
+      <tr class="hover:bg-slate-900/70">
+
+        <td class="px-5 py-4 font-semibold">
+          ${escapeHtml(
+            data.fullName ||
+            data.name ||
+            "—"
+          )}
+        </td>
+
+        <td class="px-5 py-4 text-slate-400">
+          ${escapeHtml(
+            data.email ||
+            "—"
+          )}
+        </td>
+
+        <td class="px-5 py-4 text-slate-400">
+          ${escapeHtml(
+            data.country ||
+            "—"
+          )}
+        </td>
+
+        <td class="px-5 py-4">
+
+          <span class="rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-bold text-emerald-300">
+            ${escapeHtml(
+              data.status ||
+              "ACTIVE"
+            )}
+          </span>
+
+        </td>
+
+      </tr>
+
+    `;
+
+  });
 
 
-document.getElementById(
-"metricAccounts"
-).textContent =
-accountsSnapshot.size;
-
-
-document.getElementById(
-"metricTransactions"
-).textContent =
-"—";
-
-
-document.getElementById(
-"status"
-).textContent =
-"Authenticated admin access confirmed.";
-
-
-document.getElementById(
-"customerRows"
-).innerHTML = "";
-
-
-usersSnapshot.forEach(snapshot=>{
-
-const user =
-snapshot.data();
-
-
-document.getElementById(
-"customerRows"
-).insertAdjacentHTML(
-"beforeend",
-
-`
-
-<tr class="border-b border-white/5">
-
-<td class="p-4">
-${user.firstName || ""}
-${user.lastName || ""}
-</td>
-
-<td class="p-4 text-slate-400">
-${user.email || ""}
-</td>
-
-<td class="p-4">
-${user.accountNumber || "—"}
-</td>
-
-<td class="p-4">
-${user.status || "—"}
-</td>
-
-<td class="p-4 text-slate-500">
-${formatDate(user.createdAt)}
-</td>
-
-</tr>
-
-`
-
-);
-
-});
-
-
-document.getElementById(
-"accountRows"
-).innerHTML = "";
-
-
-accountsSnapshot.forEach(snapshot=>{
-
-const account =
-snapshot.data();
-
-
-document.getElementById(
-"accountRows"
-).insertAdjacentHTML(
-"beforeend",
-
-`
-
-<tr class="border-b border-white/5">
-
-<td class="p-4">
-${account.type || "—"}
-</td>
-
-<td class="p-4">
-${account.accountNumber || "—"}
-</td>
-
-<td class="p-4">
-$${Number(account.balance || 0)
-.toLocaleString(
-undefined,
-{
-minimumFractionDigits:2
-}
-)}
-</td>
-
-<td class="p-4 text-slate-500">
-${account.userId || "—"}
-</td>
-
-</tr>
-
-`
-
-);
-
-});
+  table.innerHTML =
+    html;
 
 }
 
 
-onAuthStateChanged(
-auth,
-user=>{
+/* =========================================================
+   ACCOUNTS
+========================================================= */
 
-if(user){
+function renderAccounts(snapshot) {
 
-loadAdmin(user);
+  const table =
+    document.getElementById("accountsTable");
 
-}else{
 
-document
-.getElementById("blocked")
-.classList.remove("hidden");
+  if (snapshot.empty) {
 
-document
-.getElementById("blocked")
-.classList.add("flex");
+    table.innerHTML =
+      emptyRow(
+        4,
+        "No accounts found."
+      );
+
+    return;
+  }
+
+
+  let html = "";
+
+
+  snapshot.forEach((item) => {
+
+    const data =
+      item.data();
+
+
+    const balance =
+      Number(
+        data.balance || 0
+      );
+
+
+    html += `
+
+      <tr class="hover:bg-slate-900/70">
+
+        <td class="px-5 py-4">
+
+          <div class="font-semibold">
+            ${escapeHtml(
+              data.accountNumber ||
+              item.id
+            )}
+          </div>
+
+          <div class="mt-1 text-xs text-slate-500">
+            ${escapeHtml(
+              data.userId ||
+              "—"
+            )}
+          </div>
+
+        </td>
+
+        <td class="px-5 py-4 text-slate-400">
+          ${escapeHtml(
+            data.type ||
+            "—"
+          )}
+        </td>
+
+        <td class="px-5 py-4 font-bold">
+          ${formatMoney(balance)}
+        </td>
+
+        <td class="px-5 py-4">
+
+          <span class="rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-bold text-emerald-300">
+
+            ${data.isActive === false
+              ? "INACTIVE"
+              : "ACTIVE"}
+
+          </span>
+
+        </td>
+
+      </tr>
+
+    `;
+
+  });
+
+
+  table.innerHTML =
+    html;
 
 }
 
+
+/* =========================================================
+   TRANSACTIONS
+========================================================= */
+
+function renderTransactions(snapshot) {
+
+  const table =
+    document.getElementById("transactionsTable");
+
+
+  if (snapshot.empty) {
+
+    table.innerHTML =
+      emptyRow(
+        4,
+        "No transactions found."
+      );
+
+    return;
+  }
+
+
+  let html = "";
+
+
+  snapshot.forEach((item) => {
+
+    const data =
+      item.data();
+
+
+    html += `
+
+      <tr class="hover:bg-slate-900/70">
+
+        <td class="px-5 py-4 font-semibold">
+          ${escapeHtml(
+            data.type ||
+            "—"
+          )}
+        </td>
+
+        <td class="px-5 py-4 font-bold">
+          ${formatMoney(
+            Number(
+              data.amount || 0
+            )
+          )}
+        </td>
+
+        <td class="px-5 py-4">
+
+          <span class="font-mono text-xs text-slate-400">
+            ${escapeHtml(
+              data.userId ||
+              "—"
+            )}
+          </span>
+
+        </td>
+
+        <td class="px-5 py-4">
+
+          <span class="rounded-full bg-slate-800 px-3 py-1 text-xs font-bold">
+            ${escapeHtml(
+              data.status ||
+              "RECORDED"
+            )}
+          </span>
+
+        </td>
+
+      </tr>
+
+    `;
+
+  });
+
+
+  table.innerHTML =
+    html;
+
 }
 
-);
+
+/* =========================================================
+   LOANS
+========================================================= */
+
+function renderLoans(snapshot) {
+
+  const table =
+    document.getElementById("loansTable");
+
+
+  if (snapshot.empty) {
+
+    table.innerHTML =
+      emptyRow(
+        3,
+        "No loans found."
+      );
+
+    return;
+  }
+
+
+  let html = "";
+
+
+  snapshot.forEach((item) => {
+
+    const data =
+      item.data();
+
+
+    html += `
+
+      <tr class="hover:bg-slate-900/70">
+
+        <td class="px-5 py-4">
+
+          <span class="font-mono text-xs text-slate-400">
+            ${escapeHtml(
+              data.userId ||
+              "—"
+            )}
+          </span>
+
+        </td>
+
+        <td class="px-5 py-4 font-bold">
+          ${formatMoney(
+            Number(
+              data.amount || 0
+            )
+          )}
+        </td>
+
+        <td class="px-5 py-4">
+
+          <span class="rounded-full bg-amber-500/10 px-3 py-1 text-xs font-bold text-amber-300">
+            ${escapeHtml(
+              data.status ||
+              "PENDING"
+            )}
+          </span>
+
+        </td>
+
+      </tr>
+
+    `;
+
+  });
+
+
+  table.innerHTML =
+    html;
+
+}
+
+
+/* =========================================================
+   CARDS
+========================================================= */
+
+function renderCards(snapshot) {
+
+  const container =
+    document.getElementById("cardsList");
+
+
+  if (snapshot.empty) {
+
+    container.innerHTML = `
+
+      <div class="rounded-2xl border border-slate-800 p-5 text-sm text-slate-400">
+
+        No credit card records found.
+
+      </div>
+
+    `;
+
+    return;
+  }
+
+
+  let html = "";
+
+
+  snapshot.forEach((item) => {
+
+    const data =
+      item.data();
+
+
+    html += `
+
+      <div class="rounded-2xl border border-slate-800 bg-slate-950 p-5">
+
+        <div class="flex items-center justify-between gap-4">
+
+          <div>
+
+            <div class="font-bold">
+              ${escapeHtml(
+                data.cardType ||
+                "Credit Card"
+              )}
+            </div>
+
+            <div class="mt-1 text-xs text-slate-500">
+              ${escapeHtml(
+                data.userId ||
+                "—"
+              )}
+            </div>
+
+          </div>
+
+          <div class="text-sm text-slate-400">
+            ${escapeHtml(
+              data.status ||
+              "ACTIVE"
+            )}
+          </div>
+
+        </div>
+
+      </div>
+
+    `;
+
+  });
+
+
+  container.innerHTML =
+    html;
+
+}
+
+
+/* =========================================================
+   AUDIT LOGS
+========================================================= */
+
+function renderAuditLogs(snapshot) {
+
+  const table =
+    document.getElementById("auditTable");
+
+
+  if (snapshot.empty) {
+
+    table.innerHTML =
+      emptyRow(
+        4,
+        "No audit logs found."
+      );
+
+    return;
+  }
+
+
+  let html = "";
+
+
+  snapshot.forEach((item) => {
+
+    const data =
+      item.data();
+
+
+    html += `
+
+      <tr class="hover:bg-slate-900/70">
+
+        <td class="px-5 py-4 font-semibold">
+          ${escapeHtml(
+            data.action ||
+            "—"
+          )}
+        </td>
+
+        <td class="px-5 py-4 text-slate-400">
+          ${escapeHtml(
+            data.adminId ||
+            "—"
+          )}
+        </td>
+
+        <td class="px-5 py-4 text-slate-400">
+          ${escapeHtml(
+            data.targetId ||
+            data.targetType ||
+            "—"
+          )}
+        </td>
+
+        <td class="px-5 py-4 text-slate-400">
+          ${formatDate(
+            data.timestamp
+          )}
+        </td>
+
+      </tr>
+
+    `;
+
+  });
+
+
+  table.innerHTML =
+    html;
+
+}
+
+
+/* =========================================================
+   EMPTY TABLE ROW
+========================================================= */
+
+function emptyRow(
+  columns,
+  message
+) {
+
+  return `
+
+    <tr>
+
+      <td
+        colspan="${columns}"
+        class="px-5 py-10 text-center text-slate-500">
+
+        ${escapeHtml(message)}
+
+      </td>
+
+    </tr>
+
+  `;
+
+}
+
+
+/* =========================================================
+   FORMAT MONEY
+========================================================= */
+
+function formatMoney(amount) {
+
+  return new Intl.NumberFormat(
+    "en-US",
+    {
+      style: "currency",
+      currency: "USD"
+    }
+  ).format(
+    Number.isFinite(amount)
+      ? amount
+      : 0
+  );
+
+}
+
+
+/* =========================================================
+   FORMAT DATE
+========================================================= */
+
+function formatDate(value) {
+
+  if (!value) {
+    return "—";
+  }
+
+
+  try {
+
+    if (
+      typeof value === "object" &&
+      typeof value.toDate === "function"
+    ) {
+
+      return value
+        .toDate()
+        .toLocaleString();
+
+    }
+
+
+    return new Date(value)
+      .toLocaleString();
+
+  }
+
+  catch {
+
+    return "—";
+
+  }
+
+}
+
+
+/* =========================================================
+   ESCAPE HTML
+========================================================= */
+
+function escapeHtml(value) {
+
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+
+}
+
+
+/* =========================================================
+   SECTION NAVIGATION
+========================================================= */
+
+window.showSection =
+  function(section) {
+
+    document
+      .querySelectorAll(".adminSection")
+      .forEach((element) => {
+
+        element.classList.add("hidden");
+
+      });
+
+
+    const target =
+      document.getElementById(
+        "section-" + section
+      );
+
+
+    if (target) {
+
+      target.classList.remove(
+        "hidden"
+      );
+
+    }
+
+
+    document
+      .querySelectorAll(".navButton")
+      .forEach((button) => {
+
+        button.classList.remove(
+          "bg-emerald-400",
+          "text-slate-950"
+        );
+
+        button.classList.add(
+          "border",
+          "border-slate-700"
+        );
+
+      });
+
+
+    event?.currentTarget?.classList.add(
+      "bg-emerald-400",
+      "text-slate-950"
+    );
+
+  };
+
+
+/* =========================================================
+   REFRESH DASHBOARD
+========================================================= */
+
+window.loadDashboard =
+  loadDashboard;
+
+
+/* =========================================================
+   SIGN OUT
+========================================================= */
+
+window.adminSignOut =
+  async function() {
+
+    try {
+
+      await signOut(auth);
+
+      window.location.href =
+        "index.html";
+
+    }
+
+    catch(error) {
+
+      alert(
+        "Sign out failed: " +
+        error.message
+      );
+
+    }
+
+  };
+
+
+/* =========================================================
+   RETURN TO WEBSITE
+========================================================= */
+
+window.goToWebsite =
+  function() {
+
+    window.location.href =
+      "index.html";
+
+  };
+
+
+</script>
+
+
+<!-- =========================================================
+     TAWK.TO LIVE CHAT
+========================================================= -->
+
+<script type="text/javascript">
+
+var Tawk_API = Tawk_API || {},
+    Tawk_LoadStart = new Date();
+
+(function () {
+
+    var s1 = document.createElement("script"),
+        s0 = document.getElementsByTagName("script")[0];
+
+    s1.async = true;
+
+    s1.src =
+      "https://embed.tawk.to/6aad7099ecbade3448f2e8f8/default";
+
+    s1.charset = "UTF-8";
+
+    s1.setAttribute(
+      "crossorigin",
+      "*"
+    );
+
+    s0.parentNode.insertBefore(
+      s1,
+      s0
+    );
+
+})();
 
 </script>
 
