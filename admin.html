@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NOVA Admin — Simulation</title>
+
+<script src="https://cdn.tailwindcss.com"></script>
+
+<style>
+body {
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+}
+
+.glass {
+  background: rgba(255,255,255,.08);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(255,255,255,.1);
+}
+
+.sidebar-link.active {
+  background: rgba(16,185,129,.15);
+  color: #34d399;
+}
+</style>
+</head>
+
+<body class="bg-slate-100 text-slate-900">
+
+<!-- SIMULATION WARNING -->
+<div class="bg-amber-300 text-slate-950 text-center text-xs sm:text-sm font-bold py-2 px-3">
+⚠️ SIMULATION ONLY — THIS IS NOT A REAL BANK ADMIN SYSTEM — NO REAL MONEY
+</div>
+
+<div class="min-h-screen flex">
+
+<!-- SIDEBAR -->
+<aside id="sidebar"
+class="fixed lg:static inset-y-0 left-0 z-40 w-72 bg-slate-950 text-white transform -translate-x-full lg:translate-x-0 transition-transform duration-300">
+
+<div class="p-6 border-b border-white/10">
+
+<div class="flex items-center gap-3">
+
+<div class="w-11 h-11 rounded-2xl bg-emerald-400 text-slate-950 grid place-items-center font-black text-xl">
+N
+</div>
+
+<div>
+<div class="font-black text-xl">NOVA</div>
+<div class="text-[9px] tracking-[.3em] text-emerald-300">
+ADMIN PANEL
+</div>
+</div>
+
+</div>
+
+</div>
+
+<nav class="p-4 space-y-1">
+
+<button onclick="showPage('dashboard',this)"
+class="sidebar-link active w-full text-left px-4 py-3 rounded-xl">
+📊 Dashboard
+</button>
+
+<button onclick="showPage('users',this)"
+class="sidebar-link w-full text-left px-4 py-3 rounded-xl">
+👥 Customers
+</button>
+
+<button onclick="showPage('transactions',this)"
+class="sidebar-link w-full text-left px-4 py-3 rounded-xl">
+💳 Transactions
+</button>
+
+<button onclick="showPage('loans',this)"
+class="sidebar-link w-full text-left px-4 py-3 rounded-xl">
+🏦 Loans
+</button>
+
+<button onclick="showPage('cards',this)"
+class="sidebar-link w-full text-left px-4 py-3 rounded-xl">
+💳 Credit Cards
+</button>
+
+<button onclick="showPage('accounts',this)"
+class="sidebar-link w-full text-left px-4 py-3 rounded-xl">
+📁 Accounts
+</button>
+
+<button onclick="showPage('reports',this)"
+class="sidebar-link w-full text-left px-4 py-3 rounded-xl">
+📈 Reports
+</button>
+
+<button onclick="showPage('audit',this)"
+class="sidebar-link w-full text-left px-4 py-3 rounded-xl">
+🔐 Audit Logs
+</button>
+
+<button onclick="showPage('settings',this)"
+class="sidebar-link w-full text-left px-4 py-3 rounded-xl">
+⚙️ Settings
+</button>
+
+</nav>
+
+<div class="absolute bottom-0 left-0 right-0 p-4 border-t border-white/10">
+
+<div class="text-xs text-slate-400">
+Logged in as
+</div>
+
+<div class="font-bold">
+Super Admin
+</div>
+
+<div class="text-xs text-emerald-400">
+SIMULATION ROLE
+</div>
+
+</div>
+
+</aside>
+
+
+<!-- MAIN -->
+<main class="flex-1 min-w-0">
+
+<!-- HEADER -->
+<header class="h-20 bg-white border-b flex items-center justify-between px-5 sm:px-8 sticky top-0 z-30">
+
+<div class="flex items-center gap-4">
+
+<button onclick="toggleSidebar()"
+class="lg:hidden text-2xl">
+☰
+</button>
+
+<div>
+<h1 id="pageTitle" class="font-black text-xl">
+Admin Dashboard
+</h1>
+
+<p class="text-xs text-slate-500">
+NOVA simulated banking platform
+</p>
+</div>
+
+</div>
+
+<div class="flex items-center gap-3">
+
+<div class="hidden sm:block text-right">
+<div class="font-bold text-sm">Super Admin</div>
+<div class="text-xs text-slate-400">Administrator</div>
+</div>
+
+<div class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-700 grid place-items-center font-bold">
+SA
+</div>
+
+</div>
+
+</header>
+
+
+<div class="p-5 sm:p-8">
+
+<!-- DASHBOARD -->
+<section id="dashboard" class="page">
+
+<div class="grid sm:grid-cols-2 xl:grid-cols-4 gap-5">
+
+<div class="bg-white rounded-3xl p-6 shadow-sm">
+<div class="text-slate-500 text-sm">Total Deposits</div>
+<div class="text-3xl font-black mt-2">$2.48M</div>
+<div class="text-emerald-600 text-sm mt-2">+8.4% demo metric</div>
+</div>
+
+<div class="bg-white rounded-3xl p-6 shadow-sm">
+<div class="text-slate-500 text-sm">Active Customers</div>
+<div class="text-3xl font-black mt-2">12,482</div>
+<div class="text-emerald-600 text-sm mt-2">+326 this month</div>
+</div>
+
+<div class="bg-white rounded-3xl p-6 shadow-sm">
+<div class="text-slate-500 text-sm">Pending Loans</div>
+<div class="text-3xl font-black mt-2">184</div>
+<div class="text-amber-600 text-sm mt-2">Needs review</div>
+</div>
+
+<div class="bg-white rounded-3xl p-6 shadow-sm">
+<div class="text-slate-500 text-sm">Simulated Revenue</div>
+<div class="text-3xl font-black mt-2">$84,250</div>
+<div class="text-slate-400 text-sm mt-2">Fees + interest</div>
+</div>
+
+</div>
+
+
+<div class="grid lg:grid-cols-3 gap-5 mt-6">
+
+<div class="lg:col-span-2 bg-white rounded-3xl p-6">
+
+<div class="flex justify-between items-center">
+<h2 class="font-black text-xl">
+Recent Activity
+</h2>
+
+<button class="text-sm text-emerald-600">
+View all
+</button>
+</div>
+
+<div class="overflow-x-auto mt-5">
+
+<table class="w-full text-sm">
+
+<thead class="text-left text-slate-400 border-b">
+<tr>
+<th class="py-3">Reference</th>
+<th>User</th>
+<th>Type</th>
+<th>Amount</th>
+<th>Status</th>
+</tr>
+</thead>
+
+<tbody>
+
+<tr class="border-b">
+<td class="py-4 font-mono">SIM-100245</td>
+<td>Alex Morgan</td>
+<td>Transfer</td>
+<td>+$420.00</td>
+<td>
+<span class="text-emerald-600">Completed</span>
+</td>
+</tr>
+
+<tr class="border-b">
+<td class="py-4 font-mono">SIM-100244</td>
+<td>Jordan Lee</td>
+<td>Deposit</td>
+<td>+$1,200.00</td>
+<td>
+<span class="text-emerald-600">Completed</span>
+</td>
+</tr>
+
+<tr>
+<td class="py-4 font-mono">SIM-100243</td>
+<td>Taylor Smith</td>
+<td>Withdrawal</td>
+<td>-$250.00</td>
+<td>
+<span class="text-emerald-600">Completed</span>
+</td>
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+
+<div class="bg-slate-950 text-white rounded-3xl p-6">
+
+<h2 class="font-black text-xl">
+System Status
+</h2>
+
+<div class="mt-6 space-y-5">
+
+<div class="flex justify-between">
+<span class="text-slate-400">Authentication</span>
+<span class="text-emerald-400">● Online</span>
+</div>
+
+<div class="flex justify-between">
+<span class="text-slate-400">Firestore</span>
+<span class="text-emerald-400">● Connected</span>
+</div>
+
+<div class="flex justify-between">
+<span class="text-slate-400">Notifications</span>
+<span class="emerald-400">● Simulation</span>
+</div>
+
+<div class="flex justify-between">
+<span class="text-slate-400">Environment</span>
+<span class="text-amber-300">DEMO</span>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- USERS -->
+<section id="users" class="page hidden">
+
+<div class="flex flex-col sm:flex-row gap-4 justify-between">
+
+<div>
+<h2 class="text-3xl font-black">Customers</h2>
+<p class="text-slate-500 mt-1">
+Manage simulated customer accounts.
+</p>
+</div>
+
+<input
+oninput="filterUsers()"
+id="userSearch"
+placeholder="Search customers..."
+class="border rounded-xl px-4 py-3 bg-white w-full sm:w-72">
+
+</div>
+
+
+<div class="bg-white rounded-3xl mt-6 overflow-hidden">
+
+<div class="overflow-x-auto">
+
+<table class="w-full text-sm">
+
+<thead class="bg-slate-50 text-slate-500">
+<tr>
+<th class="text-left p-4">Customer</th>
+<th>Account</th>
+<th>Status</th>
+<th>Balance</th>
+<th>Action</th>
+</tr>
+</thead>
+
+<tbody id="userTable">
+
+<tr class="border-t">
+<td class="p-4 font-bold">Alex Morgan</td>
+<td class="text-center font-mono">SIM-100245</td>
+<td class="text-center">
+<span class="text-emerald-600">Active</span>
+</td>
+<td class="text-center">$12,450.00</td>
+<td class="text-center">
+<button onclick="openUser('Alex Morgan')"
+class="px-3 py-2 bg-slate-900 text-white rounded-lg">
+Manage
+</button>
+</td>
+</tr>
+
+<tr class="border-t">
+<td class="p-4 font-bold">Jordan Lee</td>
+<td class="text-center font-mono">SIM-100244</td>
+<td class="text-center">
+<span class="text-emerald-600">Active</span>
+</td>
+<td class="text-center">$8,240.50</td>
+<td class="text-center">
+<button onclick="openUser('Jordan Lee')"
+class="px-3 py-2 bg-slate-900 text-white rounded-lg">
+Manage
+</button>
+</td>
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- TRANSACTIONS -->
+<section id="transactions" class="page hidden">
+
+<h2 class="text-3xl font-black">
+All Transactions
+</h2>
+
+<div class="bg-white rounded-3xl mt-6 overflow-hidden">
+
+<div class="overflow-x-auto">
+
+<table class="w-full text-sm">
+
+<thead class="bg-slate-50">
+<tr>
+<th class="p-4 text-left">Reference</th>
+<th>User</th>
+<th>Type</th>
+<th>Amount</th>
+<th>Date</th>
+<th>Status</th>
+</tr>
+</thead>
+
+<tbody>
+
+<tr class="border-t">
+<td class="p-4 font-mono">SIM-100245</td>
+<td>Alex Morgan</td>
+<td>Transfer</td>
+<td>+$420.00</td>
+<td>Oct 02, 2026</td>
+<td class="text-emerald-600">Completed</td>
+</tr>
+
+<tr class="border-t">
+<td class="p-4 font-mono">SIM-100244</td>
+<td>Jordan Lee</td>
+<td>Deposit</td>
+<td>+$1,200.00</td>
+<td>Oct 02, 2026</td>
+<td class="text-emerald-600">Completed</td>
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- LOANS -->
+<section id="loans" class="page hidden">
+
+<h2 class="text-3xl font-black">
+Loan Applications
+</h2>
+
+<div class="grid md:grid-cols-2 xl:grid-cols-3 gap-5 mt-6">
+
+<div class="bg-white rounded-3xl p-6">
+
+<div class="flex justify-between">
+<h3 class="font-bold">Personal Loan</h3>
+<span class="text-amber-600 text-sm">Pending</span>
+</div>
+
+<p class="text-slate-500 mt-3">
+Applicant: Alex Morgan
+</p>
+
+<div class="text-3xl font-black mt-4">
+$15,000
+</div>
+
+<p class="text-sm text-slate-400 mt-2">
+36 months · 8.5% simulated rate
+</p>
+
+<div class="flex gap-2 mt-6">
+<button onclick="loanAction('approved')"
+class="flex-1 bg-emerald-500 rounded-xl py-3 font-bold">
+Approve
+</button>
+
+<button onclick="loanAction('rejected')"
+class="flex-1 bg-red-100 text-red-700 rounded-xl py-3 font-bold">
+Reject
+</button>
+</div>
+
+</div>
+
+</div>
+
+</section>
+
+
+<!-- CARDS -->
+<section id="cards" class="page hidden">
+
+<h2 class="text-3xl font-black">
+Credit Card Applications
+</h2>
+
+<div class="bg-white rounded-3xl p-6 mt-6">
+
+<div class="flex justify-between items-center">
+
+<div>
+<h3 class="font-bold">Alex Morgan</h3>
+<p class="text-sm text-slate-500">
+Requested simulated credit card
+</p>
+</div>
+
+<span class="text-amber-600">
+Pending
+</span>
+
+</div>
+
+<div class="mt-6 flex gap-2">
+<button onclick="cardAction('approved')"
+class="px-5 py-3 bg-emerald-500 rounded-xl font-bold">
+Approve
+</button>
+
+<button onclick="cardAction('rejected')"
+class="px-5 py-3 bg-red-100 text-red-700 rounded-xl font-bold">
+Reject
+</button>
+</div>
+
+</div>
+
+</section>
+
+
+<!-- ACCOUNTS / BACKDATE -->
+<section id="accounts" class="page hidden">
+
+<div>
+<h2 class="text-3xl font-black">
+Account Management
+</h2>
+
+<p class="text-slate-500 mt-1">
+Edit simulated account settings.
+</p>
+</div>
+
+
+<div class="bg-white rounded-3xl p-6 mt-6 max-w-3xl">
+
+<h3 class="text-xl font-black">
+Account Creation Date
+</h3>
+
+<p class="text-slate-500 mt-2">
+Change the displayed creation date for a simulated account.
+</p>
+
+<div class="grid sm:grid-cols-2 gap-5 mt-6">
+
+<div>
+<label class="text-sm font-bold">
+Account Number
+</label>
+
+<input
+value="SIM-100245"
+class="mt-2 w-full border rounded-xl px-4 py-3 bg-slate-50"
+readonly>
+</div>
+
+<div>
+<label class="text-sm font-bold">
+Customer
+</label>
+
+<input
+value="Alex Morgan"
+class="mt-2 w-full border rounded-xl px-4 py-3 bg-slate-50"
+readonly>
+</div>
+
+</div>
+
+
+<div class="mt-5">
+
+<label class="text-sm font-bold">
+Simulated Created Date
+</label>
+
+<input
+id="createdDate"
+type="date"
+value="2025-01-15"
+class="mt-2 w-full border rounded-xl px-4 py-3">
+
+</div>
+
+
+<div class="mt-5 p-4 bg-amber-50 border border-amber-200 rounded-xl text-sm text-amber-800">
+
+⚠️ Simulation feature: changing this date changes the demo record only.
+The original date should remain in the audit log.
+
+</div>
+
+
+<button
+onclick="changeDate()"
+class="mt-5 px-6 py-3 rounded-xl bg-slate-950 text-white font-bold">
+Save Simulated Date
+</button>
+
+</div>
+
+</section>
+
+
+<!-- REPORTS -->
+<section id="reports" class="page hidden">
+
+<h2 class="text-3xl font-black">
+Reports
+</h2>
+
+<div class="grid md:grid-cols-3 gap-5 mt-6">
+
+<div class="bg-white rounded-3xl p-6">
+<p class="text-slate-500">Daily Transactions</p>
+<p class="text-3xl font-black mt-2">4,821</p>
+</div>
+
+<div class="bg-white rounded-3xl p-6">
+<p class="text-slate-500">New Accounts</p>
+<p class="text-3xl font-black mt-2">326</p>
+</div>
+
+<div class="bg-white rounded-3xl p-6">
+<p class="text-slate-500">Loan Portfolio</p>
+<p class="text-3xl font-black mt-2">$4.82M</p>
+</div>
+
+</div>
+
+</section>
+
+
+<!-- AUDIT -->
+<section id="audit" class="page hidden">
+
+<h2 class="text-3xl font-black">
+Audit Logs
+</h2>
+
+<div class="bg-white rounded-3xl mt-6 overflow-hidden">
+
+<table class="w-full text-sm">
+
+<thead class="bg-slate-50">
+<tr>
+<th class="text-left p-4">Action</th>
+<th>Admin</th>
+<th>Target</th>
+<th>Date</th>
+</tr>
+</thead>
+
+<tbody id="auditTable">
+
+<tr class="border-t">
+<td class="p-4">
+Account creation date changed
+</td>
+<td class="text-center">
+Super Admin
+</td>
+<td class="text-center">
+SIM-100245
+</td>
+<td class="text-center">
+Oct 02, 2026
+</td>
+</tr>
+
+</tbody>
+
+</table>
+
+</div>
+
+</section>
+
+
+<!-- SETTINGS -->
+<section id="settings" class="page hidden">
+
+<h2 class="text-3xl font-black">
+System Settings
+</h2>
+
+<div class="bg-white rounded-3xl p-6 mt-6 max-w-2xl">
+
+<div class="space-y-5">
+
+<div>
+<label class="font-bold text-sm">
+Savings Interest Rate
+</label>
+
+<input
+value="4.25"
+type="number"
+class="mt-2 w-full border rounded-xl px-4 py-3">
+</div>
+
+<div>
+<label class="font-bold text-sm">
+Transfer Fee
+</label>
+
+<input
+value="2.50"
+type="number"
+class="mt-2 w-full border rounded-xl px-4 py-3">
+</div>
+
+<div>
+<label class="font-bold text-sm">
+Daily Transfer Limit
+</label>
+
+<input
+value="10000"
+type="number"
+class="mt-2 w-full border rounded-xl px-4 py-3">
+</div>
+
+<button
+onclick="saveSettings()"
+class="px-6 py-3 bg-emerald-500 rounded-xl font-bold">
+Save Settings
+</button>
+
+</div>
+
+</div>
+
+</section>
+
+</div>
+
+</main>
+
+</div>
+
+
+<!-- USER MODAL -->
+<div id="userModal"
+class="hidden fixed inset-0 bg-slate-950/60 z-50 items-center justify-center p-5">
+
+<div class="bg-white rounded-3xl p-7 max-w-lg w-full">
+
+<div class="flex justify-between">
+
+<h2 class="text-2xl font-black">
+Customer Management
+</h2>
+
+<button onclick="closeModal()" class="text-2xl">
+×
+</button>
+
+</div>
+
+<div id="modalUser" class="mt-6"></div>
+
+<button
+onclick="closeModal()"
+class="mt-6 w-full bg-slate-950 text-white py-3 rounded-xl">
+Close
+</button>
+
+</div>
+
+</div>
+
+
+<script>
+
+function toggleSidebar(){
+
+document
+.getElementById("sidebar")
+.classList.toggle("-translate-x-full");
+
+}
+
+
+function showPage(page, button){
+
+document
+.querySelectorAll(".page")
+.forEach(el =>
+el.classList.add("hidden")
+);
+
+document
+.getElementById(page)
+.classList.remove("hidden");
+
+document
+.querySelectorAll(".sidebar-link")
+.forEach(el =>
+el.classList.remove("active")
+);
+
+if(button)
+button.classList.add("active");
+
+const titles = {
+
+dashboard:"Admin Dashboard",
+users:"Customers",
+transactions:"Transactions",
+loans:"Loan Applications",
+cards:"Credit Cards",
+accounts:"Account Management",
+reports:"Reports",
+audit:"Audit Logs",
+settings:"System Settings"
+
+};
+
+document.getElementById("pageTitle").textContent =
+titles[page];
+
+}
+
+
+function openUser(name){
+
+document
+.getElementById("modalUser")
+.innerHTML = `
+
+<h3 class="text-xl font-black">
+${name}
+</h3>
+
+<p class="text-slate-500 mt-2">
+Simulated customer account
+</p>
+
+<div class="grid grid-cols-2 gap-3 mt-6">
+
+<div class="bg-slate-50 rounded-xl p-4">
+<div class="text-xs text-slate-400">
+Account
+</div>
+<div class="font-bold">
+SIM-100245
+</div>
+</div>
+
+<div class="bg-slate-50 rounded-xl p-4">
+<div class="text-xs text-slate-400">
+Status
+</div>
+<div class="text-emerald-600 font-bold">
+Active
+</div>
+</div>
+
+</div>
+
+<div class="flex gap-2 mt-6">
+
+<button onclick="alert('Simulation: customer suspended.')"
+class="flex-1 bg-amber-100 text-amber-700 rounded-xl py-3 font-bold">
+Suspend
+</button>
+
+<button onclick="alert('Simulation: customer activated.')"
+class="flex-1 bg-emerald-100 text-emerald-700 rounded-xl py-3 font-bold">
+Activate
+</button>
+
+</div>
+`;
+
+const modal =
+document.getElementById("userModal");
+
+modal.classList.remove("hidden");
+modal.classList.add("flex");
+
+}
+
+
+function closeModal(){
+
+const modal =
+document.getElementById("userModal");
+
+modal.classList.add("hidden");
+modal.classList.remove("flex");
+
+}
+
+
+function changeDate(){
+
+const date =
+document.getElementById("createdDate").value;
+
+if(!date){
+
+alert("Choose a date first.");
+return;
+
+}
+
+document
+.getElementById("auditTable")
+.insertAdjacentHTML(
+"afterbegin",
+`
+<tr class="border-t">
+<td class="p-4">
+Account creation date changed
+</td>
+<td class="text-center">
+Super Admin
+</td>
+<td class="text-center">
+SIM-100245
+</td>
+<td class="text-center">
+${new Date().toLocaleDateString()}
+</td>
+</tr>
+`
+);
+
+alert(
+"Simulation date changed to " +
+date +
+". An audit entry was created."
+);
+
+}
+
+
+function loanAction(action){
+
+alert(
+"Simulation: loan application " +
+action +
+"."
+);
+
+}
+
+
+function cardAction(action){
+
+alert(
+"Simulation: credit card application " +
+action +
+"."
+);
+
+}
+
+
+function saveSettings(){
+
+alert(
+"Simulation settings saved."
+);
+
+}
+
+
+function filterUsers(){
+
+const search =
+document
+.getElementById("userSearch")
+.value
+.toLowerCase();
+
+document
+.querySelectorAll("#userTable tr")
+.forEach(row => {
+
+row.style.display =
+row.innerText
+.toLowerCase()
+.includes(search)
+? ""
+: "none";
+
+});
+
+}
+
+</script>
+
+</body>
+</html>
