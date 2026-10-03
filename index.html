@@ -2,560 +2,677 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#06131a">
-<title>Cash Flow Bank — Digital Banking</title>
+
+<title>Cash Flow Bank</title>
+
 <script src="https://cdn.tailwindcss.com"></script>
 
 <style>
 :root{
   --bg:#06131a;
   --panel:#0b1c25;
-  --line:rgba(255,255,255,.09);
   --green:#10d99a;
-  --blue:#28a8ff;
+  --blue:#29a9ff;
 }
 
-html{scroll-behavior:smooth}
+html{
+  scroll-behavior:smooth;
+}
 
 body{
-  font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  margin:0;
   background:var(--bg);
-  color:#fff;
+  color:white;
+  font-family:
+    Inter,
+    ui-sans-serif,
+    system-ui,
+    -apple-system,
+    BlinkMacSystemFont,
+    "Segoe UI",
+    sans-serif;
 }
 
 .hero-grid{
   background-image:
-    linear-gradient(rgba(16,217,154,.06) 1px,transparent 1px),
-    linear-gradient(90deg,rgba(16,217,154,.06) 1px,transparent 1px);
+    linear-gradient(rgba(16,217,154,.055) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(16,217,154,.055) 1px,transparent 1px);
   background-size:42px 42px;
 }
 
 .glass{
-  background:rgba(10,29,38,.72);
-  border:1px solid var(--line);
+  background:rgba(10,29,38,.75);
+  border:1px solid rgba(255,255,255,.08);
   backdrop-filter:blur(18px);
   -webkit-backdrop-filter:blur(18px);
 }
 
-.float{animation:float 6s ease-in-out infinite}
-.float2{animation:float 7s ease-in-out 1s infinite}
-.float3{animation:float 8s ease-in-out 1.5s infinite}
+.float{
+  animation:float 6s ease-in-out infinite;
+}
+
+.float2{
+  animation:float 7s ease-in-out 1s infinite;
+}
+
+.float3{
+  animation:float 8s ease-in-out 1.5s infinite;
+}
 
 @keyframes float{
-  0%,100%{transform:translateY(0)}
-  50%{transform:translateY(-13px)}
+  0%,100%{
+    transform:translateY(0);
+  }
+
+  50%{
+    transform:translateY(-13px);
+  }
 }
 
-.ring{
-  box-shadow:
-    0 0 0 1px rgba(16,217,154,.18),
-    0 20px 70px rgba(16,217,154,.10);
+.page{
+  display:none;
 }
 
-.hidden-page{display:none}
+.page.active{
+  display:block;
+}
 
-input:focus{
+.modal{
+  display:none;
+}
+
+.modal.active{
+  display:flex;
+}
+
+input:focus,
+select:focus,
+textarea:focus{
   outline:none;
-  box-shadow:0 0 0 3px rgba(16,217,154,.13);
+  box-shadow:0 0 0 3px rgba(16,217,154,.12);
+}
+
+button{
+  transition:.2s ease;
+}
+
+button:active{
+  transform:scale(.98);
+}
+
+::-webkit-scrollbar{
+  width:8px;
+}
+
+::-webkit-scrollbar-track{
+  background:#06131a;
+}
+
+::-webkit-scrollbar-thumb{
+  background:#17333f;
+  border-radius:10px;
 }
 </style>
 </head>
 
 <body>
 
+<!-- DEVELOPMENT NOTICE -->
+
 <div class="border-b border-white/10 bg-[#081a22] text-center text-xs text-slate-400 px-4 py-2">
-  Cash Flow Bank development environment — no real customer funds or payment rails are connected.
+  Cash Flow Bank platform under development — no real customer funds or payment rails are connected.
 </div>
+
+
+<!-- NAVBAR -->
 
 <header class="sticky top-0 z-50 bg-[#06131a]/90 backdrop-blur-xl border-b border-white/10">
 
 <nav class="max-w-7xl mx-auto px-5 h-20 flex items-center justify-between">
 
-<a href="#" class="flex items-center gap-3">
+<button
+  id="brandHome"
+  class="flex items-center gap-3 text-left">
 
-<span class="w-11 h-11 rounded-2xl bg-emerald-400/10 border border-emerald-400/30 grid place-items-center">
+  <span class="w-11 h-11 rounded-2xl bg-emerald-400/10 border border-emerald-400/30 grid place-items-center">
 
-<svg viewBox="0 0 48 48" class="w-7 h-7" fill="none">
-<path d="M10 30 24 8l14 22-14 10L10 30Z"
-stroke="#10d99a"
-stroke-width="3"/>
-<path d="m17 28 7-11 7 11-7 5-7-5Z"
-fill="#10d99a"
-opacity=".25"/>
-</svg>
+    <svg viewBox="0 0 48 48" class="w-7 h-7" fill="none">
 
-</span>
+      <path
+        d="M10 30 24 8l14 22-14 10L10 30Z"
+        stroke="#10d99a"
+        stroke-width="3"/>
 
-<span>
-<strong class="block tracking-tight">Cash Flow Bank</strong>
-<small class="block text-[10px] tracking-[.22em] text-emerald-300 uppercase">
-Digital Banking
-</small>
-</span>
+      <path
+        d="m17 28 7-11 7 11-7 5-7-5Z"
+        fill="#10d99a"
+        opacity=".25"/>
 
-</a>
+    </svg>
+
+  </span>
+
+  <span>
+    <strong class="block tracking-tight">
+      Cash Flow Bank
+    </strong>
+
+    <small class="block text-[10px] tracking-[.22em] text-emerald-300 uppercase">
+      Digital Banking
+    </small>
+  </span>
+
+</button>
+
 
 <div class="hidden lg:flex items-center gap-7 text-sm text-slate-300">
 
-<a href="#features" class="hover:text-white">Features</a>
-<a href="#accounts" class="hover:text-white">Accounts</a>
-<a href="#security" class="hover:text-white">Security</a>
-<a href="#about" class="hover:text-white">About</a>
+  <button data-scroll="features" class="hover:text-white">
+    Features
+  </button>
+
+  <button data-scroll="accounts" class="hover:text-white">
+    Accounts
+  </button>
+
+  <button data-scroll="security" class="hover:text-white">
+    Security
+  </button>
+
+  <button data-scroll="about" class="hover:text-white">
+    About
+  </button>
 
 </div>
 
+
 <div class="flex items-center gap-2">
 
-<button
-id="navLogin"
-class="hidden sm:inline-flex px-4 py-2.5 rounded-xl border border-white/10 hover:bg-white/5 text-sm font-semibold">
-Sign in
-</button>
+  <button
+    id="navLogin"
+    class="hidden sm:inline-flex px-4 py-2.5 rounded-xl border border-white/10 hover:bg-white/5 text-sm font-semibold">
+    Sign in
+  </button>
 
-<button
-id="navOpen"
-class="px-4 py-2.5 rounded-xl bg-emerald-400 text-[#032018] hover:bg-emerald-300 text-sm font-bold">
-Open account
-</button>
+  <button
+    id="navOpen"
+    class="px-4 py-2.5 rounded-xl bg-emerald-400 text-[#032018] hover:bg-emerald-300 text-sm font-bold">
+    Open account
+  </button>
+
+  <button
+    id="mobileMenuBtn"
+    class="lg:hidden w-10 h-10 rounded-xl border border-white/10 grid place-items-center">
+
+    <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none">
+
+      <path
+        d="M4 7h16M4 12h16M4 17h16"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linecap="round"/>
+
+    </svg>
+
+  </button>
 
 </div>
 
 </nav>
+
+
+<!-- MOBILE MENU -->
+
+<div
+  id="mobileMenu"
+  class="hidden lg:hidden border-t border-white/10 px-5 py-4">
+
+  <div class="grid gap-2 text-sm">
+
+    <button data-scroll="features" class="text-left py-2 text-slate-300">
+      Features
+    </button>
+
+    <button data-scroll="accounts" class="text-left py-2 text-slate-300">
+      Accounts
+    </button>
+
+    <button data-scroll="security" class="text-left py-2 text-slate-300">
+      Security
+    </button>
+
+    <button data-scroll="about" class="text-left py-2 text-slate-300">
+      About
+    </button>
+
+  </div>
+
+</div>
+
 </header>
 
 
-<main>
+<!-- LANDING PAGE -->
+
+<div id="landingPage" class="page active">
+
 
 <!-- HERO -->
 
 <section class="relative overflow-hidden hero-grid">
 
-<div class="absolute -top-48 -left-48 w-[520px] h-[520px] bg-emerald-400/10 rounded-full blur-3xl"></div>
+  <div class="absolute -top-48 -left-48 w-[520px] h-[520px] bg-emerald-400/10 rounded-full blur-3xl"></div>
 
-<div class="absolute top-40 -right-48 w-[520px] h-[520px] bg-sky-400/10 rounded-full blur-3xl"></div>
+  <div class="absolute top-40 -right-48 w-[520px] h-[520px] bg-sky-400/10 rounded-full blur-3xl"></div>
 
-<div class="max-w-7xl mx-auto px-5 pt-20 pb-28 lg:pt-28 lg:pb-36">
 
-<div class="grid lg:grid-cols-[1.02fr_.98fr] gap-14 items-center">
+  <div class="max-w-7xl mx-auto px-5 pt-20 pb-28 lg:pt-28 lg:pb-36">
 
-<div>
+    <div class="grid lg:grid-cols-[1.02fr_.98fr] gap-14 items-center">
 
-<div class="inline-flex items-center gap-2 px-3 py-2 rounded-full border border-emerald-400/20 bg-emerald-400/5 text-emerald-300 text-xs font-semibold">
 
-<span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+      <div>
 
-Modern banking technology
+        <div class="inline-flex items-center gap-2 px-3 py-2 rounded-full border border-emerald-400/20 bg-emerald-400/5 text-emerald-300 text-xs font-semibold">
 
-</div>
+          <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
 
-<h1 class="mt-7 text-5xl sm:text-6xl lg:text-7xl font-black tracking-[-.04em] leading-[.98]">
+          Modern digital banking
 
-Your money.<br>
+        </div>
 
-<span class="text-emerald-400">Your future.</span><br>
 
-One connected bank.
+        <h1 class="mt-7 text-5xl sm:text-6xl lg:text-7xl font-black tracking-[-.04em] leading-[.98]">
 
-</h1>
+          Your money.<br>
 
-<p class="mt-7 max-w-xl text-lg leading-8 text-slate-400">
+          <span class="text-emerald-400">
+            Your future.
+          </span><br>
 
-Cash Flow Bank brings accounts, savings, transfers and financial tools into one clear digital experience.
+          One connected bank.
 
-</p>
+        </h1>
 
-<div class="mt-9 flex flex-wrap gap-3">
 
-<button
-id="heroOpen"
-class="px-6 py-3.5 rounded-2xl bg-emerald-400 text-[#032018] font-bold">
+        <p class="mt-7 max-w-xl text-lg leading-8 text-slate-400">
 
-Open an account
+          Cash Flow Bank brings everyday banking, savings, business accounts and financial tools together in one digital experience.
 
-<svg class="inline w-4 h-4 ml-1"
-viewBox="0 0 24 24"
-fill="none">
+        </p>
 
-<path
-d="M5 12h14m-6-6 6 6-6 6"
-stroke="currentColor"
-stroke-width="2"
-stroke-linecap="round"
-stroke-linejoin="round"/>
 
-</svg>
+        <div class="mt-9 flex flex-wrap gap-3">
 
-</button>
+          <button
+            id="heroOpen"
+            class="px-6 py-3.5 rounded-2xl bg-emerald-400 text-[#032018] font-bold">
 
-<button
-id="heroLogin"
-class="px-6 py-3.5 rounded-2xl border border-white/10 bg-white/[.03] font-semibold">
+            Open an account
 
-Sign in
+            <svg class="inline w-4 h-4 ml-1"
+              viewBox="0 0 24 24"
+              fill="none">
 
-</button>
+              <path
+                d="M5 12h14m-6-6 6 6-6 6"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"/>
 
-</div>
+            </svg>
 
+          </button>
 
-<div class="mt-8 flex flex-wrap gap-6 text-xs text-slate-500">
 
-<span class="inline-flex items-center gap-2">
+          <button
+            id="heroLogin"
+            class="px-6 py-3.5 rounded-2xl border border-white/10 bg-white/[.03] font-semibold">
 
-<svg class="w-4 h-4 text-emerald-400"
-viewBox="0 0 24 24"
-fill="none">
+            Sign in
 
-<path
-d="M12 3 20 6v5c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-3Z"
-stroke="currentColor"
-stroke-width="1.8"/>
+          </button>
 
-<path
-d="m8.5 12 2.2 2.2 4.8-5"
-stroke="currentColor"
-stroke-width="1.8"/>
+        </div>
 
-</svg>
 
-Secure authentication
+        <div class="mt-8 flex flex-wrap gap-6 text-xs text-slate-500">
 
-</span>
+          <span class="inline-flex items-center gap-2">
 
+            <svg class="w-4 h-4 text-emerald-400"
+              viewBox="0 0 24 24"
+              fill="none">
 
-<span class="inline-flex items-center gap-2">
+              <path
+                d="M12 3 20 6v5c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-3Z"
+                stroke="currentColor"
+                stroke-width="1.8"/>
 
-<svg class="w-4 h-4 text-emerald-400"
-viewBox="0 0 24 24"
-fill="none">
+              <path
+                d="m8.5 12 2.2 2.2 4.8-5"
+                stroke="currentColor"
+                stroke-width="1.8"/>
 
-<path
-d="M3 12h18M12 3v18"
-stroke="currentColor"
-stroke-width="1.8"/>
+            </svg>
 
-<circle
-cx="12"
-cy="12"
-r="9"
-stroke="currentColor"
-stroke-width="1.8"/>
+            Secure authentication
 
-</svg>
+          </span>
 
-Mobile ready
 
-</span>
+          <span class="inline-flex items-center gap-2">
 
+            <svg class="w-4 h-4 text-emerald-400"
+              viewBox="0 0 24 24"
+              fill="none">
 
-<span class="inline-flex items-center gap-2">
+              <circle
+                cx="12"
+                cy="12"
+                r="9"
+                stroke="currentColor"
+                stroke-width="1.8"/>
 
-<svg class="w-4 h-4 text-emerald-400"
-viewBox="0 0 24 24"
-fill="none">
+              <path
+                d="M3 12h18M12 3c2 3 3 6 3 9s-1 6-3 9c-2-3-3-6-3-9s1-6 3-9Z"
+                stroke="currentColor"
+                stroke-width="1.5"/>
 
-<path
-d="M4 19V9m5 10V5m6 14v-7m5 7V3"
-stroke="currentColor"
-stroke-width="1.8"
-stroke-linecap="round"/>
+            </svg>
 
-</svg>
+            Mobile ready
 
-Clear insights
+          </span>
 
-</span>
 
-</div>
+          <span class="inline-flex items-center gap-2">
 
-</div>
+            <svg class="w-4 h-4 text-emerald-400"
+              viewBox="0 0 24 24"
+              fill="none">
 
+              <path
+                d="M4 19V5m5 14V9m6 10V5m5 14V3"
+                stroke="currentColor"
+                stroke-width="1.8"
+                stroke-linecap="round"/>
 
-<!-- FLOATING HERO UI -->
+            </svg>
 
-<div class="relative min-h-[560px] lg:min-h-[620px]">
+            Clear insights
 
-<div class="absolute inset-8 rounded-[3rem] bg-gradient-to-br from-emerald-400/10 via-transparent to-sky-400/10 border border-white/5"></div>
+          </span>
 
-<div class="absolute left-4 right-4 top-20 bottom-8 rounded-[2.5rem] border border-white/5"></div>
+        </div>
 
+      </div>
 
-<!-- BALANCE -->
 
-<div class="glass ring rounded-[2rem] p-6 absolute top-10 left-5 right-5 sm:left-12 sm:right-12 z-20">
+      <!-- FLOATING BANK UI -->
 
-<div class="flex items-center justify-between">
+      <div class="relative min-h-[560px] lg:min-h-[620px]">
 
-<div>
+        <div class="absolute inset-8 rounded-[3rem] bg-gradient-to-br from-emerald-400/10 via-transparent to-sky-400/10 border border-white/5"></div>
 
-<p class="text-xs text-slate-500">
-Available balance
-</p>
+        <div class="absolute left-4 right-4 top-20 bottom-8 rounded-[2.5rem] border border-white/5"></div>
 
-<p class="text-4xl font-black mt-2">
-$24,680.50
-</p>
 
-</div>
+        <!-- BALANCE CARD -->
 
-<div class="w-12 h-12 rounded-2xl bg-emerald-400/10 grid place-items-center text-emerald-300">
+        <div class="glass rounded-[2rem] p-6 absolute top-10 left-5 right-5 sm:left-12 sm:right-12 z-20">
 
-<svg class="w-6 h-6"
-viewBox="0 0 24 24"
-fill="none">
+          <div class="flex items-center justify-between">
 
-<path
-d="M7 7h10v10H7z"
-stroke="currentColor"
-stroke-width="1.8"/>
+            <div>
 
-<path
-d="M9 12h6M12 9v6"
-stroke="currentColor"
-stroke-width="1.8"
-stroke-linecap="round"/>
+              <p class="text-xs text-slate-500">
+                Available balance
+              </p>
 
-</svg>
+              <p class="text-4xl font-black mt-2">
+                $24,680.50
+              </p>
 
-</div>
+            </div>
 
-</div>
+            <div class="w-12 h-12 rounded-2xl bg-emerald-400/10 grid place-items-center text-emerald-300">
 
+              <svg class="w-6 h-6"
+                viewBox="0 0 24 24"
+                fill="none">
 
-<div class="mt-6 h-32 rounded-2xl bg-gradient-to-br from-emerald-400/10 to-sky-400/5 border border-white/5 p-4 flex items-end">
+                <rect
+                  x="3"
+                  y="5"
+                  width="18"
+                  height="14"
+                  rx="2"
+                  stroke="currentColor"
+                  stroke-width="1.8"/>
 
-<svg
-viewBox="0 0 500 100"
-class="w-full h-full"
-preserveAspectRatio="none">
+                <path
+                  d="M3 10h18"
+                  stroke="currentColor"
+                  stroke-width="1.8"/>
 
-<path
-d="M0 82 C40 70 55 77 90 55 S145 66 180 42 S225 50 260 30 S305 52 340 24 S395 35 430 12 S470 23 500 5"
-fill="none"
-stroke="#10d99a"
-stroke-width="4"/>
+              </svg>
 
-</svg>
+            </div>
 
-</div>
+          </div>
 
 
-<div class="grid grid-cols-3 gap-3 mt-4">
+          <div class="mt-6 h-32 rounded-2xl bg-gradient-to-br from-emerald-400/10 to-sky-400/5 border border-white/5 p-4 flex items-end">
 
-<div class="rounded-2xl bg-white/[.04] p-3">
+            <svg
+              viewBox="0 0 500 100"
+              class="w-full h-full"
+              preserveAspectRatio="none">
 
-<p class="text-[10px] text-slate-500">
-Checking
-</p>
+              <path
+                d="M0 82 C40 70 55 77 90 55 S145 66 180 42 S225 50 260 30 S305 52 340 24 S395 35 430 12 S470 23 500 5"
+                fill="none"
+                stroke="#10d99a"
+                stroke-width="4"/>
 
-<p class="font-bold mt-1">
-$12,230
-</p>
+            </svg>
 
-</div>
+          </div>
 
 
-<div class="rounded-2xl bg-white/[.04] p-3">
+          <div class="grid grid-cols-3 gap-3 mt-4">
 
-<p class="text-[10px] text-slate-500">
-Savings
-</p>
+            <div class="rounded-2xl bg-white/[.04] p-3">
 
-<p class="font-bold mt-1">
-$10,450
-</p>
+              <p class="text-[10px] text-slate-500">
+                Current
+              </p>
 
-</div>
+              <p class="font-bold mt-1">
+                $12,230
+              </p>
 
+            </div>
 
-<div class="rounded-2xl bg-white/[.04] p-3">
 
-<p class="text-[10px] text-slate-500">
-Deposit
-</p>
+            <div class="rounded-2xl bg-white/[.04] p-3">
 
-<p class="font-bold mt-1">
-$2,000
-</p>
+              <p class="text-[10px] text-slate-500">
+                Savings
+              </p>
 
-</div>
+              <p class="font-bold mt-1">
+                $10,450
+              </p>
 
-</div>
+            </div>
 
-</div>
 
+            <div class="rounded-2xl bg-white/[.04] p-3">
 
-<!-- TRANSFER FLOAT -->
+              <p class="text-[10px] text-slate-500">
+                Deposit
+              </p>
 
-<div class="float glass rounded-2xl p-4 w-56 absolute right-0 top-48 z-30">
+              <p class="font-bold mt-1">
+                $2,000
+              </p>
 
-<div class="flex items-center gap-3">
+            </div>
 
-<div class="w-10 h-10 rounded-xl bg-emerald-400/10 grid place-items-center text-emerald-300">
+          </div>
 
-<svg class="w-5 h-5"
-viewBox="0 0 24 24"
-fill="none">
+        </div>
 
-<path
-d="m7 12 3 3 7-7"
-stroke="currentColor"
-stroke-width="2"
-stroke-linecap="round"
-stroke-linejoin="round"/>
 
-<circle
-cx="12"
-cy="12"
-r="9"
-stroke="currentColor"
-stroke-width="1.6"/>
+        <!-- TRANSFER -->
 
-</svg>
+        <div class="float glass rounded-2xl p-4 w-56 absolute right-0 top-48 z-30">
 
-</div>
+          <div class="flex items-center gap-3">
 
-<div>
+            <div class="w-10 h-10 rounded-xl bg-emerald-400/10 grid place-items-center text-emerald-300">
 
-<p class="text-xs text-slate-500">
-Transfer
-</p>
+              <svg class="w-5 h-5"
+                viewBox="0 0 24 24"
+                fill="none">
 
-<p class="font-bold text-emerald-300">
-+$420.00
-</p>
+                <path
+                  d="m7 12 3 3 7-7"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"/>
 
-</div>
+                <circle
+                  cx="12"
+                  cy="12"
+                  r="9"
+                  stroke="currentColor"
+                  stroke-width="1.6"/>
 
-</div>
+              </svg>
 
-<p class="text-[10px] text-slate-500 mt-3">
-Transfer completed
-</p>
+            </div>
 
-</div>
+            <div>
 
+              <p class="text-xs text-slate-500">
+                Transfer
+              </p>
 
-<!-- SAVINGS FLOAT -->
+              <p class="font-bold text-emerald-300">
+                +$420.00
+              </p>
 
-<div class="float2 glass rounded-2xl p-4 w-52 absolute left-0 bottom-28 z-30">
+            </div>
 
-<p class="text-xs text-slate-500">
-Savings growth
-</p>
+          </div>
 
-<div class="flex justify-between items-end mt-1">
+          <p class="text-[10px] text-slate-500 mt-3">
+            Transfer completed
+          </p>
 
-<strong class="text-2xl">
-4.25%
-</strong>
+        </div>
 
-<span class="text-xs text-emerald-300">
-APY
-</span>
 
-</div>
+        <!-- SAVINGS -->
 
-<div class="mt-3 h-1.5 rounded-full bg-white/10">
+        <div class="float2 glass rounded-2xl p-4 w-52 absolute left-0 bottom-28 z-30">
 
-<div class="h-full w-3/4 bg-emerald-400 rounded-full"></div>
+          <p class="text-xs text-slate-500">
+            Savings growth
+          </p>
 
-</div>
+          <div class="flex justify-between items-end mt-1">
 
-</div>
+            <strong class="text-2xl">
+              4.25%
+            </strong>
 
+            <span class="text-xs text-emerald-300">
+              APY
+            </span>
 
-<!-- ACTIVITY FLOAT -->
+          </div>
 
-<div class="float3 glass rounded-2xl p-4 w-56 absolute right-6 bottom-4 z-30">
+          <div class="mt-3 h-1.5 rounded-full bg-white/10">
 
-<div class="flex items-center justify-between">
+            <div class="h-full w-3/4 bg-emerald-400 rounded-full"></div>
 
-<p class="text-xs text-slate-500">
-Recent activity
-</p>
+          </div>
 
-<svg
-class="w-4 h-4 text-slate-500"
-viewBox="0 0 24 24"
-fill="none">
+        </div>
 
-<path
-d="M4 12h16M12 4v16"
-stroke="currentColor"
-stroke-width="1.7"/>
 
-</svg>
+        <!-- ACTIVITY -->
 
-</div>
+        <div class="float3 glass rounded-2xl p-4 w-56 absolute right-6 bottom-4 z-30">
 
-<div class="mt-3 space-y-3 text-xs">
+          <div class="flex items-center justify-between">
 
-<div class="flex justify-between">
+            <p class="text-xs text-slate-500">
+              Recent activity
+            </p>
 
-<span class="text-slate-400">
-Coffee Shop
-</span>
+            <svg
+              class="w-4 h-4 text-slate-500"
+              viewBox="0 0 24 24"
+              fill="none">
 
-<span>
--$4.75
-</span>
+              <path
+                d="M4 12h16"
+                stroke="currentColor"
+                stroke-width="1.7"/>
 
-</div>
+              <path
+                d="M12 4v16"
+                stroke="currentColor"
+                stroke-width="1.7"/>
 
-<div class="flex justify-between">
+            </svg>
 
-<span class="text-slate-400">
-Salary Deposit
-</span>
+          </div>
 
-<span class="text-emerald-300">
-+$2,500
-</span>
+          <div class="mt-3 space-y-3 text-xs">
 
-</div>
+            <div class="flex justify-between">
 
-</div>
+              <span class="text-slate-400">
+                Coffee Shop
+              </span>
 
-</div>
+              <span>
+                -$4.75
+              </span>
 
-</div>
+            </div>
 
-</div>
+            <div class="flex justify-between">
 
-</div>
+              <span class="text-slate-400">
+                Salary
+              </span>
 
-</section>
+              <span class="text-emerald-300">
+                +$2,500
+              </span>
 
+            </div>
 
-<!-- STATS -->
+          </div>
 
-<section class="border-y border-white/10 bg-[#081a22]">
+        </div>
 
-<div class="max-w-7xl mx-auto px-5 py-6 grid grid-cols-2 lg:grid-cols-4 gap-5">
+      </div>
 
-<div>
-<p class="text-2xl font-black">24/7</p>
-<p class="text-xs text-slate-500 mt-1">Digital access</p>
-</div>
+    </div>
 
-<div>
-<p class="text-2xl font-black">3</p>
-<p class="text-xs text-slate-500 mt-1">Core account types</p>
-</div>
-
-<div>
-<p class="text-2xl font-black">100%</p>
-<p class="text-xs text-slate-500 mt-1">Responsive interface</p>
-</div>
-
-<div>
-<p class="text-2xl font-black">Secure</p>
-<p class="text-xs text-slate-500 mt-1">Firebase authentication</p>
-</div>
-
-</div>
+  </div>
 
 </section>
 
@@ -564,107 +681,109 @@ Salary Deposit
 
 <section id="features" class="max-w-7xl mx-auto px-5 py-24">
 
-<div class="max-w-2xl">
+  <div class="max-w-2xl">
 
-<p class="text-emerald-300 text-xs font-bold uppercase tracking-[.22em]">
-Banking tools
-</p>
+    <p class="text-emerald-300 text-xs font-bold uppercase tracking-[.22em]">
+      Banking tools
+    </p>
 
-<h2 class="text-4xl md:text-5xl font-black mt-3">
-More than an account.
-</h2>
+    <h2 class="text-4xl md:text-5xl font-black mt-3">
+      Everything in one place.
+    </h2>
 
-<p class="text-slate-400 mt-5 leading-7">
-A structured digital banking experience with the pieces needed for customer accounts, activity and support.
-</p>
+    <p class="text-slate-400 mt-5 leading-7">
+      Manage your everyday banking experience from one connected dashboard.
+    </p>
 
-</div>
-
-
-<div class="grid md:grid-cols-3 gap-5 mt-12">
-
-<article class="glass rounded-3xl p-7">
-
-<svg class="w-8 h-8 text-emerald-300"
-viewBox="0 0 24 24"
-fill="none">
-
-<path
-d="M4 19V5h16v14H4Z"
-stroke="currentColor"
-stroke-width="1.7"/>
-
-<path
-d="M7 9h10M7 13h6"
-stroke="currentColor"
-stroke-width="1.7"
-stroke-linecap="round"/>
-
-</svg>
-
-<h3 class="text-xl font-bold mt-5">
-Online banking
-</h3>
-
-<p class="text-slate-400 mt-3 text-sm leading-6">
-Customer authentication, profiles, account views and transaction history.
-</p>
-
-</article>
+  </div>
 
 
-<article class="glass rounded-3xl p-7">
-
-<svg class="w-8 h-8 text-sky-300"
-viewBox="0 0 24 24"
-fill="none">
-
-<path
-d="M4 12h16M12 4l8 8-8 8"
-stroke="currentColor"
-stroke-width="1.7"
-stroke-linecap="round"
-stroke-linejoin="round"/>
-
-</svg>
-
-<h3 class="text-xl font-bold mt-5">
-Transfers
-</h3>
-
-<p class="text-slate-400 mt-3 text-sm leading-6">
-A clear transaction workflow ready for a future sandbox payment rail.
-</p>
-
-</article>
+  <div class="grid md:grid-cols-3 gap-5 mt-12">
 
 
-<article class="glass rounded-3xl p-7">
+    <article class="glass rounded-3xl p-7">
 
-<svg class="w-8 h-8 text-violet-300"
-viewBox="0 0 24 24"
-fill="none">
+      <svg class="w-8 h-8 text-emerald-300"
+        viewBox="0 0 24 24"
+        fill="none">
 
-<path
-d="M4 19V5m0 14h16M7 15l3-4 3 2 4-6"
-stroke="currentColor"
-stroke-width="1.7"
-stroke-linecap="round"
-stroke-linejoin="round"/>
+        <rect
+          x="3"
+          y="5"
+          width="18"
+          height="14"
+          rx="2"
+          stroke="currentColor"
+          stroke-width="1.7"/>
 
-</svg>
+        <path
+          d="M3 10h18"
+          stroke="currentColor"
+          stroke-width="1.7"/>
 
-<h3 class="text-xl font-bold mt-5">
-Financial insights
-</h3>
+      </svg>
 
-<p class="text-slate-400 mt-3 text-sm leading-6">
-Balances, activity and account-level information presented clearly.
-</p>
+      <h3 class="text-xl font-bold mt-5">
+        Current accounts
+      </h3>
 
-</article>
+      <p class="text-slate-400 mt-3 text-sm leading-6">
+        Everyday banking for payments, transfers and account activity.
+      </p>
 
-</div>
+    </article>
+
+
+    <article class="glass rounded-3xl p-7">
+
+      <svg class="w-8 h-8 text-sky-300"
+        viewBox="0 0 24 24"
+        fill="none">
+
+        <path
+          d="M12 3 20 7v5c0 4.5-3 7.5-8 9-5-1.5-8-4.5-8-9V7l8-4Z"
+          stroke="currentColor"
+          stroke-width="1.7"/>
+
+      </svg>
+
+      <h3 class="text-xl font-bold mt-5">
+        Savings
+      </h3>
+
+      <p class="text-slate-400 mt-3 text-sm leading-6">
+        Keep savings separate and track your financial progress.
+      </p>
+
+    </article>
+
+
+    <article class="glass rounded-3xl p-7">
+
+      <svg class="w-8 h-8 text-violet-300"
+        viewBox="0 0 24 24"
+        fill="none">
+
+        <path
+          d="M4 19V5m0 14h16M7 15l3-4 3 2 4-6"
+          stroke="currentColor"
+          stroke-width="1.7"
+          stroke-linecap="round"
+          stroke-linejoin="round"/>
+
+      </svg>
+
+      <h3 class="text-xl font-bold mt-5">
+        Financial insights
+      </h3>
+
+      <p class="text-slate-400 mt-3 text-sm leading-6">
+        View balances, account information and transaction history.
+      </p>
+
+    </article>
+
+  </div>
 
 </section>
 
@@ -673,142 +792,168 @@ Balances, activity and account-level information presented clearly.
 
 <section id="accounts" class="bg-[#081a22] border-y border-white/10">
 
-<div class="max-w-7xl mx-auto px-5 py-24">
+  <div class="max-w-7xl mx-auto px-5 py-24">
 
-<div class="flex flex-col md:flex-row md:items-end md:justify-between gap-5">
+    <p class="text-emerald-300 text-xs font-bold uppercase tracking-[.22em]">
+      Accounts
+    </p>
 
-<div>
-
-<p class="text-emerald-300 text-xs font-bold uppercase tracking-[.22em]">
-Accounts
-</p>
-
-<h2 class="text-4xl md:text-5xl font-black mt-3">
-Choose how you bank.
-</h2>
-
-</div>
-
-<button
-id="accountsOpen"
-class="text-sm font-bold text-emerald-300">
-Open an account →
-</button>
-
-</div>
+    <h2 class="text-4xl md:text-5xl font-black mt-3">
+      Banking built around you.
+    </h2>
 
 
-<div class="grid lg:grid-cols-3 gap-5 mt-12">
+    <div class="grid lg:grid-cols-4 gap-5 mt-12">
 
 
-<article class="rounded-3xl border border-white/10 bg-[#06131a] p-7">
+      <button
+        data-account-info="CURRENT"
+        class="text-left rounded-3xl border border-white/10 bg-[#06131a] p-7 hover:border-emerald-400/30">
 
-<div class="w-12 h-12 rounded-2xl bg-emerald-400/10 grid place-items-center text-emerald-300">
+        <div class="w-12 h-12 rounded-2xl bg-emerald-400/10 grid place-items-center text-emerald-300">
 
-<svg class="w-6 h-6"
-viewBox="0 0 24 24"
-fill="none">
+          <svg class="w-6 h-6"
+            viewBox="0 0 24 24"
+            fill="none">
 
-<rect
-x="3"
-y="5"
-width="18"
-height="14"
-rx="2"
-stroke="currentColor"
-stroke-width="1.7"/>
+            <rect
+              x="3"
+              y="5"
+              width="18"
+              height="14"
+              rx="2"
+              stroke="currentColor"
+              stroke-width="1.7"/>
 
-<path
-d="M3 10h18"
-stroke="currentColor"
-stroke-width="1.7"/>
+            <path
+              d="M3 10h18"
+              stroke="currentColor"
+              stroke-width="1.7"/>
 
-</svg>
+          </svg>
 
-</div>
+        </div>
 
-<h3 class="text-2xl font-bold mt-6">
-Checking Account
-</h3>
+        <h3 class="text-xl font-bold mt-6">
+          Current
+        </h3>
 
-<p class="text-slate-400 mt-3 leading-6">
-Everyday account structure for deposits, withdrawals and transactions.
-</p>
+        <p class="text-slate-400 mt-3 text-sm leading-6">
+          Everyday banking for payments and transfers.
+        </p>
 
-</article>
-
-
-<article class="rounded-3xl border border-emerald-400/20 bg-[#06131a] p-7">
-
-<div class="w-12 h-12 rounded-2xl bg-sky-400/10 grid place-items-center text-sky-300">
-
-<svg class="w-6 h-6"
-viewBox="0 0 24 24"
-fill="none">
-
-<path
-d="M12 3 20 7v5c0 4.5-3 7.5-8 9-5-1.5-8-4.5-8-9V7l8-4Z"
-stroke="currentColor"
-stroke-width="1.7"/>
-
-<path
-d="M8 13c1.2-2 2.8-3 4-3s2.8 1 4 3"
-stroke="currentColor"
-stroke-width="1.7"/>
-
-</svg>
-
-</div>
-
-<h3 class="text-2xl font-bold mt-6">
-Savings Account
-</h3>
-
-<p class="text-slate-400 mt-3 leading-6">
-A dedicated savings account with configurable interest-rate fields.
-</p>
-
-</article>
+      </button>
 
 
-<article class="rounded-3xl border border-white/10 bg-[#06131a] p-7">
+      <button
+        data-account-info="SAVINGS"
+        class="text-left rounded-3xl border border-white/10 bg-[#06131a] p-7 hover:border-sky-400/30">
 
-<div class="w-12 h-12 rounded-2xl bg-violet-400/10 grid place-items-center text-violet-300">
+        <div class="w-12 h-12 rounded-2xl bg-sky-400/10 grid place-items-center text-sky-300">
 
-<svg class="w-6 h-6"
-viewBox="0 0 24 24"
-fill="none">
+          <svg class="w-6 h-6"
+            viewBox="0 0 24 24"
+            fill="none">
 
-<circle
-cx="12"
-cy="12"
-r="9"
-stroke="currentColor"
-stroke-width="1.7"/>
+            <path
+              d="M12 3 20 7v5c0 4.5-3 7.5-8 9-5-1.5-8-4.5-8-9V7l8-4Z"
+              stroke="currentColor"
+              stroke-width="1.7"/>
 
-<path
-d="M8 12h8M12 8v8"
-stroke="currentColor"
-stroke-width="1.7"
-stroke-linecap="round"/>
+          </svg>
 
-</svg>
+        </div>
 
-</div>
+        <h3 class="text-xl font-bold mt-6">
+          Savings
+        </h3>
 
-<h3 class="text-2xl font-bold mt-6">
-Fixed Deposit
-</h3>
+        <p class="text-slate-400 mt-3 text-sm leading-6">
+          Save money separately and track your progress.
+        </p>
 
-<p class="text-slate-400 mt-3 leading-6">
-A term-deposit structure for future interest and maturity workflows.
-</p>
+      </button>
 
-</article>
 
-</div>
+      <button
+        data-account-info="BUSINESS"
+        class="text-left rounded-3xl border border-white/10 bg-[#06131a] p-7 hover:border-violet-400/30">
 
-</div>
+        <div class="w-12 h-12 rounded-2xl bg-violet-400/10 grid place-items-center text-violet-300">
+
+          <svg class="w-6 h-6"
+            viewBox="0 0 24 24"
+            fill="none">
+
+            <rect
+              x="3"
+              y="7"
+              width="18"
+              height="13"
+              rx="2"
+              stroke="currentColor"
+              stroke-width="1.7"/>
+
+            <path
+              d="M8 7V5h8v2M12 11v5"
+              stroke="currentColor"
+              stroke-width="1.7"/>
+
+          </svg>
+
+        </div>
+
+        <h3 class="text-xl font-bold mt-6">
+          Business
+        </h3>
+
+        <p class="text-slate-400 mt-3 text-sm leading-6">
+          Banking structure for businesses and organizations.
+        </p>
+
+      </button>
+
+
+      <button
+        data-account-info="FIXED_DEPOSIT"
+        class="text-left rounded-3xl border border-white/10 bg-[#06131a] p-7 hover:border-amber-400/30">
+
+        <div class="w-12 h-12 rounded-2xl bg-amber-400/10 grid place-items-center text-amber-300">
+
+          <svg class="w-6 h-6"
+            viewBox="0 0 24 24"
+            fill="none">
+
+            <circle
+              cx="12"
+              cy="12"
+              r="9"
+              stroke="currentColor"
+              stroke-width="1.7"/>
+
+            <path
+              d="M12 7v5l3 2"
+              stroke="currentColor"
+              stroke-width="1.7"
+              stroke-linecap="round"/>
+
+          </svg>
+
+        </div>
+
+        <h3 class="text-xl font-bold mt-6">
+          Fixed Deposit
+        </h3>
+
+        <p class="text-slate-400 mt-3 text-sm leading-6">
+          A term-based savings structure with maturity information.
+        </p>
+
+      </button>
+
+    </div>
+
+  </div>
 
 </section>
 
@@ -817,300 +962,522 @@ A term-deposit structure for future interest and maturity workflows.
 
 <section id="security" class="max-w-7xl mx-auto px-5 py-24">
 
-<div class="grid lg:grid-cols-2 gap-12 items-center">
+  <div class="grid lg:grid-cols-2 gap-12 items-center">
 
-<div>
+    <div>
 
-<p class="text-emerald-300 text-xs font-bold uppercase tracking-[.22em]">
-Security first
-</p>
+      <p class="text-emerald-300 text-xs font-bold uppercase tracking-[.22em]">
+        Security
+      </p>
 
-<h2 class="text-4xl md:text-5xl font-black mt-3">
-Designed around controlled access.
-</h2>
+      <h2 class="text-4xl md:text-5xl font-black mt-3">
+        Built with controlled access.
+      </h2>
 
-<p class="text-slate-400 mt-5 leading-7">
-Cash Flow Bank uses Firebase Authentication for identity and Cloud Firestore for application data. Sensitive balance-changing operations should be handled by trusted server-side code and protected with Firestore rules.
-</p>
+      <p class="text-slate-400 mt-5 leading-7">
+        Customer authentication is handled through Firebase Authentication and customer records are stored in Cloud Firestore.
+      </p>
 
-</div>
-
-
-<div class="grid sm:grid-cols-2 gap-4">
+    </div>
 
 
-<div class="glass rounded-3xl p-6">
+    <div class="grid sm:grid-cols-2 gap-4">
 
-<svg class="w-7 h-7 text-emerald-300"
-viewBox="0 0 24 24"
-fill="none">
+      <div class="glass rounded-3xl p-6">
 
-<path
-d="M12 3 20 6v5c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-3Z"
-stroke="currentColor"
-stroke-width="1.7"/>
+        <h3 class="font-bold">
+          Authentication
+        </h3>
 
-<path
-d="m8.5 12 2.2 2.2 4.8-5"
-stroke="currentColor"
-stroke-width="1.7"/>
+        <p class="text-sm text-slate-500 mt-2">
+          Firebase email and password authentication.
+        </p>
 
-</svg>
-
-<h3 class="font-bold mt-5">
-Authentication
-</h3>
-
-<p class="text-sm text-slate-500 mt-2">
-Firebase email/password identity.
-</p>
-
-</div>
+      </div>
 
 
-<div class="glass rounded-3xl p-6">
+      <div class="glass rounded-3xl p-6">
 
-<svg class="w-7 h-7 text-sky-300"
-viewBox="0 0 24 24"
-fill="none">
+        <h3 class="font-bold">
+          Customer data
+        </h3>
 
-<ellipse
-cx="12"
-cy="6"
-rx="7"
-ry="3"
-stroke="currentColor"
-stroke-width="1.7"/>
+        <p class="text-sm text-slate-500 mt-2">
+          Structured Firestore records.
+        </p>
 
-<path
-d="M5 6v6c0 1.7 3.1 3 7 3s7-1.3 7-3V6M5 12v6c0 1.7 3.1 3 7 3s7-1.3 7-3v-6"
-stroke="currentColor"
-stroke-width="1.7"/>
-
-</svg>
-
-<h3 class="font-bold mt-5">
-Firestore
-</h3>
-
-<p class="text-sm text-slate-500 mt-2">
-Structured customer and account data.
-</p>
-
-</div>
+      </div>
 
 
-<div class="glass rounded-3xl p-6">
+      <div class="glass rounded-3xl p-6">
 
-<svg class="w-7 h-7 text-violet-300"
-viewBox="0 0 24 24"
-fill="none">
+        <h3 class="font-bold">
+          Account control
+        </h3>
 
-<path
-d="M4 19V5m0 14h16M7 15l3-4 3 2 4-6"
-stroke="currentColor"
-stroke-width="1.7"/>
+        <p class="text-sm text-slate-500 mt-2">
+          Account status and account type fields.
+        </p>
 
-</svg>
-
-<h3 class="font-bold mt-5">
-Audit trail
-</h3>
-
-<p class="text-sm text-slate-500 mt-2">
-Admin actions can be recorded.
-</p>
-
-</div>
+      </div>
 
 
-<div class="glass rounded-3xl p-6">
+      <div class="glass rounded-3xl p-6">
 
-<svg class="w-7 h-7 text-amber-300"
-viewBox="0 0 24 24"
-fill="none">
+        <h3 class="font-bold">
+          Support
+        </h3>
 
-<path
-d="M12 3v18M5 7h9a3 3 0 1 1 0 6H7a3 3 0 1 0 0 6h10"
-stroke="currentColor"
-stroke-width="1.7"
-stroke-linecap="round"/>
+        <p class="text-sm text-slate-500 mt-2">
+          Integrated live customer support.
+        </p>
 
-</svg>
+      </div>
 
-<h3 class="font-bold mt-5">
-Controlled money logic
-</h3>
+    </div>
 
-<p class="text-sm text-slate-500 mt-2">
-Server-side processing for privileged operations.
-</p>
-
-</div>
-
-</div>
-
-</div>
+  </div>
 
 </section>
 
 
-<!-- ABOUT / CTA -->
+<!-- CTA -->
 
-<section
-id="about"
-class="bg-gradient-to-b from-[#081a22] to-[#06131a] border-y border-white/10">
+<section id="about" class="bg-[#081a22] border-y border-white/10">
 
-<div class="max-w-7xl mx-auto px-5 py-24">
+  <div class="max-w-7xl mx-auto px-5 py-24">
 
-<div class="max-w-3xl">
+    <h2 class="text-4xl md:text-5xl font-black">
+      Start banking digitally.
+    </h2>
 
-<p class="text-emerald-300 text-xs font-bold uppercase tracking-[.22em]">
-Get started
-</p>
+    <p class="text-slate-400 mt-5 max-w-2xl leading-7">
+      Create your Cash Flow Bank customer profile and select the account type that fits your needs.
+    </p>
 
-<h2 class="text-4xl md:text-5xl font-black mt-3">
-Open your Cash Flow Bank account.
-</h2>
+    <button
+      id="bottomOpen"
+      class="mt-8 px-6 py-3.5 rounded-2xl bg-emerald-400 text-[#032018] font-bold">
 
-<p class="text-slate-400 mt-5 leading-7">
-Create an account to enter the customer portal. Your identity is handled by Firebase Authentication and your profile/account records are stored in Firestore.
-</p>
+      Open an account
 
-</div>
+    </button>
 
-<div class="mt-10 flex flex-wrap gap-3">
-
-<button
-id="bottomOpen"
-class="px-6 py-3.5 rounded-2xl bg-emerald-400 text-[#032018] font-bold">
-Open an account
-</button>
-
-<button
-id="bottomLogin"
-class="px-6 py-3.5 rounded-2xl border border-white/10 font-semibold">
-Sign in
-</button>
-
-</div>
-
-</div>
+  </div>
 
 </section>
 
+</div>
 
-<!-- CUSTOMER DASHBOARD -->
 
-<section
-id="dashboard"
-class="hidden-page max-w-7xl mx-auto px-5 py-16">
+<!-- CUSTOMER APP -->
 
-<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+<div id="customerApp" class="page">
 
-<div>
 
-<p class="text-xs uppercase tracking-[.2em] text-emerald-300">
-Customer portal
-</p>
+<!-- CUSTOMER HEADER -->
 
-<h2
-id="welcome"
-class="text-3xl font-black mt-2">
-Welcome
-</h2>
+<header class="sticky top-0 z-50 bg-[#06131a]/95 backdrop-blur-xl border-b border-white/10">
+
+  <div class="max-w-7xl mx-auto px-5 h-20 flex items-center justify-between">
+
+    <button
+      id="dashboardHome"
+      class="flex items-center gap-3">
+
+      <span class="w-10 h-10 rounded-xl bg-emerald-400/10 border border-emerald-400/20 grid place-items-center text-emerald-300 font-black">
+        CF
+      </span>
+
+      <span>
+        <strong>Cash Flow Bank</strong>
+        <small class="block text-[9px] uppercase tracking-widest text-emerald-300">
+          Customer
+        </small>
+      </span>
+
+    </button>
+
+
+    <div class="flex items-center gap-2">
+
+      <button
+        id="notificationBtn"
+        class="w-10 h-10 rounded-xl border border-white/10 grid place-items-center relative">
+
+        <svg class="w-5 h-5"
+          viewBox="0 0 24 24"
+          fill="none">
+
+          <path
+            d="M18 9a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9Z"
+            stroke="currentColor"
+            stroke-width="1.7"/>
+
+          <path
+            d="M10 21h4"
+            stroke="currentColor"
+            stroke-width="1.7"
+            stroke-linecap="round"/>
+
+        </svg>
+
+        <span
+          id="notificationDot"
+          class="hidden absolute top-2 right-2 w-2 h-2 bg-emerald-400 rounded-full">
+        </span>
+
+      </button>
+
+
+      <button
+        id="profileBtn"
+        class="w-10 h-10 rounded-xl bg-emerald-400 text-[#032018] font-black">
+
+        <span id="profileInitial">
+          U
+        </span>
+
+      </button>
+
+    </div>
+
+  </div>
+
+</header>
+
+
+<!-- DASHBOARD -->
+
+<main class="max-w-7xl mx-auto px-5 py-8">
+
+
+<div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
+
+  <div>
+
+    <p class="text-xs uppercase tracking-[.2em] text-emerald-300">
+      Customer dashboard
+    </p>
+
+    <h1
+      id="welcomeName"
+      class="text-3xl md:text-4xl font-black mt-2">
+      Welcome
+    </h1>
+
+    <p
+      id="customerNumber"
+      class="text-sm text-slate-500 mt-2">
+    </p>
+
+  </div>
+
+
+  <button
+    id="logoutBtn"
+    class="px-4 py-2.5 rounded-xl border border-white/10 text-sm">
+    Sign out
+  </button>
 
 </div>
 
+
+<!-- TOTAL BALANCE -->
+
+<div class="glass rounded-3xl p-7 mt-8">
+
+  <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-5">
+
+    <div>
+
+      <p class="text-sm text-slate-500">
+        Total available balance
+      </p>
+
+      <h2
+        id="totalBalance"
+        class="text-4xl md:text-5xl font-black mt-2">
+        $0.00
+      </h2>
+
+    </div>
+
+
+    <div class="flex gap-2">
+
+      <button
+        id="depositBtn"
+        class="px-4 py-2.5 rounded-xl bg-emerald-400 text-[#032018] font-bold text-sm">
+
+        Deposit
+
+      </button>
+
+      <button
+        id="withdrawBtn"
+        class="px-4 py-2.5 rounded-xl border border-white/10 font-semibold text-sm">
+
+        Withdraw
+
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- ACTIONS -->
+
+<div class="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-5">
+
+
 <button
-id="logoutBtn"
-class="px-4 py-2 rounded-xl border border-white/10">
-Sign out
+  id="transferBtn"
+  class="glass rounded-2xl p-5 text-left hover:border-emerald-400/30">
+
+  <div class="w-10 h-10 rounded-xl bg-emerald-400/10 grid place-items-center text-emerald-300">
+
+    <svg class="w-5 h-5"
+      viewBox="0 0 24 24"
+      fill="none">
+
+      <path
+        d="M4 7h15M15 4l4 3-4 3M20 17H5m4-3-4 3 4 3"
+        stroke="currentColor"
+        stroke-width="1.7"
+        stroke-linecap="round"
+        stroke-linejoin="round"/>
+
+    </svg>
+
+  </div>
+
+  <p class="font-bold mt-4">
+    Transfer
+  </p>
+
+  <p class="text-xs text-slate-500 mt-1">
+    Move funds
+  </p>
+
 </button>
+
+
+<button
+  id="payBillBtn"
+  class="glass rounded-2xl p-5 text-left hover:border-sky-400/30">
+
+  <div class="w-10 h-10 rounded-xl bg-sky-400/10 grid place-items-center text-sky-300">
+
+    <svg class="w-5 h-5"
+      viewBox="0 0 24 24"
+      fill="none">
+
+      <rect
+        x="4"
+        y="3"
+        width="16"
+        height="18"
+        rx="2"
+        stroke="currentColor"
+        stroke-width="1.7"/>
+
+      <path
+        d="M8 8h8M8 12h8M8 16h4"
+        stroke="currentColor"
+        stroke-width="1.7"
+        stroke-linecap="round"/>
+
+    </svg>
+
+  </div>
+
+  <p class="font-bold mt-4">
+    Pay bill
+  </p>
+
+  <p class="text-xs text-slate-500 mt-1">
+    Payments
+  </p>
+
+</button>
+
+
+<button
+  id="historyBtn"
+  class="glass rounded-2xl p-5 text-left hover:border-violet-400/30">
+
+  <div class="w-10 h-10 rounded-xl bg-violet-400/10 grid place-items-center text-violet-300">
+
+    <svg class="w-5 h-5"
+      viewBox="0 0 24 24"
+      fill="none">
+
+      <circle
+        cx="12"
+        cy="12"
+        r="9"
+        stroke="currentColor"
+        stroke-width="1.7"/>
+
+      <path
+        d="M12 7v5l3 2"
+        stroke="currentColor"
+        stroke-width="1.7"
+        stroke-linecap="round"/>
+
+    </svg>
+
+  </div>
+
+  <p class="font-bold mt-4">
+    History
+  </p>
+
+  <p class="text-xs text-slate-500 mt-1">
+    Transactions
+  </p>
+
+</button>
+
+
+<button
+  id="supportBtn"
+  class="glass rounded-2xl p-5 text-left hover:border-amber-400/30">
+
+  <div class="w-10 h-10 rounded-xl bg-amber-400/10 grid place-items-center text-amber-300">
+
+    <svg class="w-5 h-5"
+      viewBox="0 0 24 24"
+      fill="none">
+
+      <path
+        d="M4 13a8 8 0 0 1 16 0v4a2 2 0 0 1-2 2h-2v-6h4M4 13v4a2 2 0 0 0 2 2h2v-6H4"
+        stroke="currentColor"
+        stroke-width="1.7"
+        stroke-linejoin="round"/>
+
+      <path
+        d="M12 21h3"
+        stroke="currentColor"
+        stroke-width="1.7"
+        stroke-linecap="round"/>
+
+    </svg>
+
+  </div>
+
+  <p class="font-bold mt-4">
+    Support
+  </p>
+
+  <p class="text-xs text-slate-500 mt-1">
+    Contact us
+  </p>
+
+</button>
+
+</div>
+
+
+<!-- ACCOUNTS -->
+
+<div class="flex items-center justify-between mt-10">
+
+  <div>
+
+    <h2 class="text-xl font-bold">
+      My accounts
+    </h2>
+
+    <p class="text-sm text-slate-500 mt-1">
+      Your Cash Flow Bank accounts
+    </p>
+
+  </div>
+
+
+  <button
+    id="refreshAccounts"
+    class="text-sm text-emerald-300">
+    Refresh
+  </button>
 
 </div>
 
 
 <div
-id="accountGrid"
-class="grid md:grid-cols-3 gap-5 mt-8">
+  id="customerAccounts"
+  class="grid md:grid-cols-2 lg:grid-cols-3 gap-5 mt-5">
 </div>
 
 
-<div class="glass rounded-3xl p-6 mt-6">
-
-<div class="flex items-center justify-between">
-
-<h3 class="font-bold">
-Recent transactions
-</h3>
-
-<span class="text-xs text-slate-500">
-Account activity
-</span>
-
-</div>
+<!-- TRANSACTIONS -->
 
 <div
-id="transactions"
-class="mt-4 text-sm text-slate-500">
-No transactions yet.
-</div>
+  id="transactionSection"
+  class="mt-10">
+
+  <div class="flex items-center justify-between">
+
+    <div>
+
+      <h2 class="text-xl font-bold">
+        Recent activity
+      </h2>
+
+      <p class="text-sm text-slate-500 mt-1">
+        Your latest transactions
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <div
+    id="transactionList"
+    class="glass rounded-3xl mt-5 divide-y divide-white/5">
+
+    <div class="p-6 text-sm text-slate-500">
+      No transactions yet.
+    </div>
+
+  </div>
 
 </div>
-
-</section>
 
 </main>
 
-
-<footer class="border-t border-white/10">
-
-<div class="max-w-7xl mx-auto px-5 py-10 flex flex-col md:flex-row justify-between gap-5">
-
-<div>
-
-<strong>Cash Flow Bank</strong>
-
-<p class="text-xs text-slate-500 mt-2">
-Digital banking platform under development.
-</p>
-
 </div>
-
-<p class="text-xs text-slate-500">
-Development build • No real funds connected
-</p>
-
-</div>
-
-</footer>
 
 
 <!-- AUTH MODAL -->
 
 <div
 id="authModal"
-class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-black/70 backdrop-blur-sm">
+class="modal fixed inset-0 z-[100] items-center justify-center p-4 bg-black/75 backdrop-blur-sm">
 
-<div class="w-full max-w-md glass rounded-3xl p-7 relative">
+<div class="w-full max-w-md glass rounded-3xl p-7 relative max-h-[92vh] overflow-y-auto">
 
 <button
-id="closeModal"
-class="absolute right-5 top-5 text-slate-400 hover:text-white">
+  id="closeAuth"
+  class="absolute right-5 top-5 text-slate-400">
 
-<svg
-class="w-5 h-5"
-viewBox="0 0 24 24"
-fill="none">
+  <svg class="w-5 h-5"
+    viewBox="0 0 24 24"
+    fill="none">
 
-<path
-d="m6 6 12 12M18 6 6 18"
-stroke="currentColor"
-stroke-width="1.8"
-stroke-linecap="round"/>
+    <path
+      d="m6 6 12 12M18 6 6 18"
+      stroke="currentColor"
+      stroke-width="1.8"
+      stroke-linecap="round"/>
 
-</svg>
+  </svg>
 
 </button>
 
@@ -1118,99 +1485,247 @@ stroke-linecap="round"/>
 <div class="flex gap-2 p-1 rounded-xl bg-white/5 mb-6">
 
 <button
-id="tabLogin"
-class="flex-1 py-2 rounded-lg bg-white/10 font-semibold">
-Sign in
+  id="loginTab"
+  class="flex-1 py-2 rounded-lg bg-white/10 font-semibold">
+  Sign in
 </button>
 
 <button
-id="tabRegister"
-class="flex-1 py-2 rounded-lg text-slate-400">
-Open account
+  id="registerTab"
+  class="flex-1 py-2 rounded-lg text-slate-400">
+  Open account
 </button>
 
 </div>
 
 
+<!-- LOGIN -->
+
 <form id="loginForm">
 
 <h3 class="text-2xl font-black">
-Welcome back
+  Welcome back
 </h3>
 
 <p class="text-sm text-slate-500 mt-2">
-Sign in with your email and password.
+  Sign in to your Cash Flow Bank account.
 </p>
 
-<input
-id="loginEmail"
-type="email"
-required
-placeholder="Email address"
-class="w-full mt-6 bg-white/5 border border-white/10 rounded-xl px-4 py-3">
 
 <input
-id="loginPassword"
-type="password"
-required
-placeholder="Password"
-class="w-full mt-3 bg-white/5 border border-white/10 rounded-xl px-4 py-3">
+  id="loginEmail"
+  type="email"
+  required
+  autocomplete="email"
+  placeholder="Email address"
+  class="w-full mt-6 bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white">
+
+
+<input
+  id="loginPassword"
+  type="password"
+  required
+  autocomplete="current-password"
+  placeholder="Password"
+  class="w-full mt-3 bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white">
+
 
 <button
-class="w-full mt-5 py-3.5 rounded-xl bg-emerald-400 text-[#032018] font-bold">
-Sign in
+  type="submit"
+  class="w-full mt-5 py-3.5 rounded-xl bg-emerald-400 text-[#032018] font-bold">
+  Sign in
 </button>
 
 </form>
 
 
-<form id="registerForm" class="hidden">
+<!-- REGISTER -->
+
+<form
+id="registerForm"
+class="hidden">
 
 <h3 class="text-2xl font-black">
-Open your account
+  Open your account
 </h3>
 
 <p class="text-sm text-slate-500 mt-2">
-Create your Cash Flow Bank customer profile.
+  Create your Cash Flow Bank customer profile.
 </p>
 
-<div class="grid grid-cols-2 gap-3 mt-6">
+
+<!-- NAME -->
 
 <input
-id="firstName"
-required
-placeholder="First name"
-class="bg-white/5 border border-white/10 rounded-xl px-4 py-3">
+  id="fullName"
+  type="text"
+  required
+  autocomplete="name"
+  placeholder="Full name"
+  class="w-full mt-6 bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white">
+
+
+<!-- EMAIL -->
 
 <input
-id="lastName"
-required
-placeholder="Last name"
-class="bg-white/5 border border-white/10 rounded-xl px-4 py-3">
+  id="registerEmail"
+  type="email"
+  required
+  autocomplete="email"
+  placeholder="Email address"
+  class="w-full mt-3 bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white">
+
+
+<!-- COUNTRY -->
+
+<select
+  id="country"
+  required
+  class="w-full mt-3 bg-[#0b1c25] border border-white/10 rounded-xl px-4 py-3 text-white">
+
+  <option value="">
+    Select country
+  </option>
+
+  <option>Nigeria</option>
+  <option>United States</option>
+  <option>United Kingdom</option>
+  <option>Canada</option>
+  <option>Ghana</option>
+  <option>South Africa</option>
+  <option>Kenya</option>
+  <option>Australia</option>
+  <option>Germany</option>
+  <option>France</option>
+  <option>Other</option>
+
+</select>
+
+
+<!-- ACCOUNT TYPE -->
+
+<select
+  id="accountType"
+  required
+  class="w-full mt-3 bg-[#0b1c25] border border-white/10 rounded-xl px-4 py-3 text-white">
+
+  <option value="">
+    Select account type
+  </option>
+
+  <option value="CURRENT">
+    Current Account
+  </option>
+
+  <option value="SAVINGS">
+    Savings Account
+  </option>
+
+  <option value="BUSINESS">
+    Business Account
+  </option>
+
+  <option value="FIXED_DEPOSIT">
+    Fixed Deposit Account
+  </option>
+
+</select>
+
+
+<!-- PASSWORD -->
+
+<input
+  id="registerPassword"
+  type="password"
+  minlength="6"
+  required
+  autocomplete="new-password"
+  placeholder="Password"
+  class="w-full mt-3 bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white">
+
+
+<!-- PIN -->
+
+<input
+  id="accountPin"
+  type="password"
+  inputmode="numeric"
+  pattern="[0-9]{4,6}"
+  minlength="4"
+  maxlength="6"
+  required
+  autocomplete="off"
+  placeholder="4–6 digit PIN"
+  class="w-full mt-3 bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white">
+
+
+<p class="text-[11px] text-slate-500 mt-2">
+  Your PIN must contain 4–6 numbers.
+</p>
+
+
+<!-- BUSINESS EXTRA -->
+
+<div
+  id="businessFields"
+  class="hidden">
+
+  <input
+    id="businessName"
+    type="text"
+    placeholder="Business name"
+    class="w-full mt-3 bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white">
+
+  <input
+    id="businessType"
+    type="text"
+    placeholder="Business type"
+    class="w-full mt-3 bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white">
 
 </div>
 
 
-<input
-id="registerEmail"
-type="email"
-required
-placeholder="Email address"
-class="w-full mt-3 bg-white/5 border border-white/10 rounded-xl px-4 py-3">
+<!-- FIXED DEPOSIT EXTRA -->
 
+<div
+  id="fixedDepositFields"
+  class="hidden">
 
-<input
-id="registerPassword"
-type="password"
-minlength="6"
-required
-placeholder="Password (6+ characters)"
-class="w-full mt-3 bg-white/5 border border-white/10 rounded-xl px-4 py-3">
+  <select
+    id="depositTerm"
+    class="w-full mt-3 bg-[#0b1c25] border border-white/10 rounded-xl px-4 py-3 text-white">
+
+    <option value="">
+      Select deposit term
+    </option>
+
+    <option value="3_MONTHS">
+      3 months
+    </option>
+
+    <option value="6_MONTHS">
+      6 months
+    </option>
+
+    <option value="12_MONTHS">
+      12 months
+    </option>
+
+    <option value="24_MONTHS">
+      24 months
+    </option>
+
+  </select>
+
+</div>
 
 
 <button
-class="w-full mt-5 py-3.5 rounded-xl bg-emerald-400 text-[#032018] font-bold">
-Create account
+  type="submit"
+  class="w-full mt-5 py-3.5 rounded-xl bg-emerald-400 text-[#032018] font-bold">
+
+  Create account
+
 </button>
 
 </form>
@@ -1226,531 +1741,2414 @@ class="hidden mt-4 rounded-xl px-4 py-3 text-sm">
 </div>
 
 
+<!-- ACTION MODAL -->
+
+<div
+id="actionModal"
+class="modal fixed inset-0 z-[100] items-center justify-center p-4 bg-black/75 backdrop-blur-sm">
+
+<div class="w-full max-w-md glass rounded-3xl p-7 relative">
+
+<button
+  id="closeAction"
+  class="absolute right-5 top-5 text-slate-400">
+
+  <svg class="w-5 h-5"
+    viewBox="0 0 24 24"
+    fill="none">
+
+    <path
+      d="m6 6 12 12M18 6 6 18"
+      stroke="currentColor"
+      stroke-width="1.8"
+      stroke-linecap="round"/>
+
+  </svg>
+
+</button>
+
+
+<div id="actionContent">
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- INFO MODAL -->
+
+<div
+id="infoModal"
+class="modal fixed inset-0 z-[100] items-center justify-center p-4 bg-black/75 backdrop-blur-sm">
+
+<div class="w-full max-w-md glass rounded-3xl p-7 relative">
+
+<button
+  id="closeInfo"
+  class="absolute right-5 top-5 text-slate-400">
+
+  <svg class="w-5 h-5"
+    viewBox="0 0 24 24"
+    fill="none">
+
+    <path
+      d="m6 6 12 12M18 6 6 18"
+      stroke="currentColor"
+      stroke-width="1.8"
+      stroke-linecap="round"/>
+
+  </svg>
+
+</button>
+
+<div id="infoContent"></div>
+
+</div>
+
+</div>
+
+
+<!-- PROFILE MODAL -->
+
+<div
+id="profileModal"
+class="modal fixed inset-0 z-[100] items-center justify-center p-4 bg-black/75 backdrop-blur-sm">
+
+<div class="w-full max-w-md glass rounded-3xl p-7 relative">
+
+<button
+  id="closeProfile"
+  class="absolute right-5 top-5 text-slate-400">
+
+  <svg class="w-5 h-5"
+    viewBox="0 0 24 24"
+    fill="none">
+
+    <path
+      d="m6 6 12 12M18 6 6 18"
+      stroke="currentColor"
+      stroke-width="1.8"
+      stroke-linecap="round"/>
+
+  </svg>
+
+</button>
+
+<div id="profileContent"></div>
+
+</div>
+
+</div>
+
+
+<!-- NOTIFICATION MODAL -->
+
+<div
+id="notificationModal"
+class="modal fixed inset-0 z-[100] items-center justify-center p-4 bg-black/75 backdrop-blur-sm">
+
+<div class="w-full max-w-md glass rounded-3xl p-7 relative">
+
+<button
+  id="closeNotification"
+  class="absolute right-5 top-5 text-slate-400">
+
+  <svg class="w-5 h-5"
+    viewBox="0 0 24 24"
+    fill="none">
+
+    <path
+      d="m6 6 12 12M18 6 6 18"
+      stroke="currentColor"
+      stroke-width="1.8"
+      stroke-linecap="round"/>
+
+  </svg>
+
+</button>
+
+<h3 class="text-2xl font-black">
+  Notifications
+</h3>
+
+<div class="mt-5 space-y-3">
+
+<div class="rounded-2xl bg-white/5 p-4">
+
+<p class="font-semibold">
+Welcome to Cash Flow Bank
+</p>
+
+<p class="text-xs text-slate-500 mt-1">
+Your customer dashboard is ready.
+</p>
+
+</div>
+
+<div class="rounded-2xl bg-white/5 p-4">
+
+<p class="font-semibold">
+Security reminder
+</p>
+
+<p class="text-xs text-slate-500 mt-1">
+Never share your password or PIN.
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<footer class="border-t border-white/10">
+
+<div class="max-w-7xl mx-auto px-5 py-10 flex flex-col md:flex-row justify-between gap-5">
+
+<div>
+
+<strong>
+Cash Flow Bank
+</strong>
+
+<p class="text-xs text-slate-500 mt-2">
+Digital banking platform under development.
+</p>
+
+</div>
+
+<p class="text-xs text-slate-500">
+No real funds connected
+</p>
+
+</div>
+
+</footer>
+
+
 <!-- FIREBASE -->
 
 <script type="module">
 
 import {
-initializeApp
+  initializeApp
 }
-from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+from
+"https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+
 
 import {
-getAuth,
-createUserWithEmailAndPassword,
-signInWithEmailAndPassword,
-sendEmailVerification,
-onAuthStateChanged,
-signOut
+  getAuth,
+  createUserWithEmailAndPassword,
+  signInWithEmailAndPassword,
+  sendEmailVerification,
+  onAuthStateChanged,
+  signOut
 }
-from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+from
+"https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+
 
 import {
-getFirestore,
-doc,
-setDoc,
-getDoc,
-collection,
-query,
-where,
-getDocs,
-serverTimestamp
+  getFirestore,
+  doc,
+  setDoc,
+  getDoc,
+  collection,
+  query,
+  where,
+  getDocs,
+  serverTimestamp
 }
-from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+from
+"https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
 
+
+/* =========================
+   FIREBASE CONFIG
+========================= */
 
 const firebaseConfig = {
 
-apiKey:
-"AIzaSyAVd2DY_EgwutXbPdcFNsj4LJG-5e5zjw",
+  apiKey:
+    "AIzaSyAVd2DY_EgwutXbPdcFNsj4LJG-5e5zjw",
 
-authDomain:
-"bank-d221d.firebaseapp.com",
+  authDomain:
+    "bank-d221d.firebaseapp.com",
 
-projectId:
-"bank-d221d",
+  projectId:
+    "bank-d221d",
 
-storageBucket:
-"bank-d221d.firebasestorage.app",
+  storageBucket:
+    "bank-d221d.firebasestorage.app",
 
-messagingSenderId:
-"17227399657",
+  messagingSenderId:
+    "17227399657",
 
-appId:
-"1:17227399657:web:cc4e711a2fe110235c4b78"
+  appId:
+    "1:17227399657:web:cc4e711a2fe110235c4b78"
 
 };
 
 
 const app =
-initializeApp(firebaseConfig);
+  initializeApp(firebaseConfig);
 
 const auth =
-getAuth(app);
+  getAuth(app);
 
 const db =
-getFirestore(app);
+  getFirestore(app);
 
 
-const modal =
-document.getElementById("authModal");
+/* =========================
+   ELEMENTS
+========================= */
 
-const loginForm =
-document.getElementById("loginForm");
+const landingPage =
+  document.getElementById("landingPage");
 
-const registerForm =
-document.getElementById("registerForm");
+const customerApp =
+  document.getElementById("customerApp");
 
-const message =
-document.getElementById("authMessage");
+const authModal =
+  document.getElementById("authModal");
 
+const actionModal =
+  document.getElementById("actionModal");
 
-function openModal(mode="login"){
+const infoModal =
+  document.getElementById("infoModal");
 
-modal.classList.remove("hidden");
+const profileModal =
+  document.getElementById("profileModal");
 
-modal.classList.add("flex");
-
-setMode(mode);
-
-message.classList.add("hidden");
-
-}
-
-
-function closeModal(){
-
-modal.classList.add("hidden");
-
-modal.classList.remove("flex");
-
-}
+const notificationModal =
+  document.getElementById("notificationModal");
 
 
-function setMode(mode){
+let currentUser = null;
 
-const login =
-mode === "login";
+let currentCustomer = null;
 
-loginForm.classList.toggle(
-"hidden",
-!login
-);
+let currentAccounts = [];
 
-registerForm.classList.toggle(
-"hidden",
-login
-);
 
-document.getElementById("tabLogin").className =
-login
-?
-"flex-1 py-2 rounded-lg bg-white/10 font-semibold"
-:
-"flex-1 py-2 rounded-lg text-slate-400";
+/* =========================
+   MODAL FUNCTIONS
+========================= */
 
-document.getElementById("tabRegister").className =
-!login
-?
-"flex-1 py-2 rounded-lg bg-white/10 font-semibold"
-:
-"flex-1 py-2 rounded-lg text-slate-400";
+function openModal(modal){
+
+  modal.classList.add("active");
 
 }
 
 
-function showMessage(
-text,
-error=false
-){
+function closeModal(modal){
 
-message.textContent =
-text;
-
-message.className =
-"mt-4 rounded-xl px-4 py-3 text-sm " +
-(
-error
-?
-"bg-red-500/10 text-red-300"
-:
-"bg-emerald-500/10 text-emerald-300"
-);
+  modal.classList.remove("active");
 
 }
+
+
+/* =========================
+   AUTH MODAL
+========================= */
+
+function openAuth(mode){
+
+  openModal(authModal);
+
+  if(mode === "register"){
+
+    document
+      .getElementById("registerForm")
+      .classList
+      .remove("hidden");
+
+    document
+      .getElementById("loginForm")
+      .classList
+      .add("hidden");
+
+    document
+      .getElementById("registerTab")
+      .className =
+      "flex-1 py-2 rounded-lg bg-white/10 font-semibold";
+
+    document
+      .getElementById("loginTab")
+      .className =
+      "flex-1 py-2 rounded-lg text-slate-400";
+
+  }else{
+
+    document
+      .getElementById("loginForm")
+      .classList
+      .remove("hidden");
+
+    document
+      .getElementById("registerForm")
+      .classList
+      .add("hidden");
+
+    document
+      .getElementById("loginTab")
+      .className =
+      "flex-1 py-2 rounded-lg bg-white/10 font-semibold";
+
+    document
+      .getElementById("registerTab")
+      .className =
+      "flex-1 py-2 rounded-lg text-slate-400";
+
+  }
+
+}
+
+
+/* =========================
+   LANDING BUTTONS
+========================= */
+
+[
+  "navOpen",
+  "heroOpen",
+  "bottomOpen"
+].forEach(id=>{
+
+  document
+    .getElementById(id)
+    .addEventListener(
+      "click",
+      ()=>{
+        openAuth("register");
+      }
+    );
+
+});
 
 
 [
-"navLogin",
-"heroLogin",
-"bottomLogin"
+  "navLogin",
+  "heroLogin"
 ].forEach(id=>{
 
-document.getElementById(id).onclick =
-()=>{
-openModal("login");
-};
+  document
+    .getElementById(id)
+    .addEventListener(
+      "click",
+      ()=>{
+        openAuth("login");
+      }
+    );
 
 });
 
-
-[
-"navOpen",
-"heroOpen",
-"accountsOpen",
-"bottomOpen"
-].forEach(id=>{
-
-document.getElementById(id).onclick =
-()=>{
-openModal("register");
-};
-
-});
-
-
-document.getElementById("closeModal").onclick =
-closeModal;
-
-document.getElementById("tabLogin").onclick =
-()=>setMode("login");
-
-document.getElementById("tabRegister").onclick =
-()=>setMode("register");
-
-
-function accountNumber(){
-
-return String(
-Math.floor(
-1000000000 +
-Math.random()*9000000000
-)
-);
-
-}
-
-
-async function createAccount(
-user,
-first,
-last,
-email
-){
-
-const number =
-accountNumber();
-
-
-await setDoc(
-doc(db,"users",user.uid),
-{
-
-uid:user.uid,
-
-firstName:first,
-
-lastName:last,
-
-email:email,
-
-accountNumber:number,
-
-status:"ACTIVE",
-
-createdAt:serverTimestamp(),
-
-originalCreatedAt:serverTimestamp()
-
-}
-);
-
-
-const types = [
-
-["CHECKING",0],
-
-["SAVINGS",4.25],
-
-["FIXED_DEPOSIT",5.5]
-
-];
-
-
-for(
-const [type,rate]
-of types
-){
-
-const id =
-user.uid +
-"_" +
-type.toLowerCase();
-
-
-await setDoc(
-doc(db,"accounts",id),
-{
-
-userId:user.uid,
-
-accountNumber:number,
-
-type:type,
-
-balance:0,
-
-interestRate:rate,
-
-isActive:true,
-
-createdAt:serverTimestamp(),
-
-originalCreatedAt:serverTimestamp(),
-
-updatedAt:serverTimestamp()
-
-}
-);
-
-}
-
-}
-
-
-registerForm.onsubmit =
-async event=>{
-
-event.preventDefault();
-
-try{
-
-const first =
-firstName.value.trim();
-
-const last =
-lastName.value.trim();
-
-const email =
-registerEmail.value.trim();
-
-const pass =
-registerPassword.value;
-
-
-const credential =
-await createUserWithEmailAndPassword(
-auth,
-email,
-pass
-);
-
-
-await createAccount(
-credential.user,
-first,
-last,
-email
-);
-
-
-try{
-
-await sendEmailVerification(
-credential.user
-);
-
-}catch{}
-
-
-showMessage(
-"Account created. Check your email if verification is enabled."
-);
-
-
-setTimeout(
-closeModal,
-1200
-);
-
-
-}catch(error){
-
-showMessage(
-error.code ===
-"auth/email-already-in-use"
-?
-"That email is already registered."
-:
-error.message,
-true
-);
-
-}
-
-};
-
-
-loginForm.onsubmit =
-async event=>{
-
-event.preventDefault();
-
-try{
-
-await signInWithEmailAndPassword(
-auth,
-loginEmail.value.trim(),
-loginPassword.value
-);
-
-closeModal();
-
-}catch{
-
-showMessage(
-"Sign in failed. Check your email and password.",
-true
-);
-
-}
-
-};
-
-
-document.getElementById("logoutBtn").onclick =
-()=>signOut(auth);
-
-
-async function loadDashboard(user){
-
-const dashboard =
-document.getElementById("dashboard");
-
-dashboard.classList.remove(
-"hidden-page"
-);
-
-
-const userSnapshot =
-await getDoc(
-doc(db,"users",user.uid)
-);
-
-
-const data =
-userSnapshot.exists()
-?
-userSnapshot.data()
-:
-{};
-
-
-document.getElementById(
-"welcome"
-).textContent =
-`Welcome, ${data.firstName || user.email}`;
-
-
-const accountsSnapshot =
-await getDocs(
-query(
-collection(db,"accounts"),
-where("userId","==",user.uid)
-)
-);
-
-
-const grid =
-document.getElementById(
-"accountGrid"
-);
-
-grid.innerHTML = "";
-
-
-accountsSnapshot.forEach(
-snapshot=>{
-
-const account =
-snapshot.data();
-
-
-grid.insertAdjacentHTML(
-"beforeend",
-
-`
-
-<div class="glass rounded-3xl p-6">
-
-<p class="text-xs text-slate-500">
-${account.type.replace("_"," ")}
-</p>
-
-<p class="text-3xl font-black mt-3">
-$${Number(account.balance || 0)
-.toLocaleString(
-undefined,
-{
-minimumFractionDigits:2
-}
-)}
-</p>
-
-<p class="text-xs text-slate-500 mt-3">
-Account •
-${account.accountNumber ||
-data.accountNumber ||
-"—"}
-</p>
-
-</div>
-
-`
-
-);
-
-}
-);
-
-
-dashboard.scrollIntoView({
-behavior:"smooth"
-});
-
-}
-
-
-onAuthStateChanged(
-auth,
-user=>{
-
-if(user){
-
-loadDashboard(user);
-
-}else{
 
 document
-.getElementById("dashboard")
-.classList
-.add("hidden-page");
+  .getElementById("loginTab")
+  .onclick =
+  ()=>{
+    openAuth("login");
+  };
+
+
+document
+  .getElementById("registerTab")
+  .onclick =
+  ()=>{
+    openAuth("register");
+  };
+
+
+document
+  .getElementById("closeAuth")
+  .onclick =
+  ()=>{
+    closeModal(authModal);
+  };
+
+
+/* =========================
+   MOBILE MENU
+========================= */
+
+document
+  .getElementById("mobileMenuBtn")
+  .onclick =
+  ()=>{
+
+    document
+      .getElementById("mobileMenu")
+      .classList
+      .toggle("hidden");
+
+  };
+
+
+/* =========================
+   SCROLL NAVIGATION
+========================= */
+
+document
+  .querySelectorAll("[data-scroll]")
+  .forEach(button=>{
+
+    button.onclick = ()=>{
+
+      const target =
+        document.getElementById(
+          button.dataset.scroll
+        );
+
+      if(target){
+
+        target.scrollIntoView({
+          behavior:"smooth"
+        });
+
+      }
+
+      document
+        .getElementById("mobileMenu")
+        .classList
+        .add("hidden");
+
+    };
+
+  });
+
+
+document
+  .getElementById("brandHome")
+  .onclick =
+  ()=>{
+
+    window.scrollTo({
+      top:0,
+      behavior:"smooth"
+    });
+
+  };
+
+
+document
+  .getElementById("dashboardHome")
+  .onclick =
+  ()=>{
+
+    window.scrollTo({
+      top:0,
+      behavior:"smooth"
+    });
+
+  };
+
+
+/* =========================
+   ACCOUNT INFO
+========================= */
+
+const accountInformation = {
+
+  CURRENT:{
+    title:"Current Account",
+    description:
+      "Designed for everyday banking, payments and transfers.",
+    features:[
+      "Everyday transactions",
+      "Transfer support",
+      "Payment workflows",
+      "Account activity"
+    ]
+  },
+
+  SAVINGS:{
+    title:"Savings Account",
+    description:
+      "A dedicated account for setting money aside and tracking savings.",
+    features:[
+      "Savings balance",
+      "Interest-rate field",
+      "Savings activity",
+      "Goal tracking foundation"
+    ]
+  },
+
+  BUSINESS:{
+    title:"Business Account",
+    description:
+      "A banking structure designed for business and organizational activity.",
+    features:[
+      "Business profile",
+      "Business transactions",
+      "Business account number",
+      "Business information"
+    ]
+  },
+
+  FIXED_DEPOSIT:{
+    title:"Fixed Deposit Account",
+    description:
+      "A term-based account structure with configurable maturity information.",
+    features:[
+      "Deposit term",
+      "Interest rate",
+      "Maturity date",
+      "Deposit tracking"
+    ]
+  }
+
+};
+
+
+document
+  .querySelectorAll("[data-account-info]")
+  .forEach(button=>{
+
+    button.onclick = ()=>{
+
+      const type =
+        button.dataset.accountInfo;
+
+      const info =
+        accountInformation[type];
+
+      document
+        .getElementById("infoContent")
+        .innerHTML = `
+
+          <div class="w-12 h-12 rounded-2xl bg-emerald-400/10 grid place-items-center text-emerald-300">
+
+            <svg class="w-6 h-6"
+              viewBox="0 0 24 24"
+              fill="none">
+
+              <circle
+                cx="12"
+                cy="12"
+                r="9"
+                stroke="currentColor"
+                stroke-width="1.7"/>
+
+              <path
+                d="M12 8v8M8 12h8"
+                stroke="currentColor"
+                stroke-width="1.7"
+                stroke-linecap="round"/>
+
+            </svg>
+
+          </div>
+
+          <h3 class="text-2xl font-black mt-5">
+            ${info.title}
+          </h3>
+
+          <p class="text-slate-400 mt-3 leading-6">
+            ${info.description}
+          </p>
+
+          <div class="mt-5 space-y-3">
+
+            ${info.features.map(feature=>`
+
+              <div class="flex gap-3 items-center">
+
+                <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+
+                <span class="text-sm text-slate-300">
+                  ${feature}
+                </span>
+
+              </div>
+
+            `).join("")}
+
+          </div>
+
+          <button
+            id="infoOpenAccount"
+            class="w-full mt-7 py-3.5 rounded-xl bg-emerald-400 text-[#032018] font-bold">
+
+            Open this account
+
+          </button>
+
+        `;
+
+      openModal(infoModal);
+
+
+      document
+        .getElementById("infoOpenAccount")
+        .onclick =
+        ()=>{
+
+          closeModal(infoModal);
+
+          openAuth("register");
+
+          document
+            .getElementById("accountType")
+            .value = type;
+
+        };
+
+    };
+
+  });
+
+
+document
+  .getElementById("closeInfo")
+  .onclick =
+  ()=>{
+    closeModal(infoModal);
+  };
+
+
+/* =========================
+   ACCOUNT TYPE EXTRAS
+========================= */
+
+document
+  .getElementById("accountType")
+  .addEventListener(
+    "change",
+    event=>{
+
+      const type =
+        event.target.value;
+
+      document
+        .getElementById("businessFields")
+        .classList
+        .toggle(
+          "hidden",
+          type !== "BUSINESS"
+        );
+
+      document
+        .getElementById("fixedDepositFields")
+        .classList
+        .toggle(
+          "hidden",
+          type !== "FIXED_DEPOSIT"
+        );
+
+    }
+  );
+
+
+/* =========================
+   PIN HASH
+========================= */
+
+async function hashPin(pin){
+
+  const data =
+    new TextEncoder()
+      .encode(pin);
+
+  const buffer =
+    await crypto.subtle.digest(
+      "SHA-256",
+      data
+    );
+
+  return Array
+    .from(
+      new Uint8Array(buffer)
+    )
+    .map(
+      byte =>
+        byte
+          .toString(16)
+          .padStart(2,"0")
+    )
+    .join("");
 
 }
 
+
+/* =========================
+   ACCOUNT NUMBER
+========================= */
+
+function generateAccountNumber(){
+
+  return String(
+    Math.floor(
+      1000000000 +
+      Math.random() * 9000000000
+    )
+  );
+
 }
 
+
+/* =========================
+   CREATE CUSTOMER
+========================= */
+
+async function createCustomerAccount(
+  user,
+  details
+){
+
+  const accountNumber =
+    generateAccountNumber();
+
+  const pinHash =
+    await hashPin(details.pin);
+
+
+  await setDoc(
+    doc(
+      db,
+      "users",
+      user.uid
+    ),
+    {
+
+      uid:user.uid,
+
+      fullName:
+        details.fullName,
+
+      email:
+        details.email,
+
+      country:
+        details.country,
+
+      accountNumber:
+        accountNumber,
+
+      status:"ACTIVE",
+
+      createdAt:
+        serverTimestamp(),
+
+      originalCreatedAt:
+        serverTimestamp()
+
+    }
+  );
+
+
+  let interestRate = 0;
+
+
+  if(
+    details.accountType ===
+    "SAVINGS"
+  ){
+
+    interestRate = 4.25;
+
+  }
+
+
+  if(
+    details.accountType ===
+    "FIXED_DEPOSIT"
+  ){
+
+    interestRate = 5.50;
+
+  }
+
+
+  const accountId =
+    user.uid +
+    "_" +
+    details.accountType.toLowerCase();
+
+
+  const accountData = {
+
+    userId:
+      user.uid,
+
+    accountNumber:
+      accountNumber,
+
+    type:
+      details.accountType,
+
+    balance:0,
+
+    interestRate:
+      interestRate,
+
+    isActive:true,
+
+    createdAt:
+      serverTimestamp(),
+
+    originalCreatedAt:
+      serverTimestamp(),
+
+    updatedAt:
+      serverTimestamp(),
+
+    pinHash:
+      pinHash
+
+  };
+
+
+  if(
+    details.accountType ===
+    "BUSINESS"
+  ){
+
+    accountData.businessName =
+      details.businessName || "";
+
+    accountData.businessType =
+      details.businessType || "";
+
+  }
+
+
+  if(
+    details.accountType ===
+    "FIXED_DEPOSIT"
+  ){
+
+    accountData.depositTerm =
+      details.depositTerm || "";
+
+  }
+
+
+  await setDoc(
+    doc(
+      db,
+      "accounts",
+      accountId
+    ),
+    accountData
+  );
+
+
+  return {
+    accountNumber,
+    accountId
+  };
+
+}
+
+
+/* =========================
+   AUTH MESSAGE
+========================= */
+
+function showAuthMessage(
+  text,
+  error=false
+){
+
+  const box =
+    document.getElementById(
+      "authMessage"
+    );
+
+  box.textContent =
+    text;
+
+  box.className =
+    "mt-4 rounded-xl px-4 py-3 text-sm " +
+    (
+      error
+      ?
+      "bg-red-500/10 text-red-300"
+      :
+      "bg-emerald-500/10 text-emerald-300"
+    );
+
+}
+
+
+/* =========================
+   REGISTER
+========================= */
+
+document
+  .getElementById("registerForm")
+  .addEventListener(
+    "submit",
+    async event=>{
+
+      event.preventDefault();
+
+
+      const fullName =
+        document
+          .getElementById("fullName")
+          .value
+          .trim();
+
+
+      const email =
+        document
+          .getElementById("registerEmail")
+          .value
+          .trim();
+
+
+      const country =
+        document
+          .getElementById("country")
+          .value;
+
+
+      const accountType =
+        document
+          .getElementById("accountType")
+          .value;
+
+
+      const password =
+        document
+          .getElementById("registerPassword")
+          .value;
+
+
+      const pin =
+        document
+          .getElementById("accountPin")
+          .value;
+
+
+      const businessName =
+        document
+          .getElementById("businessName")
+          .value
+          .trim();
+
+
+      const businessType =
+        document
+          .getElementById("businessType")
+          .value
+          .trim();
+
+
+      const depositTerm =
+        document
+          .getElementById("depositTerm")
+          .value;
+
+
+      if(!/^\d{4,6}$/.test(pin)){
+
+        showAuthMessage(
+          "Your PIN must contain 4 to 6 digits.",
+          true
+        );
+
+        return;
+
+      }
+
+
+      if(
+        accountType ===
+        "BUSINESS" &&
+        !businessName
+      ){
+
+        showAuthMessage(
+          "Please enter your business name.",
+          true
+        );
+
+        return;
+
+      }
+
+
+      if(
+        accountType ===
+        "FIXED_DEPOSIT" &&
+        !depositTerm
+      ){
+
+        showAuthMessage(
+          "Please select a fixed-deposit term.",
+          true
+        );
+
+        return;
+
+      }
+
+
+      try{
+
+        showAuthMessage(
+          "Creating your account..."
+        );
+
+
+        const credential =
+          await createUserWithEmailAndPassword(
+            auth,
+            email,
+            password
+          );
+
+
+        const result =
+          await createCustomerAccount(
+            credential.user,
+            {
+              fullName,
+              email,
+              country,
+              accountType,
+              pin,
+              businessName,
+              businessType,
+              depositTerm
+            }
+          );
+
+
+        try{
+
+          await sendEmailVerification(
+            credential.user
+          );
+
+        }catch(
+          verificationError
+        ){
+
+          console.log(
+            verificationError
+          );
+
+        }
+
+
+        showAuthMessage(
+          `Account created successfully. Your account number is ${result.accountNumber}.`
+        );
+
+
+        document
+          .getElementById("registerForm")
+          .reset();
+
+
+        setTimeout(
+          ()=>{
+            closeModal(authModal);
+          },
+          1800
+        );
+
+
+      }catch(error){
+
+        console.error(error);
+
+
+        let text =
+          "We could not create your account.";
+
+
+        if(
+          error.code ===
+          "auth/email-already-in-use"
+        ){
+
+          text =
+            "That email address is already registered.";
+
+        }
+
+
+        if(
+          error.code ===
+          "auth/weak-password"
+        ){
+
+          text =
+            "Password must contain at least 6 characters.";
+
+        }
+
+
+        if(
+          error.code ===
+          "auth/invalid-email"
+        ){
+
+          text =
+            "Please enter a valid email address.";
+
+        }
+
+
+        showAuthMessage(
+          text,
+          true
+        );
+
+      }
+
+    }
+  );
+
+
+/* =========================
+   LOGIN
+========================= */
+
+document
+  .getElementById("loginForm")
+  .addEventListener(
+    "submit",
+    async event=>{
+
+      event.preventDefault();
+
+
+      const email =
+        document
+          .getElementById("loginEmail")
+          .value
+          .trim();
+
+
+      const password =
+        document
+          .getElementById("loginPassword")
+          .value;
+
+
+      try{
+
+        showAuthMessage(
+          "Signing you in..."
+        );
+
+
+        await signInWithEmailAndPassword(
+          auth,
+          email,
+          password
+        );
+
+
+        closeModal(authModal);
+
+
+      }catch(error){
+
+        console.error(error);
+
+
+        showAuthMessage(
+          "Sign in failed. Please check your email and password.",
+          true
+        );
+
+      }
+
+    }
+  );
+
+
+/* =========================
+   LOAD CUSTOMER
+========================= */
+
+async function loadCustomer(
+  user
+){
+
+  currentUser =
+    user;
+
+
+  const customerSnapshot =
+    await getDoc(
+      doc(
+        db,
+        "users",
+        user.uid
+      )
+    );
+
+
+  if(
+    customerSnapshot.exists()
+  ){
+
+    currentCustomer =
+      customerSnapshot.data();
+
+  }else{
+
+    currentCustomer = {
+
+      fullName:
+        user.email,
+
+      email:
+        user.email,
+
+      accountNumber:""
+
+    };
+
+  }
+
+
+  await loadAccounts();
+
+  await loadTransactions();
+
+
+  landingPage
+    .classList
+    .remove("active");
+
+
+  customerApp
+    .classList
+    .add("active");
+
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+
+}
+
+
+/* =========================
+   LOAD ACCOUNTS
+========================= */
+
+async function loadAccounts(){
+
+  if(!currentUser){
+    return;
+  }
+
+
+  const snapshot =
+    await getDocs(
+      query(
+        collection(
+          db,
+          "accounts"
+        ),
+        where(
+          "userId",
+          "==",
+          currentUser.uid
+        )
+      )
+    );
+
+
+  currentAccounts = [];
+
+
+  snapshot.forEach(
+    item=>{
+
+      currentAccounts.push({
+
+        id:item.id,
+
+        ...item.data()
+
+      });
+
+    }
+  );
+
+
+  renderAccounts();
+
+}
+
+
+/* =========================
+   RENDER ACCOUNTS
+========================= */
+
+function renderAccounts(){
+
+  const container =
+    document.getElementById(
+      "customerAccounts"
+    );
+
+
+  container.innerHTML = "";
+
+
+  let total = 0;
+
+
+  currentAccounts.forEach(
+    account=>{
+
+      const balance =
+        Number(
+          account.balance || 0
+        );
+
+
+      total += balance;
+
+
+      const names = {
+
+        CURRENT:"Current Account",
+
+        SAVINGS:"Savings Account",
+
+        BUSINESS:"Business Account",
+
+        FIXED_DEPOSIT:"Fixed Deposit"
+
+      };
+
+
+      const colors = {
+
+        CURRENT:"emerald",
+
+        SAVINGS:"sky",
+
+        BUSINESS:"violet",
+
+        FIXED_DEPOSIT:"amber"
+
+      };
+
+
+      const color =
+        colors[
+          account.type
+        ] || "emerald";
+
+
+      container.insertAdjacentHTML(
+        "beforeend",
+
+        `
+
+        <button
+          data-account-id="${account.id}"
+          class="account-card text-left glass rounded-3xl p-6 hover:border-emerald-400/30">
+
+          <div class="flex items-start justify-between">
+
+            <div>
+
+              <p class="text-xs text-slate-500">
+                ${names[account.type] || account.type}
+              </p>
+
+              <p class="text-3xl font-black mt-3">
+                $${balance.toLocaleString(
+                  undefined,
+                  {
+                    minimumFractionDigits:2
+                  }
+                )}
+              </p>
+
+            </div>
+
+            <span class="px-2.5 py-1 rounded-full bg-${color}-400/10 text-${color}-300 text-[10px]">
+              ${account.isActive ? "ACTIVE" : "INACTIVE"}
+            </span>
+
+          </div>
+
+          <div class="mt-6 pt-4 border-t border-white/5 flex justify-between text-xs">
+
+            <span class="text-slate-500">
+              Account number
+            </span>
+
+            <span class="text-slate-300">
+              ${account.accountNumber || "—"}
+            </span>
+
+          </div>
+
+        </button>
+
+        `
+
+      );
+
+    }
+  );
+
+
+  if(
+    currentAccounts.length === 0
+  ){
+
+    container.innerHTML = `
+
+      <div class="glass rounded-3xl p-7 md:col-span-2 lg:col-span-3">
+
+        <p class="font-bold">
+          No accounts found
+        </p>
+
+        <p class="text-sm text-slate-500 mt-2">
+          Your account information has not been created yet.
+        </p>
+
+      </div>
+
+    `;
+
+  }
+
+
+  document
+    .getElementById("totalBalance")
+    .textContent =
+    "$" +
+    total.toLocaleString(
+      undefined,
+      {
+        minimumFractionDigits:2
+      }
+    );
+
+
+  document
+    .querySelectorAll(".account-card")
+    .forEach(card=>{
+
+      card.onclick = ()=>{
+
+        const account =
+          currentAccounts.find(
+            item =>
+              item.id ===
+              card.dataset.accountId
+          );
+
+        showAccountDetails(
+          account
+        );
+
+      };
+
+    });
+
+}
+
+
+/* =========================
+   ACCOUNT DETAILS
+========================= */
+
+function showAccountDetails(
+  account
+){
+
+  if(!account){
+    return;
+  }
+
+
+  const names = {
+
+    CURRENT:"Current Account",
+
+    SAVINGS:"Savings Account",
+
+    BUSINESS:"Business Account",
+
+    FIXED_DEPOSIT:"Fixed Deposit Account"
+
+  };
+
+
+  document
+    .getElementById("infoContent")
+    .innerHTML = `
+
+      <p class="text-xs uppercase tracking-widest text-emerald-300">
+        Account details
+      </p>
+
+      <h3 class="text-2xl font-black mt-2">
+        ${names[account.type] || account.type}
+      </h3>
+
+      <div class="mt-6 rounded-2xl bg-white/5 p-5">
+
+        <p class="text-xs text-slate-500">
+          Available balance
+        </p>
+
+        <p class="text-3xl font-black mt-2">
+          $${Number(
+            account.balance || 0
+          ).toLocaleString(
+            undefined,
+            {
+              minimumFractionDigits:2
+            }
+          )}
+        </p>
+
+      </div>
+
+
+      <div class="mt-4 space-y-3 text-sm">
+
+        <div class="flex justify-between">
+
+          <span class="text-slate-500">
+            Account number
+          </span>
+
+          <span>
+            ${account.accountNumber || "—"}
+          </span>
+
+        </div>
+
+
+        <div class="flex justify-between">
+
+          <span class="text-slate-500">
+            Account status
+          </span>
+
+          <span class="text-emerald-300">
+            ${account.isActive ? "Active" : "Inactive"}
+          </span>
+
+        </div>
+
+
+        <div class="flex justify-between">
+
+          <span class="text-slate-500">
+            Interest rate
+          </span>
+
+          <span>
+            ${Number(
+              account.interestRate || 0
+            ).toFixed(2)}%
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <button
+        id="detailTransfer"
+        class="w-full mt-7 py-3.5 rounded-xl bg-emerald-400 text-[#032018] font-bold">
+
+        Transfer from this account
+
+      </button>
+
+    `;
+
+
+  openModal(infoModal);
+
+
+  document
+    .getElementById("detailTransfer")
+    .onclick =
+    ()=>{
+
+      closeModal(infoModal);
+
+      openAction(
+        "transfer",
+        account
+      );
+
+    };
+
+}
+
+
+/* =========================
+   LOAD TRANSACTIONS
+========================= */
+
+async function loadTransactions(){
+
+  if(!currentUser){
+    return;
+  }
+
+
+  try{
+
+    const snapshot =
+      await getDocs(
+        query(
+          collection(
+            db,
+            "transactions"
+          ),
+          where(
+            "userId",
+            "==",
+            currentUser.uid
+          )
+        )
+      );
+
+
+    const list =
+      document.getElementById(
+        "transactionList"
+      );
+
+
+    list.innerHTML = "";
+
+
+    if(snapshot.empty){
+
+      list.innerHTML = `
+
+        <div class="p-6 text-sm text-slate-500">
+          No transactions yet.
+        </div>
+
+      `;
+
+      return;
+
+    }
+
+
+    snapshot.forEach(
+      item=>{
+
+        const data =
+          item.data();
+
+
+        const amount =
+          Number(
+            data.amount || 0
+          );
+
+
+        const positive =
+          data.type === "DEPOSIT";
+
+
+        list.insertAdjacentHTML(
+          "beforeend",
+
+          `
+
+          <div class="p-5 flex items-center justify-between gap-4">
+
+            <div>
+
+              <p class="font-semibold">
+                ${data.description || data.type || "Transaction"}
+              </p>
+
+              <p class="text-xs text-slate-500 mt-1">
+                ${data.status || "Pending"}
+              </p>
+
+            </div>
+
+            <p class="${positive ? "text-emerald-300" : "text-white"} font-bold">
+
+              ${positive ? "+" : "-"}$${amount.toLocaleString(
+                undefined,
+                {
+                  minimumFractionDigits:2
+                }
+              )}
+
+            </p>
+
+          </div>
+
+          `
+
+        );
+
+      }
+    );
+
+  }catch(error){
+
+    console.log(
+      "Transactions unavailable:",
+      error
+    );
+
+  }
+
+}
+
+
+/* =========================
+   ACTION MODALS
+========================= */
+
+function openAction(
+  action,
+  account=null
+){
+
+  const content =
+    document.getElementById(
+      "actionContent"
+    );
+
+
+  let html = "";
+
+
+  if(action === "deposit"){
+
+    html = `
+
+      <p class="text-xs uppercase tracking-widest text-emerald-300">
+        Deposit
+      </p>
+
+      <h3 class="text-2xl font-black mt-2">
+        Add funds
+      </h3>
+
+      <p class="text-sm text-slate-500 mt-2">
+        Choose the account and amount.
+      </p>
+
+
+      <select
+        id="actionAccount"
+        class="w-full mt-6 bg-[#0b1c25] border border-white/10 rounded-xl px-4 py-3">
+
+        ${currentAccounts.map(item=>`
+
+          <option value="${item.id}">
+            ${item.type.replace("_"," ")} — ${item.accountNumber}
+          </option>
+
+        `).join("")}
+
+      </select>
+
+
+      <input
+        id="actionAmount"
+        type="number"
+        min="0.01"
+        step="0.01"
+        placeholder="Amount"
+        class="w-full mt-3 bg-white/5 border border-white/10 rounded-xl px-4 py-3">
+
+
+      <button
+        id="submitAction"
+        class="w-full mt-5 py-3.5 rounded-xl bg-emerald-400 text-[#032018] font-bold">
+
+        Continue
+
+      </button>
+
+      <p class="text-[11px] text-slate-500 mt-3">
+        Balance changes must be processed by protected backend logic.
+      </p>
+
+    `;
+
+  }
+
+
+  if(action === "withdraw"){
+
+    html = `
+
+      <p class="text-xs uppercase tracking-widest text-amber-300">
+        Withdrawal
+      </p>
+
+      <h3 class="text-2xl font-black mt-2">
+        Withdraw funds
+      </h3>
+
+
+      <select
+        id="actionAccount"
+        class="w-full mt-6 bg-[#0b1c25] border border-white/10 rounded-xl px-4 py-3">
+
+        ${currentAccounts.map(item=>`
+
+          <option value="${item.id}">
+            ${item.type.replace("_"," ")} — ${item.accountNumber}
+          </option>
+
+        `).join("")}
+
+      </select>
+
+
+      <input
+        id="actionAmount"
+        type="number"
+        min="0.01"
+        step="0.01"
+        placeholder="Amount"
+        class="w-full mt-3 bg-white/5 border border-white/10 rounded-xl px-4 py-3">
+
+
+      <button
+        id="submitAction"
+        class="w-full mt-5 py-3.5 rounded-xl bg-emerald-400 text-[#032018] font-bold">
+
+        Continue
+
+      </button>
+
+      <p class="text-[11px] text-slate-500 mt-3">
+        Withdrawal processing will be connected to protected backend logic.
+      </p>
+
+    `;
+
+  }
+
+
+  if(action === "transfer"){
+
+    html = `
+
+      <p class="text-xs uppercase tracking-widest text-sky-300">
+        Transfer
+      </p>
+
+      <h3 class="text-2xl font-black mt-2">
+        Transfer funds
+      </h3>
+
+      <p class="text-sm text-slate-500 mt-2">
+        Enter the destination account number.
+      </p>
+
+
+      <select
+        id="actionAccount"
+        class="w-full mt-6 bg-[#0b1c25] border border-white/10 rounded-xl px-4 py-3">
+
+        ${currentAccounts.map(item=>`
+
+          <option value="${item.id}">
+            ${item.type.replace("_"," ")} — ${item.accountNumber}
+          </option>
+
+        `).join("")}
+
+      </select>
+
+
+      <input
+        id="destinationAccount"
+        type="text"
+        placeholder="Destination account number"
+        class="w-full mt-3 bg-white/5 border border-white/10 rounded-xl px-4 py-3">
+
+
+      <input
+        id="actionAmount"
+        type="number"
+        min="0.01"
+        step="0.01"
+        placeholder="Amount"
+        class="w-full mt-3 bg-white/5 border border-white/10 rounded-xl px-4 py-3">
+
+
+      <button
+        id="submitAction"
+        class="w-full mt-5 py-3.5 rounded-xl bg-emerald-400 text-[#032018] font-bold">
+
+        Continue
+
+      </button>
+
+
+      <p class="text-[11px] text-slate-500 mt-3">
+        Transfers require protected server-side validation before balances can change.
+      </p>
+
+    `;
+
+  }
+
+
+  if(action === "bill"){
+
+    html = `
+
+      <p class="text-xs uppercase tracking-widest text-violet-300">
+        Bill payment
+      </p>
+
+      <h3 class="text-2xl font-black mt-2">
+        Pay a bill
+      </h3>
+
+
+      <select
+        id="billType"
+        class="w-full mt-6 bg-[#0b1c25] border border-white/10 rounded-xl px-4 py-3">
+
+        <option value="">
+          Select bill type
+        </option>
+
+        <option>
+          Electricity
+        </option>
+
+        <option>
+          Internet
+        </option>
+
+        <option>
+          Phone
+        </option>
+
+        <option>
+          Television
+        </option>
+
+      </select>
+
+
+      <input
+        id="billReference"
+        type="text"
+        placeholder="Customer/reference number"
+        class="w-full mt-3 bg-white/5 border border-white/10 rounded-xl px-4 py-3">
+
+
+      <input
+        id="actionAmount"
+        type="number"
+        min="0.01"
+        step="0.01"
+        placeholder="Amount"
+        class="w-full mt-3 bg-white/5 border border-white/10 rounded-xl px-4 py-3">
+
+
+      <button
+        id="submitAction"
+        class="w-full mt-5 py-3.5 rounded-xl bg-emerald-400 text-[#032018] font-bold">
+
+        Continue
+
+      </button>
+
+    `;
+
+  }
+
+
+  content.innerHTML =
+    html;
+
+
+  openModal(actionModal);
+
+
+  const submit =
+    document.getElementById(
+      "submitAction"
+    );
+
+
+  if(submit){
+
+    submit.onclick =
+    ()=>{
+
+      showActionMessage(
+        "This request has been prepared. Protected server-side processing is required before a balance or payment can be changed."
+      );
+
+    };
+
+  }
+
+}
+
+
+/* =========================
+   ACTION MESSAGE
+========================= */
+
+function showActionMessage(
+  text
+){
+
+  const content =
+    document.getElementById(
+      "actionContent"
+    );
+
+
+  const existing =
+    content.querySelector(
+      ".action-message"
+    );
+
+
+  if(existing){
+
+    existing.remove();
+
+  }
+
+
+  const div =
+    document.createElement(
+      "div"
+    );
+
+
+  div.className =
+    "action-message mt-4 rounded-xl bg-emerald-400/10 text-emerald-300 px-4 py-3 text-sm";
+
+
+  div.textContent =
+    text;
+
+
+  content.appendChild(div);
+
+}
+
+
+/* =========================
+   ACTION BUTTONS
+========================= */
+
+document
+  .getElementById("depositBtn")
+  .onclick =
+  ()=>{
+    openAction("deposit");
+  };
+
+
+document
+  .getElementById("withdrawBtn")
+  .onclick =
+  ()=>{
+    openAction("withdraw");
+  };
+
+
+document
+  .getElementById("transferBtn")
+  .onclick =
+  ()=>{
+    openAction("transfer");
+  };
+
+
+document
+  .getElementById("payBillBtn")
+  .onclick =
+  ()=>{
+    openAction("bill");
+  };
+
+
+document
+  .getElementById("historyBtn")
+  .onclick =
+  ()=>{
+
+    document
+      .getElementById(
+        "transactionSection"
+      )
+      .scrollIntoView({
+        behavior:"smooth"
+      });
+
+  };
+
+
+document
+  .getElementById("refreshAccounts")
+  .onclick =
+  async ()=>{
+    await loadAccounts();
+    await loadTransactions();
+  };
+
+
+document
+  .getElementById("supportBtn")
+  .onclick =
+  ()=>{
+
+    if(
+      window.Tawk_API &&
+      typeof window.Tawk_API.maximize ===
+      "function"
+    ){
+
+      window.Tawk_API.maximize();
+
+    }else{
+
+      alert(
+        "Support chat is loading. Please try again in a moment."
+      );
+
+    }
+
+  };
+
+
+/* =========================
+   PROFILE
+========================= */
+
+document
+  .getElementById("profileBtn")
+  .onclick =
+  ()=>{
+
+    if(!currentCustomer){
+      return;
+    }
+
+
+    document
+      .getElementById("profileContent")
+      .innerHTML = `
+
+        <div class="w-16 h-16 rounded-2xl bg-emerald-400 text-[#032018] grid place-items-center text-2xl font-black">
+
+          ${(currentCustomer.fullName || "U")
+            .charAt(0)
+            .toUpperCase()}
+
+        </div>
+
+
+        <h3 class="text-2xl font-black mt-5">
+          ${currentCustomer.fullName || "Customer"}
+        </h3>
+
+
+        <p class="text-sm text-slate-500 mt-1">
+          ${currentCustomer.email || ""}
+        </p>
+
+
+        <div class="mt-6 space-y-4 text-sm">
+
+          <div class="flex justify-between gap-4">
+
+            <span class="text-slate-500">
+              Country
+            </span>
+
+            <span>
+              ${currentCustomer.country || "—"}
+            </span>
+
+          </div>
+
+
+          <div class="flex justify-between gap-4">
+
+            <span class="text-slate-500">
+              Account number
+            </span>
+
+            <span>
+              ${currentCustomer.accountNumber || "—"}
+            </span>
+
+          </div>
+
+
+          <div class="flex justify-between gap-4">
+
+            <span class="text-slate-500">
+              Status
+            </span>
+
+            <span class="text-emerald-300">
+              ${currentCustomer.status || "ACTIVE"}
+            </span>
+
+          </div>
+
+        </div>
+
+      `;
+
+
+    openModal(profileModal);
+
+  };
+
+
+document
+  .getElementById("closeProfile")
+  .onclick =
+  ()=>{
+    closeModal(profileModal);
+  };
+
+
+/* =========================
+   NOTIFICATIONS
+========================= */
+
+document
+  .getElementById("notificationBtn")
+  .onclick =
+  ()=>{
+
+    openModal(
+      notificationModal
+    );
+
+    document
+      .getElementById(
+        "notificationDot"
+      )
+      .classList
+      .add("hidden");
+
+  };
+
+
+document
+  .getElementById("closeNotification")
+  .onclick =
+  ()=>{
+    closeModal(notificationModal);
+  };
+
+
+/* =========================
+   CLOSE ACTION
+========================= */
+
+document
+  .getElementById("closeAction")
+  .onclick =
+  ()=>{
+    closeModal(actionModal);
+  };
+
+
+/* =========================
+   LOGOUT
+========================= */
+
+document
+  .getElementById("logoutBtn")
+  .onclick =
+  async ()=>{
+
+    await signOut(auth);
+
+  };
+
+
+/* =========================
+   AUTH STATE
+========================= */
+
+onAuthStateChanged(
+  auth,
+  async user=>{
+
+    if(user){
+
+      await loadCustomer(
+        user
+      );
+
+    }else{
+
+      currentUser = null;
+
+      currentCustomer = null;
+
+      currentAccounts = [];
+
+
+      customerApp
+        .classList
+        .remove("active");
+
+
+      landingPage
+        .classList
+        .add("active");
+
+    }
+
+  }
 );
 
 </script>
 
 
-<!-- TAWK.TO LIVE CHAT -->
+<!-- TAWK.TO -->
 
 <script type="text/javascript">
 
 var Tawk_API =
-Tawk_API || {};
+window.Tawk_API ||
+{};
 
 var Tawk_LoadStart =
 new Date();
@@ -1784,6 +4182,7 @@ s0
 })();
 
 </script>
+
 
 </body>
 </html>
