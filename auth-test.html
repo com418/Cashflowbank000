@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Firebase Auth Test</title>
+</head>
+
+<body style="font-family:Arial;padding:30px">
+
+<h2>Firebase Login Test</h2>
+
+<input id="email" type="email" placeholder="Email"
+  style="display:block;padding:12px;margin:10px 0;width:100%;box-sizing:border-box">
+
+<input id="password" type="password" placeholder="Password"
+  style="display:block;padding:12px;margin:10px 0;width:100%;box-sizing:border-box">
+
+<button id="login"
+  style="padding:12px 20px">
+  Sign In
+</button>
+
+<p id="status">Waiting...</p>
+
+<script type="module">
+
+import {
+  initializeApp
+} from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+
+import {
+  getAuth,
+  signInWithEmailAndPassword
+} from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAVd2DY_EgwutXbPdcFNsj4LJG-5e5zjw",
+  authDomain: "bank-d221d.firebaseapp.com",
+  projectId: "bank-d221d",
+  storageBucket: "bank-d221d.firebasestorage.app",
+  messagingSenderId: "17227399657",
+  appId: "1:17227399657:web:cc4e711a2fe110235c4b78"
+};
+
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+const status = document.getElementById("status");
+
+document.getElementById("login").onclick = async () => {
+
+  const email = document.getElementById("email").value.trim();
+  const password = document.getElementById("password").value;
+
+  status.textContent = "Signing in...";
+
+  try {
+
+    const result = await signInWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+
+    status.textContent =
+      "✅ LOGIN SUCCESSFUL — UID: " + result.user.uid;
+
+  } catch (error) {
+
+    status.textContent =
+      "❌ " + error.code + " — " + error.message;
+
+    console.error(error);
+  }
+};
+
+</script>
+
+</body>
+</html>
