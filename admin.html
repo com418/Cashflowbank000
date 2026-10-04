@@ -1,2872 +1,2584 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="theme-color" content="#064e3b">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cash Flow Bank — Admin Dashboard</title>
 
-  <title>Cash Flow Bank — Admin Dashboard</title>
+<script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- Tailwind -->
-  <script src="https://cdn.tailwindcss.com"></script>
-
-  <!-- Chart.js -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
-  <style>
+<style>
     * {
-      box-sizing: border-box;
+        box-sizing: border-box;
     }
 
     body {
-      margin: 0;
-      font-family:
-        Inter,
-        ui-sans-serif,
-        system-ui,
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        sans-serif;
-      background: #f6f8f7;
-      color: #17211d;
+        margin: 0;
+        font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI",
+                     Roboto, Helvetica, Arial, sans-serif;
+        background: #f5f7f8;
+        color: #111827;
     }
 
     .sidebar {
-      width: 250px;
-      background: #ffffff;
-      border-right: 1px solid #e7ece9;
-      position: fixed;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      z-index: 50;
+        width: 250px;
+        position: fixed;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        background: #ffffff;
+        border-right: 1px solid #e5e7eb;
+        z-index: 50;
     }
 
-    .main-area {
-      margin-left: 250px;
-      min-height: 100vh;
+    .main {
+        margin-left: 250px;
+        min-height: 100vh;
     }
 
-    .nav-item {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      width: 100%;
-      padding: 11px 14px;
-      border-radius: 10px;
-      color: #53615b;
-      font-size: 14px;
-      font-weight: 500;
-      transition: .2s;
-      cursor: pointer;
-      border: 0;
-      background: transparent;
-      text-align: left;
+    .mobile-sidebar {
+        transform: translateX(-100%);
+        transition: .25s ease;
     }
 
-    .nav-item:hover {
-      background: #f1f7f4;
-      color: #064e3b;
-    }
-
-    .nav-item.active {
-      background: #064e3b;
-      color: white;
-    }
-
-    .nav-icon {
-      width: 19px;
-      height: 19px;
-      flex-shrink: 0;
-    }
-
-    .card {
-      background: #ffffff;
-      border: 1px solid #e8eeeb;
-      border-radius: 14px;
-      box-shadow: 0 2px 8px rgba(0,0,0,.025);
-    }
-
-    .stat-card {
-      min-height: 145px;
-    }
-
-    .search-box {
-      background: #f5f7f6;
-      border: 1px solid #edf0ee;
-    }
-
-    .mobile-menu {
-      display: none;
+    .mobile-sidebar.open {
+        transform: translateX(0);
     }
 
     .overlay {
-      display: none;
-    }
-
-    .table-wrap {
-      overflow-x: auto;
-    }
-
-    table {
-      min-width: 700px;
-    }
-
-    .status-pill {
-      display: inline-flex;
-      align-items: center;
-      padding: 4px 9px;
-      border-radius: 999px;
-      font-size: 11px;
-      font-weight: 700;
-    }
-
-    .green-pill {
-      background: #e8f7ef;
-      color: #087443;
-    }
-
-    .yellow-pill {
-      background: #fff7df;
-      color: #996b00;
-    }
-
-    .red-pill {
-      background: #feecec;
-      color: #b42318;
-    }
-
-    .toast {
-      position: fixed;
-      right: 20px;
-      bottom: 20px;
-      z-index: 100;
-      max-width: 360px;
-      background: #064e3b;
-      color: white;
-      border-radius: 12px;
-      padding: 14px 17px;
-      box-shadow: 0 12px 30px rgba(0,0,0,.18);
-      display: none;
-    }
-
-    @media (max-width: 900px) {
-      .sidebar {
-        transform: translateX(-100%);
-        transition: .25s;
-      }
-
-      .sidebar.open {
-        transform: translateX(0);
-      }
-
-      .main-area {
-        margin-left: 0;
-      }
-
-      .mobile-menu {
-        display: flex;
-      }
-
-      .overlay.show {
-        display: block;
+        display: none;
         position: fixed;
         inset: 0;
         background: rgba(0,0,0,.35);
         z-index: 40;
-      }
     }
 
-    @media (max-width: 640px) {
-      .stat-card {
-        min-height: 125px;
-      }
-
-      .desktop-search {
-        display: none;
-      }
+    .overlay.show {
+        display: block;
     }
-  </style>
+
+    .nav-item {
+        transition: .2s ease;
+    }
+
+    .nav-item:hover {
+        background: #f0fdfa;
+        color: #047857;
+    }
+
+    .nav-item.active {
+        background: #08c7e8;
+        color: #ffffff;
+    }
+
+    .stat-card {
+        transition: transform .2s ease, box-shadow .2s ease;
+    }
+
+    .stat-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 30px rgba(15,23,42,.08);
+    }
+
+    .table-scroll {
+        overflow-x: auto;
+    }
+
+    @media(max-width: 900px) {
+        .sidebar {
+            display: none;
+        }
+
+        .mobile-sidebar {
+            display: block;
+        }
+
+        .main {
+            margin-left: 0;
+        }
+    }
+
+    @media(min-width: 901px) {
+        .mobile-sidebar {
+            display: none !important;
+        }
+    }
+</style>
 </head>
 
 <body>
 
 <!-- =========================================================
-     DEVELOPMENT NOTICE
-========================================================= -->
-<div
-  id="developmentNotice"
-  class="bg-emerald-950 text-emerald-50 text-center text-xs px-4 py-2"
->
-  Cash Flow Bank development environment — test data only.
-  No real banking or payment rails are connected.
-</div>
-
-
-<!-- =========================================================
      LOGIN SCREEN
 ========================================================= -->
-<section
-  id="loginScreen"
-  class="min-h-screen bg-slate-100 flex items-center justify-center p-5"
->
 
-  <div class="card w-full max-w-md p-7">
+<div id="loginScreen"
+     class="min-h-screen flex items-center justify-center px-5 py-10 bg-gradient-to-br from-slate-950 via-emerald-950 to-slate-900">
 
-    <div class="text-center mb-7">
+    <div class="w-full max-w-md">
 
-      <div
-        class="w-16 h-16 mx-auto rounded-2xl bg-emerald-950
-        flex items-center justify-center text-white shadow-lg"
-      >
-        <svg
-          width="32"
-          height="32"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.8"
-        >
-          <path d="M3 10h18"/>
-          <path d="M5 10v8"/>
-          <path d="M9 10v8"/>
-          <path d="M15 10v8"/>
-          <path d="M19 10v8"/>
-          <path d="M2 18h20"/>
-          <path d="M12 3l10 5H2l10-5Z"/>
-        </svg>
-      </div>
+        <div class="text-center mb-8">
+            <div class="mx-auto mb-5 w-16 h-16 rounded-2xl bg-emerald-500 flex items-center justify-center shadow-xl">
 
-      <h1 class="text-2xl font-bold mt-4">
-        Cash Flow Bank
-      </h1>
+                <svg width="32" height="32" viewBox="0 0 24 24"
+                     fill="none" stroke="white" stroke-width="2">
+                    <path d="M3 10h18"/>
+                    <path d="M5 10v8"/>
+                    <path d="M9 10v8"/>
+                    <path d="M15 10v8"/>
+                    <path d="M19 10v8"/>
+                    <path d="M2 18h20"/>
+                    <path d="M12 3l10 5H2l10-5z"/>
+                </svg>
 
-      <p class="text-sm text-slate-500 mt-1">
-        Administrator Portal
-      </p>
-    </div>
+            </div>
 
-    <form id="loginForm" class="space-y-4">
-
-      <div>
-        <label
-          for="email"
-          class="block text-sm font-semibold text-slate-700 mb-2"
-        >
-          Email address
-        </label>
-
-        <input
-          id="email"
-          type="email"
-          autocomplete="username"
-          required
-          placeholder="admin@example.com"
-          class="w-full px-4 py-3 rounded-xl border border-slate-200
-          outline-none focus:ring-2 focus:ring-emerald-700"
-        >
-      </div>
-
-      <div>
-        <label
-          for="password"
-          class="block text-sm font-semibold text-slate-700 mb-2"
-        >
-          Password
-        </label>
-
-        <input
-          id="password"
-          type="password"
-          autocomplete="current-password"
-          required
-          placeholder="Enter password"
-          class="w-full px-4 py-3 rounded-xl border border-slate-200
-          outline-none focus:ring-2 focus:ring-emerald-700"
-        >
-      </div>
-
-      <button
-        id="loginButton"
-        type="submit"
-        class="w-full bg-emerald-950 hover:bg-emerald-900
-        text-white font-semibold rounded-xl py-3 transition"
-      >
-        Sign in
-      </button>
-
-    </form>
-
-    <div
-      id="loginMessage"
-      class="hidden mt-4 p-3 rounded-xl text-sm break-words"
-    ></div>
-
-  </div>
-</section>
-
-
-<!-- =========================================================
-     ADMIN APP
-========================================================= -->
-<div id="adminApp" class="hidden">
-
-  <!-- MOBILE OVERLAY -->
-  <div id="sidebarOverlay" class="overlay"></div>
-
-
-  <!-- =======================================================
-       SIDEBAR
-  ======================================================== -->
-  <aside id="sidebar" class="sidebar">
-
-    <!-- LOGO -->
-    <div class="h-20 flex items-center px-6 border-b border-slate-100">
-
-      <div
-        class="w-9 h-9 rounded-xl bg-emerald-950
-        flex items-center justify-center text-white mr-3"
-      >
-        <svg
-          width="21"
-          height="21"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="1.8"
-        >
-          <path d="M3 10h18"/>
-          <path d="M5 10v8"/>
-          <path d="M9 10v8"/>
-          <path d="M15 10v8"/>
-          <path d="M19 10v8"/>
-          <path d="M2 18h20"/>
-          <path d="M12 3l10 5H2l10-5Z"/>
-        </svg>
-      </div>
-
-      <div>
-        <div class="font-bold text-lg leading-none">
-          Cash Flow
-        </div>
-
-        <div class="text-xs text-emerald-700 mt-1 font-semibold">
-          BANK ADMIN
-        </div>
-      </div>
-
-    </div>
-
-
-    <!-- NAVIGATION -->
-    <div class="p-4">
-
-      <div class="text-[10px] uppercase tracking-widest
-        text-slate-400 font-bold px-3 mb-2">
-        Main Menu
-      </div>
-
-      <nav class="space-y-1">
-
-        <button
-          class="nav-item active"
-          data-section="dashboard"
-        >
-          <svg class="nav-icon" viewBox="0 0 24 24"
-            fill="none" stroke="currentColor" stroke-width="1.8">
-            <rect x="3" y="3" width="7" height="7" rx="1"/>
-            <rect x="14" y="3" width="7" height="7" rx="1"/>
-            <rect x="3" y="14" width="7" height="7" rx="1"/>
-            <rect x="14" y="14" width="7" height="7" rx="1"/>
-          </svg>
-          Dashboard
-        </button>
-
-        <button
-          class="nav-item"
-          data-section="customers"
-        >
-          <svg class="nav-icon" viewBox="0 0 24 24"
-            fill="none" stroke="currentColor" stroke-width="1.8">
-            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
-            <circle cx="9" cy="7" r="4"/>
-            <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
-            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-          </svg>
-          Customers
-        </button>
-
-        <button
-          class="nav-item"
-          data-section="accounts"
-        >
-          <svg class="nav-icon" viewBox="0 0 24 24"
-            fill="none" stroke="currentColor" stroke-width="1.8">
-            <rect x="3" y="5" width="18" height="14" rx="2"/>
-            <path d="M3 10h18"/>
-            <path d="M7 15h4"/>
-          </svg>
-          Accounts
-        </button>
-
-        <button
-          class="nav-item"
-          data-section="transactions"
-        >
-          <svg class="nav-icon" viewBox="0 0 24 24"
-            fill="none" stroke="currentColor" stroke-width="1.8">
-            <path d="M3 12h18"/>
-            <path d="m14 6 6 6-6 6"/>
-            <path d="M10 18 4 12l6-6"/>
-          </svg>
-          Transactions
-        </button>
-
-        <button
-          class="nav-item"
-          data-section="loans"
-        >
-          <svg class="nav-icon" viewBox="0 0 24 24"
-            fill="none" stroke="currentColor" stroke-width="1.8">
-            <rect x="3" y="5" width="18" height="14" rx="2"/>
-            <circle cx="12" cy="12" r="3"/>
-            <path d="M7 9h.01"/>
-            <path d="M17 15h.01"/>
-          </svg>
-          Loans
-        </button>
-
-        <button
-          class="nav-item"
-          data-section="cards"
-        >
-          <svg class="nav-icon" viewBox="0 0 24 24"
-            fill="none" stroke="currentColor" stroke-width="1.8">
-            <rect x="2" y="5" width="20" height="14" rx="2"/>
-            <path d="M2 10h20"/>
-            <path d="M6 15h5"/>
-          </svg>
-          Cards
-        </button>
-
-        <button
-          class="nav-item"
-          data-section="audit"
-        >
-          <svg class="nav-icon" viewBox="0 0 24 24"
-            fill="none" stroke="currentColor" stroke-width="1.8">
-            <path d="M4 4h16v16H4z"/>
-            <path d="M8 9h8"/>
-            <path d="M8 13h8"/>
-            <path d="M8 17h5"/>
-          </svg>
-          Audit Logs
-        </button>
-
-      </nav>
-
-
-      <div class="border-t border-slate-100 mt-6 pt-5">
-
-        <div class="text-[10px] uppercase tracking-widest
-          text-slate-400 font-bold px-3 mb-2">
-          Account
-        </div>
-
-        <button
-          id="logoutButton"
-          class="nav-item"
-        >
-          <svg class="nav-icon" viewBox="0 0 24 24"
-            fill="none" stroke="currentColor" stroke-width="1.8">
-            <path d="M10 17l5-5-5-5"/>
-            <path d="M15 12H3"/>
-            <path d="M21 19V5a2 2 0 0 0-2-2h-6"/>
-          </svg>
-          Logout
-        </button>
-
-      </div>
-
-    </div>
-
-    <!-- ADMIN PROFILE -->
-    <div class="absolute bottom-0 left-0 right-0
-      border-t border-slate-100 p-4 bg-white">
-
-      <div class="flex items-center gap-3">
-
-        <div
-          class="w-10 h-10 rounded-full bg-emerald-100
-          text-emerald-900 flex items-center justify-center
-          font-bold"
-        >
-          A
-        </div>
-
-        <div class="min-w-0">
-          <div class="text-sm font-semibold truncate">
-            Administrator
-          </div>
-
-          <div
-            id="sidebarEmail"
-            class="text-xs text-slate-400 truncate"
-          >
-            Loading...
-          </div>
-        </div>
-
-      </div>
-
-    </div>
-
-  </aside>
-
-
-  <!-- =======================================================
-       MAIN AREA
-  ======================================================== -->
-  <main class="main-area">
-
-
-    <!-- TOP HEADER -->
-    <header
-      class="h-20 bg-white border-b border-slate-100
-      flex items-center justify-between px-4 md:px-7"
-    >
-
-      <div class="flex items-center gap-3">
-
-        <button
-          id="mobileMenuButton"
-          class="mobile-menu w-10 h-10 rounded-xl
-          border border-slate-200 items-center justify-center"
-        >
-          <svg width="21" height="21" viewBox="0 0 24 24"
-            fill="none" stroke="currentColor" stroke-width="1.8">
-            <path d="M4 6h16"/>
-            <path d="M4 12h16"/>
-            <path d="M4 18h16"/>
-          </svg>
-        </button>
-
-        <!-- SEARCH -->
-        <div
-          class="desktop-search search-box
-          w-72 rounded-xl h-10 flex items-center px-3"
-        >
-          <svg
-            width="18"
-            height="18"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="#87938d"
-            stroke-width="2"
-          >
-            <circle cx="11" cy="11" r="7"/>
-            <path d="m20 20-4-4"/>
-          </svg>
-
-          <input
-            id="globalSearch"
-            type="text"
-            placeholder="Search customers..."
-            class="bg-transparent outline-none text-sm
-            ml-2 w-full"
-          >
-        </div>
-
-      </div>
-
-
-      <div class="flex items-center gap-2 md:gap-4">
-
-        <!-- NOTIFICATION -->
-        <button
-          id="notificationButton"
-          class="w-10 h-10 rounded-xl
-          flex items-center justify-center
-          hover:bg-slate-50 relative"
-        >
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.8"
-          >
-            <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/>
-            <path d="M10 21h4"/>
-          </svg>
-
-          <span
-            class="absolute top-2 right-2 w-2 h-2
-            rounded-full bg-red-500"
-          ></span>
-        </button>
-
-
-        <!-- SETTINGS -->
-        <button
-          id="settingsButton"
-          class="w-10 h-10 rounded-xl
-          flex items-center justify-center
-          hover:bg-slate-50"
-        >
-          <svg
-            width="20"
-            height="20"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="1.8"
-          >
-            <circle cx="12" cy="12" r="3"/>
-            <path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-1.42 1.42-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1 1.55V20h-2v-.49a1.7 1.7 0 0 0-1-1.55 1.7 1.7 0 0 0-1.88.34l-.06.06-1.42-1.42.06-.06A1.7 1.7 0 0 0 8.6 15a1.7 1.7 0 0 0-1.55-1H6v-2h1.05a1.7 1.7 0 0 0 1.55-1 1.7 1.7 0 0 0-.34-1.88l-.06-.06 1.42-1.42.06.06A1.7 1.7 0 0 0 11.56 8a1.7 1.7 0 0 0 1-1.55V6h2v.45A1.7 1.7 0 0 0 15.56 8a1.7 1.7 0 0 0 1.88-.34l.06-.06 1.42 1.42-.06.06A1.7 1.7 0 0 0 18.52 11a1.7 1.7 0 0 0 1.55 1H21v2h-.93A1.7 1.7 0 0 0 19.4 15Z"/>
-          </svg>
-        </button>
-
-
-        <!-- ADMIN AVATAR -->
-        <div
-          class="w-10 h-10 rounded-full bg-emerald-100
-          text-emerald-900 flex items-center justify-center
-          font-bold"
-        >
-          A
-        </div>
-
-      </div>
-
-    </header>
-
-
-    <!-- =====================================================
-         PAGE CONTENT
-    ====================================================== -->
-    <div class="p-4 md:p-7 max-w-[1500px] mx-auto">
-
-
-      <!-- DASHBOARD -->
-      <section
-        id="dashboardSection"
-        class="page-section"
-      >
-
-        <!-- TITLE -->
-        <div
-          class="flex flex-col md:flex-row md:items-center
-          md:justify-between gap-4 mb-6"
-        >
-
-          <div>
-            <h1
-              id="welcomeTitle"
-              class="text-2xl md:text-3xl font-bold"
-            >
-              Welcome back, Admin
+            <h1 class="text-3xl font-bold text-white">
+                Cash Flow Bank
             </h1>
 
-            <p class="text-sm text-slate-500 mt-1">
-              Here's what's happening with Cash Flow Bank today.
+            <p class="text-slate-400 mt-2">
+                Secure Administration Portal
             </p>
-          </div>
-
-
-          <div class="flex gap-2">
-
-            <button
-              id="addCustomerButton"
-              class="bg-emerald-950 text-white
-              px-4 py-2.5 rounded-xl text-sm font-semibold
-              flex items-center gap-2 hover:bg-emerald-900"
-            >
-              <svg width="17" height="17" viewBox="0 0 24 24"
-                fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="9" cy="7" r="4"/>
-                <path d="M3 21v-2a6 6 0 0 1 12 0v2"/>
-                <path d="M19 8v6"/>
-                <path d="M16 11h6"/>
-              </svg>
-              Add Customer
-            </button>
-
-            <button
-              id="refreshButton"
-              class="bg-white border border-slate-200
-              px-4 py-2.5 rounded-xl text-sm font-semibold
-              flex items-center gap-2 hover:bg-slate-50"
-            >
-              <svg width="17" height="17" viewBox="0 0 24 24"
-                fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M20 11a8 8 0 0 0-14.9-3"/>
-                <path d="M4 4v5h5"/>
-                <path d="M4 13a8 8 0 0 0 14.9 3"/>
-                <path d="M20 20v-5h-5"/>
-              </svg>
-              Refresh
-            </button>
-
-          </div>
-
         </div>
 
+        <div class="bg-white rounded-3xl shadow-2xl p-7">
 
-        <!-- =================================================
-             STAT CARDS
-        ================================================== -->
-        <div
-          class="grid grid-cols-2 xl:grid-cols-4 gap-4 mb-5"
-        >
+            <h2 class="text-xl font-bold text-gray-900">
+                Administrator Sign In
+            </h2>
 
-          <!-- CUSTOMERS -->
-          <div class="card stat-card p-5">
-
-            <div class="flex justify-between items-start">
-
-              <div>
-                <p class="text-sm text-slate-500">
-                  Total Customers
-                </p>
-
-                <h2
-                  id="customerCount"
-                  class="text-3xl font-bold mt-3"
-                >
-                  —
-                </h2>
-
-                <p class="text-xs text-emerald-600 mt-3">
-                  ● Registered customers
-                </p>
-              </div>
-
-              <div
-                class="w-10 h-10 rounded-xl bg-emerald-50
-                text-emerald-700 flex items-center justify-center"
-              >
-                <svg width="21" height="21"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.8">
-                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
-                  <circle cx="9" cy="7" r="4"/>
-                  <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
-                  <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
-                </svg>
-              </div>
-
-            </div>
-
-          </div>
-
-
-          <!-- ACCOUNTS -->
-          <div class="card stat-card p-5">
-
-            <div class="flex justify-between items-start">
-
-              <div>
-                <p class="text-sm text-slate-500">
-                  Total Accounts
-                </p>
-
-                <h2
-                  id="accountCount"
-                  class="text-3xl font-bold mt-3"
-                >
-                  —
-                </h2>
-
-                <p class="text-xs text-emerald-600 mt-3">
-                  ● Customer accounts
-                </p>
-              </div>
-
-              <div
-                class="w-10 h-10 rounded-xl bg-blue-50
-                text-blue-700 flex items-center justify-center"
-              >
-                <svg width="21" height="21"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.8">
-                  <rect x="3" y="5" width="18" height="14" rx="2"/>
-                  <path d="M3 10h18"/>
-                  <path d="M7 15h4"/>
-                </svg>
-              </div>
-
-            </div>
-
-          </div>
-
-
-          <!-- TRANSACTIONS -->
-          <div class="card stat-card p-5">
-
-            <div class="flex justify-between items-start">
-
-              <div>
-                <p class="text-sm text-slate-500">
-                  Transactions
-                </p>
-
-                <h2
-                  id="transactionCount"
-                  class="text-3xl font-bold mt-3"
-                >
-                  —
-                </h2>
-
-                <p class="text-xs text-emerald-600 mt-3">
-                  ● Recorded transactions
-                </p>
-              </div>
-
-              <div
-                class="w-10 h-10 rounded-xl bg-purple-50
-                text-purple-700 flex items-center justify-center"
-              >
-                <svg width="21" height="21"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.8">
-                  <path d="M3 12h18"/>
-                  <path d="m14 6 6 6-6 6"/>
-                  <path d="M10 18 4 12l6-6"/>
-                </svg>
-              </div>
-
-            </div>
-
-          </div>
-
-
-          <!-- TOTAL BALANCE -->
-          <div class="card stat-card p-5">
-
-            <div class="flex justify-between items-start">
-
-              <div>
-                <p class="text-sm text-slate-500">
-                  Total Account Balance
-                </p>
-
-                <h2
-                  id="totalBalance"
-                  class="text-3xl font-bold mt-3"
-                >
-                  $0.00
-                </h2>
-
-                <p class="text-xs text-emerald-600 mt-3">
-                  ● Across active accounts
-                </p>
-              </div>
-
-              <div
-                class="w-10 h-10 rounded-xl bg-amber-50
-                text-amber-700 flex items-center justify-center"
-              >
-                <svg width="21" height="21"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.8">
-                  <rect x="3" y="6" width="18" height="13" rx="2"/>
-                  <path d="M16 12h.01"/>
-                  <path d="M3 10h18"/>
-                  <path d="M7 4h10"/>
-                </svg>
-              </div>
-
-            </div>
-
-          </div>
-
-        </div>
-
-
-        <!-- =================================================
-             CHART + RECENT NOTICES
-        ================================================== -->
-        <div
-          class="grid lg:grid-cols-[1.6fr_1fr] gap-5 mb-5"
-        >
-
-          <!-- CHART -->
-          <div class="card p-5">
-
-            <div
-              class="flex items-center justify-between mb-5"
-            >
-
-              <div>
-                <h3 class="font-bold text-lg">
-                  Account Activity
-                </h3>
-
-                <p class="text-xs text-slate-500 mt-1">
-                  Recent transaction activity
-                </p>
-              </div>
-
-              <select
-                id="chartPeriod"
-                class="text-xs border border-slate-200
-                rounded-lg px-3 py-2 outline-none"
-              >
-                <option>Last 7 days</option>
-                <option>Last 30 days</option>
-                <option>Last 90 days</option>
-              </select>
-
-            </div>
-
-            <div class="h-64">
-              <canvas id="activityChart"></canvas>
-            </div>
-
-          </div>
-
-
-          <!-- RECENT NOTICES -->
-          <div class="card p-5">
-
-            <div class="flex items-center justify-between mb-4">
-
-              <div>
-                <h3 class="font-bold text-lg">
-                  Recent Activity
-                </h3>
-
-                <p class="text-xs text-slate-500 mt-1">
-                  Latest system records
-                </p>
-              </div>
-
-              <button
-                id="viewTransactionsButton"
-                class="text-xs text-emerald-700 font-semibold"
-              >
-                View all
-              </button>
-
-            </div>
-
-            <div
-              id="recentActivity"
-              class="space-y-3"
-            >
-              <div class="text-sm text-slate-400">
-                Loading activity...
-              </div>
-            </div>
-
-          </div>
-
-        </div>
-
-
-        <!-- =================================================
-             LOWER CARDS
-        ================================================== -->
-        <div class="grid lg:grid-cols-2 gap-5">
-
-          <!-- ACCOUNT TYPES -->
-          <div class="card p-5">
-
-            <div class="flex justify-between items-center mb-4">
-
-              <div>
-                <h3 class="font-bold">
-                  Account Distribution
-                </h3>
-
-                <p class="text-xs text-slate-500 mt-1">
-                  Accounts by type
-                </p>
-              </div>
-
-            </div>
-
-            <div
-              id="accountDistribution"
-              class="space-y-4"
-            >
-              <div class="text-sm text-slate-400">
-                Loading...
-              </div>
-            </div>
-
-          </div>
-
-
-          <!-- ADMIN STATUS -->
-          <div class="card p-5">
-
-            <h3 class="font-bold">
-              Administrator Status
-            </h3>
-
-            <p class="text-xs text-slate-500 mt-1 mb-5">
-              Firebase authorization information
+            <p class="text-sm text-gray-500 mt-1 mb-6">
+                Sign in using your authorized Firebase administrator account.
             </p>
 
-            <div class="space-y-3 text-sm">
+            <form id="loginForm" class="space-y-4">
 
-              <div class="flex justify-between gap-4">
-                <span class="text-slate-500">
-                  Signed-in email
-                </span>
-                <strong
-                  id="diagEmail"
-                  class="truncate"
-                >
-                  —
-                </strong>
-              </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">
+                        Email address
+                    </label>
 
-              <div class="flex justify-between gap-4">
-                <span class="text-slate-500">
-                  Firebase UID
-                </span>
-                <strong
-                  id="diagUid"
-                  class="truncate max-w-[220px]"
-                >
-                  —
-                </strong>
-              </div>
+                    <input
+                        id="loginEmail"
+                        type="email"
+                        autocomplete="email"
+                        required
+                        class="w-full px-4 py-3.5 rounded-xl border border-gray-200 outline-none focus:ring-2 focus:ring-emerald-500"
+                        placeholder="admin@example.com"
+                    >
+                </div>
 
-              <div class="flex justify-between gap-4">
-                <span class="text-slate-500">
-                  Admin document
-                </span>
-                <strong
-                  id="diagDoc"
-                  class="truncate max-w-[220px]"
-                >
-                  —
-                </strong>
-              </div>
+                <div>
+                    <label class="block text-sm font-semibold text-gray-700 mb-2">
+                        Password
+                    </label>
 
-              <div class="flex justify-between">
-                <span class="text-slate-500">
-                  Active
-                </span>
+                    <input
+                        id="loginPassword"
+                        type="password"
+                        autocomplete="current-password"
+                        required
+                        class="w-full px-4 py-3.5 rounded-xl border border-gray-200 outline-none focus:ring-2 focus:ring-emerald-500"
+                        placeholder="Enter password"
+                    >
+                </div>
 
-                <span
-                  id="diagActive"
-                  class="status-pill green-pill"
-                >
-                  Checking
-                </span>
-              </div>
+                <button
+                    id="loginButton"
+                    type="submit"
+                    class="w-full py-3.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold transition">
+                    Sign In
+                </button>
 
+            </form>
+
+            <div id="loginError"
+                 class="hidden mt-4 p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 text-sm">
             </div>
 
-          </div>
+            <div class="mt-6 pt-5 border-t text-xs text-gray-400 text-center">
+                Cash Flow Bank development environment
+            </div>
 
         </div>
-
-      </section>
-
-
-      <!-- =====================================================
-           CUSTOMERS
-      ====================================================== -->
-      <section
-        id="customersSection"
-        class="page-section hidden"
-      >
-
-        <div class="flex justify-between items-center mb-6">
-
-          <div>
-            <h1 class="text-2xl font-bold">
-              Customers
-            </h1>
-
-            <p class="text-sm text-slate-500 mt-1">
-              Customer records in Firestore.
-            </p>
-          </div>
-
-          <button
-            id="customersRefresh"
-            class="bg-emerald-950 text-white
-            px-4 py-2 rounded-xl text-sm"
-          >
-            Refresh
-          </button>
-
-        </div>
-
-        <div class="card p-5">
-          <div id="customersTable"></div>
-        </div>
-
-      </section>
-
-
-      <!-- =====================================================
-           ACCOUNTS
-      ====================================================== -->
-      <section
-        id="accountsSection"
-        class="page-section hidden"
-      >
-
-        <div class="mb-6">
-          <h1 class="text-2xl font-bold">
-            Accounts
-          </h1>
-
-          <p class="text-sm text-slate-500 mt-1">
-            Customer account records.
-          </p>
-        </div>
-
-        <div class="card p-5">
-          <div id="accountsTable"></div>
-        </div>
-
-      </section>
-
-
-      <!-- =====================================================
-           TRANSACTIONS
-      ====================================================== -->
-      <section
-        id="transactionsSection"
-        class="page-section hidden"
-      >
-
-        <div class="mb-6">
-          <h1 class="text-2xl font-bold">
-            Transactions
-          </h1>
-
-          <p class="text-sm text-slate-500 mt-1">
-            Recorded transaction records.
-          </p>
-        </div>
-
-        <div class="card p-5">
-          <div id="transactionsTable"></div>
-        </div>
-
-      </section>
-
-
-      <!-- =====================================================
-           LOANS
-      ====================================================== -->
-      <section
-        id="loansSection"
-        class="page-section hidden"
-      >
-
-        <div class="mb-6">
-          <h1 class="text-2xl font-bold">
-            Loans
-          </h1>
-
-          <p class="text-sm text-slate-500 mt-1">
-            Loan records.
-          </p>
-        </div>
-
-        <div class="card p-5">
-          <div id="loansTable"></div>
-        </div>
-
-      </section>
-
-
-      <!-- =====================================================
-           CARDS
-      ====================================================== -->
-      <section
-        id="cardsSection"
-        class="page-section hidden"
-      >
-
-        <div class="mb-6">
-          <h1 class="text-2xl font-bold">
-            Cards
-          </h1>
-
-          <p class="text-sm text-slate-500 mt-1">
-            Card records.
-          </p>
-        </div>
-
-        <div class="card p-5">
-          <div id="cardsTable"></div>
-        </div>
-
-      </section>
-
-
-      <!-- =====================================================
-           AUDIT LOGS
-      ====================================================== -->
-      <section
-        id="auditSection"
-        class="page-section hidden"
-      >
-
-        <div class="mb-6">
-          <h1 class="text-2xl font-bold">
-            Audit Logs
-          </h1>
-
-          <p class="text-sm text-slate-500 mt-1">
-            Administrative activity records.
-          </p>
-        </div>
-
-        <div class="card p-5">
-          <div id="auditTable"></div>
-        </div>
-
-      </section>
 
     </div>
-
-  </main>
-
 </div>
 
 
-<!-- TOAST -->
-<div id="toast" class="toast"></div>
+<!-- =========================================================
+     ACCESS DENIED SCREEN
+========================================================= -->
+
+<div id="accessDenied"
+     class="hidden min-h-screen flex items-center justify-center bg-gray-100 px-5">
+
+    <div class="bg-white rounded-3xl shadow-xl p-8 max-w-lg w-full text-center">
+
+        <div class="w-16 h-16 mx-auto rounded-full bg-red-100 flex items-center justify-center mb-5">
+
+            <svg width="30" height="30" viewBox="0 0 24 24"
+                 fill="none" stroke="#dc2626" stroke-width="2">
+                <circle cx="12" cy="12" r="9"/>
+                <path d="M12 8v4"/>
+                <path d="M12 16h.01"/>
+            </svg>
+
+        </div>
+
+        <h2 class="text-2xl font-bold text-gray-900">
+            Administrator Access Required
+        </h2>
+
+        <p class="text-gray-500 mt-2">
+            This Firebase account is not authorized to access the admin dashboard.
+        </p>
+
+        <div class="text-left mt-6 p-4 rounded-xl bg-gray-50 border">
+
+            <div class="text-xs font-bold text-gray-500 uppercase mb-1">
+                Signed-in email
+            </div>
+
+            <div id="deniedEmail"
+                 class="font-semibold break-all">
+                Not signed in
+            </div>
+
+            <div class="text-xs font-bold text-gray-500 uppercase mt-4 mb-1">
+                Firebase UID
+            </div>
+
+            <div id="deniedUid"
+                 class="font-mono text-xs break-all">
+                Not available
+            </div>
+
+            <div class="text-xs font-bold text-gray-500 uppercase mt-4 mb-1">
+                Admin document
+            </div>
+
+            <div id="deniedAdminStatus">
+                Unknown
+            </div>
+
+        </div>
+
+        <button
+            id="deniedSignOut"
+            class="mt-6 w-full py-3 rounded-xl bg-gray-900 text-white font-bold">
+            Sign Out
+        </button>
+
+    </div>
+</div>
+
+
+<!-- =========================================================
+     MOBILE OVERLAY
+========================================================= -->
+
+<div id="sidebarOverlay" class="overlay"></div>
+
+
+<!-- =========================================================
+     DESKTOP SIDEBAR
+========================================================= -->
+
+<aside id="desktopSidebar" class="sidebar">
+
+    <div class="h-full flex flex-col">
+
+        <!-- Brand -->
+        <div class="px-6 py-6 border-b">
+
+            <div class="flex items-center gap-3">
+
+                <div class="w-10 h-10 rounded-xl bg-emerald-600 flex items-center justify-center">
+
+                    <svg width="22" height="22" viewBox="0 0 24 24"
+                         fill="none" stroke="white" stroke-width="2">
+                        <path d="M3 10h18"/>
+                        <path d="M5 10v8"/>
+                        <path d="M9 10v8"/>
+                        <path d="M15 10v8"/>
+                        <path d="M19 10v8"/>
+                        <path d="M2 18h20"/>
+                        <path d="M12 3l10 5H2l10-5z"/>
+                    </svg>
+
+                </div>
+
+                <div>
+                    <div class="font-bold text-gray-900 text-lg">
+                        Cash Flow
+                    </div>
+
+                    <div class="text-xs text-emerald-600 font-bold">
+                        ADMIN PORTAL
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Navigation -->
+        <nav class="flex-1 p-4 space-y-1 overflow-y-auto">
+
+            <button onclick="showSection('dashboard')"
+                    data-section="dashboard"
+                    class="nav-item active w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold">
+
+                <svg width="19" height="19" viewBox="0 0 24 24"
+                     fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="7" height="7"/>
+                    <rect x="14" y="3" width="7" height="7"/>
+                    <rect x="3" y="14" width="7" height="7"/>
+                    <rect x="14" y="14" width="7" height="7"/>
+                </svg>
+
+                Dashboard
+            </button>
+
+
+            <button onclick="showSection('customers')"
+                    data-section="customers"
+                    class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-gray-700">
+
+                <svg width="19" height="19" viewBox="0 0 24 24"
+                     fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                    <circle cx="9" cy="7" r="4"/>
+                    <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+                    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                </svg>
+
+                Customers
+            </button>
+
+
+            <button onclick="showSection('accounts')"
+                    data-section="accounts"
+                    class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-gray-700">
+
+                <svg width="19" height="19" viewBox="0 0 24 24"
+                     fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="5" width="18" height="14" rx="2"/>
+                    <path d="M3 10h18"/>
+                </svg>
+
+                Accounts
+            </button>
+
+
+            <button onclick="showSection('transactions')"
+                    data-section="transactions"
+                    class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-gray-700">
+
+                <svg width="19" height="19" viewBox="0 0 24 24"
+                     fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 12h18"/>
+                    <path d="M12 3v18"/>
+                    <path d="M7 7l-4 5 4 5"/>
+                    <path d="M17 7l4 5-4 5"/>
+                </svg>
+
+                Transactions
+            </button>
+
+
+            <button onclick="showSection('loans')"
+                    data-section="loans"
+                    class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-gray-700">
+
+                <svg width="19" height="19" viewBox="0 0 24 24"
+                     fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 10h18"/>
+                    <path d="M5 10v9"/>
+                    <path d="M19 10v9"/>
+                    <path d="M3 19h18"/>
+                    <path d="M12 3l9 5H3l9-5z"/>
+                </svg>
+
+                Loans
+            </button>
+
+
+            <button onclick="showSection('cards')"
+                    data-section="cards"
+                    class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-gray-700">
+
+                <svg width="19" height="19" viewBox="0 0 24 24"
+                     fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="2" y="5" width="20" height="14" rx="2"/>
+                    <path d="M2 10h20"/>
+                </svg>
+
+                Cards
+            </button>
+
+
+            <button onclick="showSection('audit')"
+                    data-section="audit"
+                    class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-gray-700">
+
+                <svg width="19" height="19" viewBox="0 0 24 24"
+                     fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 4h16v16H4z"/>
+                    <path d="M8 8h8"/>
+                    <path d="M8 12h8"/>
+                    <path d="M8 16h5"/>
+                </svg>
+
+                Audit Logs
+            </button>
+
+        </nav>
+
+
+        <!-- Bottom -->
+        <div class="p-4 border-t">
+
+            <button id="logoutButton"
+                    class="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-gray-600 hover:bg-red-50 hover:text-red-600">
+
+                <svg width="19" height="19" viewBox="0 0 24 24"
+                     fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                    <path d="M16 17l5-5-5-5"/>
+                    <path d="M21 12H9"/>
+                </svg>
+
+                Sign Out
+            </button>
+
+        </div>
+
+    </div>
+</aside>
+
+
+<!-- =========================================================
+     MOBILE SIDEBAR
+========================================================= -->
+
+<aside id="mobileSidebar"
+       class="mobile-sidebar fixed left-0 top-0 bottom-0 w-72 bg-white z-50 shadow-2xl">
+
+    <div class="h-full flex flex-col">
+
+        <div class="px-5 py-5 border-b flex items-center justify-between">
+
+            <div class="flex items-center gap-3">
+
+                <div class="w-10 h-10 rounded-xl bg-emerald-600 flex items-center justify-center">
+
+                    <svg width="21" height="21" viewBox="0 0 24 24"
+                         fill="none" stroke="white" stroke-width="2">
+                        <path d="M3 10h18"/>
+                        <path d="M5 10v8"/>
+                        <path d="M9 10v8"/>
+                        <path d="M15 10v8"/>
+                        <path d="M19 10v8"/>
+                        <path d="M2 18h20"/>
+                        <path d="M12 3l10 5H2l10-5z"/>
+                    </svg>
+
+                </div>
+
+                <div>
+                    <div class="font-bold">
+                        Cash Flow
+                    </div>
+
+                    <div class="text-xs text-emerald-600 font-bold">
+                        ADMIN
+                    </div>
+                </div>
+
+            </div>
+
+            <button id="closeSidebar"
+                    class="p-2 rounded-lg hover:bg-gray-100">
+
+                <svg width="22" height="22" viewBox="0 0 24 24"
+                     fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 6L6 18"/>
+                    <path d="M6 6l12 12"/>
+                </svg>
+
+            </button>
+
+        </div>
+
+        <nav id="mobileNav"
+             class="flex-1 p-4 space-y-1 overflow-y-auto">
+
+            <button onclick="showSection('dashboard')"
+                    data-section="dashboard"
+                    class="nav-item active w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold">
+
+                Dashboard
+            </button>
+
+            <button onclick="showSection('customers')"
+                    data-section="customers"
+                    class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-gray-700">
+
+                Customers
+            </button>
+
+            <button onclick="showSection('accounts')"
+                    data-section="accounts"
+                    class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-gray-700">
+
+                Accounts
+            </button>
+
+            <button onclick="showSection('transactions')"
+                    data-section="transactions"
+                    class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-gray-700">
+
+                Transactions
+            </button>
+
+            <button onclick="showSection('loans')"
+                    data-section="loans"
+                    class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-gray-700">
+
+                Loans
+            </button>
+
+            <button onclick="showSection('cards')"
+                    data-section="cards"
+                    class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-gray-700">
+
+                Cards
+            </button>
+
+            <button onclick="showSection('audit')"
+                    data-section="audit"
+                    class="nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold text-gray-700">
+
+                Audit Logs
+            </button>
+
+        </nav>
+
+        <div class="p-4 border-t">
+
+            <button id="mobileLogout"
+                    class="w-full py-3 rounded-xl bg-red-50 text-red-600 font-bold">
+                Sign Out
+            </button>
+
+        </div>
+
+    </div>
+</aside>
+
+
+<!-- =========================================================
+     MAIN ADMIN APPLICATION
+========================================================= -->
+
+<div id="adminApp" class="hidden">
+
+    <main class="main">
+
+        <!-- TOP BAR -->
+        <header class="h-20 bg-white border-b flex items-center justify-between px-5 md:px-8 sticky top-0 z-30">
+
+            <div class="flex items-center gap-4">
+
+                <button id="openSidebar"
+                        class="md:hidden p-2 rounded-xl hover:bg-gray-100">
+
+                    <svg width="25" height="25" viewBox="0 0 24 24"
+                         fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 6h16"/>
+                        <path d="M4 12h16"/>
+                        <path d="M4 18h16"/>
+                    </svg>
+
+                </button>
+
+                <div>
+                    <h1 id="pageTitle"
+                        class="font-bold text-xl text-gray-900">
+                        Dashboard
+                    </h1>
+
+                    <p class="text-xs text-gray-500">
+                        Cash Flow Bank Administration
+                    </p>
+                </div>
+
+            </div>
+
+
+            <div class="flex items-center gap-3">
+
+                <div class="hidden sm:block text-right">
+
+                    <div id="adminEmail"
+                         class="text-sm font-bold text-gray-800">
+                        Administrator
+                    </div>
+
+                    <div class="text-xs text-emerald-600">
+                        Active administrator
+                    </div>
+
+                </div>
+
+                <div class="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center">
+
+                    <svg width="21" height="21" viewBox="0 0 24 24"
+                         fill="none" stroke="#047857" stroke-width="2">
+                        <circle cx="12" cy="8" r="4"/>
+                        <path d="M4 21c0-4 3-7 8-7s8 3 8 7"/>
+                    </svg>
+
+                </div>
+
+            </div>
+
+        </header>
+
+
+        <!-- CONTENT -->
+        <div class="p-5 md:p-8 max-w-[1500px] mx-auto">
+
+
+            <!-- =================================================
+                 DASHBOARD
+            ================================================== -->
+
+            <section id="section-dashboard">
+
+                <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-7">
+
+                    <div>
+                        <h2 class="text-2xl md:text-3xl font-bold">
+                            Welcome back, Admin
+                        </h2>
+
+                        <p class="text-gray-500 mt-1">
+                            Here's what's happening with Cash Flow Bank today.
+                        </p>
+                    </div>
+
+                    <div class="flex gap-3">
+
+                        <button onclick="showSection('customers')"
+                                class="px-4 py-3 rounded-xl bg-emerald-600 text-white text-sm font-bold">
+                            View Customers
+                        </button>
+
+                        <button onclick="showSection('transactions')"
+                                class="px-4 py-3 rounded-xl bg-cyan-500 text-white text-sm font-bold">
+                            View Transactions
+                        </button>
+
+                    </div>
+
+                </div>
+
+
+                <!-- STAT CARDS -->
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 mb-6">
+
+                    <!-- Users -->
+                    <div class="stat-card bg-white rounded-2xl border border-gray-100 p-5">
+
+                        <div class="flex items-center justify-between">
+
+                            <div>
+
+                                <p class="text-sm text-gray-500">
+                                    Total Customers
+                                </p>
+
+                                <h3 id="totalUsers"
+                                    class="text-3xl font-bold mt-2">
+                                    —
+                                </h3>
+
+                            </div>
+
+                            <div class="w-12 h-12 rounded-xl bg-cyan-50 flex items-center justify-center">
+
+                                <svg width="24" height="24" viewBox="0 0 24 24"
+                                     fill="none" stroke="#06b6d4" stroke-width="2">
+                                    <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                                    <circle cx="9" cy="7" r="4"/>
+                                    <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                                </svg>
+
+                            </div>
+
+                        </div>
+
+                        <p class="text-xs text-emerald-600 mt-4">
+                            Registered accounts
+                        </p>
+
+                    </div>
+
+
+                    <!-- Accounts -->
+                    <div class="stat-card bg-white rounded-2xl border border-gray-100 p-5">
+
+                        <div class="flex items-center justify-between">
+
+                            <div>
+
+                                <p class="text-sm text-gray-500">
+                                    Total Accounts
+                                </p>
+
+                                <h3 id="totalAccounts"
+                                    class="text-3xl font-bold mt-2">
+                                    —
+                                </h3>
+
+                            </div>
+
+                            <div class="w-12 h-12 rounded-xl bg-emerald-50 flex items-center justify-center">
+
+                                <svg width="24" height="24" viewBox="0 0 24 24"
+                                     fill="none" stroke="#10b981" stroke-width="2">
+                                    <rect x="3" y="5" width="18" height="14" rx="2"/>
+                                    <path d="M3 10h18"/>
+                                </svg>
+
+                            </div>
+
+                        </div>
+
+                        <p class="text-xs text-emerald-600 mt-4">
+                            Customer accounts
+                        </p>
+
+                    </div>
+
+
+                    <!-- Transactions -->
+                    <div class="stat-card bg-white rounded-2xl border border-gray-100 p-5">
+
+                        <div class="flex items-center justify-between">
+
+                            <div>
+
+                                <p class="text-sm text-gray-500">
+                                    Transactions
+                                </p>
+
+                                <h3 id="totalTransactions"
+                                    class="text-3xl font-bold mt-2">
+                                    —
+                                </h3>
+
+                            </div>
+
+                            <div class="w-12 h-12 rounded-xl bg-purple-50 flex items-center justify-center">
+
+                                <svg width="24" height="24" viewBox="0 0 24 24"
+                                     fill="none" stroke="#9333ea" stroke-width="2">
+                                    <path d="M4 7h16"/>
+                                    <path d="M4 17h16"/>
+                                    <path d="M8 3l-4 4 4 4"/>
+                                    <path d="M16 13l4 4-4 4"/>
+                                </svg>
+
+                            </div>
+
+                        </div>
+
+                        <p class="text-xs text-purple-600 mt-4">
+                            Recorded activity
+                        </p>
+
+                    </div>
+
+
+                    <!-- Loans -->
+                    <div class="stat-card bg-white rounded-2xl border border-gray-100 p-5">
+
+                        <div class="flex items-center justify-between">
+
+                            <div>
+
+                                <p class="text-sm text-gray-500">
+                                    Loan Records
+                                </p>
+
+                                <h3 id="totalLoans"
+                                    class="text-3xl font-bold mt-2">
+                                    —
+                                </h3>
+
+                            </div>
+
+                            <div class="w-12 h-12 rounded-xl bg-orange-50 flex items-center justify-center">
+
+                                <svg width="24" height="24" viewBox="0 0 24 24"
+                                     fill="none" stroke="#f97316" stroke-width="2">
+                                    <path d="M3 10h18"/>
+                                    <path d="M5 10v9"/>
+                                    <path d="M19 10v9"/>
+                                    <path d="M3 19h18"/>
+                                    <path d="M12 3l9 5H3l9-5z"/>
+                                </svg>
+
+                            </div>
+
+                        </div>
+
+                        <p class="text-xs text-orange-600 mt-4">
+                            Loan applications
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <!-- LOWER DASHBOARD -->
+
+                <div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+
+                    <!-- Recent customers -->
+                    <div class="xl:col-span-2 bg-white rounded-2xl border border-gray-100">
+
+                        <div class="p-5 border-b flex items-center justify-between">
+
+                            <div>
+
+                                <h3 class="font-bold text-lg">
+                                    Recent Customers
+                                </h3>
+
+                                <p class="text-sm text-gray-500">
+                                    Latest registered customers
+                                </p>
+
+                            </div>
+
+                            <button onclick="showSection('customers')"
+                                    class="text-sm text-cyan-600 font-bold">
+                                View All
+                            </button>
+
+                        </div>
+
+                        <div id="recentCustomers"
+                             class="divide-y">
+                            <div class="p-6 text-center text-gray-400">
+                                Loading...
+                            </div>
+                        </div>
+
+                    </div>
+
+
+                    <!-- Activity -->
+                    <div class="bg-white rounded-2xl border border-gray-100">
+
+                        <div class="p-5 border-b">
+
+                            <h3 class="font-bold text-lg">
+                                System Activity
+                            </h3>
+
+                            <p class="text-sm text-gray-500">
+                                Recent system information
+                            </p>
+
+                        </div>
+
+                        <div class="p-5 space-y-5">
+
+                            <div class="flex gap-3">
+
+                                <div class="w-9 h-9 rounded-lg bg-emerald-50 flex items-center justify-center flex-shrink-0">
+
+                                    <svg width="18" height="18" viewBox="0 0 24 24"
+                                         fill="none" stroke="#10b981" stroke-width="2">
+                                        <path d="M20 6L9 17l-5-5"/>
+                                    </svg>
+
+                                </div>
+
+                                <div>
+                                    <p class="text-sm font-semibold">
+                                        Admin authentication enabled
+                                    </p>
+                                    <p class="text-xs text-gray-400 mt-1">
+                                        Firebase Authentication
+                                    </p>
+                                </div>
+
+                            </div>
+
+
+                            <div class="flex gap-3">
+
+                                <div class="w-9 h-9 rounded-lg bg-cyan-50 flex items-center justify-center flex-shrink-0">
+
+                                    <svg width="18" height="18" viewBox="0 0 24 24"
+                                         fill="none" stroke="#06b6d4" stroke-width="2">
+                                        <path d="M3 12h18"/>
+                                        <path d="M12 3v18"/>
+                                    </svg>
+
+                                </div>
+
+                                <div>
+                                    <p class="text-sm font-semibold">
+                                        Firestore connected
+                                    </p>
+                                    <p class="text-xs text-gray-400 mt-1">
+                                        Bank database
+                                    </p>
+                                </div>
+
+                            </div>
+
+
+                            <div class="flex gap-3">
+
+                                <div class="w-9 h-9 rounded-lg bg-purple-50 flex items-center justify-center flex-shrink-0">
+
+                                    <svg width="18" height="18" viewBox="0 0 24 24"
+                                         fill="none" stroke="#9333ea" stroke-width="2">
+                                        <circle cx="12" cy="12" r="9"/>
+                                        <path d="M12 7v5l3 2"/>
+                                    </svg>
+
+                                </div>
+
+                                <div>
+                                    <p class="text-sm font-semibold">
+                                        Dashboard ready
+                                    </p>
+                                    <p class="text-xs text-gray-400 mt-1">
+                                        Administration system
+                                    </p>
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 CUSTOMERS
+            ================================================== -->
+
+            <section id="section-customers" class="hidden">
+
+                <div class="mb-6">
+
+                    <h2 class="text-2xl font-bold">
+                        Customers
+                    </h2>
+
+                    <p class="text-gray-500">
+                        Registered Cash Flow Bank customers.
+                    </p>
+
+                </div>
+
+                <div class="bg-white rounded-2xl border overflow-hidden">
+
+                    <div class="p-5 border-b flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">
+
+                        <h3 class="font-bold">
+                            Customer Directory
+                        </h3>
+
+                        <input
+                            id="customerSearch"
+                            oninput="filterCustomers()"
+                            class="px-4 py-2.5 rounded-xl border outline-none focus:ring-2 focus:ring-emerald-500"
+                            placeholder="Search customers..."
+                        >
+
+                    </div>
+
+                    <div class="table-scroll">
+
+                        <table class="w-full text-sm">
+
+                            <thead class="bg-gray-50 text-gray-500">
+
+                                <tr>
+                                    <th class="text-left p-4">Customer</th>
+                                    <th class="text-left p-4">Email</th>
+                                    <th class="text-left p-4">Country</th>
+                                    <th class="text-left p-4">Account Number</th>
+                                    <th class="text-left p-4">Status</th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody id="customersTable">
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 ACCOUNTS
+            ================================================== -->
+
+            <section id="section-accounts" class="hidden">
+
+                <div class="mb-6">
+
+                    <h2 class="text-2xl font-bold">
+                        Accounts
+                    </h2>
+
+                    <p class="text-gray-500">
+                        Customer banking accounts.
+                    </p>
+
+                </div>
+
+                <div class="bg-white rounded-2xl border overflow-hidden">
+
+                    <div class="table-scroll">
+
+                        <table class="w-full text-sm">
+
+                            <thead class="bg-gray-50 text-gray-500">
+
+                                <tr>
+                                    <th class="text-left p-4">Account</th>
+                                    <th class="text-left p-4">User ID</th>
+                                    <th class="text-left p-4">Type</th>
+                                    <th class="text-left p-4">Balance</th>
+                                    <th class="text-left p-4">Status</th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody id="accountsTable">
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 TRANSACTIONS
+            ================================================== -->
+
+            <section id="section-transactions" class="hidden">
+
+                <div class="mb-6">
+
+                    <h2 class="text-2xl font-bold">
+                        Transactions
+                    </h2>
+
+                    <p class="text-gray-500">
+                        Recorded transaction activity.
+                    </p>
+
+                </div>
+
+                <div class="bg-white rounded-2xl border overflow-hidden">
+
+                    <div class="table-scroll">
+
+                        <table class="w-full text-sm">
+
+                            <thead class="bg-gray-50 text-gray-500">
+
+                                <tr>
+                                    <th class="text-left p-4">Type</th>
+                                    <th class="text-left p-4">User ID</th>
+                                    <th class="text-left p-4">Amount</th>
+                                    <th class="text-left p-4">Status</th>
+                                    <th class="text-left p-4">Date</th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody id="transactionsTable">
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 LOANS
+            ================================================== -->
+
+            <section id="section-loans" class="hidden">
+
+                <div class="mb-6">
+
+                    <h2 class="text-2xl font-bold">
+                        Loans
+                    </h2>
+
+                    <p class="text-gray-500">
+                        Loan records and applications.
+                    </p>
+
+                </div>
+
+                <div class="bg-white rounded-2xl border overflow-hidden">
+
+                    <div class="table-scroll">
+
+                        <table class="w-full text-sm">
+
+                            <thead class="bg-gray-50 text-gray-500">
+
+                                <tr>
+                                    <th class="text-left p-4">User ID</th>
+                                    <th class="text-left p-4">Amount</th>
+                                    <th class="text-left p-4">Status</th>
+                                    <th class="text-left p-4">Date</th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody id="loansTable">
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 CARDS
+            ================================================== -->
+
+            <section id="section-cards" class="hidden">
+
+                <div class="mb-6">
+
+                    <h2 class="text-2xl font-bold">
+                        Cards
+                    </h2>
+
+                    <p class="text-gray-500">
+                        Customer card records.
+                    </p>
+
+                </div>
+
+                <div class="bg-white rounded-2xl border overflow-hidden">
+
+                    <div class="table-scroll">
+
+                        <table class="w-full text-sm">
+
+                            <thead class="bg-gray-50 text-gray-500">
+
+                                <tr>
+                                    <th class="text-left p-4">User ID</th>
+                                    <th class="text-left p-4">Card Type</th>
+                                    <th class="text-left p-4">Status</th>
+                                    <th class="text-left p-4">Created</th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody id="cardsTable">
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+
+            <!-- =================================================
+                 AUDIT
+            ================================================== -->
+
+            <section id="section-audit" class="hidden">
+
+                <div class="mb-6">
+
+                    <h2 class="text-2xl font-bold">
+                        Audit Logs
+                    </h2>
+
+                    <p class="text-gray-500">
+                        Administrative activity records.
+                    </p>
+
+                </div>
+
+                <div class="bg-white rounded-2xl border overflow-hidden">
+
+                    <div class="table-scroll">
+
+                        <table class="w-full text-sm">
+
+                            <thead class="bg-gray-50 text-gray-500">
+
+                                <tr>
+                                    <th class="text-left p-4">Action</th>
+                                    <th class="text-left p-4">Admin</th>
+                                    <th class="text-left p-4">Target</th>
+                                    <th class="text-left p-4">Date</th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody id="auditTable">
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                </div>
+
+            </section>
+
+        </div>
+
+    </main>
+
+</div>
 
 
 <!-- =========================================================
      FIREBASE
 ========================================================= -->
+
 <script type="module">
 
-  import {
+import {
     initializeApp
-  } from
-  "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+} from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
 
-  import {
+import {
     getAuth,
-    setPersistence,
-    browserLocalPersistence,
     onAuthStateChanged,
     signInWithEmailAndPassword,
-    signOut
-  } from
-  "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+    signOut,
+    setPersistence,
+    browserLocalPersistence
+} from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
 
-  import {
+import {
     getFirestore,
     doc,
     getDoc,
     collection,
     getDocs,
     query,
-    limit
-  } from
-  "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+    limit,
+    orderBy
+} from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
 
 
-  /* =========================================================
-     YOUR CORRECT FIREBASE CONFIG
-  ========================================================= */
+/* =========================================================
+   YOUR EXACT FIREBASE CONFIG
+========================================================= */
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyAVd2DY_EgwutXbPdcFNsj4LJG-5e5zjw",
+const firebaseConfig = {
+    apiKey: "AIzaSyAVd2DY_EgwutXbqPdcFNsj4LJG-5e5zjw",
     authDomain: "bank-d221d.firebaseapp.com",
     projectId: "bank-d221d",
     storageBucket: "bank-d221d.firebasestorage.app",
     messagingSenderId: "17227399657",
     appId: "1:17227399657:web:cc4e711a2fe110235c4b78"
-  };
+};
 
 
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-  const db = getFirestore(app);
+/* =========================================================
+   INITIALIZE
+========================================================= */
+
+const app = initializeApp(firebaseConfig);
+
+const auth = getAuth(app);
+
+const db = getFirestore(app);
 
 
-  /* =========================================================
-     VARIABLES
-  ========================================================= */
+/* =========================================================
+   ELEMENTS
+========================================================= */
 
-  let currentUser = null;
-  let activityChart = null;
+const loginScreen = document.getElementById("loginScreen");
+const accessDenied = document.getElementById("accessDenied");
+const adminApp = document.getElementById("adminApp");
 
-  const $ = id => document.getElementById(id);
+const loginForm = document.getElementById("loginForm");
+const loginEmail = document.getElementById("loginEmail");
+const loginPassword = document.getElementById("loginPassword");
+const loginButton = document.getElementById("loginButton");
+const loginError = document.getElementById("loginError");
 
+const deniedEmail = document.getElementById("deniedEmail");
+const deniedUid = document.getElementById("deniedUid");
+const deniedAdminStatus = document.getElementById("deniedAdminStatus");
 
-  /* =========================================================
-     TOAST
-  ========================================================= */
-
-  function toast(message) {
-
-    const element = $("toast");
-
-    element.textContent = message;
-    element.style.display = "block";
-
-    clearTimeout(window.toastTimer);
-
-    window.toastTimer = setTimeout(() => {
-      element.style.display = "none";
-    }, 3000);
-  }
+const adminEmail = document.getElementById("adminEmail");
 
 
-  /* =========================================================
-     LOGIN MESSAGE
-  ========================================================= */
+/* =========================================================
+   HELPERS
+========================================================= */
 
-  function loginMessage(message, success = false) {
+function showLoginError(message) {
 
-    const element = $("loginMessage");
+    loginError.textContent = message;
+    loginError.classList.remove("hidden");
 
-    element.textContent = message;
-
-    element.className =
-      "mt-4 p-3 rounded-xl text-sm break-words " +
-      (
-        success
-          ? "bg-emerald-100 text-emerald-800"
-          : "bg-red-100 text-red-800"
-      );
-  }
+}
 
 
-  /* =========================================================
-     ERROR HANDLER
-  ========================================================= */
+function hideLoginError() {
 
-  function friendlyError(error) {
+    loginError.classList.add("hidden");
 
-    const code = error?.code || "";
-    const message = error?.message || String(error);
+}
 
-    if (code.includes("auth/api-key-not-valid")) {
-      return "Firebase rejected the API key. Make sure this file contains the current Web API key from Firebase Project Settings.";
+
+function escapeHtml(value) {
+
+    if (value === null || value === undefined) {
+        return "";
     }
 
-    if (
-      code.includes("auth/invalid-credential") ||
-      code.includes("auth/wrong-password") ||
-      code.includes("auth/user-not-found")
-    ) {
-      return "The email or password is incorrect.";
+    return String(value)
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+}
+
+
+function formatMoney(value) {
+
+    const number = Number(value || 0);
+
+    return new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD"
+    }).format(number);
+
+}
+
+
+function formatDate(value) {
+
+    if (!value) {
+        return "—";
     }
-
-    if (code.includes("auth/operation-not-allowed")) {
-      return "Email/Password sign-in is not enabled in Firebase Authentication.";
-    }
-
-    if (code.includes("auth/unauthorized-domain")) {
-      return "This website domain is not authorized in Firebase Authentication.";
-    }
-
-    if (code.includes("permission-denied")) {
-      return "Firestore denied access. Check your Firestore security rules.";
-    }
-
-    return message;
-  }
-
-
-  /* =========================================================
-     SHOW / HIDE APP
-  ========================================================= */
-
-  function showAdmin() {
-
-    $("loginScreen").classList.add("hidden");
-    $("adminApp").classList.remove("hidden");
-  }
-
-
-  function showLogin() {
-
-    $("adminApp").classList.add("hidden");
-    $("loginScreen").classList.remove("hidden");
-  }
-
-
-  /* =========================================================
-     CHECK ADMIN
-  ========================================================= */
-
-  async function checkAdmin(user) {
-
-    const adminRef =
-      doc(db, "admins", user.uid);
-
-    let snapshot;
 
     try {
 
-      snapshot = await getDoc(adminRef);
+        if (value.toDate) {
+            return value.toDate().toLocaleString();
+        }
 
-    } catch (error) {
+        const date = new Date(value);
 
-      throw new Error(
-        "Unable to read your admin record: " +
-        friendlyError(error)
-      );
+        if (!isNaN(date.getTime())) {
+            return date.toLocaleString();
+        }
+
+    } catch (error) {}
+
+    return "—";
+}
+
+
+function emptyRow(message, columns) {
+
+    return `
+        <tr>
+            <td colspan="${columns}"
+                class="p-8 text-center text-gray-400">
+                ${escapeHtml(message)}
+            </td>
+        </tr>
+    `;
+
+}
+
+
+/* =========================================================
+   FIREBASE AUTH PERSISTENCE
+========================================================= */
+
+try {
+
+    await setPersistence(auth, browserLocalPersistence);
+
+} catch (error) {
+
+    console.error("Persistence error:", error);
+
+}
+
+
+/* =========================================================
+   LOGIN
+========================================================= */
+
+loginForm.addEventListener("submit", async (event) => {
+
+    event.preventDefault();
+
+    hideLoginError();
+
+    const email = loginEmail.value.trim();
+    const password = loginPassword.value;
+
+    if (!email || !password) {
+
+        showLoginError("Please enter your email and password.");
+
+        return;
     }
 
+    loginButton.disabled = true;
+    loginButton.textContent = "Signing in...";
 
-    if (!snapshot.exists()) {
+    try {
 
-      throw new Error(
-        "No admin document exists for this Firebase UID."
-      );
-    }
-
-
-    const admin = snapshot.data();
-
-
-    if (admin.active !== true) {
-
-      throw new Error(
-        "Your admin document exists, but active is not Boolean true."
-      );
-    }
-
-
-    return admin;
-  }
-
-
-  /* =========================================================
-     LOGIN
-  ========================================================= */
-
-  $("loginForm").addEventListener(
-    "submit",
-    async event => {
-
-      event.preventDefault();
-
-      const email =
-        $("email").value.trim();
-
-      const password =
-        $("password").value;
-
-      const button =
-        $("loginButton");
-
-
-      button.disabled = true;
-      button.textContent = "Signing in...";
-
-
-      try {
-
-        await setPersistence(
-          auth,
-          browserLocalPersistence
-        );
-
-
-        const credential =
-          await signInWithEmailAndPassword(
+        await signInWithEmailAndPassword(
             auth,
             email,
             password
-          );
-
-
-        currentUser =
-          credential.user;
-
-
-        await checkAdmin(currentUser);
-
-
-        showAdmin();
-
-        await updateAdminInfo();
-
-        await loadEverything();
-
-
-        toast("Administrator access verified.");
-
-      } catch (error) {
-
-        loginMessage(
-          friendlyError(error)
         );
 
-      } finally {
+    } catch (error) {
 
-        button.disabled = false;
-        button.textContent = "Sign in";
-      }
+        console.error(error);
+
+        let message = "Unable to sign in.";
+
+        if (error.code === "auth/invalid-credential") {
+            message = "Incorrect email or password.";
+        }
+
+        if (error.code === "auth/user-not-found") {
+            message = "No Firebase Authentication user was found with this email.";
+        }
+
+        if (error.code === "auth/wrong-password") {
+            message = "Incorrect password.";
+        }
+
+        if (error.code === "auth/invalid-api-key") {
+            message =
+                "Firebase rejected the API key. Make sure this page is using the current Web API key from Firebase Project Settings.";
+        }
+
+        if (error.code === "auth/unauthorized-domain") {
+            message =
+                "This website domain is not authorized in Firebase Authentication.";
+        }
+
+        showLoginError(message);
+
+    } finally {
+
+        loginButton.disabled = false;
+        loginButton.textContent = "Sign In";
 
     }
-  );
+
+});
 
 
-  /* =========================================================
-     AUTH STATE
-  ========================================================= */
+/* =========================================================
+   AUTH STATE
+========================================================= */
 
-  onAuthStateChanged(
-    auth,
-    async user => {
+onAuthStateChanged(auth, async (user) => {
 
-      if (!user) {
+    if (!user) {
 
-        currentUser = null;
-        showLogin();
+        loginScreen.classList.remove("hidden");
+        accessDenied.classList.add("hidden");
+        adminApp.classList.add("hidden");
 
         return;
-      }
-
-
-      try {
-
-        currentUser = user;
-
-        await checkAdmin(user);
-
-        showAdmin();
-
-        await updateAdminInfo();
-
-        await loadEverything();
-
-      } catch (error) {
-
-        await signOut(auth).catch(() => {});
-
-        currentUser = null;
-
-        showLogin();
-
-        loginMessage(
-          friendlyError(error)
-        );
-      }
-
     }
-  );
 
 
-  /* =========================================================
-     ADMIN INFORMATION
-  ========================================================= */
+    loginScreen.classList.add("hidden");
 
-  async function updateAdminInfo() {
-
-    if (!currentUser) return;
-
-
-    $("sidebarEmail").textContent =
-      currentUser.email || "Administrator";
-
-
-    $("diagEmail").textContent =
-      currentUser.email || "—";
-
-
-    $("diagUid").textContent =
-      currentUser.uid;
-
-
-    $("diagDoc").textContent =
-      "admins/" + currentUser.uid;
+    adminEmail.textContent =
+        user.email || "Administrator";
 
 
     try {
 
-      const snapshot =
-        await getDoc(
-          doc(db, "admins", currentUser.uid)
+        const adminRef = doc(
+            db,
+            "admins",
+            user.uid
         );
 
-
-      if (snapshot.exists()) {
-
-        const data =
-          snapshot.data();
+        const adminSnapshot = await getDoc(adminRef);
 
 
-        $("diagActive").textContent =
-          data.active === true
-            ? "Active"
-            : "Inactive";
+        if (!adminSnapshot.exists()) {
 
-        $("diagActive").className =
-          data.active === true
-            ? "status-pill green-pill"
-            : "status-pill red-pill";
-      }
+            deniedEmail.textContent =
+                user.email || "Unknown";
+
+            deniedUid.textContent =
+                user.uid;
+
+            deniedAdminStatus.textContent =
+                "Admin document does not exist.";
+
+            accessDenied.classList.remove("hidden");
+            adminApp.classList.add("hidden");
+
+            return;
+        }
+
+
+        const adminData = adminSnapshot.data();
+
+
+        if (adminData.active !== true) {
+
+            deniedEmail.textContent =
+                user.email || "Unknown";
+
+            deniedUid.textContent =
+                user.uid;
+
+            deniedAdminStatus.textContent =
+                "Admin account exists but active is not Boolean true.";
+
+            accessDenied.classList.remove("hidden");
+            adminApp.classList.add("hidden");
+
+            return;
+        }
+
+
+        /* ADMIN VERIFIED */
+
+        accessDenied.classList.add("hidden");
+        adminApp.classList.remove("hidden");
+
+
+        await loadDashboard();
+
 
     } catch (error) {
 
-      $("diagActive").textContent =
-        "Error";
+        console.error("Admin verification error:", error);
 
-      $("diagActive").className =
-        "status-pill red-pill";
+        deniedEmail.textContent =
+            user.email || "Unknown";
+
+        deniedUid.textContent =
+            user.uid;
+
+        deniedAdminStatus.textContent =
+            "Firebase/Firestore error: " + error.message;
+
+        accessDenied.classList.remove("hidden");
+        adminApp.classList.add("hidden");
+
     }
 
-  }
+});
 
 
-  /* =========================================================
-     READ COLLECTION
-  ========================================================= */
+/* =========================================================
+   DASHBOARD DATA
+========================================================= */
 
-  async function readCollection(
-    collectionName,
-    maximum = 250
-  ) {
-
-    const result =
-      await getDocs(
-        query(
-          collection(db, collectionName),
-          limit(maximum)
-        )
-      );
+let customersCache = [];
 
 
-    return result.docs.map(
-      item => ({
-        id: item.id,
-        ...item.data()
-      })
-    );
-  }
+async function loadDashboard() {
+
+    await Promise.all([
+        loadUsers(),
+        loadAccounts(),
+        loadTransactions(),
+        loadLoans(),
+        loadCards(),
+        loadAuditLogs()
+    ]);
+
+}
 
 
-  /* =========================================================
-     LOAD EVERYTHING
-  ========================================================= */
+/* =========================================================
+   USERS
+========================================================= */
 
-  async function loadEverything() {
+async function loadUsers() {
 
     try {
 
-      const customers =
-        await readCollection("users");
+        const snapshot =
+            await getDocs(collection(db, "users"));
+
+        customersCache = [];
+
+        snapshot.forEach((docSnap) => {
+
+            customersCache.push({
+                id: docSnap.id,
+                ...docSnap.data()
+            });
+
+        });
 
 
-      const accounts =
-        await readCollection("accounts");
+        document.getElementById("totalUsers").textContent =
+            customersCache.length;
 
 
-      const transactions =
-        await readCollection("transactions");
-
-
-      const loans =
-        await readCollection("loans");
-
-
-      let cards = [];
-
-      try {
-        cards =
-          await readCollection("creditCards");
-      } catch (_) {}
-
-
-      let auditLogs = [];
-
-      try {
-        auditLogs =
-          await readCollection("auditLogs");
-      } catch (_) {}
-
-
-      $("customerCount").textContent =
-        customers.length;
-
-
-      $("accountCount").textContent =
-        accounts.length;
-
-
-      $("transactionCount").textContent =
-        transactions.length;
-
-
-      $("totalBalance").textContent =
-        formatMoney(
-          calculateBalance(accounts)
-        );
-
-
-      renderCustomers(customers);
-
-      renderAccounts(accounts);
-
-      renderTransactions(transactions);
-
-      renderLoans(loans);
-
-      renderCards(cards);
-
-      renderAuditLogs(auditLogs);
-
-      renderRecentActivity(transactions);
-
-      renderAccountDistribution(accounts);
-
-      createChart(transactions);
+        renderCustomers();
+        renderRecentCustomers();
 
 
     } catch (error) {
 
-      toast(
-        "Some dashboard data could not be loaded: " +
-        friendlyError(error)
-      );
+        console.error("Users error:", error);
+
+        document.getElementById("totalUsers").textContent = "—";
+
+        document.getElementById("customersTable").innerHTML =
+            emptyRow("Unable to load customers.", 5);
+
+        document.getElementById("recentCustomers").innerHTML =
+            `<div class="p-6 text-center text-red-500">
+                Unable to load customers.
+             </div>`;
 
     }
 
-  }
+}
 
 
-  /* =========================================================
-     BALANCE
-  ========================================================= */
+/* =========================================================
+   ACCOUNTS
+========================================================= */
 
-  function calculateBalance(accounts) {
+async function loadAccounts() {
 
-    return accounts.reduce(
-      (total, account) => {
+    try {
 
-        const balance =
-          Number(account.balance) || 0;
+        const snapshot =
+            await getDocs(collection(db, "accounts"));
 
-        return total + balance;
+        const rows = [];
 
-      },
-      0
-    );
+        snapshot.forEach((docSnap) => {
 
-  }
+            const data = docSnap.data();
 
+            rows.push({
+                id: docSnap.id,
+                ...data
+            });
 
-  /* =========================================================
-     MONEY
-  ========================================================= */
-
-  function formatMoney(value) {
-
-    return new Intl.NumberFormat(
-      "en-US",
-      {
-        style: "currency",
-        currency: "USD"
-      }
-    ).format(value || 0);
-
-  }
+        });
 
 
-  /* =========================================================
-     ESCAPE HTML
-  ========================================================= */
+        document.getElementById("totalAccounts").textContent =
+            rows.length;
 
-  function escapeHtml(value) {
 
-    if (
-      value === null ||
-      value === undefined
-    ) {
-      return "";
+        const table =
+            document.getElementById("accountsTable");
+
+        if (!rows.length) {
+
+            table.innerHTML =
+                emptyRow("No accounts found.", 5);
+
+            return;
+        }
+
+
+        table.innerHTML = rows.slice(0, 100).map(account => {
+
+            const status =
+                account.isActive === false
+                    ? "INACTIVE"
+                    : "ACTIVE";
+
+            return `
+                <tr class="border-t hover:bg-gray-50">
+
+                    <td class="p-4 font-semibold">
+                        ${escapeHtml(
+                            account.accountNumber ||
+                            account.id
+                        )}
+                    </td>
+
+                    <td class="p-4 font-mono text-xs">
+                        ${escapeHtml(account.userId || "—")}
+                    </td>
+
+                    <td class="p-4">
+                        ${escapeHtml(
+                            account.type ||
+                            "ACCOUNT"
+                        )}
+                    </td>
+
+                    <td class="p-4 font-bold">
+                        ${formatMoney(account.balance)}
+                    </td>
+
+                    <td class="p-4">
+
+                        <span class="px-2.5 py-1 rounded-full text-xs font-bold
+                            ${status === "ACTIVE"
+                                ? "bg-emerald-50 text-emerald-700"
+                                : "bg-red-50 text-red-700"}">
+
+                            ${status}
+
+                        </span>
+
+                    </td>
+
+                </tr>
+            `;
+
+        }).join("");
+
+
+    } catch (error) {
+
+        console.error("Accounts error:", error);
+
+        document.getElementById("totalAccounts").textContent = "—";
+
+        document.getElementById("accountsTable").innerHTML =
+            emptyRow("Unable to load accounts.", 5);
+
+    }
+
+}
+
+
+/* =========================================================
+   TRANSACTIONS
+========================================================= */
+
+async function loadTransactions() {
+
+    try {
+
+        const snapshot =
+            await getDocs(collection(db, "transactions"));
+
+        const rows = [];
+
+        snapshot.forEach((docSnap) => {
+
+            rows.push({
+                id: docSnap.id,
+                ...docSnap.data()
+            });
+
+        });
+
+
+        document.getElementById("totalTransactions").textContent =
+            rows.length;
+
+
+        const table =
+            document.getElementById("transactionsTable");
+
+
+        if (!rows.length) {
+
+            table.innerHTML =
+                emptyRow("No transactions found.", 5);
+
+            return;
+        }
+
+
+        rows.sort((a,b) => {
+
+            const aTime =
+                a.createdAt?.toMillis
+                    ? a.createdAt.toMillis()
+                    : 0;
+
+            const bTime =
+                b.createdAt?.toMillis
+                    ? b.createdAt.toMillis()
+                    : 0;
+
+            return bTime - aTime;
+
+        });
+
+
+        table.innerHTML = rows.slice(0,100).map(tx => {
+
+            const status =
+                String(tx.status || "PENDING").toUpperCase();
+
+            return `
+                <tr class="border-t hover:bg-gray-50">
+
+                    <td class="p-4 font-semibold">
+                        ${escapeHtml(
+                            tx.type ||
+                            tx.transactionType ||
+                            "TRANSACTION"
+                        )}
+                    </td>
+
+                    <td class="p-4 font-mono text-xs">
+                        ${escapeHtml(tx.userId || "—")}
+                    </td>
+
+                    <td class="p-4 font-bold">
+                        ${formatMoney(tx.amount)}
+                    </td>
+
+                    <td class="p-4">
+
+                        <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-gray-100 text-gray-700">
+                            ${escapeHtml(status)}
+                        </span>
+
+                    </td>
+
+                    <td class="p-4 text-gray-500">
+                        ${formatDate(
+                            tx.createdAt ||
+                            tx.timestamp
+                        )}
+                    </td>
+
+                </tr>
+            `;
+
+        }).join("");
+
+
+    } catch (error) {
+
+        console.error("Transactions error:", error);
+
+        document.getElementById("totalTransactions").textContent =
+            "—";
+
+        document.getElementById("transactionsTable").innerHTML =
+            emptyRow("Unable to load transactions.", 5);
+
+    }
+
+}
+
+
+/* =========================================================
+   LOANS
+========================================================= */
+
+async function loadLoans() {
+
+    try {
+
+        const snapshot =
+            await getDocs(collection(db, "loans"));
+
+        const rows = [];
+
+        snapshot.forEach((docSnap) => {
+
+            rows.push({
+                id: docSnap.id,
+                ...docSnap.data()
+            });
+
+        });
+
+
+        document.getElementById("totalLoans").textContent =
+            rows.length;
+
+
+        const table =
+            document.getElementById("loansTable");
+
+
+        if (!rows.length) {
+
+            table.innerHTML =
+                emptyRow("No loan records found.", 4);
+
+            return;
+        }
+
+
+        table.innerHTML = rows.slice(0,100).map(loan => {
+
+            return `
+                <tr class="border-t hover:bg-gray-50">
+
+                    <td class="p-4 font-mono text-xs">
+                        ${escapeHtml(loan.userId || "—")}
+                    </td>
+
+                    <td class="p-4 font-bold">
+                        ${formatMoney(loan.amount)}
+                    </td>
+
+                    <td class="p-4">
+                        ${escapeHtml(
+                            String(
+                                loan.status ||
+                                "PENDING"
+                            ).toUpperCase()
+                        )}
+                    </td>
+
+                    <td class="p-4 text-gray-500">
+                        ${formatDate(
+                            loan.createdAt ||
+                            loan.timestamp
+                        )}
+                    </td>
+
+                </tr>
+            `;
+
+        }).join("");
+
+
+    } catch (error) {
+
+        console.error("Loans error:", error);
+
+        document.getElementById("totalLoans").textContent = "—";
+
+        document.getElementById("loansTable").innerHTML =
+            emptyRow("Unable to load loans.", 4);
+
+    }
+
+}
+
+
+/* =========================================================
+   CARDS
+========================================================= */
+
+async function loadCards() {
+
+    try {
+
+        const snapshot =
+            await getDocs(collection(db, "creditCards"));
+
+        const rows = [];
+
+        snapshot.forEach((docSnap) => {
+
+            rows.push({
+                id: docSnap.id,
+                ...docSnap.data()
+            });
+
+        });
+
+
+        const table =
+            document.getElementById("cardsTable");
+
+
+        if (!rows.length) {
+
+            table.innerHTML =
+                emptyRow("No card records found.", 4);
+
+            return;
+        }
+
+
+        table.innerHTML = rows.slice(0,100).map(card => {
+
+            return `
+                <tr class="border-t hover:bg-gray-50">
+
+                    <td class="p-4 font-mono text-xs">
+                        ${escapeHtml(card.userId || "—")}
+                    </td>
+
+                    <td class="p-4">
+                        ${escapeHtml(
+                            card.type ||
+                            card.cardType ||
+                            "CARD"
+                        )}
+                    </td>
+
+                    <td class="p-4">
+                        ${escapeHtml(
+                            String(
+                                card.status ||
+                                "ACTIVE"
+                            ).toUpperCase()
+                        )}
+                    </td>
+
+                    <td class="p-4 text-gray-500">
+                        ${formatDate(
+                            card.createdAt
+                        )}
+                    </td>
+
+                </tr>
+            `;
+
+        }).join("");
+
+
+    } catch (error) {
+
+        console.error("Cards error:", error);
+
+        document.getElementById("cardsTable").innerHTML =
+            emptyRow("Unable to load cards.", 4);
+
+    }
+
+}
+
+
+/* =========================================================
+   AUDIT LOGS
+========================================================= */
+
+async function loadAuditLogs() {
+
+    try {
+
+        const snapshot =
+            await getDocs(collection(db, "auditLogs"));
+
+        const rows = [];
+
+        snapshot.forEach((docSnap) => {
+
+            rows.push({
+                id: docSnap.id,
+                ...docSnap.data()
+            });
+
+        });
+
+
+        const table =
+            document.getElementById("auditTable");
+
+
+        if (!rows.length) {
+
+            table.innerHTML =
+                emptyRow("No audit logs found.", 4);
+
+            return;
+        }
+
+
+        table.innerHTML = rows.slice(0,100).map(log => {
+
+            return `
+                <tr class="border-t hover:bg-gray-50">
+
+                    <td class="p-4 font-semibold">
+                        ${escapeHtml(
+                            log.action || "—"
+                        )}
+                    </td>
+
+                    <td class="p-4 font-mono text-xs">
+                        ${escapeHtml(
+                            log.adminId || "—"
+                        )}
+                    </td>
+
+                    <td class="p-4">
+                        ${escapeHtml(
+                            log.targetId ||
+                            log.targetType ||
+                            "—"
+                        )}
+                    </td>
+
+                    <td class="p-4 text-gray-500">
+                        ${formatDate(
+                            log.timestamp ||
+                            log.createdAt
+                        )}
+                    </td>
+
+                </tr>
+            `;
+
+        }).join("");
+
+
+    } catch (error) {
+
+        console.error("Audit error:", error);
+
+        document.getElementById("auditTable").innerHTML =
+            emptyRow("Unable to load audit logs.", 4);
+
+    }
+
+}
+
+
+/* =========================================================
+   CUSTOMER TABLE
+========================================================= */
+
+function renderCustomers(list = customersCache) {
+
+    const table =
+        document.getElementById("customersTable");
+
+
+    if (!list.length) {
+
+        table.innerHTML =
+            emptyRow("No customers found.", 5);
+
+        return;
     }
 
 
-    return String(value)
-      .replaceAll("&", "&amp;")
-      .replaceAll("<", "&lt;")
-      .replaceAll(">", "&gt;")
-      .replaceAll('"', "&quot;")
-      .replaceAll("'", "&#039;");
-  }
+    table.innerHTML = list.slice(0,100).map(user => {
+
+        const status =
+            String(
+                user.status ||
+                "ACTIVE"
+            ).toUpperCase();
 
 
-  /* =========================================================
-     TABLE
-  ========================================================= */
+        return `
+            <tr class="border-t hover:bg-gray-50">
 
-  function createTable(
-    targetId,
-    rows,
-    columns
-  ) {
+                <td class="p-4">
 
-    const target =
-      $(targetId);
+                    <div class="font-bold">
+                        ${escapeHtml(
+                            user.fullName ||
+                            user.name ||
+                            "Unnamed customer"
+                        )}
+                    </div>
 
+                    <div class="text-xs text-gray-400 font-mono">
+                        ${escapeHtml(user.uid || user.id)}
+                    </div>
 
-    if (!rows.length) {
-
-      target.innerHTML =
-        `
-          <div class="py-10 text-center">
-            <div class="text-slate-400 text-sm">
-              No records found.
-            </div>
-          </div>
-        `;
-
-      return;
-    }
-
-
-    let html =
-      `
-        <div class="table-wrap">
-          <table class="w-full">
-            <thead>
-              <tr class="border-b border-slate-100">
-      `;
-
-
-    columns.forEach(
-      column => {
-
-        html +=
-          `
-            <th class="text-left px-4 py-3
-              text-xs uppercase tracking-wider
-              text-slate-400 font-bold">
-              ${escapeHtml(column.label)}
-            </th>
-          `;
-
-      }
-    );
-
-
-    html +=
-      `
-            </tr>
-          </thead>
-          <tbody>
-      `;
-
-
-    rows.forEach(
-      row => {
-
-        html +=
-          `
-            <tr class="border-b border-slate-50
-              hover:bg-slate-50">
-          `;
-
-
-        columns.forEach(
-          column => {
-
-            let value =
-              row[column.key];
-
-
-            if (
-              column.money &&
-              value !== undefined
-            ) {
-
-              value =
-                formatMoney(
-                  Number(value) || 0
-                );
-            }
-
-
-            if (
-              column.status
-            ) {
-
-              const status =
-                String(value || "UNKNOWN")
-                  .toUpperCase();
-
-
-              let cls =
-                "green-pill";
-
-
-              if (
-                status.includes("PENDING")
-              ) {
-                cls = "yellow-pill";
-              }
-
-
-              if (
-                status.includes("FAILED") ||
-                status.includes("REJECTED") ||
-                status.includes("INACTIVE")
-              ) {
-                cls = "red-pill";
-              }
-
-
-              value =
-                `
-                  <span class="status-pill ${cls}">
-                    ${escapeHtml(status)}
-                  </span>
-                `;
-
-            } else {
-
-              value =
-                escapeHtml(
-                  value === undefined ||
-                  value === null ||
-                  value === ""
-                    ? "—"
-                    : value
-                );
-            }
-
-
-            html +=
-              `
-                <td class="px-4 py-3
-                  text-sm text-slate-600">
-                  ${value}
                 </td>
-              `;
 
-          }
-        );
+                <td class="p-4">
+                    ${escapeHtml(
+                        user.email || "—"
+                    )}
+                </td>
 
+                <td class="p-4">
+                    ${escapeHtml(
+                        user.country || "—"
+                    )}
+                </td>
 
-        html +=
-          `
+                <td class="p-4 font-mono">
+                    ${escapeHtml(
+                        user.accountNumber || "—"
+                    )}
+                </td>
+
+                <td class="p-4">
+
+                    <span class="px-2.5 py-1 rounded-full text-xs font-bold bg-emerald-50 text-emerald-700">
+
+                        ${escapeHtml(status)}
+
+                    </span>
+
+                </td>
+
             </tr>
-          `;
-
-      }
-    );
-
-
-    html +=
-      `
-          </tbody>
-        </table>
-      </div>
-      `;
-
-
-    target.innerHTML =
-      html;
-  }
-
-
-  /* =========================================================
-     CUSTOMERS
-  ========================================================= */
-
-  function renderCustomers(rows) {
-
-    createTable(
-      "customersTable",
-      rows,
-      [
-        {
-          key: "fullName",
-          label: "Customer"
-        },
-        {
-          key: "email",
-          label: "Email"
-        },
-        {
-          key: "country",
-          label: "Country"
-        },
-        {
-          key: "accountNumber",
-          label: "Account"
-        },
-        {
-          key: "status",
-          label: "Status",
-          status: true
-        }
-      ]
-    );
-
-  }
-
-
-  /* =========================================================
-     ACCOUNTS
-  ========================================================= */
-
-  function renderAccounts(rows) {
-
-    createTable(
-      "accountsTable",
-      rows,
-      [
-        {
-          key: "accountNumber",
-          label: "Account Number"
-        },
-        {
-          key: "type",
-          label: "Type"
-        },
-        {
-          key: "userId",
-          label: "User ID"
-        },
-        {
-          key: "balance",
-          label: "Balance",
-          money: true
-        },
-        {
-          key: "isActive",
-          label: "Active"
-        }
-      ]
-    );
-
-  }
-
-
-  /* =========================================================
-     TRANSACTIONS
-  ========================================================= */
-
-  function renderTransactions(rows) {
-
-    createTable(
-      "transactionsTable",
-      rows,
-      [
-        {
-          key: "type",
-          label: "Type"
-        },
-        {
-          key: "userId",
-          label: "User ID"
-        },
-        {
-          key: "amount",
-          label: "Amount",
-          money: true
-        },
-        {
-          key: "status",
-          label: "Status",
-          status: true
-        },
-        {
-          key: "id",
-          label: "Transaction ID"
-        }
-      ]
-    );
-
-  }
-
-
-  /* =========================================================
-     LOANS
-  ========================================================= */
-
-  function renderLoans(rows) {
-
-    createTable(
-      "loansTable",
-      rows,
-      [
-        {
-          key: "userId",
-          label: "Customer"
-        },
-        {
-          key: "amount",
-          label: "Amount",
-          money: true
-        },
-        {
-          key: "status",
-          label: "Status",
-          status: true
-        },
-        {
-          key: "id",
-          label: "Loan ID"
-        }
-      ]
-    );
-
-  }
-
-
-  /* =========================================================
-     CARDS
-  ========================================================= */
-
-  function renderCards(rows) {
-
-    createTable(
-      "cardsTable",
-      rows,
-      [
-        {
-          key: "userId",
-          label: "Customer"
-        },
-        {
-          key: "status",
-          label: "Status",
-          status: true
-        },
-        {
-          key: "id",
-          label: "Card Record"
-        }
-      ]
-    );
-
-  }
-
-
-  /* =========================================================
-     AUDIT LOGS
-  ========================================================= */
-
-  function renderAuditLogs(rows) {
-
-    createTable(
-      "auditTable",
-      rows,
-      [
-        {
-          key: "action",
-          label: "Action"
-        },
-        {
-          key: "adminId",
-          label: "Admin"
-        },
-        {
-          key: "targetType",
-          label: "Target"
-        },
-        {
-          key: "targetId",
-          label: "Target ID"
-        },
-        {
-          key: "timestamp",
-          label: "Time"
-        }
-      ]
-    );
-
-  }
-
-
-  /* =========================================================
-     RECENT ACTIVITY
-  ========================================================= */
-
-  function renderRecentActivity(rows) {
-
-    const container =
-      $("recentActivity");
-
-
-    if (!rows.length) {
-
-      container.innerHTML =
-        `
-          <div class="py-6 text-center
-            text-sm text-slate-400">
-            No transaction activity yet.
-          </div>
         `;
 
-      return;
-    }
+    }).join("");
+
+}
 
 
-    const recent =
-      rows.slice(0, 5);
+/* =========================================================
+   RECENT CUSTOMERS
+========================================================= */
 
-
-    container.innerHTML =
-      recent.map(
-        row => {
-
-          const amount =
-            Number(row.amount) || 0;
-
-
-          const positive =
-            amount >= 0;
-
-
-          return `
-            <div
-              class="flex items-center gap-3
-              border-b border-slate-50 pb-3"
-            >
-
-              <div
-                class="w-9 h-9 rounded-xl
-                ${positive
-                  ? "bg-emerald-50 text-emerald-700"
-                  : "bg-red-50 text-red-700"}
-                flex items-center justify-center"
-              >
-
-                <svg
-                  width="17"
-                  height="17"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.8"
-                >
-                  <path d="M12 19V5"/>
-                  <path d="m6 11 6-6 6 6"/>
-                </svg>
-
-              </div>
-
-              <div class="min-w-0 flex-1">
-
-                <div class="font-semibold text-sm">
-                  ${escapeHtml(row.type || "Transaction")}
-                </div>
-
-                <div
-                  class="text-[11px]
-                  text-slate-400 truncate"
-                >
-                  ${escapeHtml(row.userId || "Unknown customer")}
-                </div>
-
-              </div>
-
-              <div
-                class="text-sm font-bold
-                ${positive
-                  ? "text-emerald-700"
-                  : "text-red-600"}"
-              >
-                ${positive ? "+" : ""}
-                ${formatMoney(amount)}
-              </div>
-
-            </div>
-          `;
-        }
-      )
-      .join("");
-
-  }
-
-
-  /* =========================================================
-     ACCOUNT DISTRIBUTION
-  ========================================================= */
-
-  function renderAccountDistribution(rows) {
+function renderRecentCustomers() {
 
     const container =
-      $("accountDistribution");
+        document.getElementById("recentCustomers");
 
 
-    const counts = {};
+    const users = [...customersCache];
 
 
-    rows.forEach(
-      account => {
+    users.sort((a,b) => {
 
-        const type =
-          String(
-            account.type ||
-            "OTHER"
-          ).toUpperCase();
+        const aTime =
+            a.createdAt?.toMillis
+                ? a.createdAt.toMillis()
+                : 0;
 
+        const bTime =
+            b.createdAt?.toMillis
+                ? b.createdAt.toMillis()
+                : 0;
 
-        counts[type] =
-          (counts[type] || 0) + 1;
-      }
-    );
+        return bTime - aTime;
 
-
-    const entries =
-      Object.entries(counts);
+    });
 
 
-    if (!entries.length) {
+    const recent = users.slice(0,5);
 
-      container.innerHTML =
-        `
-          <div class="text-sm text-slate-400">
-            No account records yet.
-          </div>
+
+    if (!recent.length) {
+
+        container.innerHTML = `
+            <div class="p-6 text-center text-gray-400">
+                No customers yet.
+            </div>
         `;
 
-      return;
+        return;
     }
 
 
-    const total =
-      rows.length;
+    container.innerHTML = recent.map(user => {
+
+        const name =
+            user.fullName ||
+            user.name ||
+            "Unnamed customer";
 
 
-    container.innerHTML =
-      entries.map(
-        ([type, count]) => {
-
-          const percentage =
-            Math.round(
-              (count / total) * 100
-            );
+        const initial =
+            name.charAt(0).toUpperCase();
 
 
-          return `
-            <div>
+        return `
+            <div class="p-4 flex items-center justify-between gap-4">
 
-              <div
-                class="flex justify-between
-                text-sm mb-2"
-              >
-                <span class="font-medium">
-                  ${escapeHtml(type)}
-                </span>
+                <div class="flex items-center gap-3 min-w-0">
 
-                <span class="text-slate-500">
-                  ${count}
-                </span>
-              </div>
+                    <div class="w-10 h-10 rounded-full bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold flex-shrink-0">
 
-              <div
-                class="h-2 bg-slate-100
-                rounded-full overflow-hidden"
-              >
-                <div
-                  class="h-full bg-emerald-700
-                  rounded-full"
-                  style="width:${percentage}%"
-                ></div>
-              </div>
+                        ${escapeHtml(initial)}
+
+                    </div>
+
+                    <div class="min-w-0">
+
+                        <div class="font-semibold truncate">
+                            ${escapeHtml(name)}
+                        </div>
+
+                        <div class="text-xs text-gray-400 truncate">
+                            ${escapeHtml(
+                                user.email || "No email"
+                            )}
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="text-right flex-shrink-0">
+
+                    <div class="text-xs text-gray-400">
+                        ${formatDate(user.createdAt)}
+                    </div>
+
+                </div>
 
             </div>
-          `;
+        `;
 
-        }
-      )
-      .join("");
+    }).join("");
 
-  }
+}
 
 
-  /* =========================================================
-     CHART
-  ========================================================= */
+/* =========================================================
+   CUSTOMER SEARCH
+========================================================= */
 
-  function createChart(rows) {
+window.filterCustomers = function() {
 
-    const canvas =
-      $("activityChart");
+    const search =
+        document.getElementById("customerSearch")
+            .value
+            .toLowerCase()
+            .trim();
 
 
-    if (!canvas) return;
+    if (!search) {
 
+        renderCustomers();
 
-    if (activityChart) {
-
-      activityChart.destroy();
+        return;
     }
 
 
-    const labels = [
-      "Mon",
-      "Tue",
-      "Wed",
-      "Thu",
-      "Fri",
-      "Sat",
-      "Sun"
-    ];
+    const filtered =
+        customersCache.filter(user => {
 
-
-    const values =
-      [0, 0, 0, 0, 0, 0, 0];
-
-
-    rows
-      .slice(0, 100)
-      .forEach(
-        row => {
-
-          const amount =
-            Math.abs(
-              Number(row.amount) || 0
-            );
-
-
-          if (amount > 0) {
-
-            const index =
-              Math.floor(
-                Math.random() * 7
-              );
-
-
-            values[index] +=
-              amount;
-          }
-
-        }
-      );
-
-
-    activityChart =
-      new Chart(
-        canvas,
-        {
-          type: "line",
-
-          data: {
-
-            labels,
-
-            datasets: [
-              {
-                label:
-                  "Transaction activity",
-
-                data:
-                  values,
-
-                borderColor:
-                  "#087443",
-
-                backgroundColor:
-                  "rgba(8,116,67,.08)",
-
-                fill: true,
-
-                tension: .4,
-
-                borderWidth: 2,
-
-                pointRadius: 3,
-
-                pointBackgroundColor:
-                  "#087443"
-              }
+            const text = [
+                user.fullName,
+                user.name,
+                user.email,
+                user.country,
+                user.accountNumber,
+                user.uid,
+                user.id
             ]
-
-          },
-
-          options: {
-
-            responsive: true,
-
-            maintainAspectRatio: false,
-
-            plugins: {
-
-              legend: {
-                display: false
-              }
-
-            },
-
-            scales: {
-
-              x: {
-                grid: {
-                  display: false
-                }
-              },
-
-              y: {
-                beginAtZero: true,
-
-                grid: {
-                  color:
-                    "#eef2f0"
-                },
-
-                ticks: {
-                  callback:
-                    value =>
-                      "$" +
-                      Number(value).toLocaleString()
-                }
-              }
-
-            }
-          }
-
-        }
-      );
-
-  }
-
-
-  /* =========================================================
-     NAVIGATION
-  ========================================================= */
-
-  document
-    .querySelectorAll(".nav-item[data-section]")
-    .forEach(
-      button => {
-
-        button.addEventListener(
-          "click",
-          () => {
-
-            const section =
-              button.dataset.section;
-
-
-            document
-              .querySelectorAll(".nav-item[data-section]")
-              .forEach(
-                item =>
-                  item.classList.remove("active")
-              );
-
-
-            button.classList.add("active");
-
-
-            document
-              .querySelectorAll(".page-section")
-              .forEach(
-                page =>
-                  page.classList.add("hidden")
-              );
-
-
-            const target =
-              $(
-                section +
-                "Section"
-              );
-
-
-            if (target) {
-
-              target.classList.remove("hidden");
-            }
-
-
-            $("sidebar")
-              .classList.remove("open");
-
-
-            $("sidebarOverlay")
-              .classList.remove("show");
-
-          }
-        );
-
-      }
-    );
-
-
-  /* =========================================================
-     LOGOUT
-  ========================================================= */
-
-  $("logoutButton")
-    .addEventListener(
-      "click",
-      async () => {
-
-        await signOut(auth);
-
-        currentUser = null;
-
-        showLogin();
-
-        $("loginForm").reset();
-
-      }
-    );
-
-
-  /* =========================================================
-     REFRESH
-  ========================================================= */
-
-  $("refreshButton")
-    .addEventListener(
-      "click",
-      async () => {
-
-        toast("Refreshing dashboard...");
-
-        await loadEverything();
-
-        toast("Dashboard refreshed.");
-
-      }
-    );
-
-
-  $("customersRefresh")
-    .addEventListener(
-      "click",
-      loadEverything
-    );
-
-
-  /* =========================================================
-     VIEW TRANSACTIONS
-  ========================================================= */
-
-  $("viewTransactionsButton")
-    .addEventListener(
-      "click",
-      () => {
-
-        document
-          .querySelectorAll(".nav-item[data-section]")
-          .forEach(
-            item => {
-
-              item.classList.remove("active");
-
-              if (
-                item.dataset.section ===
-                "transactions"
-              ) {
-                item.classList.add("active");
-              }
-            }
-          );
-
-
-        document
-          .querySelectorAll(".page-section")
-          .forEach(
-            page =>
-              page.classList.add("hidden")
-          );
-
-
-        $("transactionsSection")
-          .classList.remove("hidden");
-
-      }
-    );
-
-
-  /* =========================================================
-     ADD CUSTOMER BUTTON
-  ========================================================= */
-
-  $("addCustomerButton")
-    .addEventListener(
-      "click",
-      () => {
-
-        toast(
-          "Customer creation should use the secure backend workflow."
-        );
-
-        document
-          .querySelectorAll(".nav-item[data-section]")
-          .forEach(
-            item => {
-
-              item.classList.remove("active");
-
-              if (
-                item.dataset.section ===
-                "customers"
-              ) {
-                item.classList.add("active");
-              }
-
-            }
-          );
-
-
-        document
-          .querySelectorAll(".page-section")
-          .forEach(
-            page =>
-              page.classList.add("hidden")
-          );
-
-
-        $("customersSection")
-          .classList.remove("hidden");
-
-      }
-    );
-
-
-  /* =========================================================
-     NOTIFICATION
-  ========================================================= */
-
-  $("notificationButton")
-    .addEventListener(
-      "click",
-      () => {
-
-        toast(
-          "No new administrator notifications."
-        );
-
-      }
-    );
-
-
-  /* =========================================================
-     SETTINGS
-  ========================================================= */
-
-  $("settingsButton")
-    .addEventListener(
-      "click",
-      () => {
-
-        toast(
-          "Administrator settings are coming in the next dashboard update."
-        );
-
-      }
-    );
-
-
-  /* =========================================================
-     MOBILE SIDEBAR
-  ========================================================= */
-
-  $("mobileMenuButton")
-    .addEventListener(
-      "click",
-      () => {
-
-        $("sidebar")
-          .classList.add("open");
-
-        $("sidebarOverlay")
-          .classList.add("show");
-
-      }
-    );
-
-
-  $("sidebarOverlay")
-    .addEventListener(
-      "click",
-      () => {
-
-        $("sidebar")
-          .classList.remove("open");
-
-        $("sidebarOverlay")
-          .classList.remove("show");
-
-      }
-    );
-
-
-  /* =========================================================
-     SEARCH
-  ========================================================= */
-
-  $("globalSearch")
-    .addEventListener(
-      "input",
-      event => {
-
-        const search =
-          event.target.value
-            .trim()
+            .filter(Boolean)
+            .join(" ")
             .toLowerCase();
 
 
-        if (!search) return;
+            return text.includes(search);
+
+        });
 
 
-        toast(
-          "Search is ready for the customer records."
-        );
+    renderCustomers(filtered);
 
-      }
+};
+
+
+/* =========================================================
+   SECTION NAVIGATION
+========================================================= */
+
+window.showSection = function(section) {
+
+    const sections = [
+        "dashboard",
+        "customers",
+        "accounts",
+        "transactions",
+        "loans",
+        "cards",
+        "audit"
+    ];
+
+
+    sections.forEach(name => {
+
+        const element =
+            document.getElementById(
+                "section-" + name
+            );
+
+        if (element) {
+
+            element.classList.toggle(
+                "hidden",
+                name !== section
+            );
+
+        }
+
+    });
+
+
+    document.querySelectorAll("[data-section]")
+        .forEach(button => {
+
+            button.classList.toggle(
+                "active",
+                button.dataset.section === section
+            );
+
+        });
+
+
+    const titles = {
+        dashboard: "Dashboard",
+        customers: "Customers",
+        accounts: "Accounts",
+        transactions: "Transactions",
+        loans: "Loans",
+        cards: "Cards",
+        audit: "Audit Logs"
+    };
+
+
+    document.getElementById("pageTitle")
+        .textContent =
+        titles[section] || "Dashboard";
+
+
+    closeMobileSidebar();
+
+};
+
+
+/* =========================================================
+   MOBILE SIDEBAR
+========================================================= */
+
+const mobileSidebar =
+    document.getElementById("mobileSidebar");
+
+const sidebarOverlay =
+    document.getElementById("sidebarOverlay");
+
+
+function openMobileSidebar() {
+
+    mobileSidebar.classList.add("open");
+    sidebarOverlay.classList.add("show");
+
+}
+
+
+function closeMobileSidebar() {
+
+    mobileSidebar.classList.remove("open");
+    sidebarOverlay.classList.remove("show");
+
+}
+
+
+document.getElementById("openSidebar")
+    .addEventListener(
+        "click",
+        openMobileSidebar
     );
 
 
-</script>
-
-
-<!-- =========================================================
-     TAWK.TO LIVE CHAT
-========================================================= -->
-<script type="text/javascript">
-
-  var Tawk_API = Tawk_API || {},
-      Tawk_LoadStart = new Date();
-
-  (function () {
-
-    var s1 = document.createElement("script"),
-        s0 = document.getElementsByTagName("script")[0];
-
-    s1.async = true;
-
-    s1.src =
-      "https://embed.tawk.to/6aad7099ecbade3448f2e8f2e8f2e8f2/default";
-
-    s1.charset = "UTF-8";
-
-    s1.setAttribute(
-      "crossorigin",
-      "*"
+document.getElementById("closeSidebar")
+    .addEventListener(
+        "click",
+        closeMobileSidebar
     );
 
-    s0.parentNode.insertBefore(
-      s1,
-      s0
+
+sidebarOverlay.addEventListener(
+    "click",
+    closeMobileSidebar
+);
+
+
+/* =========================================================
+   SIGN OUT
+========================================================= */
+
+async function logout() {
+
+    try {
+
+        await signOut(auth);
+
+    } catch (error) {
+
+        console.error(error);
+
+    }
+
+}
+
+
+document.getElementById("logoutButton")
+    .addEventListener(
+        "click",
+        logout
     );
 
-  })();
+
+document.getElementById("mobileLogout")
+    .addEventListener(
+        "click",
+        logout
+    );
+
+
+document.getElementById("deniedSignOut")
+    .addEventListener(
+        "click",
+        logout
+    );
+
 
 </script>
 
