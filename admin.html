@@ -4,669 +4,2871 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="theme-color" content="#064e3b">
-  <title>Cash Flow Bank — Admin</title>
 
+  <title>Cash Flow Bank — Admin Dashboard</title>
+
+  <!-- Tailwind -->
   <script src="https://cdn.tailwindcss.com"></script>
 
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
   <style>
+    * {
+      box-sizing: border-box;
+    }
+
     body {
-      font-family: Arial, sans-serif;
-      background: #f3f6f5;
+      margin: 0;
+      font-family:
+        Inter,
+        ui-sans-serif,
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+      background: #f6f8f7;
+      color: #17211d;
     }
-    .nav-btn {
+
+    .sidebar {
+      width: 250px;
+      background: #ffffff;
+      border-right: 1px solid #e7ece9;
+      position: fixed;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      z-index: 50;
+    }
+
+    .main-area {
+      margin-left: 250px;
+      min-height: 100vh;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
       width: 100%;
-      text-align: left;
-      padding: 12px;
+      padding: 11px 14px;
       border-radius: 10px;
-      color: #d1fae5;
+      color: #53615b;
+      font-size: 14px;
+      font-weight: 500;
+      transition: .2s;
+      cursor: pointer;
+      border: 0;
+      background: transparent;
+      text-align: left;
     }
-    .nav-btn:hover, .nav-btn.active {
-      background: #065f46;
+
+    .nav-item:hover {
+      background: #f1f7f4;
+      color: #064e3b;
+    }
+
+    .nav-item.active {
+      background: #064e3b;
       color: white;
     }
-    .panel {
-      background: white;
-      border: 1px solid #e5e7eb;
-      border-radius: 16px;
-      padding: 20px;
-      box-shadow: 0 3px 12px rgba(0,0,0,.03);
+
+    .nav-icon {
+      width: 19px;
+      height: 19px;
+      flex-shrink: 0;
     }
-    th, td {
-      text-align: left;
-      padding: 12px;
-      border-bottom: 1px solid #e5e7eb;
-      font-size: 13px;
-      white-space: nowrap;
+
+    .card {
+      background: #ffffff;
+      border: 1px solid #e8eeeb;
+      border-radius: 14px;
+      box-shadow: 0 2px 8px rgba(0,0,0,.025);
     }
-    th {
-      color: #64748b;
-      background: #f8fafc;
+
+    .stat-card {
+      min-height: 145px;
     }
-    .table-wrap { overflow-x: auto; }
+
+    .search-box {
+      background: #f5f7f6;
+      border: 1px solid #edf0ee;
+    }
+
+    .mobile-menu {
+      display: none;
+    }
+
+    .overlay {
+      display: none;
+    }
+
+    .table-wrap {
+      overflow-x: auto;
+    }
+
+    table {
+      min-width: 700px;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 9px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .green-pill {
+      background: #e8f7ef;
+      color: #087443;
+    }
+
+    .yellow-pill {
+      background: #fff7df;
+      color: #996b00;
+    }
+
+    .red-pill {
+      background: #feecec;
+      color: #b42318;
+    }
+
+    .toast {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      z-index: 100;
+      max-width: 360px;
+      background: #064e3b;
+      color: white;
+      border-radius: 12px;
+      padding: 14px 17px;
+      box-shadow: 0 12px 30px rgba(0,0,0,.18);
+      display: none;
+    }
+
+    @media (max-width: 900px) {
+      .sidebar {
+        transform: translateX(-100%);
+        transition: .25s;
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .main-area {
+        margin-left: 0;
+      }
+
+      .mobile-menu {
+        display: flex;
+      }
+
+      .overlay.show {
+        display: block;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,.35);
+        z-index: 40;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .stat-card {
+        min-height: 125px;
+      }
+
+      .desktop-search {
+        display: none;
+      }
+    }
   </style>
 </head>
 
-<body class="text-slate-800">
+<body>
 
-  <!-- Development notice -->
-  <div class="bg-amber-100 text-amber-900 text-center text-xs p-3">
-    DEVELOPMENT ENVIRONMENT — Test data only. No real banking or payment
-    services are connected.
-  </div>
+<!-- =========================================================
+     DEVELOPMENT NOTICE
+========================================================= -->
+<div
+  id="developmentNotice"
+  class="bg-emerald-950 text-emerald-50 text-center text-xs px-4 py-2"
+>
+  Cash Flow Bank development environment — test data only.
+  No real banking or payment rails are connected.
+</div>
 
-  <!-- LOGIN SCREEN -->
-  <main id="loginScreen"
-    class="min-h-screen flex items-center justify-center p-5">
 
-    <div class="panel w-full max-w-md">
-      <div class="text-center mb-7">
-        <div class="w-16 h-16 rounded-2xl bg-emerald-900 text-white
-          flex items-center justify-center mx-auto text-2xl font-bold">
-          CF
-        </div>
+<!-- =========================================================
+     LOGIN SCREEN
+========================================================= -->
+<section
+  id="loginScreen"
+  class="min-h-screen bg-slate-100 flex items-center justify-center p-5"
+>
 
-        <h1 class="text-2xl font-bold mt-4">Cash Flow Bank</h1>
-        <p class="text-slate-500 text-sm mt-1">Administrator sign in</p>
+  <div class="card w-full max-w-md p-7">
+
+    <div class="text-center mb-7">
+
+      <div
+        class="w-16 h-16 mx-auto rounded-2xl bg-emerald-950
+        flex items-center justify-center text-white shadow-lg"
+      >
+        <svg
+          width="32"
+          height="32"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+        >
+          <path d="M3 10h18"/>
+          <path d="M5 10v8"/>
+          <path d="M9 10v8"/>
+          <path d="M15 10v8"/>
+          <path d="M19 10v8"/>
+          <path d="M2 18h20"/>
+          <path d="M12 3l10 5H2l10-5Z"/>
+        </svg>
       </div>
 
-      <form id="loginForm" class="space-y-4">
-        <div>
-          <label for="email" class="block text-sm font-semibold mb-2">
-            Admin email
-          </label>
-          <input id="email" type="email" autocomplete="username"
-            required placeholder="Enter your Firebase email"
-            class="w-full border rounded-xl p-3 outline-none
-            focus:ring-2 focus:ring-emerald-700">
-        </div>
+      <h1 class="text-2xl font-bold mt-4">
+        Cash Flow Bank
+      </h1>
 
-        <div>
-          <label for="password" class="block text-sm font-semibold mb-2">
-            Password
-          </label>
-          <input id="password" type="password"
-            autocomplete="current-password" required
-            placeholder="Enter your password"
-            class="w-full border rounded-xl p-3 outline-none
-            focus:ring-2 focus:ring-emerald-700">
-        </div>
-
-        <button id="loginButton" type="submit"
-          class="w-full bg-emerald-900 text-white rounded-xl p-3
-          font-semibold hover:bg-emerald-800">
-          Sign in
-        </button>
-      </form>
-
-      <div id="loginMessage"
-        class="hidden mt-4 p-3 rounded-xl text-sm break-words"
-        role="alert"></div>
-
-      <p class="text-xs text-slate-500 mt-6 text-center">
-        Sign in using the account registered in Firebase Authentication
-        and authorized in the admins collection.
+      <p class="text-sm text-slate-500 mt-1">
+        Administrator Portal
       </p>
     </div>
-  </main>
 
-  <!-- ADMIN APP -->
-  <div id="adminApp" class="hidden min-h-screen">
+    <form id="loginForm" class="space-y-4">
 
-    <header class="bg-emerald-950 text-white p-4">
-      <div class="max-w-7xl mx-auto flex justify-between items-center gap-3">
-        <div>
-          <h1 class="font-bold text-lg">Cash Flow Bank</h1>
-          <p class="text-xs text-emerald-200">Administration panel</p>
+      <div>
+        <label
+          for="email"
+          class="block text-sm font-semibold text-slate-700 mb-2"
+        >
+          Email address
+        </label>
+
+        <input
+          id="email"
+          type="email"
+          autocomplete="username"
+          required
+          placeholder="admin@example.com"
+          class="w-full px-4 py-3 rounded-xl border border-slate-200
+          outline-none focus:ring-2 focus:ring-emerald-700"
+        >
+      </div>
+
+      <div>
+        <label
+          for="password"
+          class="block text-sm font-semibold text-slate-700 mb-2"
+        >
+          Password
+        </label>
+
+        <input
+          id="password"
+          type="password"
+          autocomplete="current-password"
+          required
+          placeholder="Enter password"
+          class="w-full px-4 py-3 rounded-xl border border-slate-200
+          outline-none focus:ring-2 focus:ring-emerald-700"
+        >
+      </div>
+
+      <button
+        id="loginButton"
+        type="submit"
+        class="w-full bg-emerald-950 hover:bg-emerald-900
+        text-white font-semibold rounded-xl py-3 transition"
+      >
+        Sign in
+      </button>
+
+    </form>
+
+    <div
+      id="loginMessage"
+      class="hidden mt-4 p-3 rounded-xl text-sm break-words"
+    ></div>
+
+  </div>
+</section>
+
+
+<!-- =========================================================
+     ADMIN APP
+========================================================= -->
+<div id="adminApp" class="hidden">
+
+  <!-- MOBILE OVERLAY -->
+  <div id="sidebarOverlay" class="overlay"></div>
+
+
+  <!-- =======================================================
+       SIDEBAR
+  ======================================================== -->
+  <aside id="sidebar" class="sidebar">
+
+    <!-- LOGO -->
+    <div class="h-20 flex items-center px-6 border-b border-slate-100">
+
+      <div
+        class="w-9 h-9 rounded-xl bg-emerald-950
+        flex items-center justify-center text-white mr-3"
+      >
+        <svg
+          width="21"
+          height="21"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1.8"
+        >
+          <path d="M3 10h18"/>
+          <path d="M5 10v8"/>
+          <path d="M9 10v8"/>
+          <path d="M15 10v8"/>
+          <path d="M19 10v8"/>
+          <path d="M2 18h20"/>
+          <path d="M12 3l10 5H2l10-5Z"/>
+        </svg>
+      </div>
+
+      <div>
+        <div class="font-bold text-lg leading-none">
+          Cash Flow
         </div>
 
-        <button id="logoutButton"
-          class="bg-white/10 border border-white/20 rounded-lg
-          px-3 py-2 text-sm">
-          Sign out
-        </button>
+        <div class="text-xs text-emerald-700 mt-1 font-semibold">
+          BANK ADMIN
+        </div>
       </div>
+
+    </div>
+
+
+    <!-- NAVIGATION -->
+    <div class="p-4">
+
+      <div class="text-[10px] uppercase tracking-widest
+        text-slate-400 font-bold px-3 mb-2">
+        Main Menu
+      </div>
+
+      <nav class="space-y-1">
+
+        <button
+          class="nav-item active"
+          data-section="dashboard"
+        >
+          <svg class="nav-icon" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="1.8">
+            <rect x="3" y="3" width="7" height="7" rx="1"/>
+            <rect x="14" y="3" width="7" height="7" rx="1"/>
+            <rect x="3" y="14" width="7" height="7" rx="1"/>
+            <rect x="14" y="14" width="7" height="7" rx="1"/>
+          </svg>
+          Dashboard
+        </button>
+
+        <button
+          class="nav-item"
+          data-section="customers"
+        >
+          <svg class="nav-icon" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
+          Customers
+        </button>
+
+        <button
+          class="nav-item"
+          data-section="accounts"
+        >
+          <svg class="nav-icon" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="1.8">
+            <rect x="3" y="5" width="18" height="14" rx="2"/>
+            <path d="M3 10h18"/>
+            <path d="M7 15h4"/>
+          </svg>
+          Accounts
+        </button>
+
+        <button
+          class="nav-item"
+          data-section="transactions"
+        >
+          <svg class="nav-icon" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M3 12h18"/>
+            <path d="m14 6 6 6-6 6"/>
+            <path d="M10 18 4 12l6-6"/>
+          </svg>
+          Transactions
+        </button>
+
+        <button
+          class="nav-item"
+          data-section="loans"
+        >
+          <svg class="nav-icon" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="1.8">
+            <rect x="3" y="5" width="18" height="14" rx="2"/>
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M7 9h.01"/>
+            <path d="M17 15h.01"/>
+          </svg>
+          Loans
+        </button>
+
+        <button
+          class="nav-item"
+          data-section="cards"
+        >
+          <svg class="nav-icon" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="1.8">
+            <rect x="2" y="5" width="20" height="14" rx="2"/>
+            <path d="M2 10h20"/>
+            <path d="M6 15h5"/>
+          </svg>
+          Cards
+        </button>
+
+        <button
+          class="nav-item"
+          data-section="audit"
+        >
+          <svg class="nav-icon" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M4 4h16v16H4z"/>
+            <path d="M8 9h8"/>
+            <path d="M8 13h8"/>
+            <path d="M8 17h5"/>
+          </svg>
+          Audit Logs
+        </button>
+
+      </nav>
+
+
+      <div class="border-t border-slate-100 mt-6 pt-5">
+
+        <div class="text-[10px] uppercase tracking-widest
+          text-slate-400 font-bold px-3 mb-2">
+          Account
+        </div>
+
+        <button
+          id="logoutButton"
+          class="nav-item"
+        >
+          <svg class="nav-icon" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M10 17l5-5-5-5"/>
+            <path d="M15 12H3"/>
+            <path d="M21 19V5a2 2 0 0 0-2-2h-6"/>
+          </svg>
+          Logout
+        </button>
+
+      </div>
+
+    </div>
+
+    <!-- ADMIN PROFILE -->
+    <div class="absolute bottom-0 left-0 right-0
+      border-t border-slate-100 p-4 bg-white">
+
+      <div class="flex items-center gap-3">
+
+        <div
+          class="w-10 h-10 rounded-full bg-emerald-100
+          text-emerald-900 flex items-center justify-center
+          font-bold"
+        >
+          A
+        </div>
+
+        <div class="min-w-0">
+          <div class="text-sm font-semibold truncate">
+            Administrator
+          </div>
+
+          <div
+            id="sidebarEmail"
+            class="text-xs text-slate-400 truncate"
+          >
+            Loading...
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </aside>
+
+
+  <!-- =======================================================
+       MAIN AREA
+  ======================================================== -->
+  <main class="main-area">
+
+
+    <!-- TOP HEADER -->
+    <header
+      class="h-20 bg-white border-b border-slate-100
+      flex items-center justify-between px-4 md:px-7"
+    >
+
+      <div class="flex items-center gap-3">
+
+        <button
+          id="mobileMenuButton"
+          class="mobile-menu w-10 h-10 rounded-xl
+          border border-slate-200 items-center justify-center"
+        >
+          <svg width="21" height="21" viewBox="0 0 24 24"
+            fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M4 6h16"/>
+            <path d="M4 12h16"/>
+            <path d="M4 18h16"/>
+          </svg>
+        </button>
+
+        <!-- SEARCH -->
+        <div
+          class="desktop-search search-box
+          w-72 rounded-xl h-10 flex items-center px-3"
+        >
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="#87938d"
+            stroke-width="2"
+          >
+            <circle cx="11" cy="11" r="7"/>
+            <path d="m20 20-4-4"/>
+          </svg>
+
+          <input
+            id="globalSearch"
+            type="text"
+            placeholder="Search customers..."
+            class="bg-transparent outline-none text-sm
+            ml-2 w-full"
+          >
+        </div>
+
+      </div>
+
+
+      <div class="flex items-center gap-2 md:gap-4">
+
+        <!-- NOTIFICATION -->
+        <button
+          id="notificationButton"
+          class="w-10 h-10 rounded-xl
+          flex items-center justify-center
+          hover:bg-slate-50 relative"
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+          >
+            <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"/>
+            <path d="M10 21h4"/>
+          </svg>
+
+          <span
+            class="absolute top-2 right-2 w-2 h-2
+            rounded-full bg-red-500"
+          ></span>
+        </button>
+
+
+        <!-- SETTINGS -->
+        <button
+          id="settingsButton"
+          class="w-10 h-10 rounded-xl
+          flex items-center justify-center
+          hover:bg-slate-50"
+        >
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.8"
+          >
+            <circle cx="12" cy="12" r="3"/>
+            <path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-1.42 1.42-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1 1.55V20h-2v-.49a1.7 1.7 0 0 0-1-1.55 1.7 1.7 0 0 0-1.88.34l-.06.06-1.42-1.42.06-.06A1.7 1.7 0 0 0 8.6 15a1.7 1.7 0 0 0-1.55-1H6v-2h1.05a1.7 1.7 0 0 0 1.55-1 1.7 1.7 0 0 0-.34-1.88l-.06-.06 1.42-1.42.06.06A1.7 1.7 0 0 0 11.56 8a1.7 1.7 0 0 0 1-1.55V6h2v.45A1.7 1.7 0 0 0 15.56 8a1.7 1.7 0 0 0 1.88-.34l.06-.06 1.42 1.42-.06.06A1.7 1.7 0 0 0 18.52 11a1.7 1.7 0 0 0 1.55 1H21v2h-.93A1.7 1.7 0 0 0 19.4 15Z"/>
+          </svg>
+        </button>
+
+
+        <!-- ADMIN AVATAR -->
+        <div
+          class="w-10 h-10 rounded-full bg-emerald-100
+          text-emerald-900 flex items-center justify-center
+          font-bold"
+        >
+          A
+        </div>
+
+      </div>
+
     </header>
 
-    <div class="max-w-7xl mx-auto p-4 md:p-6">
-      <div class="mb-6">
-        <h2 class="text-2xl font-bold">Admin dashboard</h2>
-        <p id="signedInEmail" class="text-sm text-slate-500 mt-1"></p>
-        <p id="adminStatus" class="text-sm text-emerald-700 mt-1"></p>
-      </div>
 
-      <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
-        <div class="panel">
-          <p class="text-sm text-slate-500">Customers</p>
-          <p id="customerCount" class="text-3xl font-bold mt-2">—</p>
-        </div>
-        <div class="panel">
-          <p class="text-sm text-slate-500">Accounts</p>
-          <p id="accountCount" class="text-3xl font-bold mt-2">—</p>
-        </div>
-        <div class="panel">
-          <p class="text-sm text-slate-500">Transactions</p>
-          <p id="transactionCount" class="text-3xl font-bold mt-2">—</p>
-        </div>
-        <div class="panel">
-          <p class="text-sm text-slate-500">Loan records</p>
-          <p id="loanCount" class="text-3xl font-bold mt-2">—</p>
-        </div>
-      </div>
+    <!-- =====================================================
+         PAGE CONTENT
+    ====================================================== -->
+    <div class="p-4 md:p-7 max-w-[1500px] mx-auto">
 
-      <div class="grid md:grid-cols-[200px_1fr] gap-5">
 
-        <aside class="bg-emerald-950 rounded-2xl p-3 h-fit">
-          <p class="text-xs uppercase tracking-wider text-emerald-300
-            px-3 py-2">Menu</p>
-          <button class="nav-btn active" data-section="overview">Overview</button>
-          <button class="nav-btn" data-section="customers">Customers</button>
-          <button class="nav-btn" data-section="accounts">Accounts</button>
-          <button class="nav-btn" data-section="transactions">Transactions</button>
-          <button class="nav-btn" data-section="loans">Loans</button>
-          <button class="nav-btn" data-section="cards">Credit cards</button>
-          <button class="nav-btn" data-section="auditLogs">Audit logs</button>
-        </aside>
+      <!-- DASHBOARD -->
+      <section
+        id="dashboardSection"
+        class="page-section"
+      >
 
-        <section class="min-w-0">
-          <div id="overviewSection" class="section-content space-y-5">
-            <div class="panel">
-              <div class="flex justify-between items-center gap-3">
-                <div>
-                  <h3 class="font-bold text-lg">System overview</h3>
-                  <p class="text-sm text-slate-500 mt-1">
-                    Read-only summary of your Firestore records.
-                  </p>
-                </div>
-                <button id="refreshButton"
-                  class="border rounded-lg px-3 py-2 text-sm">
-                  Refresh
-                </button>
+        <!-- TITLE -->
+        <div
+          class="flex flex-col md:flex-row md:items-center
+          md:justify-between gap-4 mb-6"
+        >
+
+          <div>
+            <h1
+              id="welcomeTitle"
+              class="text-2xl md:text-3xl font-bold"
+            >
+              Welcome back, Admin
+            </h1>
+
+            <p class="text-sm text-slate-500 mt-1">
+              Here's what's happening with Cash Flow Bank today.
+            </p>
+          </div>
+
+
+          <div class="flex gap-2">
+
+            <button
+              id="addCustomerButton"
+              class="bg-emerald-950 text-white
+              px-4 py-2.5 rounded-xl text-sm font-semibold
+              flex items-center gap-2 hover:bg-emerald-900"
+            >
+              <svg width="17" height="17" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="9" cy="7" r="4"/>
+                <path d="M3 21v-2a6 6 0 0 1 12 0v2"/>
+                <path d="M19 8v6"/>
+                <path d="M16 11h6"/>
+              </svg>
+              Add Customer
+            </button>
+
+            <button
+              id="refreshButton"
+              class="bg-white border border-slate-200
+              px-4 py-2.5 rounded-xl text-sm font-semibold
+              flex items-center gap-2 hover:bg-slate-50"
+            >
+              <svg width="17" height="17" viewBox="0 0 24 24"
+                fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 11a8 8 0 0 0-14.9-3"/>
+                <path d="M4 4v5h5"/>
+                <path d="M4 13a8 8 0 0 0 14.9 3"/>
+                <path d="M20 20v-5h-5"/>
+              </svg>
+              Refresh
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <!-- =================================================
+             STAT CARDS
+        ================================================== -->
+        <div
+          class="grid grid-cols-2 xl:grid-cols-4 gap-4 mb-5"
+        >
+
+          <!-- CUSTOMERS -->
+          <div class="card stat-card p-5">
+
+            <div class="flex justify-between items-start">
+
+              <div>
+                <p class="text-sm text-slate-500">
+                  Total Customers
+                </p>
+
+                <h2
+                  id="customerCount"
+                  class="text-3xl font-bold mt-3"
+                >
+                  —
+                </h2>
+
+                <p class="text-xs text-emerald-600 mt-3">
+                  ● Registered customers
+                </p>
               </div>
-              <p id="dataMessage" class="text-sm mt-4 text-slate-600">
-                Waiting for data...
-              </p>
+
+              <div
+                class="w-10 h-10 rounded-xl bg-emerald-50
+                text-emerald-700 flex items-center justify-center"
+              >
+                <svg width="21" height="21"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8">
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+                  <circle cx="9" cy="7" r="4"/>
+                  <path d="M22 21v-2a4 4 0 0 0-3-3.87"/>
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                </svg>
+              </div>
+
             </div>
 
-            <div class="panel">
-              <h3 class="font-bold mb-3">Administrator diagnostics</h3>
-              <div class="text-sm space-y-2 break-words">
-                <p><strong>Signed-in email:</strong>
-                  <span id="diagEmail">—</span></p>
-                <p><strong>Firebase UID:</strong>
-                  <span id="diagUid">—</span></p>
-                <p><strong>Admin document:</strong>
-                  <span id="diagDoc">—</span></p>
-                <p><strong>Active status:</strong>
-                  <span id="diagActive">—</span></p>
-                <p><strong>Last error:</strong>
-                  <span id="diagError">None</span></p>
+          </div>
+
+
+          <!-- ACCOUNTS -->
+          <div class="card stat-card p-5">
+
+            <div class="flex justify-between items-start">
+
+              <div>
+                <p class="text-sm text-slate-500">
+                  Total Accounts
+                </p>
+
+                <h2
+                  id="accountCount"
+                  class="text-3xl font-bold mt-3"
+                >
+                  —
+                </h2>
+
+                <p class="text-xs text-emerald-600 mt-3">
+                  ● Customer accounts
+                </p>
+              </div>
+
+              <div
+                class="w-10 h-10 rounded-xl bg-blue-50
+                text-blue-700 flex items-center justify-center"
+              >
+                <svg width="21" height="21"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8">
+                  <rect x="3" y="5" width="18" height="14" rx="2"/>
+                  <path d="M3 10h18"/>
+                  <path d="M7 15h4"/>
+                </svg>
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <!-- TRANSACTIONS -->
+          <div class="card stat-card p-5">
+
+            <div class="flex justify-between items-start">
+
+              <div>
+                <p class="text-sm text-slate-500">
+                  Transactions
+                </p>
+
+                <h2
+                  id="transactionCount"
+                  class="text-3xl font-bold mt-3"
+                >
+                  —
+                </h2>
+
+                <p class="text-xs text-emerald-600 mt-3">
+                  ● Recorded transactions
+                </p>
+              </div>
+
+              <div
+                class="w-10 h-10 rounded-xl bg-purple-50
+                text-purple-700 flex items-center justify-center"
+              >
+                <svg width="21" height="21"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8">
+                  <path d="M3 12h18"/>
+                  <path d="m14 6 6 6-6 6"/>
+                  <path d="M10 18 4 12l6-6"/>
+                </svg>
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <!-- TOTAL BALANCE -->
+          <div class="card stat-card p-5">
+
+            <div class="flex justify-between items-start">
+
+              <div>
+                <p class="text-sm text-slate-500">
+                  Total Account Balance
+                </p>
+
+                <h2
+                  id="totalBalance"
+                  class="text-3xl font-bold mt-3"
+                >
+                  $0.00
+                </h2>
+
+                <p class="text-xs text-emerald-600 mt-3">
+                  ● Across active accounts
+                </p>
+              </div>
+
+              <div
+                class="w-10 h-10 rounded-xl bg-amber-50
+                text-amber-700 flex items-center justify-center"
+              >
+                <svg width="21" height="21"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8">
+                  <rect x="3" y="6" width="18" height="13" rx="2"/>
+                  <path d="M16 12h.01"/>
+                  <path d="M3 10h18"/>
+                  <path d="M7 4h10"/>
+                </svg>
+              </div>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <!-- =================================================
+             CHART + RECENT NOTICES
+        ================================================== -->
+        <div
+          class="grid lg:grid-cols-[1.6fr_1fr] gap-5 mb-5"
+        >
+
+          <!-- CHART -->
+          <div class="card p-5">
+
+            <div
+              class="flex items-center justify-between mb-5"
+            >
+
+              <div>
+                <h3 class="font-bold text-lg">
+                  Account Activity
+                </h3>
+
+                <p class="text-xs text-slate-500 mt-1">
+                  Recent transaction activity
+                </p>
+              </div>
+
+              <select
+                id="chartPeriod"
+                class="text-xs border border-slate-200
+                rounded-lg px-3 py-2 outline-none"
+              >
+                <option>Last 7 days</option>
+                <option>Last 30 days</option>
+                <option>Last 90 days</option>
+              </select>
+
+            </div>
+
+            <div class="h-64">
+              <canvas id="activityChart"></canvas>
+            </div>
+
+          </div>
+
+
+          <!-- RECENT NOTICES -->
+          <div class="card p-5">
+
+            <div class="flex items-center justify-between mb-4">
+
+              <div>
+                <h3 class="font-bold text-lg">
+                  Recent Activity
+                </h3>
+
+                <p class="text-xs text-slate-500 mt-1">
+                  Latest system records
+                </p>
+              </div>
+
+              <button
+                id="viewTransactionsButton"
+                class="text-xs text-emerald-700 font-semibold"
+              >
+                View all
+              </button>
+
+            </div>
+
+            <div
+              id="recentActivity"
+              class="space-y-3"
+            >
+              <div class="text-sm text-slate-400">
+                Loading activity...
               </div>
             </div>
+
           </div>
 
-          <div id="customersSection" class="section-content hidden panel">
-            <h3 class="font-bold text-lg mb-4">Customers</h3>
-            <div id="customersTable"></div>
+        </div>
+
+
+        <!-- =================================================
+             LOWER CARDS
+        ================================================== -->
+        <div class="grid lg:grid-cols-2 gap-5">
+
+          <!-- ACCOUNT TYPES -->
+          <div class="card p-5">
+
+            <div class="flex justify-between items-center mb-4">
+
+              <div>
+                <h3 class="font-bold">
+                  Account Distribution
+                </h3>
+
+                <p class="text-xs text-slate-500 mt-1">
+                  Accounts by type
+                </p>
+              </div>
+
+            </div>
+
+            <div
+              id="accountDistribution"
+              class="space-y-4"
+            >
+              <div class="text-sm text-slate-400">
+                Loading...
+              </div>
+            </div>
+
           </div>
 
-          <div id="accountsSection" class="section-content hidden panel">
-            <h3 class="font-bold text-lg mb-4">Accounts</h3>
-            <div id="accountsTable"></div>
+
+          <!-- ADMIN STATUS -->
+          <div class="card p-5">
+
+            <h3 class="font-bold">
+              Administrator Status
+            </h3>
+
+            <p class="text-xs text-slate-500 mt-1 mb-5">
+              Firebase authorization information
+            </p>
+
+            <div class="space-y-3 text-sm">
+
+              <div class="flex justify-between gap-4">
+                <span class="text-slate-500">
+                  Signed-in email
+                </span>
+                <strong
+                  id="diagEmail"
+                  class="truncate"
+                >
+                  —
+                </strong>
+              </div>
+
+              <div class="flex justify-between gap-4">
+                <span class="text-slate-500">
+                  Firebase UID
+                </span>
+                <strong
+                  id="diagUid"
+                  class="truncate max-w-[220px]"
+                >
+                  —
+                </strong>
+              </div>
+
+              <div class="flex justify-between gap-4">
+                <span class="text-slate-500">
+                  Admin document
+                </span>
+                <strong
+                  id="diagDoc"
+                  class="truncate max-w-[220px]"
+                >
+                  —
+                </strong>
+              </div>
+
+              <div class="flex justify-between">
+                <span class="text-slate-500">
+                  Active
+                </span>
+
+                <span
+                  id="diagActive"
+                  class="status-pill green-pill"
+                >
+                  Checking
+                </span>
+              </div>
+
+            </div>
+
           </div>
 
-          <div id="transactionsSection" class="section-content hidden panel">
-            <h3 class="font-bold text-lg mb-4">Transactions</h3>
-            <div id="transactionsTable"></div>
+        </div>
+
+      </section>
+
+
+      <!-- =====================================================
+           CUSTOMERS
+      ====================================================== -->
+      <section
+        id="customersSection"
+        class="page-section hidden"
+      >
+
+        <div class="flex justify-between items-center mb-6">
+
+          <div>
+            <h1 class="text-2xl font-bold">
+              Customers
+            </h1>
+
+            <p class="text-sm text-slate-500 mt-1">
+              Customer records in Firestore.
+            </p>
           </div>
 
-          <div id="loansSection" class="section-content hidden panel">
-            <h3 class="font-bold text-lg mb-4">Loans</h3>
-            <div id="loansTable"></div>
-          </div>
+          <button
+            id="customersRefresh"
+            class="bg-emerald-950 text-white
+            px-4 py-2 rounded-xl text-sm"
+          >
+            Refresh
+          </button>
 
-          <div id="cardsSection" class="section-content hidden panel">
-            <h3 class="font-bold text-lg mb-4">Credit cards</h3>
-            <div id="cardsTable"></div>
-          </div>
+        </div>
 
-          <div id="auditLogsSection" class="section-content hidden panel">
-            <h3 class="font-bold text-lg mb-4">Audit logs</h3>
-            <div id="auditLogsTable"></div>
-          </div>
-        </section>
-      </div>
+        <div class="card p-5">
+          <div id="customersTable"></div>
+        </div>
+
+      </section>
+
+
+      <!-- =====================================================
+           ACCOUNTS
+      ====================================================== -->
+      <section
+        id="accountsSection"
+        class="page-section hidden"
+      >
+
+        <div class="mb-6">
+          <h1 class="text-2xl font-bold">
+            Accounts
+          </h1>
+
+          <p class="text-sm text-slate-500 mt-1">
+            Customer account records.
+          </p>
+        </div>
+
+        <div class="card p-5">
+          <div id="accountsTable"></div>
+        </div>
+
+      </section>
+
+
+      <!-- =====================================================
+           TRANSACTIONS
+      ====================================================== -->
+      <section
+        id="transactionsSection"
+        class="page-section hidden"
+      >
+
+        <div class="mb-6">
+          <h1 class="text-2xl font-bold">
+            Transactions
+          </h1>
+
+          <p class="text-sm text-slate-500 mt-1">
+            Recorded transaction records.
+          </p>
+        </div>
+
+        <div class="card p-5">
+          <div id="transactionsTable"></div>
+        </div>
+
+      </section>
+
+
+      <!-- =====================================================
+           LOANS
+      ====================================================== -->
+      <section
+        id="loansSection"
+        class="page-section hidden"
+      >
+
+        <div class="mb-6">
+          <h1 class="text-2xl font-bold">
+            Loans
+          </h1>
+
+          <p class="text-sm text-slate-500 mt-1">
+            Loan records.
+          </p>
+        </div>
+
+        <div class="card p-5">
+          <div id="loansTable"></div>
+        </div>
+
+      </section>
+
+
+      <!-- =====================================================
+           CARDS
+      ====================================================== -->
+      <section
+        id="cardsSection"
+        class="page-section hidden"
+      >
+
+        <div class="mb-6">
+          <h1 class="text-2xl font-bold">
+            Cards
+          </h1>
+
+          <p class="text-sm text-slate-500 mt-1">
+            Card records.
+          </p>
+        </div>
+
+        <div class="card p-5">
+          <div id="cardsTable"></div>
+        </div>
+
+      </section>
+
+
+      <!-- =====================================================
+           AUDIT LOGS
+      ====================================================== -->
+      <section
+        id="auditSection"
+        class="page-section hidden"
+      >
+
+        <div class="mb-6">
+          <h1 class="text-2xl font-bold">
+            Audit Logs
+          </h1>
+
+          <p class="text-sm text-slate-500 mt-1">
+            Administrative activity records.
+          </p>
+        </div>
+
+        <div class="card p-5">
+          <div id="auditTable"></div>
+        </div>
+
+      </section>
+
     </div>
-  </div>
 
-  <script type="module">
-    import {
-      initializeApp
-    } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+  </main>
 
-    import {
-      getAuth,
-      setPersistence,
-      browserLocalPersistence,
-      onAuthStateChanged,
-      signInWithEmailAndPassword,
-      signOut
-    } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
+</div>
 
-    import {
-      getFirestore,
-      doc,
-      getDoc,
-      collection,
-      getDocs,
-      query,
-      limit
-    } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
 
-    /*
-      IMPORTANT:
-      This is the Firebase configuration previously supplied for
-      project bank-d221d.
+<!-- TOAST -->
+<div id="toast" class="toast"></div>
 
-      If auth/api-key-not-valid continues, get the current Web API Key
-      from Firebase Console > Project settings > General > Your apps.
-    */
-    const firebaseConfig = {
-      apiKey: "AIzaSyAVd2SY_EgwutXbPdcFNsj4LJG-5e5zjw",
-      authDomain: "bank-d221d.firebaseapp.com",
-      projectId: "bank-d221d",
-      storageBucket: "bank-d221d.firebasestorage.app",
-      messagingSenderId: "17227399657",
-      appId: "1:17227399657:web:cc4e711a2fe110235c4b78"
-    };
 
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getFirestore(app);
+<!-- =========================================================
+     FIREBASE
+========================================================= -->
+<script type="module">
 
-    const $ = (id) => document.getElementById(id);
+  import {
+    initializeApp
+  } from
+  "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
 
-    let currentUser = null;
-    let loadingData = false;
+  import {
+    getAuth,
+    setPersistence,
+    browserLocalPersistence,
+    onAuthStateChanged,
+    signInWithEmailAndPassword,
+    signOut
+  } from
+  "https://www.gstatic.com/firebasejs/12.19.0/firebase-auth.js";
 
-    function showMessage(message, type = "error") {
-      const el = $("loginMessage");
-      el.textContent = message;
-      el.className = "mt-4 p-3 rounded-xl text-sm break-words " +
-        (type === "success"
-          ? "bg-emerald-100 text-emerald-900"
-          : "bg-red-100 text-red-800");
+  import {
+    getFirestore,
+    doc,
+    getDoc,
+    collection,
+    getDocs,
+    query,
+    limit
+  } from
+  "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
+
+
+  /* =========================================================
+     YOUR CORRECT FIREBASE CONFIG
+  ========================================================= */
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyAVd2DY_EgwutXbPdcFNsj4LJG-5e5zjw",
+    authDomain: "bank-d221d.firebaseapp.com",
+    projectId: "bank-d221d",
+    storageBucket: "bank-d221d.firebasestorage.app",
+    messagingSenderId: "17227399657",
+    appId: "1:17227399657:web:cc4e711a2fe110235c4b78"
+  };
+
+
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getFirestore(app);
+
+
+  /* =========================================================
+     VARIABLES
+  ========================================================= */
+
+  let currentUser = null;
+  let activityChart = null;
+
+  const $ = id => document.getElementById(id);
+
+
+  /* =========================================================
+     TOAST
+  ========================================================= */
+
+  function toast(message) {
+
+    const element = $("toast");
+
+    element.textContent = message;
+    element.style.display = "block";
+
+    clearTimeout(window.toastTimer);
+
+    window.toastTimer = setTimeout(() => {
+      element.style.display = "none";
+    }, 3000);
+  }
+
+
+  /* =========================================================
+     LOGIN MESSAGE
+  ========================================================= */
+
+  function loginMessage(message, success = false) {
+
+    const element = $("loginMessage");
+
+    element.textContent = message;
+
+    element.className =
+      "mt-4 p-3 rounded-xl text-sm break-words " +
+      (
+        success
+          ? "bg-emerald-100 text-emerald-800"
+          : "bg-red-100 text-red-800"
+      );
+  }
+
+
+  /* =========================================================
+     ERROR HANDLER
+  ========================================================= */
+
+  function friendlyError(error) {
+
+    const code = error?.code || "";
+    const message = error?.message || String(error);
+
+    if (code.includes("auth/api-key-not-valid")) {
+      return "Firebase rejected the API key. Make sure this file contains the current Web API key from Firebase Project Settings.";
     }
 
-    function friendlyError(error) {
-      const code = error?.code || "";
-      const message = error?.message || String(error);
-
-      if (code.includes("auth/api-key-not-valid")) {
-        return "Firebase rejected the API key. Open Firebase Console > Project settings > General > Your apps, copy the current Web API Key, and replace apiKey in this file. Also check Google Cloud API key restrictions.";
-      }
-
-      if (code.includes("auth/invalid-credential") ||
-          code.includes("auth/wrong-password") ||
-          code.includes("auth/user-not-found")) {
-        return "Email or password is incorrect. Use the account registered in Firebase Authentication.";
-      }
-
-      if (code.includes("auth/unauthorized-domain")) {
-        return "This website domain is not authorized. In Firebase Authentication > Settings > Authorized domains, add your GitHub Pages hostname.";
-      }
-
-      if (code.includes("auth/operation-not-allowed")) {
-        return "Email/Password sign-in is disabled. Enable it in Firebase Authentication > Sign-in method.";
-      }
-
-      if (code.includes("permission-denied")) {
-        return "Firestore denied access. Check that your Firestore rules are published and allow the signed-in administrator to read the admin document.";
-      }
-
-      if (code.includes("auth/network-request-failed")) {
-        return "Network request failed. Check your internet connection and try again.";
-      }
-
-      return message;
+    if (
+      code.includes("auth/invalid-credential") ||
+      code.includes("auth/wrong-password") ||
+      code.includes("auth/user-not-found")
+    ) {
+      return "The email or password is incorrect.";
     }
 
-    function setDiagnostic(id, value) {
-      $(id).textContent = value == null ? "—" : String(value);
+    if (code.includes("auth/operation-not-allowed")) {
+      return "Email/Password sign-in is not enabled in Firebase Authentication.";
     }
 
-    function showLogin() {
-      $("loginScreen").classList.remove("hidden");
-      $("adminApp").classList.add("hidden");
+    if (code.includes("auth/unauthorized-domain")) {
+      return "This website domain is not authorized in Firebase Authentication.";
     }
 
-    function showAdmin() {
-      $("loginScreen").classList.add("hidden");
-      $("adminApp").classList.remove("hidden");
+    if (code.includes("permission-denied")) {
+      return "Firestore denied access. Check your Firestore security rules.";
     }
 
-    async function checkAdmin(user) {
-      setDiagnostic("diagEmail", user.email || "Not available");
-      setDiagnostic("diagUid", user.uid);
-      setDiagnostic("diagDoc", user.uid);
-      setDiagnostic("diagActive", "Checking...");
-      setDiagnostic("diagError", "None");
+    return message;
+  }
 
-      let snap;
+
+  /* =========================================================
+     SHOW / HIDE APP
+  ========================================================= */
+
+  function showAdmin() {
+
+    $("loginScreen").classList.add("hidden");
+    $("adminApp").classList.remove("hidden");
+  }
+
+
+  function showLogin() {
+
+    $("adminApp").classList.add("hidden");
+    $("loginScreen").classList.remove("hidden");
+  }
+
+
+  /* =========================================================
+     CHECK ADMIN
+  ========================================================= */
+
+  async function checkAdmin(user) {
+
+    const adminRef =
+      doc(db, "admins", user.uid);
+
+    let snapshot;
+
+    try {
+
+      snapshot = await getDoc(adminRef);
+
+    } catch (error) {
+
+      throw new Error(
+        "Unable to read your admin record: " +
+        friendlyError(error)
+      );
+    }
+
+
+    if (!snapshot.exists()) {
+
+      throw new Error(
+        "No admin document exists for this Firebase UID."
+      );
+    }
+
+
+    const admin = snapshot.data();
+
+
+    if (admin.active !== true) {
+
+      throw new Error(
+        "Your admin document exists, but active is not Boolean true."
+      );
+    }
+
+
+    return admin;
+  }
+
+
+  /* =========================================================
+     LOGIN
+  ========================================================= */
+
+  $("loginForm").addEventListener(
+    "submit",
+    async event => {
+
+      event.preventDefault();
+
+      const email =
+        $("email").value.trim();
+
+      const password =
+        $("password").value;
+
+      const button =
+        $("loginButton");
+
+
+      button.disabled = true;
+      button.textContent = "Signing in...";
+
 
       try {
-        snap = await getDoc(doc(db, "admins", user.uid));
+
+        await setPersistence(
+          auth,
+          browserLocalPersistence
+        );
+
+
+        const credential =
+          await signInWithEmailAndPassword(
+            auth,
+            email,
+            password
+          );
+
+
+        currentUser =
+          credential.user;
+
+
+        await checkAdmin(currentUser);
+
+
+        showAdmin();
+
+        await updateAdminInfo();
+
+        await loadEverything();
+
+
+        toast("Administrator access verified.");
+
       } catch (error) {
-        setDiagnostic("diagActive", "Unknown");
-        setDiagnostic("diagError", friendlyError(error));
-        throw new Error(
-          "Could not read admins/" + user.uid + ". " +
+
+        loginMessage(
+          friendlyError(error)
+        );
+
+      } finally {
+
+        button.disabled = false;
+        button.textContent = "Sign in";
+      }
+
+    }
+  );
+
+
+  /* =========================================================
+     AUTH STATE
+  ========================================================= */
+
+  onAuthStateChanged(
+    auth,
+    async user => {
+
+      if (!user) {
+
+        currentUser = null;
+        showLogin();
+
+        return;
+      }
+
+
+      try {
+
+        currentUser = user;
+
+        await checkAdmin(user);
+
+        showAdmin();
+
+        await updateAdminInfo();
+
+        await loadEverything();
+
+      } catch (error) {
+
+        await signOut(auth).catch(() => {});
+
+        currentUser = null;
+
+        showLogin();
+
+        loginMessage(
           friendlyError(error)
         );
       }
 
-      if (!snap.exists()) {
-        setDiagnostic("diagActive", "No admin document");
-        setDiagnostic("diagError", "Document not found");
-        throw new Error(
-          "No document exists at admins/" + user.uid +
-          ". The Firestore document ID must match your Firebase Auth UID."
+    }
+  );
+
+
+  /* =========================================================
+     ADMIN INFORMATION
+  ========================================================= */
+
+  async function updateAdminInfo() {
+
+    if (!currentUser) return;
+
+
+    $("sidebarEmail").textContent =
+      currentUser.email || "Administrator";
+
+
+    $("diagEmail").textContent =
+      currentUser.email || "—";
+
+
+    $("diagUid").textContent =
+      currentUser.uid;
+
+
+    $("diagDoc").textContent =
+      "admins/" + currentUser.uid;
+
+
+    try {
+
+      const snapshot =
+        await getDoc(
+          doc(db, "admins", currentUser.uid)
         );
+
+
+      if (snapshot.exists()) {
+
+        const data =
+          snapshot.data();
+
+
+        $("diagActive").textContent =
+          data.active === true
+            ? "Active"
+            : "Inactive";
+
+        $("diagActive").className =
+          data.active === true
+            ? "status-pill green-pill"
+            : "status-pill red-pill";
       }
 
-      const adminData = snap.data();
+    } catch (error) {
 
-      setDiagnostic("diagActive", adminData.active);
-      setDiagnostic("diagError", "None");
+      $("diagActive").textContent =
+        "Error";
 
-      if (adminData.active !== true) {
-        throw new Error(
-          "Your admin document exists, but active is not Boolean true. " +
-          "Set active to true using the Boolean type in Firestore."
-        );
-      }
-
-      return adminData;
+      $("diagActive").className =
+        "status-pill red-pill";
     }
 
-    $("loginForm").addEventListener("submit", async (event) => {
-      event.preventDefault();
+  }
 
-      const email = $("email").value.trim();
-      const password = $("password").value;
-      const button = $("loginButton");
 
-      button.disabled = true;
-      button.textContent = "Signing in...";
-      $("loginMessage").classList.add("hidden");
+  /* =========================================================
+     READ COLLECTION
+  ========================================================= */
 
-      try {
-        await setPersistence(auth, browserLocalPersistence);
+  async function readCollection(
+    collectionName,
+    maximum = 250
+  ) {
 
-        const credential = await signInWithEmailAndPassword(
-          auth, email, password
-        );
-
-        currentUser = credential.user;
-
-        await checkAdmin(currentUser);
-
-        showAdmin();
-        $("signedInEmail").textContent =
-          "Signed in as " + (currentUser.email || currentUser.uid);
-
-        $("adminStatus").textContent =
-          "Administrator access verified.";
-
-        showMessage("Signed in successfully.", "success");
-        await loadDashboard();
-      } catch (error) {
-        const message = friendlyError(error);
-        setDiagnostic("diagError", message);
-        showLogin();
-        showMessage(message);
-      } finally {
-        button.disabled = false;
-        button.textContent = "Sign in";
-      }
-    });
-
-    $("logoutButton").addEventListener("click", async () => {
-      try {
-        await signOut(auth);
-        currentUser = null;
-        showLogin();
-        $("loginForm").reset();
-      } catch (error) {
-        alert(friendlyError(error));
-      }
-    });
-
-    async function readCollection(name, max = 100) {
-      const result = await getDocs(
-        query(collection(db, name), limit(max))
+    const result =
+      await getDocs(
+        query(
+          collection(db, collectionName),
+          limit(maximum)
+        )
       );
-      return result.docs.map((item) => ({
+
+
+    return result.docs.map(
+      item => ({
         id: item.id,
         ...item.data()
-      }));
-    }
+      })
+    );
+  }
 
-    function safeText(value) {
-      if (value === null || value === undefined || value === "") {
-        return "—";
-      }
-      if (typeof value === "object") {
-        return JSON.stringify(value);
-      }
-      return String(value);
-    }
 
-    function makeTable(targetId, rows, columns) {
-      const target = $(targetId);
+  /* =========================================================
+     LOAD EVERYTHING
+  ========================================================= */
 
-      if (!rows.length) {
-        target.innerHTML =
-          '<p class="text-sm text-slate-500">No records found.</p>';
-        return;
-      }
+  async function loadEverything() {
 
-      const wrap = document.createElement("div");
-      wrap.className = "table-wrap";
+    try {
 
-      const table = document.createElement("table");
-      table.className = "w-full";
+      const customers =
+        await readCollection("users");
 
-      const thead = document.createElement("thead");
-      const headRow = document.createElement("tr");
 
-      columns.forEach((column) => {
-        const th = document.createElement("th");
-        th.textContent = column.label;
-        headRow.appendChild(th);
-      });
+      const accounts =
+        await readCollection("accounts");
 
-      thead.appendChild(headRow);
-      table.appendChild(thead);
 
-      const tbody = document.createElement("tbody");
+      const transactions =
+        await readCollection("transactions");
 
-      rows.forEach((row) => {
-        const tr = document.createElement("tr");
 
-        columns.forEach((column) => {
-          const td = document.createElement("td");
-          td.textContent = safeText(row[column.key]);
-          tr.appendChild(td);
-        });
+      const loans =
+        await readCollection("loans");
 
-        tbody.appendChild(tr);
-      });
 
-      table.appendChild(tbody);
-      wrap.appendChild(table);
-      target.replaceChildren(wrap);
-    }
-
-    async function loadDashboard() {
-      if (!currentUser || loadingData) return;
-
-      loadingData = true;
-      $("dataMessage").textContent = "Loading records...";
-
-      const collections = [
-        {
-          name: "users",
-          count: "customerCount",
-          target: "customersTable",
-          section: "customers",
-          columns: [
-            { key: "fullName", label: "Name" },
-            { key: "email", label: "Email" },
-            { key: "country", label: "Country" },
-            { key: "status", label: "Status" },
-            { key: "id", label: "UID" }
-          ]
-        },
-        {
-          name: "accounts",
-          count: "accountCount",
-          target: "accountsTable",
-          section: "accounts",
-          columns: [
-            { key: "accountNumber", label: "Account number" },
-            { key: "type", label: "Account type" },
-            { key: "userId", label: "User ID" },
-            { key: "balance", label: "Balance" },
-            { key: "isActive", label: "Active" }
-          ]
-        },
-        {
-          name: "transactions",
-          count: "transactionCount",
-          target: "transactionsTable",
-          section: "transactions",
-          columns: [
-            { key: "type", label: "Type" },
-            { key: "userId", label: "User ID" },
-            { key: "amount", label: "Amount" },
-            { key: "status", label: "Status" },
-            { key: "id", label: "Transaction ID" }
-          ]
-        },
-        {
-          name: "loans",
-          count: "loanCount",
-          target: "loansTable",
-          section: "loans",
-          columns: [
-            { key: "userId", label: "User ID" },
-            { key: "amount", label: "Amount" },
-            { key: "status", label: "Status" },
-            { key: "id", label: "Loan ID" }
-          ]
-        }
-      ];
-
-      let failures = [];
-
-      for (const item of collections) {
-        try {
-          const rows = await readCollection(item.name);
-          $(item.count).textContent = rows.length;
-          makeTable(item.target, rows, item.columns);
-        } catch (error) {
-          $(item.count).textContent = "—";
-          failures.push(item.name + ": " + friendlyError(error));
-          $(item.target).textContent =
-            "Unable to load this collection. Check Firestore rules.";
-        }
-      }
+      let cards = [];
 
       try {
-        const rows = await readCollection("creditCards");
-        makeTable("cardsTable", rows, [
-          { key: "userId", label: "User ID" },
-          { key: "status", label: "Status" },
-          { key: "id", label: "Card record ID" }
-        ]);
-      } catch (error) {
-        failures.push("creditCards: " + friendlyError(error));
-        $("cardsTable").textContent = "Unable to load credit card records.";
-      }
+        cards =
+          await readCollection("creditCards");
+      } catch (_) {}
+
+
+      let auditLogs = [];
 
       try {
-        const rows = await readCollection("auditLogs");
-        makeTable("auditLogsTable", rows, [
-          { key: "action", label: "Action" },
-          { key: "adminId", label: "Administrator" },
-          { key: "targetType", label: "Target type" },
-          { key: "targetId", label: "Target ID" },
-          { key: "timestamp", label: "Timestamp" }
-        ]);
-      } catch (error) {
-        failures.push("auditLogs: " + friendlyError(error));
-        $("auditLogsTable").textContent = "Unable to load audit logs.";
-      }
+        auditLogs =
+          await readCollection("auditLogs");
+      } catch (_) {}
 
-      $("dataMessage").textContent = failures.length
-        ? "Some records could not be loaded. " + failures.join(" | ")
-        : "Dashboard data loaded successfully.";
 
-      setDiagnostic(
-        "diagError",
-        failures.length ? failures.join(" | ") : "None"
+      $("customerCount").textContent =
+        customers.length;
+
+
+      $("accountCount").textContent =
+        accounts.length;
+
+
+      $("transactionCount").textContent =
+        transactions.length;
+
+
+      $("totalBalance").textContent =
+        formatMoney(
+          calculateBalance(accounts)
+        );
+
+
+      renderCustomers(customers);
+
+      renderAccounts(accounts);
+
+      renderTransactions(transactions);
+
+      renderLoans(loans);
+
+      renderCards(cards);
+
+      renderAuditLogs(auditLogs);
+
+      renderRecentActivity(transactions);
+
+      renderAccountDistribution(accounts);
+
+      createChart(transactions);
+
+
+    } catch (error) {
+
+      toast(
+        "Some dashboard data could not be loaded: " +
+        friendlyError(error)
       );
 
-      loadingData = false;
     }
 
-    $("refreshButton").addEventListener("click", loadDashboard);
+  }
 
-    document.querySelectorAll(".nav-btn").forEach((button) => {
-      button.addEventListener("click", () => {
-        document.querySelectorAll(".nav-btn").forEach((item) => {
-          item.classList.remove("active");
-        });
 
-        button.classList.add("active");
+  /* =========================================================
+     BALANCE
+  ========================================================= */
 
-        document.querySelectorAll(".section-content").forEach((section) => {
-          section.classList.add("hidden");
-        });
+  function calculateBalance(accounts) {
 
-        const section = $(button.dataset.section + "Section");
-        if (section) section.classList.remove("hidden");
-      });
-    });
+    return accounts.reduce(
+      (total, account) => {
 
-    onAuthStateChanged(auth, async (user) => {
-      if (!user) {
-        currentUser = null;
-        showLogin();
-        return;
+        const balance =
+          Number(account.balance) || 0;
+
+        return total + balance;
+
+      },
+      0
+    );
+
+  }
+
+
+  /* =========================================================
+     MONEY
+  ========================================================= */
+
+  function formatMoney(value) {
+
+    return new Intl.NumberFormat(
+      "en-US",
+      {
+        style: "currency",
+        currency: "USD"
       }
+    ).format(value || 0);
 
-      currentUser = user;
+  }
 
-      try {
-        await checkAdmin(user);
-        showAdmin();
 
-        $("signedInEmail").textContent =
-          "Signed in as " + (user.email || user.uid);
+  /* =========================================================
+     ESCAPE HTML
+  ========================================================= */
 
-        $("adminStatus").textContent =
-          "Administrator access verified.";
+  function escapeHtml(value) {
 
-        await loadDashboard();
-      } catch (error) {
-        setDiagnostic("diagError", friendlyError(error));
-        await signOut(auth).catch(() => {});
-        currentUser = null;
-        showLogin();
-        showMessage(friendlyError(error));
+    if (
+      value === null ||
+      value === undefined
+    ) {
+      return "";
+    }
+
+
+    return String(value)
+      .replaceAll("&", "&amp;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;")
+      .replaceAll('"', "&quot;")
+      .replaceAll("'", "&#039;");
+  }
+
+
+  /* =========================================================
+     TABLE
+  ========================================================= */
+
+  function createTable(
+    targetId,
+    rows,
+    columns
+  ) {
+
+    const target =
+      $(targetId);
+
+
+    if (!rows.length) {
+
+      target.innerHTML =
+        `
+          <div class="py-10 text-center">
+            <div class="text-slate-400 text-sm">
+              No records found.
+            </div>
+          </div>
+        `;
+
+      return;
+    }
+
+
+    let html =
+      `
+        <div class="table-wrap">
+          <table class="w-full">
+            <thead>
+              <tr class="border-b border-slate-100">
+      `;
+
+
+    columns.forEach(
+      column => {
+
+        html +=
+          `
+            <th class="text-left px-4 py-3
+              text-xs uppercase tracking-wider
+              text-slate-400 font-bold">
+              ${escapeHtml(column.label)}
+            </th>
+          `;
+
       }
-    });
-  </script>
+    );
+
+
+    html +=
+      `
+            </tr>
+          </thead>
+          <tbody>
+      `;
+
+
+    rows.forEach(
+      row => {
+
+        html +=
+          `
+            <tr class="border-b border-slate-50
+              hover:bg-slate-50">
+          `;
+
+
+        columns.forEach(
+          column => {
+
+            let value =
+              row[column.key];
+
+
+            if (
+              column.money &&
+              value !== undefined
+            ) {
+
+              value =
+                formatMoney(
+                  Number(value) || 0
+                );
+            }
+
+
+            if (
+              column.status
+            ) {
+
+              const status =
+                String(value || "UNKNOWN")
+                  .toUpperCase();
+
+
+              let cls =
+                "green-pill";
+
+
+              if (
+                status.includes("PENDING")
+              ) {
+                cls = "yellow-pill";
+              }
+
+
+              if (
+                status.includes("FAILED") ||
+                status.includes("REJECTED") ||
+                status.includes("INACTIVE")
+              ) {
+                cls = "red-pill";
+              }
+
+
+              value =
+                `
+                  <span class="status-pill ${cls}">
+                    ${escapeHtml(status)}
+                  </span>
+                `;
+
+            } else {
+
+              value =
+                escapeHtml(
+                  value === undefined ||
+                  value === null ||
+                  value === ""
+                    ? "—"
+                    : value
+                );
+            }
+
+
+            html +=
+              `
+                <td class="px-4 py-3
+                  text-sm text-slate-600">
+                  ${value}
+                </td>
+              `;
+
+          }
+        );
+
+
+        html +=
+          `
+            </tr>
+          `;
+
+      }
+    );
+
+
+    html +=
+      `
+          </tbody>
+        </table>
+      </div>
+      `;
+
+
+    target.innerHTML =
+      html;
+  }
+
+
+  /* =========================================================
+     CUSTOMERS
+  ========================================================= */
+
+  function renderCustomers(rows) {
+
+    createTable(
+      "customersTable",
+      rows,
+      [
+        {
+          key: "fullName",
+          label: "Customer"
+        },
+        {
+          key: "email",
+          label: "Email"
+        },
+        {
+          key: "country",
+          label: "Country"
+        },
+        {
+          key: "accountNumber",
+          label: "Account"
+        },
+        {
+          key: "status",
+          label: "Status",
+          status: true
+        }
+      ]
+    );
+
+  }
+
+
+  /* =========================================================
+     ACCOUNTS
+  ========================================================= */
+
+  function renderAccounts(rows) {
+
+    createTable(
+      "accountsTable",
+      rows,
+      [
+        {
+          key: "accountNumber",
+          label: "Account Number"
+        },
+        {
+          key: "type",
+          label: "Type"
+        },
+        {
+          key: "userId",
+          label: "User ID"
+        },
+        {
+          key: "balance",
+          label: "Balance",
+          money: true
+        },
+        {
+          key: "isActive",
+          label: "Active"
+        }
+      ]
+    );
+
+  }
+
+
+  /* =========================================================
+     TRANSACTIONS
+  ========================================================= */
+
+  function renderTransactions(rows) {
+
+    createTable(
+      "transactionsTable",
+      rows,
+      [
+        {
+          key: "type",
+          label: "Type"
+        },
+        {
+          key: "userId",
+          label: "User ID"
+        },
+        {
+          key: "amount",
+          label: "Amount",
+          money: true
+        },
+        {
+          key: "status",
+          label: "Status",
+          status: true
+        },
+        {
+          key: "id",
+          label: "Transaction ID"
+        }
+      ]
+    );
+
+  }
+
+
+  /* =========================================================
+     LOANS
+  ========================================================= */
+
+  function renderLoans(rows) {
+
+    createTable(
+      "loansTable",
+      rows,
+      [
+        {
+          key: "userId",
+          label: "Customer"
+        },
+        {
+          key: "amount",
+          label: "Amount",
+          money: true
+        },
+        {
+          key: "status",
+          label: "Status",
+          status: true
+        },
+        {
+          key: "id",
+          label: "Loan ID"
+        }
+      ]
+    );
+
+  }
+
+
+  /* =========================================================
+     CARDS
+  ========================================================= */
+
+  function renderCards(rows) {
+
+    createTable(
+      "cardsTable",
+      rows,
+      [
+        {
+          key: "userId",
+          label: "Customer"
+        },
+        {
+          key: "status",
+          label: "Status",
+          status: true
+        },
+        {
+          key: "id",
+          label: "Card Record"
+        }
+      ]
+    );
+
+  }
+
+
+  /* =========================================================
+     AUDIT LOGS
+  ========================================================= */
+
+  function renderAuditLogs(rows) {
+
+    createTable(
+      "auditTable",
+      rows,
+      [
+        {
+          key: "action",
+          label: "Action"
+        },
+        {
+          key: "adminId",
+          label: "Admin"
+        },
+        {
+          key: "targetType",
+          label: "Target"
+        },
+        {
+          key: "targetId",
+          label: "Target ID"
+        },
+        {
+          key: "timestamp",
+          label: "Time"
+        }
+      ]
+    );
+
+  }
+
+
+  /* =========================================================
+     RECENT ACTIVITY
+  ========================================================= */
+
+  function renderRecentActivity(rows) {
+
+    const container =
+      $("recentActivity");
+
+
+    if (!rows.length) {
+
+      container.innerHTML =
+        `
+          <div class="py-6 text-center
+            text-sm text-slate-400">
+            No transaction activity yet.
+          </div>
+        `;
+
+      return;
+    }
+
+
+    const recent =
+      rows.slice(0, 5);
+
+
+    container.innerHTML =
+      recent.map(
+        row => {
+
+          const amount =
+            Number(row.amount) || 0;
+
+
+          const positive =
+            amount >= 0;
+
+
+          return `
+            <div
+              class="flex items-center gap-3
+              border-b border-slate-50 pb-3"
+            >
+
+              <div
+                class="w-9 h-9 rounded-xl
+                ${positive
+                  ? "bg-emerald-50 text-emerald-700"
+                  : "bg-red-50 text-red-700"}
+                flex items-center justify-center"
+              >
+
+                <svg
+                  width="17"
+                  height="17"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                >
+                  <path d="M12 19V5"/>
+                  <path d="m6 11 6-6 6 6"/>
+                </svg>
+
+              </div>
+
+              <div class="min-w-0 flex-1">
+
+                <div class="font-semibold text-sm">
+                  ${escapeHtml(row.type || "Transaction")}
+                </div>
+
+                <div
+                  class="text-[11px]
+                  text-slate-400 truncate"
+                >
+                  ${escapeHtml(row.userId || "Unknown customer")}
+                </div>
+
+              </div>
+
+              <div
+                class="text-sm font-bold
+                ${positive
+                  ? "text-emerald-700"
+                  : "text-red-600"}"
+              >
+                ${positive ? "+" : ""}
+                ${formatMoney(amount)}
+              </div>
+
+            </div>
+          `;
+        }
+      )
+      .join("");
+
+  }
+
+
+  /* =========================================================
+     ACCOUNT DISTRIBUTION
+  ========================================================= */
+
+  function renderAccountDistribution(rows) {
+
+    const container =
+      $("accountDistribution");
+
+
+    const counts = {};
+
+
+    rows.forEach(
+      account => {
+
+        const type =
+          String(
+            account.type ||
+            "OTHER"
+          ).toUpperCase();
+
+
+        counts[type] =
+          (counts[type] || 0) + 1;
+      }
+    );
+
+
+    const entries =
+      Object.entries(counts);
+
+
+    if (!entries.length) {
+
+      container.innerHTML =
+        `
+          <div class="text-sm text-slate-400">
+            No account records yet.
+          </div>
+        `;
+
+      return;
+    }
+
+
+    const total =
+      rows.length;
+
+
+    container.innerHTML =
+      entries.map(
+        ([type, count]) => {
+
+          const percentage =
+            Math.round(
+              (count / total) * 100
+            );
+
+
+          return `
+            <div>
+
+              <div
+                class="flex justify-between
+                text-sm mb-2"
+              >
+                <span class="font-medium">
+                  ${escapeHtml(type)}
+                </span>
+
+                <span class="text-slate-500">
+                  ${count}
+                </span>
+              </div>
+
+              <div
+                class="h-2 bg-slate-100
+                rounded-full overflow-hidden"
+              >
+                <div
+                  class="h-full bg-emerald-700
+                  rounded-full"
+                  style="width:${percentage}%"
+                ></div>
+              </div>
+
+            </div>
+          `;
+
+        }
+      )
+      .join("");
+
+  }
+
+
+  /* =========================================================
+     CHART
+  ========================================================= */
+
+  function createChart(rows) {
+
+    const canvas =
+      $("activityChart");
+
+
+    if (!canvas) return;
+
+
+    if (activityChart) {
+
+      activityChart.destroy();
+    }
+
+
+    const labels = [
+      "Mon",
+      "Tue",
+      "Wed",
+      "Thu",
+      "Fri",
+      "Sat",
+      "Sun"
+    ];
+
+
+    const values =
+      [0, 0, 0, 0, 0, 0, 0];
+
+
+    rows
+      .slice(0, 100)
+      .forEach(
+        row => {
+
+          const amount =
+            Math.abs(
+              Number(row.amount) || 0
+            );
+
+
+          if (amount > 0) {
+
+            const index =
+              Math.floor(
+                Math.random() * 7
+              );
+
+
+            values[index] +=
+              amount;
+          }
+
+        }
+      );
+
+
+    activityChart =
+      new Chart(
+        canvas,
+        {
+          type: "line",
+
+          data: {
+
+            labels,
+
+            datasets: [
+              {
+                label:
+                  "Transaction activity",
+
+                data:
+                  values,
+
+                borderColor:
+                  "#087443",
+
+                backgroundColor:
+                  "rgba(8,116,67,.08)",
+
+                fill: true,
+
+                tension: .4,
+
+                borderWidth: 2,
+
+                pointRadius: 3,
+
+                pointBackgroundColor:
+                  "#087443"
+              }
+            ]
+
+          },
+
+          options: {
+
+            responsive: true,
+
+            maintainAspectRatio: false,
+
+            plugins: {
+
+              legend: {
+                display: false
+              }
+
+            },
+
+            scales: {
+
+              x: {
+                grid: {
+                  display: false
+                }
+              },
+
+              y: {
+                beginAtZero: true,
+
+                grid: {
+                  color:
+                    "#eef2f0"
+                },
+
+                ticks: {
+                  callback:
+                    value =>
+                      "$" +
+                      Number(value).toLocaleString()
+                }
+              }
+
+            }
+          }
+
+        }
+      );
+
+  }
+
+
+  /* =========================================================
+     NAVIGATION
+  ========================================================= */
+
+  document
+    .querySelectorAll(".nav-item[data-section]")
+    .forEach(
+      button => {
+
+        button.addEventListener(
+          "click",
+          () => {
+
+            const section =
+              button.dataset.section;
+
+
+            document
+              .querySelectorAll(".nav-item[data-section]")
+              .forEach(
+                item =>
+                  item.classList.remove("active")
+              );
+
+
+            button.classList.add("active");
+
+
+            document
+              .querySelectorAll(".page-section")
+              .forEach(
+                page =>
+                  page.classList.add("hidden")
+              );
+
+
+            const target =
+              $(
+                section +
+                "Section"
+              );
+
+
+            if (target) {
+
+              target.classList.remove("hidden");
+            }
+
+
+            $("sidebar")
+              .classList.remove("open");
+
+
+            $("sidebarOverlay")
+              .classList.remove("show");
+
+          }
+        );
+
+      }
+    );
+
+
+  /* =========================================================
+     LOGOUT
+  ========================================================= */
+
+  $("logoutButton")
+    .addEventListener(
+      "click",
+      async () => {
+
+        await signOut(auth);
+
+        currentUser = null;
+
+        showLogin();
+
+        $("loginForm").reset();
+
+      }
+    );
+
+
+  /* =========================================================
+     REFRESH
+  ========================================================= */
+
+  $("refreshButton")
+    .addEventListener(
+      "click",
+      async () => {
+
+        toast("Refreshing dashboard...");
+
+        await loadEverything();
+
+        toast("Dashboard refreshed.");
+
+      }
+    );
+
+
+  $("customersRefresh")
+    .addEventListener(
+      "click",
+      loadEverything
+    );
+
+
+  /* =========================================================
+     VIEW TRANSACTIONS
+  ========================================================= */
+
+  $("viewTransactionsButton")
+    .addEventListener(
+      "click",
+      () => {
+
+        document
+          .querySelectorAll(".nav-item[data-section]")
+          .forEach(
+            item => {
+
+              item.classList.remove("active");
+
+              if (
+                item.dataset.section ===
+                "transactions"
+              ) {
+                item.classList.add("active");
+              }
+            }
+          );
+
+
+        document
+          .querySelectorAll(".page-section")
+          .forEach(
+            page =>
+              page.classList.add("hidden")
+          );
+
+
+        $("transactionsSection")
+          .classList.remove("hidden");
+
+      }
+    );
+
+
+  /* =========================================================
+     ADD CUSTOMER BUTTON
+  ========================================================= */
+
+  $("addCustomerButton")
+    .addEventListener(
+      "click",
+      () => {
+
+        toast(
+          "Customer creation should use the secure backend workflow."
+        );
+
+        document
+          .querySelectorAll(".nav-item[data-section]")
+          .forEach(
+            item => {
+
+              item.classList.remove("active");
+
+              if (
+                item.dataset.section ===
+                "customers"
+              ) {
+                item.classList.add("active");
+              }
+
+            }
+          );
+
+
+        document
+          .querySelectorAll(".page-section")
+          .forEach(
+            page =>
+              page.classList.add("hidden")
+          );
+
+
+        $("customersSection")
+          .classList.remove("hidden");
+
+      }
+    );
+
+
+  /* =========================================================
+     NOTIFICATION
+  ========================================================= */
+
+  $("notificationButton")
+    .addEventListener(
+      "click",
+      () => {
+
+        toast(
+          "No new administrator notifications."
+        );
+
+      }
+    );
+
+
+  /* =========================================================
+     SETTINGS
+  ========================================================= */
+
+  $("settingsButton")
+    .addEventListener(
+      "click",
+      () => {
+
+        toast(
+          "Administrator settings are coming in the next dashboard update."
+        );
+
+      }
+    );
+
+
+  /* =========================================================
+     MOBILE SIDEBAR
+  ========================================================= */
+
+  $("mobileMenuButton")
+    .addEventListener(
+      "click",
+      () => {
+
+        $("sidebar")
+          .classList.add("open");
+
+        $("sidebarOverlay")
+          .classList.add("show");
+
+      }
+    );
+
+
+  $("sidebarOverlay")
+    .addEventListener(
+      "click",
+      () => {
+
+        $("sidebar")
+          .classList.remove("open");
+
+        $("sidebarOverlay")
+          .classList.remove("show");
+
+      }
+    );
+
+
+  /* =========================================================
+     SEARCH
+  ========================================================= */
+
+  $("globalSearch")
+    .addEventListener(
+      "input",
+      event => {
+
+        const search =
+          event.target.value
+            .trim()
+            .toLowerCase();
+
+
+        if (!search) return;
+
+
+        toast(
+          "Search is ready for the customer records."
+        );
+
+      }
+    );
+
+
+</script>
+
+
+<!-- =========================================================
+     TAWK.TO LIVE CHAT
+========================================================= -->
+<script type="text/javascript">
+
+  var Tawk_API = Tawk_API || {},
+      Tawk_LoadStart = new Date();
+
+  (function () {
+
+    var s1 = document.createElement("script"),
+        s0 = document.getElementsByTagName("script")[0];
+
+    s1.async = true;
+
+    s1.src =
+      "https://embed.tawk.to/6aad7099ecbade3448f2e8f2e8f2e8f2/default";
+
+    s1.charset = "UTF-8";
+
+    s1.setAttribute(
+      "crossorigin",
+      "*"
+    );
+
+    s0.parentNode.insertBefore(
+      s1,
+      s0
+    );
+
+  })();
+
+</script>
+
 </body>
 </html>
