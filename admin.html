@@ -8,119 +8,320 @@
 <script src="https://cdn.tailwindcss.com"></script>
 
 <style>
-html.dark body{background:#0f172a;color:#e5e7eb}
-.dark .card{background:#1e293b;border-color:#334155}
-.dark input,.dark select{background:#0f172a;color:white;border-color:#475569}
-.dark .muted{color:#94a3b8}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:
+    radial-gradient(circle at top left,rgba(16,185,129,.16),transparent 35%),
+    radial-gradient(circle at bottom right,rgba(59,130,246,.12),transparent 35%),
+    #f4f7f6;
+  color:#17211d;
+  transition:.3s;
+}
+body.dark{
+  background:
+    radial-gradient(circle at top left,rgba(16,185,129,.13),transparent 35%),
+    radial-gradient(circle at bottom right,rgba(59,130,246,.10),transparent 35%),
+    #07110d;
+  color:#ecfdf5;
+}
+.glass{
+  background:rgba(255,255,255,.62);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  border:1px solid rgba(255,255,255,.7);
+  box-shadow:0 15px 40px rgba(15,23,42,.08);
+}
+.dark .glass{
+  background:rgba(15,23,42,.58);
+  border-color:rgba(255,255,255,.08);
+  box-shadow:0 15px 40px rgba(0,0,0,.25);
+}
+.input{
+  width:100%;
+  padding:13px 15px;
+  border-radius:14px;
+  border:1px solid rgba(100,116,139,.25);
+  background:rgba(255,255,255,.65);
+  outline:none;
+}
+.dark .input{
+  background:rgba(15,23,42,.75);
+  color:white;
+  border-color:rgba(255,255,255,.1);
+}
+.input:focus{
+  border-color:#10b981;
+  box-shadow:0 0 0 3px rgba(16,185,129,.12);
+}
+.btn{
+  border:0;
+  border-radius:13px;
+  padding:11px 15px;
+  font-weight:700;
+  transition:.2s;
+}
+.btn:active{transform:scale(.97)}
+.green{background:#059669;color:white}
+.blue{background:#2563eb;color:white}
+.orange{background:#f59e0b;color:white}
+.red{background:#dc2626;color:white}
+.purple{background:#7c3aed;color:white}
+.soft{
+  background:rgba(255,255,255,.55);
+  border:1px solid rgba(100,116,139,.15);
+}
+.dark .soft{
+  background:rgba(30,41,59,.55);
+  border-color:rgba(255,255,255,.07);
+}
+.hide{display:none!important}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-thumb{background:#94a3b8;border-radius:20px}
 </style>
 </head>
 
-<body class="bg-gray-100 text-gray-900 min-h-screen">
+<body>
 
 <!-- LOGIN -->
 <div id="loginPage" class="min-h-screen flex items-center justify-center p-5">
-  <div class="card bg-white border rounded-2xl shadow-xl p-6 w-full max-w-md">
-    <h1 class="text-3xl font-bold text-green-700">Cash Flow Bank</h1>
-    <p class="muted text-gray-500 mb-6">Admin Panel</p>
 
-    <input id="email" type="email" placeholder="Admin email"
-      class="w-full border rounded-xl p-3 mb-3">
+  <div class="glass rounded-[28px] p-7 w-full max-w-md">
 
-    <input id="password" type="password" placeholder="Password"
-      class="w-full border rounded-xl p-3 mb-4">
+    <div class="flex items-center gap-3 mb-7">
+      <div class="w-12 h-12 rounded-2xl bg-emerald-600 text-white flex items-center justify-center text-2xl">
+        $
+      </div>
 
-    <button onclick="login()"
-      class="w-full bg-green-600 text-white p-3 rounded-xl font-semibold">
+      <div>
+        <h1 class="text-2xl font-black">Cash Flow Bank</h1>
+        <p class="text-sm opacity-60">Secure Admin Portal</p>
+      </div>
+    </div>
+
+    <div class="mb-5">
+      <h2 class="text-xl font-bold">Welcome back 👋</h2>
+      <p class="text-sm opacity-60 mt-1">
+        Sign in to manage your banking prototype.
+      </p>
+    </div>
+
+    <input id="email"
+      type="email"
+      placeholder="Admin email"
+      class="input mb-3">
+
+    <input id="password"
+      type="password"
+      placeholder="Password"
+      class="input mb-4">
+
+    <button onclick="login()" class="btn green w-full">
       Sign In
     </button>
 
-    <p id="loginError" class="text-red-500 text-sm mt-4"></p>
+    <p id="loginError"
+      class="text-red-500 text-sm mt-4"></p>
+
   </div>
 </div>
 
 
 <!-- ADMIN -->
-<div id="adminPage" class="hidden">
+<div id="adminPage" class="hide">
 
-<header class="bg-green-700 text-white p-4 flex justify-between items-center">
-  <div>
-    <h1 class="font-bold text-xl">Cash Flow Bank</h1>
-    <p class="text-xs opacity-80">ADMIN PANEL</p>
-  </div>
+  <!-- HEADER -->
+  <header class="sticky top-0 z-40 glass border-b px-4 py-3">
 
-  <div class="flex gap-2">
-    <button onclick="lightMode()" class="bg-white text-gray-800 px-3 py-2 rounded-lg">
-      ☀️
-    </button>
-    <button onclick="darkMode()" class="bg-gray-900 text-white px-3 py-2 rounded-lg">
-      🌙
-    </button>
-    <button onclick="logout()" class="bg-red-500 px-3 py-2 rounded-lg">
+    <div class="max-w-7xl mx-auto flex items-center justify-between gap-3">
+
+      <div class="flex items-center gap-3">
+
+        <div class="w-11 h-11 rounded-2xl bg-emerald-600 text-white flex items-center justify-center font-black text-xl">
+          $
+        </div>
+
+        <div>
+          <h1 class="font-black text-lg">Cash Flow Bank</h1>
+          <p class="text-[10px] uppercase tracking-[2px] opacity-50">
+            Administration
+          </p>
+        </div>
+
+      </div>
+
+      <div class="flex items-center gap-2">
+
+        <button onclick="lightMode()"
+          class="w-10 h-10 rounded-xl soft">
+          ☀️
+        </button>
+
+        <button onclick="darkMode()"
+          class="w-10 h-10 rounded-xl soft">
+          🌙
+        </button>
+
+        <button onclick="logout()"
+          class="btn red hidden sm:block">
+          Logout
+        </button>
+
+      </div>
+
+    </div>
+  </header>
+
+
+  <main class="max-w-7xl mx-auto p-4 md:p-6">
+
+    <!-- WELCOME -->
+    <section class="glass rounded-[28px] p-5 md:p-7 mb-5 overflow-hidden relative">
+
+      <div class="relative z-10">
+        <p class="text-emerald-600 font-bold text-sm mb-1">
+          ADMIN DASHBOARD
+        </p>
+
+        <h2 class="text-2xl md:text-4xl font-black">
+          Manage Cash Flow Bank
+        </h2>
+
+        <p class="opacity-60 mt-2 max-w-xl">
+          Monitor customers, review account requests, manage balances,
+          and maintain your banking prototype.
+        </p>
+      </div>
+
+      <div class="absolute -right-8 -bottom-12 w-44 h-44 rounded-full
+                  bg-emerald-400/10 blur-2xl"></div>
+
+    </section>
+
+
+    <!-- STATS -->
+    <section class="grid grid-cols-2 lg:grid-cols-4 gap-3 mb-5">
+
+      <div class="glass rounded-2xl p-4">
+        <div class="flex justify-between">
+          <span class="text-2xl">👥</span>
+          <span class="text-xs opacity-50">TOTAL</span>
+        </div>
+
+        <p class="opacity-55 text-sm mt-3">Customers</p>
+        <h3 id="customerCount"
+          class="text-2xl font-black mt-1">
+          0
+        </h3>
+      </div>
+
+
+      <div class="glass rounded-2xl p-4">
+        <div class="flex justify-between">
+          <span class="text-2xl">⏳</span>
+          <span class="text-xs opacity-50">REVIEW</span>
+        </div>
+
+        <p class="opacity-55 text-sm mt-3">Pending</p>
+        <h3 id="pendingCount"
+          class="text-2xl font-black text-orange-500 mt-1">
+          0
+        </h3>
+      </div>
+
+
+      <div class="glass rounded-2xl p-4">
+        <div class="flex justify-between">
+          <span class="text-2xl">🏦</span>
+          <span class="text-xs opacity-50">ACTIVE</span>
+        </div>
+
+        <p class="opacity-55 text-sm mt-3">Accounts</p>
+        <h3 id="accountCount"
+          class="text-2xl font-black mt-1">
+          0
+        </h3>
+      </div>
+
+
+      <div class="glass rounded-2xl p-4">
+        <div class="flex justify-between">
+          <span class="text-2xl">↗️</span>
+          <span class="text-xs opacity-50">TOTAL</span>
+        </div>
+
+        <p class="opacity-55 text-sm mt-3">Transactions</p>
+        <h3 id="transactionCount"
+          class="text-2xl font-black mt-1">
+          0
+        </h3>
+      </div>
+
+    </section>
+
+
+    <!-- CUSTOMERS -->
+    <section class="glass rounded-[26px] p-4 md:p-6">
+
+      <div class="flex flex-col sm:flex-row sm:items-center
+                  justify-between gap-3 mb-5">
+
+        <div>
+          <h2 class="text-xl font-black">
+            Customers
+          </h2>
+
+          <p class="text-sm opacity-50">
+            Manage customer accounts
+          </p>
+        </div>
+
+        <button onclick="loadData()"
+          class="btn green">
+          ↻ Refresh
+        </button>
+
+      </div>
+
+      <div id="customers" class="space-y-3">
+        <div class="text-center py-10 opacity-50">
+          Loading customers...
+        </div>
+      </div>
+
+    </section>
+
+
+    <!-- MOBILE LOGOUT -->
+    <button onclick="logout()"
+      class="btn red w-full mt-4 sm:hidden">
       Logout
     </button>
-  </div>
-</header>
 
-
-<main class="max-w-6xl mx-auto p-4">
-
-  <!-- DASHBOARD -->
-  <section class="grid grid-cols-2 md:grid-cols-4 gap-3 mb-6">
-
-    <div class="card bg-white border rounded-xl p-4">
-      <p class="muted text-gray-500 text-sm">Customers</p>
-      <h2 id="customerCount" class="text-2xl font-bold">0</h2>
-    </div>
-
-    <div class="card bg-white border rounded-xl p-4">
-      <p class="muted text-gray-500 text-sm">Pending</p>
-      <h2 id="pendingCount" class="text-2xl font-bold text-orange-500">0</h2>
-    </div>
-
-    <div class="card bg-white border rounded-xl p-4">
-      <p class="muted text-gray-500 text-sm">Accounts</p>
-      <h2 id="accountCount" class="text-2xl font-bold">0</h2>
-    </div>
-
-    <div class="card bg-white border rounded-xl p-4">
-      <p class="muted text-gray-500 text-sm">Transactions</p>
-      <h2 id="transactionCount" class="text-2xl font-bold">0</h2>
-    </div>
-
-  </section>
-
-
-  <!-- CUSTOMERS -->
-  <section class="card bg-white border rounded-2xl p-4">
-
-    <div class="flex justify-between items-center mb-4">
-      <h2 class="text-xl font-bold">Customers</h2>
-
-      <button onclick="loadData()"
-        class="bg-green-600 text-white px-4 py-2 rounded-lg">
-        Refresh
-      </button>
-    </div>
-
-    <div id="customers" class="space-y-3">
-      Loading...
-    </div>
-
-  </section>
-
-</main>
+  </main>
 </div>
 
 
-<!-- CUSTOMER MODAL -->
+<!-- MODAL -->
 <div id="modal"
- class="hidden fixed inset-0 bg-black/60 flex items-center justify-center p-4">
+  class="hide fixed inset-0 z-50 bg-black/60
+         backdrop-blur-sm flex items-center justify-center p-4">
 
-  <div class="card bg-white rounded-2xl p-5 w-full max-w-md">
+  <div class="glass rounded-[25px] p-5 w-full max-w-md">
 
-    <div class="flex justify-between mb-4">
-      <h2 id="modalTitle" class="text-xl font-bold">Customer</h2>
-      <button onclick="closeModal()">✕</button>
+    <div class="flex justify-between items-center mb-5">
+
+      <h2 id="modalTitle"
+        class="text-xl font-black">
+        Action
+      </h2>
+
+      <button onclick="closeModal()"
+        class="w-9 h-9 rounded-xl soft">
+        ✕
+      </button>
+
     </div>
 
     <div id="modalBody"></div>
@@ -150,8 +351,6 @@ import {
   getDoc,
   getDocs,
   collection,
-  query,
-  where,
   updateDoc,
   deleteDoc,
   addDoc,
@@ -165,63 +364,61 @@ from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
 /* FIREBASE */
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAVd2DY_EgwutXbqPdcFNsj4LJG-5e5zjw",
-  authDomain: "bank-d221d.firebaseapp.com",
-  projectId: "bank-d221d",
-  storageBucket: "bank-d221d.firebasestorage.app",
-  messagingSenderId: "17227399657",
-  appId: "1:17227399657:web:cc4e711a2fe110235c4b78"
+  apiKey:"AIzaSyAVd2DY_EgwutXbPdcFNsj4LJG-5e5zjw",
+  authDomain:"bank-d221d.firebaseapp.com",
+  projectId:"bank-d221d",
+  storageBucket:"bank-d221d.firebasestorage.app",
+  messagingSenderId:"17227399657",
+  appId:"1:17227399657:web:cc4e711a2fe110235c4b78"
 };
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+const app=initializeApp(firebaseConfig);
+const auth=getAuth(app);
+const db=getFirestore(app);
 
-let currentUser = null;
-let customers = [];
-let accounts = [];
+let currentUser=null;
+let customers=[];
+let accounts=[];
 
 
 /* THEME */
 
-function lightMode(){
-  document.documentElement.classList.remove("dark");
+window.lightMode=()=>{
+  document.body.classList.remove("dark");
   localStorage.setItem("cfb-theme","light");
-}
+};
 
-function darkMode(){
-  document.documentElement.classList.add("dark");
+window.darkMode=()=>{
+  document.body.classList.add("dark");
   localStorage.setItem("cfb-theme","dark");
-}
+};
 
 if(localStorage.getItem("cfb-theme")==="dark"){
-  document.documentElement.classList.add("dark");
-}else{
-  document.documentElement.classList.remove("dark");
+  document.body.classList.add("dark");
 }
-
-window.lightMode = lightMode;
-window.darkMode = darkMode;
 
 
 /* LOGIN */
 
-window.login = async function(){
+window.login=async()=>{
 
-  const email = document.getElementById("email").value.trim();
-  const password = document.getElementById("password").value;
+  const email=document.getElementById("email").value.trim();
+  const password=document.getElementById("password").value;
 
-  document.getElementById("loginError").textContent = "";
+  const error=document.getElementById("loginError");
+  error.textContent="";
 
-  if(!email || !password){
-    document.getElementById("loginError").textContent =
-      "Enter your email and password.";
+  if(!email||!password){
+    error.textContent="Enter your email and password.";
     return;
   }
 
   try{
 
-    await setPersistence(auth,browserLocalPersistence);
+    await setPersistence(
+      auth,
+      browserLocalPersistence
+    );
 
     await signInWithEmailAndPassword(
       auth,
@@ -229,53 +426,59 @@ window.login = async function(){
       password
     );
 
-  }catch(error){
+  }catch(e){
 
-    document.getElementById("loginError").textContent =
-      error.message;
+    error.textContent=e.message;
 
   }
 
 };
 
 
-/* AUTH */
+/* AUTH CHECK */
 
-onAuthStateChanged(auth,async(user)=>{
+onAuthStateChanged(auth,async user=>{
 
   if(!user){
 
-    document.getElementById("loginPage").classList.remove("hidden");
-    document.getElementById("adminPage").classList.add("hidden");
-    return;
+    document.getElementById("loginPage")
+      .classList.remove("hide");
 
+    document.getElementById("adminPage")
+      .classList.add("hide");
+
+    return;
   }
 
   try{
 
-    const adminRef = doc(db,"admins",user.uid);
-    const adminSnap = await getDoc(adminRef);
+    const ref=doc(db,"admins",user.uid);
+    const snap=await getDoc(ref);
 
     if(
-      !adminSnap.exists() ||
-      adminSnap.data().active !== true
+      !snap.exists() ||
+      snap.data().active!==true
     ){
 
       alert("Access denied. You are not an active admin.");
+
       await signOut(auth);
       return;
     }
 
-    currentUser = user;
+    currentUser=user;
 
-    document.getElementById("loginPage").classList.add("hidden");
-    document.getElementById("adminPage").classList.remove("hidden");
+    document.getElementById("loginPage")
+      .classList.add("hide");
+
+    document.getElementById("adminPage")
+      .classList.remove("hide");
 
     loadData();
 
-  }catch(error){
+  }catch(e){
 
-    alert("Admin check failed: " + error.message);
+    alert("Admin verification failed:\n"+e.message);
 
   }
 
@@ -284,154 +487,195 @@ onAuthStateChanged(auth,async(user)=>{
 
 /* LOGOUT */
 
-window.logout = function(){
+window.logout=()=>{
   signOut(auth);
 };
 
 
-/* LOAD DATA */
+/* LOAD */
 
-window.loadData = async function(){
+window.loadData=async()=>{
 
   try{
 
-    const userSnap = await getDocs(collection(db,"users"));
-    const accountSnap = await getDocs(collection(db,"accounts"));
-    const transactionSnap = await getDocs(collection(db,"transactions"));
+    const usersSnap=
+      await getDocs(collection(db,"users"));
 
-    customers = userSnap.docs.map(x=>({
+    const accountsSnap=
+      await getDocs(collection(db,"accounts"));
+
+    const transactionsSnap=
+      await getDocs(collection(db,"transactions"));
+
+    customers=usersSnap.docs.map(x=>({
       id:x.id,
       ...x.data()
     }));
 
-    accounts = accountSnap.docs.map(x=>({
+    accounts=accountsSnap.docs.map(x=>({
       id:x.id,
       ...x.data()
     }));
 
-    document.getElementById("customerCount").textContent =
-      customers.length;
+    document.getElementById("customerCount")
+      .textContent=customers.length;
 
-    document.getElementById("pendingCount").textContent =
-      customers.filter(x=>String(x.status||"PENDING").toUpperCase()==="PENDING").length;
+    document.getElementById("pendingCount")
+      .textContent=
+      customers.filter(x=>
+        String(x.status||"PENDING")
+        .toUpperCase()==="PENDING"
+      ).length;
 
-    document.getElementById("accountCount").textContent =
-      accounts.length;
+    document.getElementById("accountCount")
+      .textContent=accounts.length;
 
-    document.getElementById("transactionCount").textContent =
-      transactionSnap.size;
+    document.getElementById("transactionCount")
+      .textContent=transactionsSnap.size;
 
     renderCustomers();
 
-  }catch(error){
+  }catch(e){
 
-    document.getElementById("customers").innerHTML =
-      `<p class="text-red-500">${escapeHtml(error.message)}</p>`;
+    document.getElementById("customers").innerHTML=`
+      <div class="text-red-500 p-4">
+        ${escapeHtml(e.message)}
+      </div>
+    `;
 
   }
 
 };
 
 
-/* CUSTOMERS */
+/* CUSTOMER LIST */
 
 function renderCustomers(){
 
-  const box = document.getElementById("customers");
+  const box=document.getElementById("customers");
 
   if(!customers.length){
-    box.innerHTML =
-      `<p class="muted text-gray-500">No customers found.</p>`;
+
+    box.innerHTML=`
+      <div class="text-center py-12 opacity-50">
+        No customers found.
+      </div>
+    `;
+
     return;
   }
 
-  box.innerHTML = customers.map(c=>{
+  box.innerHTML=customers.map(c=>{
 
-    const status =
-      String(c.status || "PENDING").toUpperCase();
+    const status=
+      String(c.status||"PENDING").toUpperCase();
 
-    let badge = "bg-gray-200 text-gray-700";
+    const account=
+      accounts.find(a=>a.userId===c.id);
 
-    if(status==="ACTIVE")
-      badge="bg-green-100 text-green-700";
+    let statusClass="bg-orange-500/10 text-orange-600";
+    let icon="⏳";
 
-    if(status==="PENDING")
-      badge="bg-orange-100 text-orange-700";
+    if(status==="ACTIVE"){
+      statusClass="bg-emerald-500/10 text-emerald-600";
+      icon="✓";
+    }
 
-    if(status==="DECLINED")
-      badge="bg-red-100 text-red-700";
-
-    const account = accounts.find(
-      a=>a.userId===c.id
-    );
+    if(status==="DECLINED"){
+      statusClass="bg-red-500/10 text-red-600";
+      icon="×";
+    }
 
     return `
 
-    <div class="border rounded-xl p-4">
+    <div class="soft rounded-2xl p-4">
 
-      <div class="flex justify-between gap-3">
+      <div class="flex flex-col md:flex-row
+                  md:items-center justify-between gap-4">
 
-        <div class="min-w-0">
+        <div class="flex items-center gap-3 min-w-0">
 
-          <h3 class="font-bold truncate">
-            ${escapeHtml(c.fullName || "Unnamed")}
-          </h3>
+          <div class="w-12 h-12 shrink-0 rounded-2xl
+                      bg-emerald-500/10 text-emerald-600
+                      flex items-center justify-center
+                      font-black text-lg">
+            ${escapeHtml(
+              (c.fullName||"U").charAt(0).toUpperCase()
+            )}
+          </div>
 
-          <p class="text-sm muted text-gray-500 truncate">
-            ${escapeHtml(c.email || "")}
-          </p>
+          <div class="min-w-0">
 
-          <p class="text-xs mt-1">
-            ${escapeHtml(c.accountNumber || "No account number")}
-          </p>
+            <h3 class="font-bold truncate">
+              ${escapeHtml(c.fullName||"Unnamed")}
+            </h3>
 
-          <span class="inline-block mt-2 px-2 py-1 rounded-full text-xs ${badge}">
-            ${status}
-          </span>
+            <p class="text-sm opacity-50 truncate">
+              ${escapeHtml(c.email||"")}
+            </p>
+
+            <p class="text-xs opacity-40 mt-1">
+              ${escapeHtml(c.accountNumber||"No account number")}
+            </p>
+
+          </div>
 
         </div>
 
-        <div class="text-right">
 
-          <p class="font-bold">
-            ${account ? money(account.balance) : "$0.00"}
-          </p>
+        <div class="flex md:flex-col
+                    md:items-end justify-between gap-2">
 
-          <p class="text-xs muted text-gray-500">
-            ${account ? escapeHtml(account.type || "Account") : "No account"}
-          </p>
+          <span class="px-3 py-1 rounded-full
+                       text-xs font-bold ${statusClass}">
+            ${icon} ${status}
+          </span>
+
+          <strong>
+            ${account?money(account.balance):"$0.00"}
+          </strong>
 
         </div>
 
       </div>
 
-      <div class="grid grid-cols-2 md:grid-cols-5 gap-2 mt-4">
 
-        ${status==="PENDING" ? `
-        <button onclick="approveCustomer('${c.id}')"
-          class="bg-green-600 text-white p-2 rounded-lg text-sm">
-          Approve
+      <div class="grid grid-cols-2
+                  sm:grid-cols-3 lg:grid-cols-5
+                  gap-2 mt-4">
+
+        ${status==="PENDING"?`
+
+        <button
+          onclick="approveCustomer('${c.id}')"
+          class="btn green text-sm">
+          ✓ Approve
         </button>
 
-        <button onclick="declineCustomer('${c.id}')"
-          class="bg-orange-500 text-white p-2 rounded-lg text-sm">
-          Decline
-        </button>
-        ` : ""}
-
-        <button onclick="editDate('${c.id}')"
-          class="bg-blue-600 text-white p-2 rounded-lg text-sm">
-          Date
+        <button
+          onclick="declineCustomer('${c.id}')"
+          class="btn orange text-sm">
+          × Decline
         </button>
 
-        <button onclick="addFunds('${c.id}')"
-          class="bg-purple-600 text-white p-2 rounded-lg text-sm">
-          Add Funds
+        `:""}
+
+        <button
+          onclick="editDate('${c.id}')"
+          class="btn blue text-sm">
+          📅 Date
         </button>
 
-        <button onclick="deleteCustomer('${c.id}')"
-          class="bg-red-600 text-white p-2 rounded-lg text-sm">
-          Delete
+        <button
+          onclick="addFunds('${c.id}')"
+          class="btn purple text-sm">
+          + Funds
+        </button>
+
+        <button
+          onclick="deleteCustomer('${c.id}')"
+          class="btn red text-sm">
+          🗑 Delete
         </button>
 
       </div>
@@ -447,9 +691,9 @@ function renderCustomers(){
 
 /* APPROVE */
 
-window.approveCustomer = async function(id){
+window.approveCustomer=async id=>{
 
-  if(!confirm("Approve this customer?")) return;
+  if(!confirm("Approve this customer?"))return;
 
   try{
 
@@ -462,17 +706,14 @@ window.approveCustomer = async function(id){
       }
     );
 
-    await audit(
-      "CUSTOMER_APPROVED",
-      id
-    );
+    await audit("CUSTOMER_APPROVED",id);
 
-    alert("Customer approved.");
+    alert("Customer approved successfully.");
     loadData();
 
-  }catch(error){
+  }catch(e){
 
-    alert("Approve failed: " + error.message);
+    alert("Approve failed:\n"+e.message);
 
   }
 
@@ -481,9 +722,9 @@ window.approveCustomer = async function(id){
 
 /* DECLINE */
 
-window.declineCustomer = async function(id){
+window.declineCustomer=async id=>{
 
-  if(!confirm("Decline this customer?")) return;
+  if(!confirm("Decline this customer?"))return;
 
   try{
 
@@ -496,17 +737,14 @@ window.declineCustomer = async function(id){
       }
     );
 
-    await audit(
-      "CUSTOMER_DECLINED",
-      id
-    );
+    await audit("CUSTOMER_DECLINED",id);
 
     alert("Customer declined.");
     loadData();
 
-  }catch(error){
+  }catch(e){
 
-    alert("Decline failed: " + error.message);
+    alert("Decline failed:\n"+e.message);
 
   }
 
@@ -515,48 +753,58 @@ window.declineCustomer = async function(id){
 
 /* EDIT DATE */
 
-window.editDate = function(id){
+window.editDate=id=>{
 
-  const c = customers.find(x=>x.id===id);
-  if(!c) return;
+  const c=customers.find(x=>x.id===id);
+
+  if(!c)return;
 
   let value="";
 
   if(c.createdAt?.toDate){
+
     const d=c.createdAt.toDate();
-    value =
+
+    value=
       d.getFullYear()+"-"+
       String(d.getMonth()+1).padStart(2,"0")+"-"+
       String(d.getDate()).padStart(2,"0")+"T"+
       String(d.getHours()).padStart(2,"0")+":"+
       String(d.getMinutes()).padStart(2,"0");
+
   }
 
-  document.getElementById("modalTitle").textContent =
-    "Edit Creation Date";
+  document.getElementById("modalTitle")
+    .textContent="Edit Creation Date";
 
   document.getElementById("modalBody").innerHTML=`
+
+    <p class="text-sm opacity-50 mb-3">
+      Change the date shown for this customer's account.
+    </p>
 
     <input id="newDate"
       type="datetime-local"
       value="${value}"
-      class="w-full border rounded-xl p-3">
+      class="input">
 
-    <button onclick="saveDate('${id}')"
-      class="w-full bg-blue-600 text-white p-3 rounded-xl mt-4">
-      Save Date
+    <button
+      onclick="saveDate('${id}')"
+      class="btn blue w-full mt-4">
+      Save Creation Date
     </button>
 
   `;
 
-  document.getElementById("modal").classList.remove("hidden");
+  openModal();
 
 };
 
 
-window.saveDate = async function(id){
+window.saveDate=async id=>{
 
-  const value=document.getElementById("newDate").value;
+  const value=
+    document.getElementById("newDate").value;
 
   if(!value){
     alert("Select a date.");
@@ -571,7 +819,9 @@ window.saveDate = async function(id){
       doc(db,"users",id),
       {
         originalCreatedAt:
-          c.originalCreatedAt || c.createdAt || serverTimestamp(),
+          c.originalCreatedAt||
+          c.createdAt||
+          serverTimestamp(),
 
         createdAt:
           Timestamp.fromDate(new Date(value)),
@@ -587,12 +837,13 @@ window.saveDate = async function(id){
     );
 
     closeModal();
+
     alert("Creation date updated.");
     loadData();
 
-  }catch(error){
+  }catch(e){
 
-    alert("Date update failed: " + error.message);
+    alert("Date update failed:\n"+e.message);
 
   }
 
@@ -601,96 +852,120 @@ window.saveDate = async function(id){
 
 /* ADD FUNDS */
 
-window.addFunds = function(id){
+window.addFunds=id=>{
 
-  const account=accounts.find(
-    a=>a.userId===id
-  );
+  const account=
+    accounts.find(a=>a.userId===id);
 
   if(!account){
+
     alert("This customer has no account.");
     return;
   }
 
-  document.getElementById("modalTitle").textContent =
-    "Add Funds";
+  document.getElementById("modalTitle")
+    .textContent="Add Funds";
 
   document.getElementById("modalBody").innerHTML=`
 
-    <p class="mb-3">
-      Current balance:
-      <strong>${money(account.balance)}</strong>
-    </p>
+    <div class="soft rounded-2xl p-4 mb-4">
+
+      <p class="text-sm opacity-50">
+        Current balance
+      </p>
+
+      <p class="text-2xl font-black mt-1">
+        ${money(account.balance)}
+      </p>
+
+    </div>
 
     <input id="fundAmount"
       type="number"
       min="0.01"
       step="0.01"
-      placeholder="Amount"
-      class="w-full border rounded-xl p-3">
+      placeholder="Enter amount"
+      class="input">
 
-    <button onclick="saveFunds('${account.id}')"
-      class="w-full bg-purple-600 text-white p-3 rounded-xl mt-4">
+    <button
+      onclick="saveFunds('${account.id}')"
+      class="btn purple w-full mt-4">
       Add Funds
     </button>
 
   `;
 
-  document.getElementById("modal").classList.remove("hidden");
+  openModal();
 
 };
 
 
-window.saveFunds = async function(accountId){
+window.saveFunds=async accountId=>{
 
-  const amount =
-    Number(document.getElementById("fundAmount").value);
+  const amount=
+    Number(
+      document.getElementById("fundAmount").value
+    );
 
-  if(!amount || amount<=0){
+  if(!amount||amount<=0){
+
     alert("Enter a valid amount.");
     return;
+
   }
 
   try{
 
-    const accountRef=doc(db,"accounts",accountId);
+    const accountRef=
+      doc(db,"accounts",accountId);
 
-    await runTransaction(db,async(transaction)=>{
+    await runTransaction(
+      db,
+      async transaction=>{
 
-      const snap=await transaction.get(accountRef);
+        const snap=
+          await transaction.get(accountRef);
 
-      if(!snap.exists())
-        throw new Error("Account not found.");
+        if(!snap.exists())
+          throw new Error("Account not found.");
 
-      const data=snap.data();
+        const data=snap.data();
 
-      const oldBalance=Number(data.balance||0);
+        const oldBalance=
+          Number(data.balance||0);
 
-      const newBalance=oldBalance+amount;
+        const newBalance=
+          oldBalance+amount;
 
-      transaction.update(accountRef,{
-        balance:newBalance,
-        updatedAt:serverTimestamp()
-      });
+        transaction.update(
+          accountRef,
+          {
+            balance:newBalance,
+            updatedAt:serverTimestamp()
+          }
+        );
 
-      const txRef=doc(
-        collection(db,"transactions")
-      );
+        const txRef=
+          doc(collection(db,"transactions"));
 
-      transaction.set(txRef,{
-        accountId:accountId,
-        userId:data.userId,
-        type:"DEPOSIT",
-        method:"ADMIN",
-        amount:amount,
-        balanceBefore:oldBalance,
-        balanceAfter:newBalance,
-        status:"COMPLETED",
-        createdAt:serverTimestamp(),
-        createdBy:currentUser.uid
-      });
+        transaction.set(
+          txRef,
+          {
+            userId:data.userId,
+            accountId:accountId,
+            type:"DEPOSIT",
+            method:"ADMIN",
+            amount:amount,
+            balanceBefore:oldBalance,
+            balanceAfter:newBalance,
+            status:"COMPLETED",
+            createdAt:serverTimestamp(),
+            createdBy:currentUser.uid
+          }
+        );
 
-    });
+      }
+    );
 
     await audit(
       "ADMIN_ADDED_FUNDS",
@@ -703,34 +978,34 @@ window.saveFunds = async function(accountId){
     alert("Funds added successfully.");
     loadData();
 
-  }catch(error){
+  }catch(e){
 
-    alert("Add funds failed: " + error.message);
+    alert("Add funds failed:\n"+e.message);
 
   }
 
 };
 
 
-/* DELETE CUSTOMER */
+/* DELETE */
 
-window.deleteCustomer = async function(id){
+window.deleteCustomer=async id=>{
 
   const c=customers.find(x=>x.id===id);
 
-  if(!c) return;
+  if(!c)return;
 
   const ok=confirm(
-    "Delete this customer?\n\n" +
-    (c.fullName || c.email || id) +
-    "\n\nThis cannot be undone."
+    "Delete this customer?\n\n"+
+    (c.fullName||c.email||id)+
+    "\n\nThis action cannot be undone."
   );
 
-  if(!ok) return;
+  if(!ok)return;
 
   try{
 
-    const customerAccounts =
+    const customerAccounts=
       accounts.filter(a=>a.userId===id);
 
     for(const account of customerAccounts){
@@ -753,9 +1028,9 @@ window.deleteCustomer = async function(id){
     alert("Customer deleted.");
     loadData();
 
-  }catch(error){
+  }catch(e){
 
-    alert("Delete failed: " + error.message);
+    alert("Delete failed:\n"+e.message);
 
   }
 
@@ -764,16 +1039,20 @@ window.deleteCustomer = async function(id){
 
 /* AUDIT */
 
-async function audit(action,targetId,amount=null){
+async function audit(
+  action,
+  targetId,
+  amount=null
+){
 
   try{
 
     await addDoc(
       collection(db,"auditLogs"),
       {
-        action,
-        targetId,
-        amount,
+        action:action,
+        targetId:targetId,
+        amount:amount,
         adminId:currentUser.uid,
         adminEmail:currentUser.email,
         timestamp:serverTimestamp()
@@ -782,7 +1061,7 @@ async function audit(action,targetId,amount=null){
 
   }catch(e){
 
-    console.log("Audit log failed:",e.message);
+    console.log("Audit log:",e.message);
 
   }
 
@@ -791,8 +1070,18 @@ async function audit(action,targetId,amount=null){
 
 /* MODAL */
 
-window.closeModal=function(){
-  document.getElementById("modal").classList.add("hidden");
+function openModal(){
+
+  document.getElementById("modal")
+    .classList.remove("hide");
+
+}
+
+window.closeModal=()=>{
+
+  document.getElementById("modal")
+    .classList.add("hide");
+
 };
 
 
